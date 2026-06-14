@@ -1,0 +1,15 @@
+.reactedge-banner-view {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    width: 100%;
+    gap: 20px;
+}
+
+.reactedge-banner-view__item {
+    flex: 0 0 auto;
+}
+
+.reactedge-banner-view-slide__image {
+    object-fit: cover;
+}

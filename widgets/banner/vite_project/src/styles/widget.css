@@ -1,0 +1,5 @@
+/* banner.css */
+@import "banner.slider.css";
+@import "banner.static.css";
+@import "banner.view.css";
+@import "banner.arrows.css";

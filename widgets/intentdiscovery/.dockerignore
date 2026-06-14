@@ -1,0 +1,12 @@
+node_modules
+.git
+venv
+__pycache__
+tests
+vite_project
+__pycache__/
+*.pyc
+.env
+.env.*
+.gitignore
+.cache

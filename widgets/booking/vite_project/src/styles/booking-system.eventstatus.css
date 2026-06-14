@@ -1,0 +1,37 @@
+.event-card__status {
+    font-size: var(--small-size, 16px);
+    font-weight: 500;
+    text-align: center;
+    color: var(--dark-color, #111);;
+    transform: rotate(-15deg);
+    border: 1px solid var(--dark-color, #111);;
+    border-radius: 3px;
+    background: #ffffff;
+    padding: 2px;
+    position: absolute;
+    width: 74px;
+    right: -32px;
+    top:-1px;
+    z-index: 10;
+}
+
+.event-card__status--busy {
+    color: #999;
+}
+
+.event-card__status--purchased {
+    color: var(--purchased-color, #2e7d32);
+}
+
+.day-unavailable {
+    color: var(--unavailable-color);
+    padding: 0.75rem 0;
+    text-align: center;
+    border: 1px dashed var(--dark-color, #111);;
+    border-radius: 6px;
+}
+
+.event-card__status--wasordered {
+    border-color: var(--highlighting-color, #0a66c2);
+    color: var(--highlighting-color, #0a66c2);
+}

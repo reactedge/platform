@@ -1,0 +1,61 @@
+.booking-system {
+    font-size: var(--p-size, 14px);
+    line-height: 1.4;
+    position: relative;
+}
+
+.booking-system button,
+.booking-system input,
+.booking-system select,
+.booking-system textarea,
+.booking-system span {
+    font: inherit;
+}
+
+.booking-header,
+.week-event-list {
+    margin: 0 auto;
+    padding: 1rem 1.25rem;
+}
+
+.booking-header {
+    position: relative;
+    padding-bottom: 72px;
+}
+
+.week-event-day {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+h1, h2,
+.booking-title {
+    color: var(--title-color, #111);
+}
+
+h1 {
+    font-size: var(--h1-size, 24px);
+}
+
+h2 {
+    font-size: var(--h2-size, 20px);
+}
+
+h3 {
+    font-size: var(--h3-size, 16px);
+    color: var(--grey, #111);
+}
+
+.booking-context strong,
+.week-event-day strong,
+.booking-filter-label {
+    color: var(--title-color, #111);
+}
+
+.widget-loader-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+}

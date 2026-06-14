@@ -1,0 +1,97 @@
+.booking-filters {
+    display: flex;
+    flex-direction: column;
+    gap: var(--standard-gap, 1rem);
+}
+
+.booking-filters[data-layout="mobile"] {
+    flex-direction: column;
+    gap: 0;
+}
+
+.filter-group {
+    display: flex;
+    gap: var(--standard-gap, 1rem);
+    justify-items: center;
+    align-items: center;
+}
+
+.filter-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.filter-edit {
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.filter-edit:hover {
+    opacity: 1;
+}
+
+.booking-options {
+    display: flex;
+    gap: var(--standard-gap, 1rem);
+}
+
+.booking-options[data-layout="mobile"] {
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+.booking-options .booking-option {
+    display: block;
+    text-align: left;
+
+    padding: var(--card-padding, 0.75rem);
+
+    border: 1px solid var(--border-color, rgba(0,0,0,0.15));
+    border-radius: var(--input-border-radius, 6px);
+    background: var(--card-background, #ffffff);
+
+    cursor: pointer;
+}
+
+.booking-options .booking-option-label {
+    font-family: var(--nav-font-family);
+    margin-bottom: 0.3rem;
+    color: var(--title-color);
+    display: block;
+}
+
+.booking-options[data-layout="mobile"] .booking-option-label {
+    margin-bottom: 0;
+}
+
+.booking-option-desc {
+    display: block;
+    line-height: var(--p-line-height, 1rem);
+    color: var(--light-color, #666);
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color-faint, rgba(0, 0, 0, 0.08))
+}
+
+.booking-option:hover {
+    border-color: var(--cta-bg, #ccc);
+    background: var(--highlighting-secondarycolor);
+}
+
+.booking-option.is-selected {
+    background: var(--cta-bg, #f0f6ff);
+    border-color: var(--cta-bg, #111);
+}
+
+.booking-option.is-selected .booking-option-label,
+.booking-option.is-selected .booking-option-desc {
+    color: var(--cta-color, #111);
+}
+
+.booking-options button.is-active {
+    border-color: var(--primary-color, #111);;
+}
+

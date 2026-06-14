@@ -1,0 +1,15 @@
+.navigationDots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #999;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}

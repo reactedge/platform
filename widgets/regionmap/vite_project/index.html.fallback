@@ -1,0 +1,40 @@
+<body>
+<script type="module" src="./src/widget.ts"></script>
+
+<div data-load="eager"
+     data-page="home"
+     data-src="https://widget.regionmap.co.uk:8448/widget-regionmap.iife.js"
+>
+    <regionmap-widget >
+        <script type="application/json" data-config>
+            {
+                "data": {
+                    "title": "Working area",
+                    "center": { "lat": 50.72, "lng": -1.98 },
+                    "zoom": 10,
+                    "region": [
+                        { "lat": 50.75, "lng": -2.00 },
+                        { "lat": 50.78, "lng": -1.97 },
+                        { "lat": 50.70, "lng": -1.90 },
+                        { "lat": 50.68, "lng": -1.95 }
+                    ]
+                },
+                "integration": {
+                    "requires": ["googleMaps"]
+                }
+            }
+        </script>
+    </regionmap-widget>
+</div>
+
+<script type="application/json" id="reactedge-runtime">
+    {
+        "integrations": {
+            "googleMaps": {
+                "apiKey": "AIzaSyDZjbEqFRn9nffqoC6-vXydH71s_-Kqof4"
+            }
+        }
+    }
+</script>
+
+</body>

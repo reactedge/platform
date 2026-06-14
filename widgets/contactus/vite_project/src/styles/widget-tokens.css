@@ -1,0 +1,23 @@
+/* widget-tokens.css */
+
+/* New shared tokens (canonical) */
+:host {
+    display: block;
+    width: 100%;
+
+    font-family: var(--text-font-family);
+    font-size: var(--text-font-size);
+    line-height: var(--text-line-height);
+    margin-bottom: var(--text-margin-bottom);
+    color: var(--text-color);
+}
+
+:host p,
+:host input,
+:host textarea,
+:host select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+}

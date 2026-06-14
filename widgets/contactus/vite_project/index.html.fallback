@@ -1,0 +1,68 @@
+<body>
+<script type="module" src="./src/widget.ts"></script>
+
+<div class="contact-form">
+    <div data-widget-container="contactus"
+        data-load="eager"
+        data-page="contact"
+        data-src="https://widget.contactus.co.uk:8448/widget-contact-us.iife.js"
+    >
+        <contactus-widget>
+        </contactus-widget>
+
+        <script type="application/json" contactus-data-config>
+            {
+                "data": {
+                    "title": "Contact us",
+                    "intro": "Got a question about solar, electrical work, or how we can help your home or business? Our friendly team is here to help. Reach out today—we’ll reply within one business day.",
+                    "endpoint": "https://scsolarltd.co.uk/wp-json/contact/v1/send",
+                    "categories": [
+                        {
+                            "value": "general",
+                            "label": "General enquiry"
+                        },
+                        {
+                            "value": "quote",
+                            "label": "Request a quote"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Your name",
+                            "required": true
+                        },
+                        {
+                            "name": "email",
+                            "label": "Email",
+                            "type": "email",
+                            "required": true
+                        },
+                        {
+                            "name": "message",
+                            "label": "Message",
+                            "type": "textarea",
+                            "required": true
+                        }
+                    ]
+                },
+                "integrations": {
+                    "require": ["cloudflare"]
+                }
+            }
+        </script>
+    </div>
+    <div id="contactus-turnstile"></div>
+</div>
+
+<script type="application/json" id="reactedge-runtime">
+    {
+        "integrations": {
+            "cloudflare": {
+                "siteKey": "0x4AAAAAACLGHYkoMP038SNT"
+            }
+        }
+    }
+</script>
+
+</body>

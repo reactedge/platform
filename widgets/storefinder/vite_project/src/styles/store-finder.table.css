@@ -1,0 +1,35 @@
+.storeTable {
+    margin-top: var(--sf-space-lg);
+}
+
+.storeTable__title {
+    margin: 0;
+}
+
+.storeTable__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--sf-space-sm);
+}
+
+.storeTable__headRow {
+    background: #f4f4f4; /* acceptable: neutral structural color */
+}
+
+.storeTable__th {
+    padding: var(--sf-space-sm);
+    text-align: left;
+    border-bottom: 2px solid #ccc;
+}
+
+.storeTable__row {
+    border-bottom: 1px solid var(--sf-color-border);
+}
+
+.storeTable__td {
+    padding: var(--sf-space-sm);
+}
+
+.storeTable__empty {
+    margin-top: var(--sf-space-lg);
+}

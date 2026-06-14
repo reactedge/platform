@@ -1,0 +1,17 @@
+# IDE
+.idea
+
+# dependencies
+node_modules
+
+# editor temp files
+*.swp
+
+# local environment
+.env
+widget.local.crt
+widget.local.key
+
+# generated / local artefacts
+www
+test-results

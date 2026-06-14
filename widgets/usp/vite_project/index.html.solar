@@ -1,0 +1,32 @@
+<body>
+<script type="module" src="./src/widget.ts"></script>
+
+<section class="usp" id="home-usp" data-usp='{
+        "slides": [
+            {
+                "text": "Over 20 years of experience",
+                "textColor": "#F6F2DF"
+            },
+            {
+                "text": "Local specialists you can trust",
+                "textColor": "#F6F2DF"
+            },
+            {
+                "text": "Fully accredited &amp; insured",
+                "textColor": "#F6F2DF"
+            }
+        ],
+        "settings": {
+            "mode": {
+                "desktop": "static",
+                "tablet": "slider",
+                "mobile": "slider"
+            },
+            "height": "45px",
+            "backgroundColor": "#003652"
+        }
+     }'>
+        <usp-widget></usp-widget>
+    </section>
+
+</body>

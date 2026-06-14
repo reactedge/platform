@@ -1,0 +1,55 @@
+/* BannerStatic.css */
+
+.banner-static-grid {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+}
+
+.banner-static-grid.cols-1 {
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.banner-static-grid.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.banner-static-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.banner-static-item {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Ratios */
+
+.banner-static-item.ratio-16-7 {
+    aspect-ratio: 16 / 7;
+}
+
+.banner-static-item.ratio-4-3 {
+    aspect-ratio: 4 / 3;
+}
+
+.banner-static-item.ratio-3-4 {
+    aspect-ratio: 3 / 4;
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+    .banner-static-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Tablet */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .banner-static-grid.cols-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

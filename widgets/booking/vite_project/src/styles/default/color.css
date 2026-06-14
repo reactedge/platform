@@ -1,0 +1,28 @@
+:host {
+    /* text */
+    --header-color: #666;
+    --primary-color: #111;
+    --light-color: #555;
+    --purchased-color: #444;
+    --unavailable-color: #888;
+
+    /* borders & dividers */
+    --border-color: #e5e7eb;
+    --border-color-soft: rgba(0, 0, 0, 0.12);
+    --border-color-faint: rgba(0, 0, 0, 0.05);
+
+    /* surfaces */
+    --drawer-color: #e5e5e5;
+    --dark-color: #888;
+    --filter-color: #ddd;
+    --highlighting-color: #e6fffa;
+
+    /* auth */
+    --auth-background: #f9f9f9;
+    --auth-switch-background: #f9f9f9;
+
+    --title-color: #222222;
+
+    --card-background: #fff;
+}
+

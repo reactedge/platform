@@ -1,0 +1,41 @@
+.intro {
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-family: var(--title-font-family);
+    font-size: var(--title-font-size);
+    font-weight: var(--title-font-weight);
+    line-height: var(--title-line-height);
+    margin-bottom: var(--title-margin-bottom);
+    color: var(--title-color);
+}
+
+button {
+    font-size: var(--cta-font-size);
+    color: var(--cta-color);
+    background: var(--cta-bg);
+    padding: var(--cta-padding);
+    width: var(--cta-width);
+    border-radius: var(--cta-radius);
+}
+
+button:hover {
+    background: var(--cta-bg-hover);
+    border: 1px solid #1a1a1a;
+}
+
+.contact {
+    width: 100%;
+}
+
+input,
+textarea,
+select {
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--input-border-radius);
+}
+
+button {
+    cursor: pointer;
+}

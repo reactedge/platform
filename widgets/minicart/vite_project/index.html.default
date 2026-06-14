@@ -1,0 +1,37 @@
+<body>
+<script type="module" src="./src/widget.ts"></script>
+
+<div id="home-minicart"
+     data-minicart='{
+        slides": [
+            {
+                "text": "Over 20 years of experience",
+                "backgroundColor": "#143d1a",
+                "textColor": "#ffffff"
+            },
+            {
+                "text": "Local specialists you can trust",
+                "backgroundColor": "#ffe047",
+                "textColor": "#333333"
+            },
+            {
+                "text": "Fully accredited & insured",
+                "backgroundColor": "#ff7a00",
+                "textColor": "#ffffff"
+            }
+        ],
+        "settings": {
+            "mode": {
+                "desktop": "static",
+                "tablet": "slider",
+                "mobile": "slider"
+            },
+            "height": "60px",
+            "backgroundColor": "#fff"
+        }
+     }'>
+    <minicart-widget></minicart-widget>
+</div>
+
+
+</body>

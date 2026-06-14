@@ -1,0 +1,28 @@
+<body>
+<script type="module" src="./src/widget.ts"></script>
+
+<script type="module">
+    export const registry = {
+        banner: {
+            cdn: '/cdn/secondary.json'
+        }
+    };
+
+    import { mount } from './src/widget.ts';
+    import {loadContractByName} from './src/widget-runtime/lib/contractLoader.ts';
+
+    const el = document.querySelector('banner-widget');
+
+    const config = await loadContractByName('banner', registry);
+
+    mount(el, config);
+</script>
+
+<div class="banner">
+    <div data-load="on-scroll:100"
+            data-src="https://widget.banner.co.uk:8442/widget-banner.iife.js">
+        <banner-widget />
+    </div>
+</div>
+
+</body>

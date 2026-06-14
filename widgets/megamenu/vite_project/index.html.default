@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://widgets-cdn.co.uk:8459/megamenu/styles/megamenu.css">
+</head>
+<body>
+
+<h2>megamenu x2 Test</h2>
+
+
+<script type="module">
+    import {getCdnManifest} from "./src/lib/contract-resolver.js";
+    import { mount } from './src/widget.ts';
+
+    const configs = await getCdnManifest();
+    const config = configs[0]
+    const element = document.querySelector('megamenu-widget');
+
+    await requestAnimationFrame(() => {
+        mount(element, config.data);
+    })
+</script>
+
+<megamenu-widget></megamenu-widget>
+
+</body>
+</html>

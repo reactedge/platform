@@ -1,0 +1,38 @@
+{
+  "data": {
+    "title": "Controlled Scheduling Without Platform Lock-In",
+    "summary": "Booking systems directly influence conversion, capacity planning, and operational flow. Yet in many platforms, scheduling logic is embedded in backend templates, tightly coupled to session state, and difficult to evolve safely. What drives revenue often becomes a source of deployment anxiety.",
+    "sections": [
+      {
+        "type": "friction",
+        "title": "Where friction appears",
+        "items": [
+          "Updating availability requires developer involvement",
+          "Booking changes risk breaking unrelated pages",
+          "Capacity adjustments are slow to deploy",
+          "Experimenting with booking flows feels unsafe",
+          "Operational teams depend on engineering cycles"
+        ]
+      },
+      {
+        "type": "impact",
+        "title": "What isolation changes",
+        "items": [
+          "Booking rules evolve independently from theme code",
+          "Availability logic updated without platform risk",
+          "State contained within a predictable boundary",
+          "Conversion flow isolated from core templates",
+          "Operational adjustments become controlled"
+        ]
+      }
+    ],
+    "closing": "Revenue-critical scheduling becomes controlled — not fragile.",
+    "illustration": {
+      "svg": "https://wpdemo.reactedge.net/wp-content/themes/greenedge/images/widgets/matrix/booking-impact-matrix.svg"
+    },
+    "layout": "right"
+  },
+  "binding": {
+    "trigger": "[data-explainer-trigger='booking-isolation']"
+  }
+}

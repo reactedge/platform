@@ -1,0 +1,46 @@
+.re-explainer-content {
+    flex: 1;
+}
+
+.re-explainer-title {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.re-explainer-notes {
+    font-size: var(--p-size);
+    line-height: 1.2;
+    color: #374151;
+}
+
+.re-explainer-notes p {
+    margin: 0.25rem 0;
+}
+
+.re-explainer-section--friction {
+    border-left: 3px solid #d33;
+    padding-left: 16px;
+}
+
+.re-explainer-section--impact {
+    border-left: 3px solid #2a8f5b;
+    padding-left: 16px;
+}
+
+.re-explainer-closing {
+    font-weight: 600;
+    margin-top: 24px;
+}
+
+h2 {
+    font-family: var(--title-font-family);
+    font-size: 32px;
+}
+
+.re-explainer-section-list,p {
+    color: var(--grey);
+    font-size: 20px;
+    line-height: var(--p-line-height);
+    margin-bottom: var(--paragraph-margin-bottom);
+}

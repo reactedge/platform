@@ -1,0 +1,192 @@
+intentdiscovery-widget  .re-intent-body {
+    color: #374151;
+    font-size: 14px;
+}
+
+intentdiscovery-widget  .re-intent-layout {
+    display: block; /* default single column */
+}
+
+intentdiscovery-widget  .re-intent-layout--two {
+    display: grid;
+    grid-template-columns: 1fr 360px; /* left grows, right fixed-ish */
+    gap: 16px;
+    align-items: start;
+}
+
+/* make right column sticky if you want it to stay visible */
+intentdiscovery-widget  .re-intent-col--right {
+    position: relative;
+}
+
+/* responsive: collapse back to 1 column on smaller screens */
+@media (max-width: 980px) {
+    intentdiscovery-widget  .re-intent-layout--two {
+        grid-template-columns: 1fr;
+    }
+}
+
+intentdiscovery-widget  .re-intent-card[aria-busy="true"] .re-intent-body {
+    opacity: 0.85;
+}
+
+intentdiscovery-widget  .re-intent-card-item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eef2f7;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+}
+
+intentdiscovery-widget  .re-intent-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fff;
+    margin-top: 16px;
+}
+
+intentdiscovery-widget  .re-intent-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+intentdiscovery-widget  .re-intent-header-left {
+    min-width: 0;
+}
+
+intentdiscovery-widget  .re-intent-title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+intentdiscovery-widget  .re-intent-subtitle {
+    margin-top: 6px;
+    color: #4b5563;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+intentdiscovery-widget  .re-intent-close-btn {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+intentdiscovery-widget  .re-intent-body {
+    color: #374151;
+    font-size: 14px;
+}
+
+intentdiscovery-widget  .re-intent-message {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+intentdiscovery-widget  .re-intent-subtle {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+intentdiscovery-widget  .re-intent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+intentdiscovery-widget  .re-intent-card-item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eef2f7;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+}
+
+intentdiscovery-widget  .re-intent-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: #f3f4f6;
+}
+
+intentdiscovery-widget  .re-intent-card-body {
+    padding: 12px;
+}
+
+intentdiscovery-widget  .re-intent-product-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+intentdiscovery-widget  .re-intent-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+intentdiscovery-widget  .re-intent-pill {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+intentdiscovery-widget  .re-intent-price {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+intentdiscovery-widget  .re-intent-reason {
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.35;
+}
+
+intentdiscovery-widget  .intent-evaluation-container {
+    position: relative;
+}
+
+intentdiscovery-widget  .step-finder--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+intentdiscovery-widget  .rec-attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+intentdiscovery-widget  .rec-attributes span {
+    font-size: 12px;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 12px;
+
+    background: #f3f4f6;      /* soft grey */
+    color: #374151;           /* readable but not dominant */
+
+    border: 1px solid #e5e7eb;
+}

@@ -1,0 +1,51 @@
+// widgetCache.ts
+const CACHE_PREFIX = 'widget';
+
+export type WidgetCacheOptions = {
+    name: string;      // 'usp'
+    version: string;   // 'v1'
+};
+
+function key({ name, version }: WidgetCacheOptions) {
+    return `${CACHE_PREFIX}:${name}:${version}`;
+}
+
+export function restoreCache(
+    shadow: ShadowRoot,
+    options: WidgetCacheOptions
+): boolean {
+    const cached = sessionStorage.getItem(key(options));
+    if (!cached) return false;
+
+    let root = shadow.querySelector('[data-widget-root]');
+
+    if (!root) {
+        root = document.createElement('div');
+        root.setAttribute('data-widget-root', '');
+        shadow.appendChild(root);
+    }
+
+    root.innerHTML = cached;
+    shadow.host.setAttribute('data-widget-cached', 'true');
+
+    return true;
+}
+
+export function snapshotCache(
+    container: HTMLElement,
+    options: WidgetCacheOptions
+) {
+    const root = container.querySelector('[data-widget-root]');
+    if (!root) {
+        console.warn('[widget-cache] no root found, snapshot skipped');
+        return;
+    }
+
+    sessionStorage.setItem(key(options), root.outerHTML);
+    container.setAttribute('data-widget-cached', 'true');
+}
+
+
+export function clearCache(options: WidgetCacheOptions) {
+    sessionStorage.removeItem(key(options));
+}

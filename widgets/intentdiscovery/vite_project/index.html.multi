@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>intentdiscovery x2 Test</h2>
+
+
+<script type="module">
+    const manifest = await fetch('/cdn/index.json').then(r => r.json());
+
+    import { mount } from './src/widget.ts';
+
+    const configs = await Promise.all(
+        manifest.contracts.map(url => fetch(url).then(r => r.json()))
+    );
+
+    function pickRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    const widths = [280, 320, 480, 768, 1024, 1440];
+
+    const root = document.getElementById('root');
+
+    const instances = 10 + Math.floor(Math.random() * 10);
+
+    for (let i = 0; i < instances; i++) {
+        const container = document.createElement('div');
+
+        const width = pickRandom(widths);
+        container.style.width = width + 'px';
+        container.style.margin = '10px';
+        container.style.border = '1px dashed #ccc';
+
+        const el = document.createElement('intentdiscovery-widget');
+        container.appendChild(el);
+        root.appendChild(container);
+    }
+
+    const elements = Array.from(document.querySelectorAll('intentdiscovery-widget'));
+
+    function delay(ms) {
+        return new Promise(r => setTimeout(r, ms));
+    }
+
+    await Promise.all(
+        elements.map(async (el) => {
+            const config = pickRandom(configs);
+
+            await delay(Math.random() * 300);
+
+            requestAnimationFrame(() => {
+                mount(el, config);
+            });
+        })
+    );
+</script>
+
+<div id="root"></div>
+
+<script type="application/json" id="reactedge-runtime">
+    {
+        "integrations": {
+            "magentoGraphql": {
+                "api": "https://mageos-docker.magsite.co.uk/graphql"
+            },
+            "intentApi": {
+                "baseUrl": "http://localhost:8000/v1"
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

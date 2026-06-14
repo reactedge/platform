@@ -1,0 +1,24 @@
+.storeMap {
+    position: relative;
+    width: 100%;
+}
+
+.storeMap__title {
+    position: absolute;
+    top: 100px;
+    left: 12px;
+
+    background: var(--sf-color-bg);
+    color: var(--sf-color-text);
+
+    padding: 6px 12px;
+    border-radius: 2px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    box-shadow: var(--sf-shadow-card);
+    z-index: 5;
+
+    pointer-events: none;
+}

@@ -1,0 +1,17 @@
+<body>
+    <script type="module" src="./src/widget.ts"></script>
+
+    <megamenu-widget
+        data-host='magento'
+        data-widget='{
+            "dataLocale" : "fr-FR",
+            "fontColor": "#333",
+            "primaryColor": "#1979c3",
+            "secondaryColour": "#ff5501",
+            "urlSuffix": ".html",
+            "dropdownLayouts": {
+              "/gear": "tiles"
+            }
+        }'
+    ></megamenu-widget>
+</body>

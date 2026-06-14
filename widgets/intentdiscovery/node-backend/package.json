@@ -1,0 +1,54 @@
+{
+  "name": "complex-app",
+  "version": "1.0.0",
+  "description": "hey dude",
+  "main": "build/index.js",
+  "scripts": {
+    "start:build": "npx tsc -w && cp -r src/cdn build/cdn",
+    "start:run": "nodemon build/index.js",
+    "start": "concurrently npm:start:*",
+    "debug": "nodemon build/index.js",
+    "cron": "nodemon build/cron.js",
+    "docker:build": "docker build -t import-attribute-node-backend:latest-dev .",
+    "docker:run": "docker run -p 3000:3000 -v ./:/user/src/app --name node_backend import-attribute-node-backend:latest-dev",
+    "docker:stop": "docker stop node_backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "overrides": {
+    "semver": "7.5.3"
+  },
+  "dependencies": {
+    "app-root-path": "^3.1.0",
+    "bcryptjs": "^2.4.3",
+    "casual": "^1.6.2",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "cross-fetch": "^4.0.0",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.18.2",
+    "fast-xml-parser": "^5.4.1",
+    "find-config": "^1.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "md5": "^2.3.0",
+    "node-cache": "^5.1.2",
+    "node-cron": "^3.0.3",
+    "nodemon": "^2.0.22",
+    "openai": "^4.100.0",
+    "path": "^0.12.7",
+    "pg": "^8.14.0",
+    "redis": "^4.6.14",
+    "socket.io": "^4.7.1",
+    "validator": "^13.9.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "@types/pg": "^8.11.11",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,0 +1,27 @@
+.mw-cta-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--cta-font-size);
+    gap: var(--cta-gap);
+    padding: var(--cta-padding);
+    background: var(--cta-bg);
+    font-weight: var(--cta-font-weight);
+    color: var(--cta-color);
+    text-decoration: none;
+    border-radius: var(--cta-radius);
+    transition: background 150ms ease;
+}
+
+.mw-cta-link:hover {
+    background: var(--cta-bg-hover);
+}
+
+.mw-cta-link__label {
+    line-height: 1;
+    white-space: nowrap;
+    color: inherit;
+}
+
+.mw-cta-link__icon {
+    display: inline-flex;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--    <link rel="stylesheet" href="https://widgets-cdn.co.uk:8459/intentdiscovery/styles/intent-discovery.css">-->
+</head>
+<body style="background: wheat">
+
+<h2>intentdiscovery x2 Test</h2>
+<script type="module">
+    import { mount } from './src/widget.ts';
+    import {loadContract} from "./src/lib/contract-resolver.js";
+    import {readIntegrationConfig} from "./src/IntentDiscoveryConfig.js"
+    const config = await loadContract('default.json')
+    const storeCode = 'default'
+    const category = 'tops-men'
+    const element = document.querySelector('intentdiscovery-widget');
+
+    const runtimeConfig = readIntegrationConfig(storeCode, category);
+
+    await requestAnimationFrame(() => {
+        mount(element, config, runtimeConfig);
+    })
+</script>
+
+
+<intentdiscovery-widget></intentdiscovery-widget>
+
+<script type="application/json" id="reactedge-runtime">
+    {
+        "integrations": {
+            "magentoGraphql": {
+                "api": "https://mageos-docker.magsite.co.uk/graphql"
+            },
+            "intentApi": {
+                "baseUrl": "http://localhost:8000/v1"
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

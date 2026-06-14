@@ -1,0 +1,10 @@
+{
+  "contracts": [
+    "/cdn/banner-explainer.json",
+    "/cdn/booking-explainer.json",
+    "/cdn/herobanner-explainer.json",
+    "/cdn/navigation-explainer.json",
+    "/cdn/quoteform-explainer.json",
+    "/cdn/contactus-explainer.json"
+  ]
+}

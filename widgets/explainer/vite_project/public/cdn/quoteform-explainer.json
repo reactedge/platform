@@ -1,0 +1,33 @@
+{
+  "data": {
+    "title": "Isolated Quote Form",
+    "sections": [
+      {
+        "type": "friction",
+        "title": "Where friction appears",
+        "items": [
+          "Form updates and their validation are implicit development complexity",
+          "Routing is built-in with the core creating complexity",
+          "Testing is tangled from the core capability"
+        ]
+      },
+      {
+        "type": "impact",
+        "title": "What isolation changes",
+        "items": [
+          "Validation logic contained within the widget",
+          "Routing concern safely moved in its own environment",
+          "Use modern UI for more future proof deliverables"
+        ]
+      }
+    ],
+    "closing":  "Core transactional flow is reduced more liberating dev team on what matters",
+    "illustration": {
+      "svg": "https://wpdemo.reactedge.net/wp-content/themes/greenedge/images/widgets/matrix/contactus-impact-matrix.svg"
+    },
+    "layout": "right"
+  },
+  "binding": {
+    "trigger": "[data-explainer-trigger='quoteform-isolation']"
+  }
+}

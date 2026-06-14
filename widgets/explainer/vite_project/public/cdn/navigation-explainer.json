@@ -1,0 +1,33 @@
+{
+  "data": {
+    "title": "How Isolating Megamenu Help?",
+    "summary": "Removing a module that runs on every page simplfies the core system",
+    "sections": [
+      {
+        "type": "friction",
+        "title": "Where friction appears",
+        "items": [
+          "Advanced navigation requirements (eg: A/B tests) bring risk due to module customisation inside the core",
+          "Styling updates increase css bundling size with poor refactoring capabilities"
+        ]
+      },
+      {
+        "type": "impact",
+        "title": "What isolation changes",
+        "items": [
+          "No core template overrides",
+          "Independent deployment of navigation updates",
+          "Core system de-risk by simplification"
+        ]
+      }
+    ],
+    "closing": "Navigation is not impacting on the core transactional code surface.",
+    "illustration": {
+      "svg": "https://wpdemo.reactedge.net/wp-content/themes/greenedge/images/widgets/matrix/megamenu-impact-matrix.svg"
+    },
+    "layout": "right"
+  },
+  "binding": {
+    "trigger": "[data-explainer-trigger='navigation-isolation']"
+  }
+}

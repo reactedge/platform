@@ -1,0 +1,91 @@
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--dark-color, #111);
+}
+
+.drawer-header h3 {
+    margin: 0;
+}
+
+.drawer-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.drawer-summary strong {
+    display: block;
+    font-weight: 600;
+}
+
+.drawer-summary p {
+    margin: 0.25rem 0 0;
+    color: var(--light-color, #666);
+}
+
+.drawer-section {
+    padding: 0.75rem 1rem;
+}
+
+.drawer-label {
+    display: block;
+    font-size: var(--text-font-size, 14px);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #666;
+}
+
+.drawer-outcome {
+    background: #fafafa;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.drawer-actions {
+    margin-top: auto;
+    padding: 1rem;
+    border-top: 1px solid var(--header-color, #111);
+}
+
+.drawer-primary {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: var(--text-font-size, 16px);
+    font-weight: 600;
+    border-radius: 4px;
+    border: 1px solid var(--primary-color, #111);;
+    background: var(--primary-color, #111);;
+    color: #fff;
+    cursor: pointer;
+}
+
+.drawer-primary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.drawer-inline {
+    position: absolute;
+    background: #ffffff;
+    width: 400px;
+    top: 0;
+    left: -20px;
+    right: 0;
+    border-radius: 5px;
+
+    margin-top: 0.25rem;
+    z-index: 20;
+
+    border: 1px solid var(--drawer-color, #1a1a1a);
+}
+
+.drawer-auth-form input {
+    width: 100%;
+    box-sizing: border-box;
+}

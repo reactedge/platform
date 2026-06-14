@@ -1,0 +1,23 @@
+.storeSearchForm {
+    display: flex;
+    align-items: center;
+    gap: var(--sf-space-sm);
+    margin-bottom: var(--sf-space-lg);
+}
+
+.storeSearchForm__input {
+    padding: var(--sf-space-sm);
+    font-size: 14px;
+    width: 140px;
+}
+
+.storeSearchForm__select {
+    padding: var(--sf-space-sm);
+    font-size: 14px;
+}
+
+.storeSearchForm__button {
+    padding: 8px 14px; /* acceptable literal: mixed x/y padding */
+    font-size: 14px;
+    cursor: pointer;
+}

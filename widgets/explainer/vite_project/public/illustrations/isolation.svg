@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="520" viewBox="0 0 980 520" role="img" aria-label="Core platform risk vs decoupled feature delivery">
+    <defs>
+        <style>
+            .title { font: 700 18px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+            .label { font: 600 14px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+            .text  { font: 500 13px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+            .small { font: 500 12px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; opacity: .9; }
+            .muted { opacity: .85; }
+        </style>
+
+        <!-- subtle shadow -->
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.18"/>
+        </filter>
+
+        <!-- arrowheads -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+
+        <marker id="arrowMuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#666"/>
+        </marker>
+
+        <!-- dotted stroke -->
+        <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse">
+            <circle cx="1.5" cy="1.5" r="1.1" fill="#bbb"/>
+        </pattern>
+    </defs>
+
+    <!-- background -->
+    <rect x="0" y="0" width="980" height="520" fill="#fff"/>
+
+    <!-- top title -->
+    <text x="30" y="42" class="title">Why “not touching the core” changes delivery risk</text>
+    <text x="30" y="66" class="small muted">Left: traditional modules ship inside the platform’s failure domain • Right: features ship independently via a simple contract</text>
+
+    <!-- LEFT PANEL -->
+    <g transform="translate(30,105)">
+        <text x="0" y="-12" class="label">Traditional delivery</text>
+
+        <!-- platform box -->
+        <rect x="0" y="0" width="430" height="360" rx="18" fill="#f7f7f7" stroke="#ddd" filter="url(#shadow)"/>
+        <text x="18" y="34" class="label">Core Platform</text>
+        <text x="18" y="56" class="small muted">Themes • Plugins • Business rules • Shared runtime</text>
+
+        <!-- core area -->
+        <rect x="18" y="82" width="394" height="120" rx="14" fill="#ffffff" stroke="#e3e3e3"/>
+        <text x="34" y="114" class="text">Core code + runtime</text>
+        <text x="34" y="138" class="small muted">One release cadence • One blast radius</text>
+
+        <!-- modules area -->
+        <rect x="18" y="220" width="394" height="120" rx="14" fill="#ffffff" stroke="#e3e3e3"/>
+        <text x="34" y="252" class="text">Traditional modules</text>
+        <text x="34" y="276" class="small muted">Hooks • Shared state • Dependency drift</text>
+
+        <!-- module blocks -->
+        <g>
+            <rect x="270" y="240" width="120" height="32" rx="10" fill="#f2f2f2" stroke="#d9d9d9"/>
+            <rect x="270" y="282" width="120" height="32" rx="10" fill="#f2f2f2" stroke="#d9d9d9"/>
+            <rect x="270" y="324" width="120" height="32" rx="10" fill="#f2f2f2" stroke="#d9d9d9"/>
+            <text x="282" y="261" class="small">Module A</text>
+            <text x="282" y="303" class="small">Module B</text>
+            <text x="282" y="345" class="small">Module C</text>
+        </g>
+
+        <!-- coupling arrows -->
+        <line x1="240" y1="256" x2="120" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="240" y1="298" x2="120" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="240" y1="340" x2="120" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="18" y="336" class="small muted">Result: coupling grows → releases slow down → change feels risky</text>
+    </g>
+
+    <!-- RIGHT PANEL -->
+    <g transform="translate(520,105)">
+        <text x="0" y="-12" class="label">Decoupled feature delivery</text>
+
+        <!-- platform box -->
+        <rect x="0" y="0" width="430" height="360" rx="18" fill="#f7f7f7" stroke="#ddd" filter="url(#shadow)"/>
+        <text x="18" y="34" class="label">Core Platform</text>
+        <text x="18" y="56" class="small muted">Stable core • Minimal change surface</text>
+
+        <!-- core area -->
+        <rect x="18" y="82" width="394" height="120" rx="14" fill="#ffffff" stroke="#e3e3e3"/>
+        <text x="34" y="114" class="text">Core stays stable</text>
+        <text x="34" y="138" class="small muted">Focus on reliability and business-critical flows</text>
+
+        <!-- contract area -->
+        <rect x="18" y="220" width="394" height="70" rx="14" fill="#ffffff" stroke="#e3e3e3"/>
+        <text x="34" y="252" class="text">Widget contract surface</text>
+        <text x="34" y="275" class="small muted">Mount point • Config • Events • Logs</text>
+
+        <!-- external features zone -->
+        <rect x="18" y="304" width="394" height="56" rx="14" fill="#ffffff" stroke="#e3e3e3"/>
+        <text x="34" y="308" class="text">Independent features (versioned)</text>
+
+        <!-- feature blocks outside "core" (still in panel but shown as separate units) -->
+        <g transform="translate(0,-50)">
+            <rect x="270" y="312" width="120" height="32" rx="10" fill="#eef6ff" stroke="#cfe3ff"/>
+            <rect x="270" y="270" width="120" height="32" rx="10" fill="#eef6ff" stroke="#cfe3ff"/>
+            <rect x="270" y="228" width="120" height="32" rx="10" fill="#eef6ff" stroke="#cfe3ff"/>
+            <text x="282" y="333" class="small">Featuregg v1.2</text>
+            <text x="282" y="291" class="small">Feature v2.0</text>
+            <text x="282" y="249" class="small">Feature v0.9</text>
+        </g>
+
+        <!-- arrows from features to contract (not to core) -->
+        <line x1="260" y1="194" x2="170" y2="252" stroke="#666" stroke-width="2" marker-end="url(#arrowMuted)"/>
+        <line x1="260" y1="236" x2="170" y2="252" stroke="#666" stroke-width="2" marker-end="url(#arrowMuted)"/>
+        <line x1="260" y1="278" x2="170" y2="280" stroke="#666" stroke-width="2" marker-end="url(#arrowMuted)"/>
+
+        <text x="18" y="336" class="small muted">Result: features evolve independently → safer releases → faster cycles</text>
+    </g>
+
+    <!-- bottom callouts -->
+    <g transform="translate(30,480)">
+        <rect x="0" y="-22" width="920" height="34" rx="12" fill="url(#dots)" opacity="0.25"/>
+        <text x="14" y="0" class="small">
+            Key idea: move change pressure away from the core — ship features as independent units, connected by a stable contract.
+        </text>
+    </g>
+</svg>

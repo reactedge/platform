@@ -1,0 +1,50 @@
+:host {
+    /* =========================
+       PRIMARY — SANTA RED
+       ========================= */
+    --primary-color: #c4161c;           /* classic Santa red */
+    --header-color: #c4161c;
+    --purchased-color: #a31217;
+    --unavailable-color: #d07a7d;
+
+    /* =========================
+       CARDS — PINE GREEN
+       ========================= */
+    --border-color: #1f6b3a;            /* strong pine */
+    --border-color-soft: rgba(31, 107, 58, 0.45);
+    --border-color-faint: rgba(31, 107, 58, 0.20);
+
+    /* =========================
+       HOST — ELF GREEN
+       ========================= */
+    --host-color: #7fcf9b;              /* light elf green */
+    --host-color-soft: rgba(127, 207, 155, 0.35);
+
+    /* =========================
+       SPECIAL — GOLD
+       ========================= */
+    --highlighting-color: rgba(232, 196, 93, 0.6);
+
+    /* =========================
+       SURFACES — SNOW / PAPER
+       ========================= */
+    --drawer-color: #ffffff;
+    --dark-color: #7a1f2b;
+    --filter-color: #f0f0f0;
+
+    /* =========================
+       TEXT
+       ========================= */
+    --light-color: #444;
+
+    /* =========================
+       AUTH (leave neutral)
+       ========================= */
+    --auth-background: #fafafa;
+    --auth-switch-background: #fafafa;
+
+    /* TITLES — MULLED WINE */
+    --title-color: #7a1f2b; /* same family as Santa red, darker */
+
+    --card-background: lightgreen;
+}

@@ -1,0 +1,21 @@
+<body>
+<script type="module" src="./src/widget.ts"></script>
+
+<script type="module">
+    import { mount } from './src/widget.ts';
+    import {loadContract} from './src/lib/contract-resolver.ts';
+
+    const el = document.querySelector('banner-widget');
+
+    const config = await loadContract('mageosuk7.json');
+
+    mount(el, config);
+</script>
+
+<div class="banner">
+    <div data-load="on-scroll:100">
+        <banner-widget />
+    </div>
+</div>
+
+</body>

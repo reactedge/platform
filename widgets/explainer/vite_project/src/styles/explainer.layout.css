@@ -1,0 +1,72 @@
+.reactedge-explainer {
+    position: fixed;
+    top: 120px; /* below header */
+    left: 0;
+    right: 0;
+    padding: 1rem;
+}
+
+.re-explainer-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+
+    background: var(--re-card-bg, #fff);
+    border: 1px solid var(--re-card-border, #e5e7eb);
+    border-radius: 6px;
+
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.re-explainer-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.re-explainer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.re-explainer-overlay-content {
+    max-width: 90vw;
+    max-height: 80vh;
+    background: white;
+    padding: 0;
+}
+
+.re-explainer-overlay-content img {
+    width: 100%;
+}
+
+.re-explainer-svg {
+    cursor: zoom-in;
+}
+
+@media (min-width: 768px) {
+    .re-explainer-card {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .re-layout-left {
+        flex-direction: row;
+    }
+
+    .re-layout-right {
+        flex-direction: row-reverse;
+    }
+}
+
+

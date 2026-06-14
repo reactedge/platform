@@ -1,0 +1,24 @@
+.mw-parent-link {
+    text-decoration: none;
+    color: var(--nav-color);
+}
+
+.mw-parent-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--nav-color);
+    font-size: var(--nav-font-size);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+}
+
+.mw-parent-arrow {
+    font-size: 0.7em;
+}
+
+@media (max-width: 768px) {
+    .mw-parent-link {
+        padding: 0;
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "runtime": {
+    "venue": "green-edge"
+  },
+  "integrations": {
+    "api": {
+      "graphql": "http://booking-api.local/api/graphql",
+      "auth": "http://auth-bridge.southerndemo.com"
+    },
+    "requires": ["cloudflare"]
+  }
+}

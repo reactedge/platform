@@ -1,0 +1,35 @@
+{
+  "data": {
+    "title": "Campaign Velocity Without Theme Risk",
+    "summary": "In many systems, updating campaigns, adjusting messaging, or testing layouts requires theme edits, deployment coordination, and regression risk. What should move weekly often moves monthly with fear to introduce bugs.",
+    "sections": [
+      {
+        "type": "friction",
+        "title": "Where friction appears",
+        "items": [
+          "Campaign updates require mixed coordination for each concerns involved (creative, responsiveness, UX, optimisation)",
+          "Animation logic interferes with global scripts",
+          "Performance cost is bundled into the global theme"
+        ]
+      },
+      {
+        "type": "impact",
+        "title": "What isolation changes",
+        "items": [
+          "Campaign content defined via structured contract",
+          "Animation and interaction scoped locally",
+          "Loaded only when present on the page",
+          "Independent deployment of core capabilities"
+        ]
+      }
+    ],
+    "closing": "Campaign execution becomes iterative — not infrastructural.",
+    "illustration": {
+      "svg": "https://wpdemo.reactedge.net/wp-content/themes/greenedge/images/widgets/matrix/banner-impact-matrix.svg"
+    },
+    "layout": "right"
+  },
+  "binding": {
+    "trigger": "[data-explainer-trigger='banner2-isolation']"
+  }
+}

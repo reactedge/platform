@@ -1,0 +1,12 @@
+.contact--loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.contact__error {
+    margin-top: 0.5rem;
+}
+
+.contact__success {
+    margin-top: 0.5rem;
+}

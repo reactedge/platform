@@ -1,0 +1,16 @@
+.switchButton {
+    background-color: #1979c3; /* Magento primary blue */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 3px; /* Magento-like radius */
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: background-color 0.2s ease;
+}
+
+.switchButton:hover {
+    background-color: #1669a8; /* slightly darker on hover */
+}

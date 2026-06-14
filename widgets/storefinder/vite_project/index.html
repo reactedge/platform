@@ -1,0 +1,33 @@
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+<h2>Store Finder</h2>
+<script type="module">
+    import { mount } from './src/widget.ts';
+    import {loadContract} from "./src/lib/contract-resolver.js";
+    import {readIntegrationConfig} from "./src/Config.js";
+    const config = await loadContract('uk.json')
+    const element = document.querySelector('storefinder-widget');
+
+    const runtimeConfig = readIntegrationConfig();
+
+    await requestAnimationFrame(() => {
+        mount(element, config, runtimeConfig);
+    })
+</script>
+
+<storefinder-widget />
+
+<script type="application/json" id="reactedge-runtime">
+    {
+        "integrations": {
+            "googleMaps": {
+                "apiKey": "AIzaSyBXDMg2bxjoLBCi7HwS_3WyHpYYOcjX3iY"
+            }
+        }
+    }
+</script>
+
+</body>

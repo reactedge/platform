@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>USP Widget Fixture</title>
+
+    <!-- Load built widget bundle -->
+    <script type="module" src="/dist/widget-megamenu.iife.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<megamenu-widget
+        data-instance="main-nav">
+    <script type="application/json" data-config>
+        {
+            "data": {
+                "items": [
+                    {
+                        "id": "1",
+                        "label": "Home",
+                        "url": "/",
+                        "children": []
+                    },
+                    {
+                        "id": "2",
+                        "label": "Services",
+                        "url": "/services",
+                        "children": [
+                            {
+                                "id": "21",
+                                "label": "Web Design",
+                                "url": "/services/web-design",
+                                "children": []
+                            },
+                            {
+                                "id": "22",
+                                "label": "SEO",
+                                "url": "/services/seo",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "id": "3",
+                        "label": "About",
+                        "url": "/about",
+                        "children": []
+                    },
+                    {
+                        "id": "4",
+                        "label": "Contact",
+                        "url": "/contact",
+                        "children": [],
+                        "meta": {
+                            "type": "cta"
+                        }
+                    }
+                ]
+            },
+            "settings": {
+                "theme": {
+                    "dataLocale" : "fr-FR",
+                    "fontColor": "#333",
+                    "primaryColor": "#1979c3",
+                    "secondaryColor": "#ff5501"
+                }
+            }
+        }
+    </script>
+
+    <div class="widget-spinner"></div>
+</megamenu-widget>
+
+</body>
+</html>

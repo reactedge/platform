@@ -1,0 +1,13 @@
+<body>
+<script type="module" src="./src/widget.ts"></script>
+
+<contactus-widget data-title="Contact us" data-sitekey="0x4AAAAAACIE8OqQC3iwDaZh" data-intro="Got a question about solar, electrical work, or how we can help your home or business? Our friendly team is here to help. Reach out today—we’ll reply within one business day." data-endpoint="https://scsolarltd.co.uk/wp-json/contact/v1/send" data-categories="[
+                {&quot;value&quot;:&quot;general&quot;,&quot;label&quot;:&quot;General enquiry&quot;},
+                {&quot;value&quot;:&quot;quote&quot;,&quot;label&quot;:&quot;Request a quote&quot;}
+              ]" data-fields="[
+                {&quot;name&quot;:&quot;name&quot;,&quot;label&quot;:&quot;Your name&quot;,&quot;required&quot;:true},
+                {&quot;name&quot;:&quot;email&quot;,&quot;label&quot;:&quot;Email&quot;,&quot;type&quot;:&quot;email&quot;,&quot;required&quot;:true},
+                {&quot;name&quot;:&quot;message&quot;,&quot;label&quot;:&quot;Message&quot;,&quot;type&quot;:&quot;textarea&quot;,&quot;required&quot;:true}
+              ]"></contactus-widget>
+
+</body>

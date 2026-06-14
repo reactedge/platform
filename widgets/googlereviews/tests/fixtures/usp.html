@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>USP Widget Fixture</title>
+
+    <!-- Load built widget bundle -->
+    <script type="module" src="/dist/widget-usp.iife.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<usp-widget>
+    <script type="application/json" data-config>
+        {
+            "data": {
+                "slides": [
+                    { "text": "Over 20 years of experience", "textColor": "#F6F2DF" },
+                    { "text": "Local specialists you can trust", "textColor": "#F6F2DF" },
+                    { "text": "Fully accredited & insured", "textColor": "#F6F2DF" }
+                ]
+            },
+            "settings": {
+                "mode": {
+                    "desktop": "static",
+                    "tablet": "slider",
+                    "mobile": "slider"
+                },
+                "height": "45px",
+                "backgroundColor": "#003652"
+            }
+        }
+    </script>
+</usp-widget>
+
+</body>
+</html>

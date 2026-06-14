@@ -1,0 +1,67 @@
+.event-status {
+    font-size: var(--text-font-size, 10px);
+    color: var(--header-color, #111);
+}
+
+.week-event-list {
+    opacity: 0.6;
+    animation: contentFadeIn 900ms ease forwards;
+    position: relative;
+}
+
+.week-event-list[data-layout="desktop"] {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+@keyframes contentFadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.week-event-list[data-layout="mobile"] {
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+}
+
+.week-event-day {
+    display: flex;
+    flex-direction: column;
+    width: 100%;        /* or flex-basis, see below */
+}
+
+.week-event-day-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.week-event-day--empty {
+    width: 300px;
+}
+
+.booking-context {
+    margin: 0.75rem 0 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.15));
+    opacity: 0.6;
+    animation: contentFadeIn 900ms ease forwards;
+}
+
+.booking-context__main {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    font-size: var(--text-font-size, 14px);
+}
+
+.booking-context__main strong {
+    font-weight: 600;
+}
+
+.booking-context__description {
+    margin-top: 0.25rem;
+    color: var(--light-color, #666);
+}

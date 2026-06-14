@@ -1,0 +1,163 @@
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+    <script type="module">
+        export const registry = {
+            intentdiscovery: {
+                cdn: '/cdn/default.json'
+            }
+        };
+
+        import { mount } from './src/widget.ts';
+        import {loadContractByName} from './src/widget-runtime/lib/contractLoader.ts';
+
+        const el = document.querySelector('intentdiscovery-widget');
+
+        const config = await loadContractByName('intentdiscovery', registry);
+
+        mount(el, config);
+    </script>
+
+    <script>
+        window.ReactEdgeIntent = window.ReactEdgeIntent || {
+            emit: (signal) => {
+                window.dispatchEvent(
+                    new CustomEvent("reactedge:intent", { detail: signal })
+                );
+            }
+        }
+
+        window.addEventListener("reactedge:syncfilters", (event) => {
+            const { filters } = event.detail;
+
+            const params = new URLSearchParams(window.location.search);
+
+            if (Object.keys(filters).length > 0) {
+                Object.entries(filters).forEach(([attribute, value]) => {
+                    const values = Object.keys(value)
+                    values.forEach(value => {
+                        params.set(attribute, value);
+                    })
+                });
+                reloadUrl(params, 'reload url (filters)')
+            }
+        });
+
+        window.addEventListener('reactedge:recommendations', (event) => {
+            const { recommendations } = event.detail
+
+            const scoreMap = new Map(
+                recommendations.map(r => [r.sku, r.match])
+            )
+
+            renderRecommendationBadges(scoreMap)
+        })
+
+        function reloadUrl(params, log) {
+            console.log(log);
+            const url = `${window.location.pathname}?${params.toString()}`;
+            // AJAX mode → no reload
+            window.history.pushState({}, '', url);
+            // simulate lifecycle
+            window.dispatchEvent(new CustomEvent('reactedge:request-recommendations'));
+        }
+
+        function renderRecommendationBadges(scoreMap) {
+            const nodes = document.querySelectorAll('[data-sku]')
+
+            nodes.forEach(node => {
+                const sku = node.getAttribute('data-sku')
+                if (!sku) return
+
+                const score = scoreMap.get(sku)
+                if (!score) return
+
+                // avoid duplicates
+                if (node.querySelector('.reactedge-score-badge')) return
+
+                node.classList.add('reactedge-match')
+
+                const badge = document.createElement('div')
+                badge.className = `reactedge-score-badge ${getScoreClass(score)}`
+                badge.innerHTML = `
+          <span class="reactedge-badge-label">Match</span>
+          <span class="reactedge-badge-score">${score}%</span>`
+
+                node.appendChild(badge)
+            })
+        }
+
+        function getScoreClass(score) {
+            if (score > 0.8) return 'is-high'
+            if (score > 0.5) return 'is-medium'
+            return 'is-low'
+        }
+    </script>
+
+    <div style="padding:20px; border:1px solid #ccc; margin-top:20px;">
+        <h3>Intent Debug Panel</h3>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'product_view', sku: 'SKU-123' })">
+            Simulate Product View (SKU-123)
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'add_to_cart', sku: 'SKU-123', price: 120 })">
+            Simulate Add To Cart (£120)
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'category_view', id: 'mens' })">
+            Simulate Category View (Mens)
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'size', value: '168' })">
+            Simulate Filter Size M
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'style_general', value: '124' })">
+            Simulate Filter Style General Soft Shell
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'climate', value: '204' })">
+            Simulate Filter Climate Indoor
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'material', value: '36' })">
+            Simulate Filter Material Mesh
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'climate', value: '203' })">
+            Simulate Climate Cool
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'material', value: '152' })">
+            Simulate Material with weird character
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'category_view', id: 'men' })">
+            Simulate category: Mens
+        </button>
+
+        <button onclick="ReactEdgeIntent.emit({ type: 'category_view', id: 'tops' })">
+            Simulate category: Tops
+        </button>
+    </div>
+
+    <intentdiscovery-widget />
+
+
+    <script type="application/json" id="reactedge-runtime">
+    {
+        "integrations": {
+            "magentoGraphql": {
+                "api": "https://mageos-docker.magsite.co.uk/graphql"
+            },
+            "intentApi": {
+                "baseUrl": "http://localhost:8000/v1"
+            }
+        }
+    }
+</script>
+
+</body>

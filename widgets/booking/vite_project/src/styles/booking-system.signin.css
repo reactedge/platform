@@ -1,0 +1,53 @@
+.drawer-auth h4 {
+    margin-bottom: 0.5rem;
+}
+
+.drawer-auth-form {
+  position: relative;
+}
+
+.drawer-auth-form h4 {
+    margin-bottom: 0.5rem;
+}
+
+.drawer-auth-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.drawer-auth-form input {
+    width: 95%;
+    padding: 0.7rem;
+    font-size: var(--text-font-size, 14px);
+}
+
+.drawer-auth-form button {
+    width: 100%;
+    padding: 0.8rem;
+    font-weight: 500;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    background: var(--auth-background, #f5f5f5);
+    color: var(--primary-color, #111);;
+    cursor: pointer;
+}
+
+.drawer-auth-switch {
+    margin-top: var(--standard-gap, 1rem);
+}
+
+.drawer-auth-switch button {
+    padding: 0.5rem 0.8rem;
+    font-weight: 500;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    background: var(--auth-switch-background, #fafafa);
+    color: var(--primary-color, #111);;
+    cursor: pointer;
+}
+
+.drawer-auth-form button:hover,
+.drawer-auth-switch button:hover {
+    border-color: var(--primary-color, #111);;
+}

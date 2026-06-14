@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://widgets-cdn.co.uk/usp/styles/usp.css">
+</head>
+<body>
+
+<h2>usp x2 Test</h2>
+<script type="module">
+    import { mount } from './src/widget.ts';
+
+    const config = {
+        slides: [
+            { text: 'Over 20 years of experience', textColor: '#F6F2DF' },
+            { text: 'Local specialists you can trust', textColor: '#F6F2DF' },
+            { text: 'Fully accredited & insured', textColor: '#F6F2DF' }
+        ],
+        settings: {
+            mode: {
+                desktop: 'static',
+                tablet: 'slider',
+                mobile: 'slider'
+            },
+            height: '45px',
+            backgroundColor: '#003652'
+        }
+    };
+
+    const element = document.querySelector('usp-widget');
+
+    await requestAnimationFrame(() => {
+        mount(element, config);
+    })
+</script>
+
+<usp-widget></usp-widget>
+
+</body>
+</html>

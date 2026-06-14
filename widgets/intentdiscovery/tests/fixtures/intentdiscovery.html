@@ -1,0 +1,85 @@
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+<script type="module" src="./src/widget.ts"></script>
+
+<script>
+    window.ReactEdgeIntent = window.ReactEdgeIntent || {
+        emit: (signal) => {
+            window.dispatchEvent(
+                new CustomEvent("reactedge:intent", { detail: signal })
+            );
+        }
+    }
+    function simulateCategory(category) {
+        window.dispatchEvent(
+            new CustomEvent("reactedge:intent", {
+                detail: {
+                    type: "category_view",
+                    id: category
+                }
+            })
+        );
+    }
+</script>
+
+<div style="padding:20px; border:1px solid #ccc; margin-top:20px;">
+    <h3>Intent Debug Panel</h3>
+
+    <button onclick="ReactEdgeIntent.emit({ type: 'product_view', sku: 'SKU-123' })">
+        Simulate Product View (SKU-123)
+    </button>
+
+    <button onclick="ReactEdgeIntent.emit({ type: 'add_to_cart', sku: 'SKU-123', price: 120 })">
+        Simulate Add To Cart (£120)
+    </button>
+
+    <button onclick="ReactEdgeIntent.emit({ type: 'category_view', id: 'mens' })">
+        Simulate Category View (Mens)
+    </button>
+
+    <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'size', value: '168' })">
+        Simulate Filter Size M
+    </button>
+
+    <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'style_general', value: '124' })">
+        Simulate Filter Style General Soft Shell
+    </button>
+
+    <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'climate', value: '204' })">
+        Simulate Filter Climate Indoor
+    </button>
+
+    <button onclick="ReactEdgeIntent.emit({ type: 'filter_select', attribute: 'material', value: '36' })">
+        Simulate Filter Material Mesh
+    </button>
+
+    <button onclick="simulateCategory('men')">
+        Simulate category: Mens
+    </button>
+
+    <button onclick="simulateCategory('jackets-men')">
+        Simulate category: Tops
+    </button>
+</div>
+
+<intentdiscovery-widget data-contract="/cdn/uk.json" />
+
+
+
+<script type="application/json" id="reactedge-runtime">
+    {
+        "integrations": {
+            "magentoGraphql": {
+                "api": "https://mageos-docker.magsite.co.uk/graphql"
+            },
+            "intentApi": {
+                "baseUrl": "http://localhost:3003"
+            }
+        }
+    }
+</script>
+
+</body>

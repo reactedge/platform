@@ -1,0 +1,48 @@
+.uspSlider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.uspSlider__inner {
+    position: relative;
+    width: 100%;
+}
+
+.banner-media {
+    position: relative;
+    width: 100%;
+}
+
+.re-banner-media {
+    width: 100%;
+}
+
+.re-banner-viewport {
+    position: relative;
+    width: 100%;
+}
+
+.re-banner-track {
+    width: 100%;
+}
+
+/* multi-slide (tiles) */
+.re-banner-track--tiles {
+    display: flex;
+    gap: 16px;
+}
+
+/* hero banner mode */
+.re-banner-track--single {
+    position: relative;
+}
+
+/* navigation area */
+.re-banner-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+}

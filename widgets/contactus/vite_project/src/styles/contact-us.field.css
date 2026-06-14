@@ -1,0 +1,47 @@
+.contact__field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+label {
+    margin-bottom: 0.25rem;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    box-sizing: border-box;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 12px 40px 12px 12px;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+
+    font-size: 16px; /* critical: prevents iOS zoom */
+    line-height: 1.4;
+
+    background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='black' stroke-width='2' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+input,
+textarea {
+    padding: 0.7rem;
+}
+
+select {
+    padding: 0.70rem;
+    background: #fff;
+}
+
+.contact__actions {
+    margin-top: 1rem;
+}

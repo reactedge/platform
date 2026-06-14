@@ -1,0 +1,12 @@
+.usp-static-bar  {
+    height: 40px;
+}
+
+.usp-static-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    font-size: 14px;
+    text-align: center;
+}
