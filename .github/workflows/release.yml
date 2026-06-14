@@ -61,7 +61,7 @@ jobs:
             --exclude "node_modules" \
             --exclude ".github" \
             --exclude ".env" \
-            ./services/widgets-ssr/ \
+            ./services/ssr/ \
             ${{ secrets.WIDGET_SSH_USER }}@${{ secrets.WIDGET_SSH_HOST }}:/var/www/ssr/
 
       - name: Install and restart SSR
