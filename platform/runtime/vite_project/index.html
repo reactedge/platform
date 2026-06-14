@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Multi Widget Test</h2>
+
+<usp-widget data-contract="/cdn/uk.json"></usp-widget>
+<megamenu-widget data-instance="main-nav" data-contract="/cdn/fr.json">
+    <div class="widget-spinner"></div>
+</megamenu-widget>
+
+<div class="contact-form">
+    <div data-widget-container="contactus"
+         data-load="eager"
+         data-page="contact"
+    >
+        <contactus-widget data-contract="/cdn/default.json">
+        </contactus-widget>
+    </div>
+    <div id="contactus-turnstile"></div>
+</div>
+
+<script type="application/json" id="reactedge-runtime">
+    {
+        "integrations": {
+            "cloudflare": {
+                "siteKey": "0x4AAAAAACLGHYkoMP038SNT"
+            }
+        }
+    }
+</script>
+
+<script type="module" src="/src/mount.ts"></script>
+</body>
+</html>

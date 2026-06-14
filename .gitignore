@@ -1,0 +1,69 @@
+.idea
+node_modules
+www
+.env
+widget.local.crt
+widget.local.key
+test-results
+images-webp/
+
+archive/*
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+coverage/
+
+# Vite
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment
+.env.*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Runtime
+tmp/
+.temp/
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+
+# OpenTelemetry
+*.trace
+*.span
+
+# Generated widget assets
+platform/widgets-cdn/www/**/bundle/
+platform/widgets-cdn/www/**/css/
+
+# Generated SSR snapshots
+platform/widgets-ssr/snapshots/
+
+# Deployment artifacts
+artifacts/
+
+platform/intent-engine/*
+platform/**/self-healing/*
+platform/cdn/**/contracts/*
+README-DEPLOY-DEMO.md

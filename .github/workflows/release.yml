@@ -1,0 +1,71 @@
+name: Publish ReactEdge Platform
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: reactedge
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.WIDGET_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          if [ -z "${{ secrets.WIDGET_SSH_HOST }}" ]; then
+            echo "ERROR: WIDGET_SSH_HOST not set (environment secrets not visible)"
+            exit 1
+          fi
+
+          ssh-keyscan -H "${{ secrets.WIDGET_SSH_HOST }}" >> ~/.ssh/known_hosts
+
+#      - name: Build CSS bundles
+#        run: npm run build:css
+
+      - name: Sync CDN assets
+        run: |
+          rsync -avz --delete \
+            ./platform/cdn/www/ \
+            ${{ secrets.WIDGET_SSH_USER }}@${{ secrets.WIDGET_SSH_HOST }}:/var/www/cdn/
+
+      - name: Sync SSR widgets source code
+        run: |
+          rsync -avz --delete \
+            ./platform/widgets-ssr/code/ \
+            ${{ secrets.WIDGET_SSH_USER }}@${{ secrets.WIDGET_SSH_HOST }}:/var/www/widgets_src/
+
+      - name: Sync SSR runtime
+        run: |
+          rsync -avz --delete \
+            --exclude ".git" \
+            --exclude "code" \
+            --exclude "node_modules" \
+            --exclude ".github" \
+            --exclude ".env" \
+            ./platform/widgets-ssr/ \
+            ${{ secrets.WIDGET_SSH_USER }}@${{ secrets.WIDGET_SSH_HOST }}:/var/www/ssr/
+
+      - name: Install and restart SSR
+        run: |
+          ssh ${{ secrets.WIDGET_SSH_USER }}@${{ secrets.WIDGET_SSH_HOST }} << 'EOF'
+            cd /var/www/ssr
+
+            npm ci
+            npm run build
+            pm2 restart widgets-ssr || pm2 start npm --name "widgets-ssr" -- run start
+            pm2 save
+          EOF

@@ -1,0 +1,78 @@
+name: Build & publish widget
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: reactedge
+    env:
+      WIDGET_NAME: __WIDGET_NAME__
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: vite_project
+        run: npm install
+
+      - name: Build widget
+        working-directory: vite_project
+        run: |
+          mkdir -p ../www
+          npm run build
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.WIDGET_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          if [ -z "${{ secrets.WIDGET_SSH_HOST }}" ]; then
+            echo "ERROR: WIDGET_SSH_HOST not set (environment secrets not visible)"
+            exit 1
+          fi
+
+          ssh-keyscan -H "${{ secrets.WIDGET_SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Prepare artifact
+        id: prepare_artifact
+        run: |
+          chmod +x scripts/build-widget.sh
+          ./scripts/build-widget.sh ${WIDGET_NAME}
+
+      - name: Publish artifact
+        run: |
+          DEST="/var/www/widgets/${WIDGET_NAME}"
+
+          ssh ${{ secrets.WIDGET_SSH_USER }}@${{ secrets.WIDGET_SSH_HOST }} \
+          "mkdir -p $DEST"
+          
+          FILE="${{ steps.prepare_artifact.outputs.file }}"
+          
+          if [ -z "$FILE" ]; then
+            echo "ERROR: file output is empty"
+            exit 1
+          fi
+          
+          rsync -av --chown=www-data:www-data \
+            "$FILE" \
+            "www/widget-${WIDGET_NAME}.manifest.json" \
+            ${{ secrets.WIDGET_SSH_USER }}@${{ secrets.WIDGET_SSH_HOST }}:$DEST/
+
+      - name: Publish SSR widget source
+        env:
+          SSH_USER: ${{ secrets.WIDGET_SSH_USER }}
+          SSH_HOST: ${{ secrets.WIDGET_SSH_HOST }}
+        run: |
+          bash scripts/deploy-ssr-widget.sh $WIDGET_NAME

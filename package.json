@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "usp": "cd widgets/usp/vite_project && npm run dev",
+    "banner": "cd widgets/banner/vite_project && npm run dev",
+    "bannermulti": "cd widgets/bannermulti/vite_project && npm run dev",
+    "megamenu": "cd widgets/megamenu/vite_project && npm run dev",
+    "intentdiscovery": "cd widgets/intentdiscovery/vite_project && npm run dev",
+    "storefinder": "cd widgets/storefinder/vite_project && npm run dev",
+    "contactus": "cd widgets/contactus/vite_project && npm run dev",
+    "booking": "cd widgets/booking/vite_project && npm run dev",
+    "explainer": "cd widgets/explainer/vite_project && npm run dev",
+    "googlereviews": "cd widgets/googlereviews/vite_project && npm run dev",
+    "minicart": "cd widgets/minicart/vite_project && npm run dev",
+    "productgallery": "cd widgets/productgallery/vite_project && npm run dev",
+    "regionmap": "cd widgets/regionmap/vite_project && npm run dev",
+    "trustpilot": "cd widgets/trustpilot/vite_project && npm run dev",
+    "trustpilot2": "cd widgets/trustpilot2/vite_project && npm run dev"
+  }
+}
