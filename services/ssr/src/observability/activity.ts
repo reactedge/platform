@@ -1,32 +1,8 @@
 import {context, Span, SpanStatusCode, trace, Tracer} from "@opentelemetry/api";
-import {getTracer, setupTelemetry} from "./tracing";
 import {OTLPTraceExporter} from "@opentelemetry/exporter-trace-otlp-http";
 import {NodeTracerProvider} from "@opentelemetry/sdk-trace-node";
 import {resourceFromAttributes} from "@opentelemetry/resources";
 import {BatchSpanProcessor} from "@opentelemetry/sdk-trace-base";
-import {logger} from "../logger";
-
-export function getActiveSpan(traceId: string, parentSpanId: string) {
-    const parentContext =
-        trace.setSpanContext(
-            context.active(),
-            {
-                traceId,
-                spanId: parentSpanId,
-                traceFlags: 1,
-                isRemote: true
-            }
-        );
-
-    const span =
-        getTracer().startSpan(
-            'ssr.render',
-            undefined,
-            parentContext
-        );
-
-    return span
-}
 
 export class OpenTelemetryObserver {
     private serviceName = 'reactedge-ssr';
