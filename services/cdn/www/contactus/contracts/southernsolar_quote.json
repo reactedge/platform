@@ -1,0 +1,22 @@
+{
+  "data": {
+    "title": "Request a quote",
+    "intro": "Tell us a bit about your project and we’ll get back to you with a tailored quote.",
+    "endpoint": "/wp-json/contact/v1/send",
+    "categories": [
+      {"value":"solar","label":"Solar installation"},
+      {"value":"battery","label":"Battery storage"},
+      {"value":"maintenance","label":"Maintenance / repair"},
+      {"value":"other","label":"Other enquiry"}
+    ],
+    "fields": [
+      {"name":"name","label":"Your name","required":true},
+      {"name":"email","label":"Email","type":"email","required":true},
+      {"name":"postcode","label":"Postcode"},
+      {"name":"message","label":"Tell us about your project","type":"textarea","required":true}
+    ]
+  },
+  "integrations": {
+    "require": ["cloudflare"]
+  }
+}

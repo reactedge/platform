@@ -1,6 +1,5 @@
 .idea
 node_modules
-www
 .env
 widget.local.crt
 widget.local.key
@@ -52,10 +51,6 @@ tmp/
 # OpenTelemetry
 *.trace
 *.span
-
-# Generated widget assets
-platform/widgets-cdn/www/**/bundle/
-platform/widgets-cdn/www/**/css/
 
 # Generated SSR snapshots
 platform/widgets-ssr/snapshots/

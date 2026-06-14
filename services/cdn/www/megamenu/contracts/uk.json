@@ -1,0 +1,195 @@
+
+{
+  "runtime": {
+    "platform": "magento"
+  },
+  "data": {
+    "items": [
+      {
+        "id": "Mzg=",
+        "label": "What's New",
+        "url": "/what-is-new",
+        "children": []
+      },
+      {
+        "id": "MjA=",
+        "label": "Women",
+        "url": "/women",
+        "children": [
+          {
+            "id": "MjE=",
+            "label": "Tops",
+            "url": "/women/tops-women",
+            "children": [
+              {
+                "id": "MjM=",
+                "label": "Jackets",
+                "url": "/women/tops-women/jackets-women",
+                "children": []
+              },
+              {
+                "id": "MjQ=",
+                "label": "Hoodies & Sweatshirts",
+                "url": "/women/tops-women/hoodies-and-sweatshirts-women",
+                "children": []
+              },
+              {
+                "id": "MjU=",
+                "label": "Tees",
+                "url": "/women/tops-women/tees-women",
+                "children": []
+              },
+              {
+                "id": "MjY=",
+                "label": "Bras & Tanks",
+                "url": "/women/tops-women/tanks-women",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "MjI=",
+            "label": "Bottoms",
+            "url": "/women/bottoms-women",
+            "children": [
+              {
+                "id": "Mjc=",
+                "label": "Pants",
+                "url": "/women/bottoms-women/pants-women",
+                "children": []
+              },
+              {
+                "id": "Mjg=",
+                "label": "Shorts",
+                "url": "/women/bottoms-women/shorts-women",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "MTE=",
+        "label": "Men",
+        "url": "/men",
+        "children": [
+          {
+            "id": "MTI=",
+            "label": "Tops",
+            "url": "/men/tops-men",
+            "children": [
+              {
+                "id": "MTQ=",
+                "label": "Jackets",
+                "url": "/men/tops-men/jackets-men",
+                "children": []
+              },
+              {
+                "id": "MTU=",
+                "label": "Hoodies & Sweatshirts",
+                "url": "/men/tops-men/hoodies-and-sweatshirts-men",
+                "children": []
+              },
+              {
+                "id": "MTY=",
+                "label": "Tees",
+                "url": "/men/tops-men/tees-men",
+                "children": []
+              },
+              {
+                "id": "MTc=",
+                "label": "Tanks",
+                "url": "/men/tops-men/tanks-men",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "MTM=",
+            "label": "Bottoms",
+            "url": "/men/bottoms-men",
+            "children": [
+              {
+                "id": "MTg=",
+                "label": "Pants",
+                "url": "/men/bottoms-men/pants-men",
+                "children": []
+              },
+              {
+                "id": "MTk=",
+                "label": "Shorts",
+                "url": "/men/bottoms-men/shorts-men",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Mw==",
+        "label": "Gear",
+        "url": "/gear",
+        "children": [
+          {
+            "id": "NA==",
+            "label": "Bags",
+            "url": "/gear/bags",
+            "image": "{{TARGET_URL}}/media/catalog/category/bag.jpg",
+            "children": []
+          },
+          {
+            "id": "NQ==",
+            "label": "Fitness Equipment",
+            "url": "/gear/fitness-equipment",
+            "image": "{{TARGET_URL}}/media/catalog/category/equipment.jpg",
+            "children": []
+          },
+          {
+            "id": "Ng==",
+            "label": "Watches",
+            "url": "/gear/watches",
+            "image": "{{TARGET_URL}}/media/catalog/category/watches.jpg",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "OQ==",
+        "label": "Training",
+        "url": "/training",
+        "children": [
+          {
+            "id": "MTA=",
+            "label": "Video Download",
+            "url": "/training/training-video",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "Mzc=",
+        "label": "Sale",
+        "url": "/sale",
+        "children": []
+      },
+      {
+        "id": "NDE=",
+        "label": "Decking",
+        "url": "/decking",
+        "children": []
+      }
+    ]
+  },
+  "settings": {
+    "theme": {
+      "dataLocale" : "en-GB",
+      "fontColor": "#333",
+      "primaryColor": "#1979c3",
+      "secondaryColor": "#ff5501",
+      "urlSuffix": ".html",
+      "dropdownLayouts": {
+        "/gear": "tiles"
+      }
+    }
+  }
+}

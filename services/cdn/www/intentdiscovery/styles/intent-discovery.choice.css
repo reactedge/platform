@@ -1,0 +1,117 @@
+intentdiscovery-widget  .step-finder {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+/* Desktop */
+@media (min-width: 600px) {
+    intentdiscovery-widget  .step-finder {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+intentdiscovery-widget  .choice-tile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 4px 10px 10px;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    background: #ffffff;
+
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-sizing: border-box;
+    position: relative;
+}
+
+intentdiscovery-widget  .choice-tile[data-intent-active='true'] {
+    border-color: #c7d2fe;
+    background: #f5f7ff;
+    color: #1d4ed8;
+    font-weight: 500;
+}
+
+intentdiscovery-widget  .choice-tile[data-intent-activated='true'] {
+    border-color: #cfcfcf;
+    background: #fafafa;
+    color: #1f2937;              /* neutral but clear */
+}
+
+intentdiscovery-widget  .choice-tile .intent-icon {
+    top: unset;
+}
+
+intentdiscovery-widget  .intent-icon {
+    stroke-width:1.8;
+    fill:none;
+    margin-right: 6px;
+    margin-left:10px;
+    opacity: 0.75;
+    position: absolute;
+    right: 10px;
+    z-index: 10;
+}
+
+intentdiscovery-widget  .choice-tile__label {
+    margin-right: 10px;
+}
+
+intentdiscovery-widget  .choice-tile__label--active {
+    font-weight: 600;
+}
+
+intentdiscovery-widget  .choice-tile:hover {
+    border-color: #cfcfcf;
+    background: #fafafa;
+}
+
+intentdiscovery-widget  .choice-tile .badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: #eef2ff;
+    font-size: 12px;
+}
+
+/* Hide radio visually but keep accessibility */
+intentdiscovery-widget  .choice-tile input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Selected state */
+intentdiscovery-widget  .choice-tile input:checked+.choice-tile__label {
+    font-weight: 600;
+}
+
+intentdiscovery-widget  .choice-tile input:checked {
+    /* parent highlight */
+}
+
+intentdiscovery-widget  .swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+intentdiscovery-widget  .swatch--color {
+    /* backgroundColor injected inline */
+}
+
+intentdiscovery-widget  .choice-tile:has(input:checked) {
+    border-color: #2a7fff;
+    background: #f5f9ff;
+}
+
+intentdiscovery-widget  .choice-tile__label {
+    font-size: 0.95rem;
+    line-height: 1.4;
+}

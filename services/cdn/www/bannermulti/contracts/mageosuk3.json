@@ -1,0 +1,58 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech1.jpeg",
+          "alt": "Technology concept 1"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech2.jpeg",
+          "alt": "Technology concept 2"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech3.jpeg",
+          "alt": "Technology concept 3"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech4.jpeg",
+          "alt": "Technology concept 4"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech5.jpeg",
+          "alt": "Technology concept 5"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech6.jpeg",
+          "alt": "Technology concept 6"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech7.jpeg",
+          "alt": "Technology concept 7"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "slider",
+        "tablet": "slider",
+        "mobile": "slider"
+      },
+      "imageWidth": 192,
+      "imageHeight": 133,
+      "visibleSlides": 3
+    }
+  }
+}

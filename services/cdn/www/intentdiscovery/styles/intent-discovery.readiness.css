@@ -1,0 +1,103 @@
+intentdiscovery-widget  .intent-ai-threshold {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px 14px;
+    margin-bottom: 10px;
+
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+
+    background: #f9fafb;
+    color: #6b7280;
+
+    font-size: 13px;
+    line-height: 1.4;
+
+    transition: all 0.2s ease;
+}
+
+intentdiscovery-widget .intent-ai-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+intentdiscovery-widget  .intent-ai-threshold.ready {
+    background: #fef3c7; /* soft amber */
+    border-color: #fcd34d;
+    color: #92400e;
+}
+
+
+intentdiscovery-widget  .intent-ai-threshold .confidence {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+intentdiscovery-widget  .intent-ai-threshold .help {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+intentdiscovery-widget  .intent-ai-threshold:not(.ready) {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+    color: #6b7280;
+}
+
+intentdiscovery-widget  .intent-ai-threshold:not(.ready) .confidence::before {
+    content: "\26A0 ";
+    font-size: 14px;
+}
+
+intentdiscovery-widget  .intent-banner {
+    margin-bottom: 1rem;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+intentdiscovery-widget  .intent-banner.success {
+    background-color: #edf7ed;
+    border: 1px solid #b7e1c1;
+    color: #1e7d32;
+}
+
+intentdiscovery-widget  .intent-banner.success::before {
+    ccontent: "\2714";
+    font-size: 14px;
+}
+
+intentdiscovery-widget  .intent-banner.empty {
+    background-color: #fff4e5;
+    border: 1px solid #ffd59e;
+    color: #8a5a00;
+}
+
+intentdiscovery-widget  .intent-banner.empty::before {
+    content: "\26A0 ";
+}
+
+intentdiscovery-widget .intent-reset {
+    margin-left: 12px;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 400;
+    color: #6b7280;
+    opacity: 0.8;
+    cursor: pointer;
+    padding: 0;
+}
+
+intentdiscovery-widget .intent-reset:hover {
+    opacity: 1;
+    text-decoration: underline;
+}

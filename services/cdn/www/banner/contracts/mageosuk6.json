@@ -1,0 +1,27 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech2.jpeg",
+          "alt": "Modern cloud infrastructure"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/tech4.jpeg",
+          "alt": "Distributed system architecture"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "static",
+        "tablet": "static",
+        "mobile": "static"
+      },
+      "imageWidth": 192,
+      "imageHeight": 133
+    }
+  }
+}

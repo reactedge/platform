@@ -1,0 +1,11 @@
+@import "../../src/styles/booking-system.init.css";
+@import "../../src/styles/booking-system.styles.css";
+@import "../../src/styles/booking-system.dashboard.css";
+@import "../../src/styles/booking-system.filter.css";
+@import "../../src/styles/booking-system.drawer.css";
+@import "../../src/styles/booking-system.eventgroup.css";
+@import "../../src/styles/booking-system.eventcard.css";
+@import "../../src/styles/booking-system.eventstatus.css";
+@import "../../src/styles/booking-system.signin.css";
+@import "../../src/styles/booking-system.signup.css";
+@import "../../src/styles/solar/color.css";

@@ -1,0 +1,36 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/luma-project/megamenu.png",
+          "alt": "Vitalising your system without rebuilding"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/luma-project/searchassistant.png",
+          "alt": "Successful Dev Talk in Dorset with dev.talk bournemouth group"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/luma-project/storefinder.png",
+          "alt": "Successful Dev Talk in Dorset with dev.talk bournemouth group"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "slider",
+        "tablet": "slider",
+        "mobile": "slider"
+      },
+      "imageWidth": 535,
+      "imageHeight": 474,
+      "ssr": {
+        "height": 480
+      }
+    }
+  }
+}

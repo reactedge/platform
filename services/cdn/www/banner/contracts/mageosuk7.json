@@ -1,0 +1,27 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/techbeauty1.webp",
+          "alt": "Beauty and technology fusion"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/techbeauty3.webp",
+          "alt": "Digital beauty transformation"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "static",
+        "tablet": "slider",
+        "mobile": "slider"
+      },
+      "imageWidth": 740,
+      "imageHeight": 460
+    }
+  }
+}

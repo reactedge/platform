@@ -1,0 +1,20 @@
+.mw-link {
+    font-family: var(--nav-font-family);
+    display: block;
+    padding: 10px;
+    margin-bottom: var(--nav-line-height);
+    font-size: var(--nav-font-size);
+    font-weight: normal;
+    color: var(--nav-color);
+    text-decoration: none;
+    align-items: center;
+    gap: 6px;
+}
+
+.mw-link:hover {
+    border-bottom: var(--cta-bg-hover);
+}
+
+.mw-link.in-breadcrumb {
+    border-bottom: 2px solid var(--cta-bg-hover);
+}

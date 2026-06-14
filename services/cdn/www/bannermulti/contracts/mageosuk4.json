@@ -1,0 +1,34 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/techbeauty1.png",
+          "alt": "Tech beauty concept 1"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/techbeauty2.png",
+          "alt": "Tech beauty concept 2"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/media/wysiwyg/widgets/banner/techbeauty3.png",
+          "alt": "Tech beauty concept 3"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "slider",
+        "tablet": "slider",
+        "mobile": "slider"
+      },
+      "imageWidth": 740,
+      "imageHeight": 460,
+      "visibleSlides": 2
+    }
+  }
+}

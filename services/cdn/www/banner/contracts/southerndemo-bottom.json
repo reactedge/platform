@@ -1,0 +1,33 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/greenedge/images/home-banner/image1.webp",
+          "alt": "Formal garden steps surrounded by neatly clipped hedges and topiary"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/greenedge/images/home-banner/image2.webp",
+          "alt": "Large sculpted topiary bush in a professionally landscaped garden"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/greenedge/images/home-banner/image3.webp",
+          "alt": "Purple flowers adding colour to a stone garden wall"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "static",
+        "tablet": "slider",
+        "mobile": "slider"
+      },
+      "imageWidth": 466,
+      "imageHeight": 186
+    }
+  }
+}

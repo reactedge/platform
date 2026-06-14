@@ -1,0 +1,56 @@
+{
+  "data": {
+    "enabledCategories": [
+      "men",
+      "tops-women",
+      "tops-men"
+    ],
+    "minProductCount": 40,
+    "attributeExcludedInLayer": [
+      "eco_collection",
+      "erin_recommends",
+      "sale",
+      "pattern_category",
+      "new",
+      "performance_fabric",
+      "price",
+      "category_uid",
+      "style_bottom"
+    ],
+    "attributeOrder": [
+      "color",
+      "climate"
+    ],
+    "labelMap": {
+      "color": "Couleur",
+      "climate": "Météo",
+      "style_general": "Style",
+      "material": "Matière",
+      "size": "Taille",
+      "price": "Prix",
+      "pattern": "Motif",
+      "result": "Meilleures correspondances"
+    },
+    "ai": {
+      "enabled": true,
+      "activationThreshold": 30,
+      "matchThreshold": 30,
+      "minIntentScore": 4,
+      "maxProductsForAnalysis": 40
+    }
+  },
+  "translations": {
+    "May I ask why you came here to shop?": "Qu’êtes-vous venu chercher aujourd’hui ?",
+    "Describe what you're looking for": "Décrivez ce que vous recherchez",
+    "Tell us what matters most for your purchase": "Décrivez ce qui compte le plus pour votre achat",
+    "View all": "Afficher tout",
+    "Show less": "Afficher moins",
+    "AI suggestions": "Suggestions de l’IA",
+    "AI can be activated in %s more characters": "L’IA pourra s’activer dans %s caractères",
+    "AI ready to interpret your request": "L’IA est prête à interpréter votre demande",
+    "Searching your best match…": "Recherche des produits les plus adaptés à votre demande…"
+  },
+  "integrations": {
+    "require": ["magentoGraphql", "intentApi"]
+  }
+}

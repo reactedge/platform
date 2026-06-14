@@ -33,11 +33,6 @@ jobs:
 
           ssh-keyscan -H "${{ secrets.WIDGET_SSH_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Debug paths
-        run: |
-          pwd
-          find . -maxdepth 3 -type d | sort
-
 #      - name: Build CSS bundles
 #        run: npm run build:css
 

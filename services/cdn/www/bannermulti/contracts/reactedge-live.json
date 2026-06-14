@@ -1,0 +1,100 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/banner.webp",
+          "alt": "Banner widget preview showing a responsive hero component embedded in a webpage"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/banner.svg",
+          "alt": "Banner Widget (SVG)"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/booking.webp",
+          "alt": "Booking Widget"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/booking.svg",
+          "alt": "Booking Widget (SVG)"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/contactus.webp",
+          "alt": "Contact Form Widget"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/contactus.svg",
+          "alt": "Contact Form Widget (SVG)"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/intentdiscovery.webp",
+          "alt": "Intent Discovery Widget"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/intentdiscovery.svg",
+          "alt": "Intent Discovery Widget (SVG)"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/megamenu.webp",
+          "alt": "Mega Menu Widget"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/megamenu.svg",
+          "alt": "Mega Menu Widget (SVG)"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/regionmap.webp",
+          "alt": "Region Map Widget"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/regionmap.svg",
+          "alt": "Region Map Widget (SVG)"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/storefinder.webp",
+          "alt": "Store Finder Widget"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/digitalrisedorset/images/widgets/banner/storefinder.svg",
+          "alt": "Store Finder Widget (SVG)"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "slider",
+        "tablet": "slider",
+        "mobile": "slider"
+      },
+      "imageWidth": 360,
+      "imageHeight": 170,
+      "visibleSlides": 2
+    }
+  }
+}

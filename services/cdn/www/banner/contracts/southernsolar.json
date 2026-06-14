@@ -1,0 +1,36 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/inset-roof-359x221.webp",
+          "srcset": "{{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/inset-roof-479x295.webp 479w, {{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/inset-roof-359x221.webp 359w",
+          "alt": "Roofing Solutions for more energy in your house"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/inverter-479x295.webp",
+          "srcset": "{{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/inverter-479x295.webp 479w, {{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/inverter-359x221.webp 359w",
+          "alt": "Tim Fudge owner of Southern Solar Limited"
+        }
+      },
+      {
+        "image": {
+          "src": "{{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/roof-479x295.webp",
+          "srcset": "{{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/roof-479x295.webp 479w, {{TARGET_URL}}/wp-content/themes/southernsolar/images/home-banner/roof-359x221.webp 359w",
+          "alt": "A Dorset local specialist in Solar Energy Solutions"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "static",
+        "tablet": "slider",
+        "mobile": "slider"
+      },
+      "imageWidth": 466,
+      "imageHeight": 186
+    }
+  }
+}

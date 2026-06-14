@@ -1,0 +1,43 @@
+.usp-slider-bar.dark, .usp-static-bar.dark {
+    --usp-bg: #1f2937;      /* slate-800 */
+    --usp-color: #e5e7eb;   /* soft white */
+
+    --arrow-bg: #374151;    /* subtle contrast */
+    --arrow-color: #f9fafb;
+}
+
+.usp-slider-bar.light, .usp-static-bar.light {
+    --usp-bg: #f8fafc;
+    --usp-color: #1e3a8a;
+
+    --arrow-bg: #e5e7eb;   /* light gray */
+    --arrow-color: #374151;
+}
+
+.usp-slider-bar.promo, .usp-static-bar.promo {
+    --usp-bg: linear-gradient(60deg, #f97316, #f5a623); /* orange gradient */
+    --usp-color: #ffffff;
+
+    --arrow-bg: rgba(255,255,255,0.2);
+    --arrow-color: #ffffff;
+}
+
+.usp-slider-bar, .usp-static-bar {
+    background: var(--usp-bg);
+    color: var(--usp-color);
+}
+
+.arrow-btn {
+    background: var(--arrow-bg);
+    color: var(--arrow-color);
+
+    border-radius: 9999px;
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.2s ease;
+}
