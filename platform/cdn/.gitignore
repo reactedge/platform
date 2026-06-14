@@ -1,0 +1,12 @@
+# IDE
+.idea
+
+# editor temp files
+*.swp
+
+# local environment
+.env
+widget.local.crt
+widget.local.key
+*.bundle.css
+node_modules

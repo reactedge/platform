@@ -1,0 +1,21 @@
+{
+  "data": {
+    "title": "Observable Search",
+    "placeholder": "Search..."
+  },
+  "runtime": {
+    "observability": {
+      "enabled": true
+    },
+    "failureMode": {
+      "enabled": false,
+      "percentage": 0
+    }
+  },
+  "integrations": {},
+  "translations": {
+    "searchButton": "Search",
+    "loading": "Loading...",
+    "error": "Search failed"
+  }
+}

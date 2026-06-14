@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "build:css": "tsx scripts/build-all-css-bundles.ts",
+    "prefix:css": "tsx scripts/prefix-css.ts"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "fast-glob": "^3.3.3",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "postcss": "^8.5.14",
+    "postcss-prefix-selector": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "tsx": "^4.21.0"
+  }
+}

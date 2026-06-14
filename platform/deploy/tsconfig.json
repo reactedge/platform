@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "target": "ES2022",
+    "outDir": "dist",
+    "esModuleInterop": true
+  }
+}
