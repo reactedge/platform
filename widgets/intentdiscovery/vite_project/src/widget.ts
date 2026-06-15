@@ -1,14 +1,10 @@
-import {type WidgetConfig, WIDGET_ID} from "./IntentDiscoveryConfig.ts";
 import {mountWidget} from "./mountWidget.tsx";
+import {WIDGET_ID} from "./Config.ts";
+
 import type {ReactEdgeRuntimeConfig} from "./domain/intent-discovery.types.ts";
+import type {RawWidgetConfig} from "./ConfigSchema.ts";
 
-import "./styles/intent-discovery.css"
-
-const mount = async (
-    el: HTMLElement,
-    config: WidgetConfig,
-    runtimeConfig: ReactEdgeRuntimeConfig
-) => {
+const mount = async (el: HTMLElement, config: RawWidgetConfig, runtimeConfig: ReactEdgeRuntimeConfig) => {
     await mountWidget(el, config, runtimeConfig)
 }
 

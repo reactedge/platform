@@ -1,4 +1,4 @@
-import {WIDGET_ID} from "../IntentDiscoveryConfig.ts";
+import {WIDGET_ID} from "../Config.ts";
 
 const CDN_URL = 'https://widgets-cdn.co.uk'
 export async function getCdnManifest() {

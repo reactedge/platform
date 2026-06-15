@@ -32,6 +32,13 @@ else
   echo "File already correctly named, skipping mv"
 fi
 
+CSS_FILE=$(ls ${BASE_DIR}/widget-${WIDGET_NAME}*.css 2>/dev/null || true)
+
+if [ -n "$CSS_FILE" ]; then
+  NEW_CSS="${BASE_DIR}/widget-${WIDGET_NAME}@${HASH}.css"
+  mv "$CSS_FILE" "$NEW_CSS"
+fi
+
 MANIFEST="${BASE_DIR}/widget-${WIDGET_NAME}.manifest.json"
 
 cat <<EOF > "$MANIFEST"
@@ -40,6 +47,7 @@ cat <<EOF > "$MANIFEST"
   "version": "${VERSION}",
   "hash": "${HASH}",
   "filename": "widget-${WIDGET_NAME}@${HASH}.iife.js",
+  "css": "widget-${WIDGET_NAME}@${HASH}.css",
   "built_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
 EOF

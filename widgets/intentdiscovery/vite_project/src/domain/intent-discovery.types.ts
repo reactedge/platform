@@ -41,7 +41,7 @@ export type OptionLabelMap = Map<string, Map<string, string>>
 export type MagentoIntegrationName = 'magentoGraphql';
 
 export interface IntentDiscoveryDataConfig {
-    categoryUrlKey: string;
+    minProductCount: number;
     /**
      * Codes used to determine the order of preference steps. These attributes
      * will be **excluded** from the attribute layer display; the layer renders

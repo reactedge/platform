@@ -1,15 +1,15 @@
 import {createRoot} from "react-dom/client";
-import {IntentDiscoveryWidgetWrapper} from "./IntentDiscoveryWidgetWrapper.tsx";
-import {activity} from "./activity";
-import type {WidgetConfig} from "./IntentDiscoveryConfig.ts";
-import type {ReactEdgeRuntimeConfig} from "./domain/intent-discovery.types.ts";
+import React from "react";
+import {WidgetWrapper} from "./WidgetWrapper.tsx";
 import {getMountedHost} from "./lib/hostReader.ts";
+import {ActivityContextProvider} from "./activity/Context/ActivityContextProvider.tsx";
+import type {ReactEdgeRuntimeConfig} from "./domain/intent-discovery.types.ts";
+import type {RawWidgetConfig} from "./ConfigSchema.ts";
 
-export function mountWidget(hostElement: HTMLElement, config: WidgetConfig, runtimeConfig: ReactEdgeRuntimeConfig) {
+export async function mountWidget(hostElement: HTMLElement, config: RawWidgetConfig, runtimeConfig: ReactEdgeRuntimeConfig) {
     const mountedHost = getMountedHost(hostElement);
 
-    activity('bootstrap', 'Widget mounted', hostElement);
-
-    const root = createRoot(mountedHost);
-    root.render(<IntentDiscoveryWidgetWrapper rawConfig={config} runtimeConfig={runtimeConfig} />);
+    createRoot(mountedHost).render(<ActivityContextProvider hostElement={hostElement}>
+        <WidgetWrapper rawConfig={config} runtimeConfig={runtimeConfig} />
+    </ActivityContextProvider>);
 }

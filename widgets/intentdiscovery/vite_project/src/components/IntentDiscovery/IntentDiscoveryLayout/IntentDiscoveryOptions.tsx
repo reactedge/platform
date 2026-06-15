@@ -4,10 +4,10 @@ import type {MagentoLayeredNavigation} from "../../../hooks/domain/useLayeredNav
 import {useInteractionState} from "../../../state/Interaction/useInteractionState.ts";
 import {useIntentState} from "../../../state/Intent/useIntentState.ts";
 import {useEffect} from "react";
-import {activity} from "../../../activity";
 import {FinderRow} from "./IntentDiscoveryOptions/FinderRow.tsx";
 import {StepPriceFinder} from "./IntentDiscoveryOptions/FinderWidget/StepPriceFinder.tsx";
 import {StepFinder} from "./IntentDiscoveryOptions/FinderWidget/StepFinder.tsx";
+import {useActivityContext} from "../../../activity/Context/useActivityContext.ts";
 
 export interface Props {
     categoryData: CategoryData
@@ -21,10 +21,11 @@ export const IntentDiscoveryOptions = ({
     const stepCode = navigation.activeAttribute
     const { intentState } = useIntentState()
     const isSearching = intentState.status === "suggestionProcessing"
+    const activity = useActivityContext()
 
     useEffect(() => {
         if (stepCode !== null) {
-            activity('intent-discovery', 'Intent Discover Step', stepCode);
+            activity.log('intent-discovery', 'Intent Discover Step', stepCode);
         }
     }, [stepCode]);
 

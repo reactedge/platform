@@ -1,17 +1,17 @@
 
-.usp-slider-bar {
+usp-widget .usp-slider-bar {
     position: relative;
     overflow: hidden;
     width: 100%;
 }
 
-.usp-slider__inner {
+usp-widget .usp-slider__inner {
     display: flex;
     transition: transform 0.3s ease;
     width: 100%;
 }
 
-.usp-slider__inner > * {
+usp-widget .usp-slider__inner > * {
     flex: 0 0 100%;
     width: 100%;
     display: flex;

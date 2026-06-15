@@ -1,4 +1,4 @@
-.mw-menu-tile {
+megamenu-widget .mw-menu-tile {
     display: flex;
     flex-direction: column;
     gap: var(--tile-gap);
@@ -9,17 +9,17 @@
     transition: background var(--tile-transition);
 }
 
-.mw-menu-tile:hover {
+megamenu-widget .mw-menu-tile:hover {
     background: var(--tile-bg-hover);
 }
 
-.mw-menu-tile__image {
+megamenu-widget .mw-menu-tile__image {
     width: 70%;
     height: auto;
     display: block;
 }
 
-.mw-menu-tile__label {
+megamenu-widget .mw-menu-tile__label {
     color: var(--tile-label-color);
     transition: color var(--tile-transition);
     font-size: var(--nav-font-size);
@@ -30,7 +30,7 @@
     padding-left: 10px;
 }
 
-.mw-menu-tile:hover .mw-menu-tile__label {
+megamenu-widget .mw-menu-tile:hover .mw-menu-tile__label {
     color: var(--tile-label-hover);
 }
 

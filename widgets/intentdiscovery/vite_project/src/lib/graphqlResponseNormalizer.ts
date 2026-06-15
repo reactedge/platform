@@ -1,4 +1,4 @@
-import {activity} from "../activity";
+import type {WidgetActivity} from "../activity";
 
 export interface GraphqlNormalizerOptions {
     patchOn?: boolean;
@@ -7,7 +7,8 @@ export interface GraphqlNormalizerOptions {
 const PATCH_ON_DEFAULT = true;
 
 export function normalizeGraphqlResponse(
-    rawText: string
+    rawText: string,
+    activity?: WidgetActivity
 ) {
     try {
         return JSON.parse(rawText);
@@ -33,7 +34,7 @@ export function normalizeGraphqlResponse(
 
         const candidate = rawText.slice(idx);
 
-        activity('graphql-invalid-json', 'GraphQL normalised raw text', {
+        activity?.log('graphql-invalid-json', 'GraphQL normalised raw text', {
             candidate: candidate
         });
 

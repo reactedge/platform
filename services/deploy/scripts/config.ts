@@ -22,7 +22,10 @@ export function loadConfig(
             .split(',')
             .map(host => host.trim()),
         otelHost: process.env.OTEL_HOST??  'http://localhost:4318/v1/traces',
-        otelServiceName: 'reactedge-build'
+        otelServiceName: 'reactedge-build',
+        updateIntegrity: process.env.UPDATE_INTEGRITY
+            ? process.env.UPDATE_INTEGRITY === 'true'
+            : false,
     };
 }
 

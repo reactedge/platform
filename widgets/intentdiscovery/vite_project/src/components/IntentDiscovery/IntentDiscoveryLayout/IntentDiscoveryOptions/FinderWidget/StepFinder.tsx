@@ -3,8 +3,8 @@ import { useInteractionState } from "../../../../../state/Interaction/useInterac
 import { useFindAttributeOptionsByCode } from "../../../../../hooks/domain/useFindAttributeOptionsByCode.tsx";
 import { useIntentState } from "../../../../../state/Intent/useIntentState.ts";
 import type { MergedAttributeOption } from "../../../../../hooks/infra/useMagentoLayeredData.tsx";
-import { activity } from "../../../../../activity";
 import { unescapeHtml } from "../../../../../lib/string.ts";
+import {useActivityContext} from "../../../../../activity/Context/useActivityContext.ts";
 
 interface StepFinderProps {
     optionCode: string
@@ -15,6 +15,7 @@ export const StepFinder: React.FC<StepFinderProps> = ({ optionCode, attributeLay
     const { setActiveAttribute, setFocusedOption } = useInteractionState()
     const { attributeData } = useFindAttributeOptionsByCode(optionCode, attributeLayerData)
     const { setPreference, intentState, dispatch } = useIntentState()
+    const activity = useActivityContext()
 
     const handleOnClick = async (option: MergedAttributeOption) => {
         setActiveAttribute(optionCode);
@@ -22,7 +23,7 @@ export const StepFinder: React.FC<StepFinderProps> = ({ optionCode, attributeLay
         setFocusedOption(option.value)
         dispatch({ type: "FILTER_CHANGED", attributeCode: optionCode, optionValue: option.value })
 
-        activity('intent-discovery-option', 'Intent Option Selection', { intentState, optionCode, value: option.value });
+        activity.log('intent-discovery-option', 'Intent Option Selection', { intentState, optionCode, value: option.value });
     };
 
     const selectedMap = intentState.attributeScore?.[optionCode] || {};

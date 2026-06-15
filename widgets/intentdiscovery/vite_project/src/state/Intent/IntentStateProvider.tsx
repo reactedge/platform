@@ -17,22 +17,23 @@ import type {
 import { useSystemState } from "../System/useSystemState.ts";
 import type { IntentDiscoveryDataConfig } from "../../domain/intent-discovery.types.ts";
 import type { MagentoLayeredNavigation } from "../../hooks/domain/useLayeredNavigation.tsx";
-import { activity } from "../../activity";
 import { parseFiltersFromUrl } from "../../controller/load.ts";
 import { intentPersistence } from "../../services/intentPersistence/intentPersistence.service.ts";
 import { computeAiReadiness } from "../../domain/intent/readiness.ts";
 import { intentReducer } from "./intent.reducer.ts";
 import { runIntentEffects } from "./intent.effects.ts";
+import type {WidgetActivity} from "../../activity";
 
 interface IntentStateProviderProps {
     children: ReactNode;
     config: IntentDiscoveryDataConfig;
+    activity?: WidgetActivity
 }
 
 const MIN_TEXT_LENGTH = 50
 const LocalStateProvider = LocalIntentStateContext.Provider;
 
-export const IntentStateProvider: React.FC<IntentStateProviderProps> = ({ children, config }) => {
+export const IntentStateProvider: React.FC<IntentStateProviderProps> = ({ children, config, activity }) => {
     const [intentState, setIntentState] = useState<IntentEngineState>(loadIntentState());
     const { intentEngine } = useSystemState()
 
@@ -164,7 +165,7 @@ export const IntentStateProvider: React.FC<IntentStateProviderProps> = ({ childr
     }, [intentState.recommendations]);
 
     useEffect(() => {
-        activity('intent-state', 'Intent State Update', intentState);
+        activity?.log('intent-state', 'Intent State Update', intentState);
     }, [intentState.status])
 
     useEffect(() => {

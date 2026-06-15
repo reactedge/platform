@@ -1,4 +1,4 @@
-.drawer {
+megamenu-widget .drawer {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -9,25 +9,25 @@
     z-index: 9999;
 }
 
-.drawer--right {
+megamenu-widget .drawer--right {
     right: 0;
     transform: translateX(100%);
 }
 
-.drawer--right.is-open {
+megamenu-widget .drawer--right.is-open {
     transform: translateX(0);
 }
 
-.drawer {
+megamenu-widget .drawer {
     left: 0;
     transform: translateX(-100%);
 }
 
-.drawer.is-open {
+megamenu-widget .drawer.is-open {
     transform: translateX(0);
 }
 
-.drawer-overlay {
+megamenu-widget .drawer-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.4);
@@ -36,12 +36,12 @@
     transition: opacity 0.3s ease;
 }
 
-.drawer-overlay.is-open {
+megamenu-widget .drawer-overlay.is-open {
     opacity: 1;
     pointer-events: auto;
 }
 
-.menu-toggle {
+megamenu-widget .menu-toggle {
     background: none;
     border: none;
     font-size: 24px;

@@ -10,7 +10,7 @@ import type {MagentoLayeredNavigation} from "./useLayeredNavigation.tsx";
 import {useIntentState} from "../../state/Intent/useIntentState.ts";
 import type {EnrichedSuggestion} from "../../types/infra/magento/product.types.ts";
 import type {AiRecommendationResponse} from "../infra/useAiRecommendations.tsx";
-import {activity} from "../../activity";
+import {useActivityContext} from "../../activity/Context/useActivityContext.ts";
 
 type UseAskAnalyseSearch = {
     attributeLayerData: MagentoLayeredNavigation
@@ -35,7 +35,7 @@ export function useAnalyseSearch({
      categoryData,
      intentState
  }: UseAskAnalyseSearch) {
-
+    const activity = useActivityContext()
     const {graphqlClient, intentEngine} = useSystemState()
     const {dispatch} = useIntentState()
 
@@ -57,7 +57,7 @@ export function useAnalyseSearch({
             intentState
         })
 
-        activity('recommendations', 'Recommendations Received', result.ai.suggestions);
+        activity.log('recommendations', 'Recommendations Received', result.ai.suggestions);
 
         dispatch(
             result.ai?.suggestions?.length

@@ -1,6 +1,6 @@
 import type {AiRecommendationRequest, AiRecommendationResponse} from "../../hooks/infra/useAiRecommendations.tsx";
 import type {AiInterpretationRequest, AiInterpretationResponse} from "../../hooks/infra/useAiInterpreter.tsx";
-import {activity} from "../../activity";
+import type {WidgetActivity} from "../../activity";
 
 export interface IntentApiClientConfig {
     baseUrl: string;
@@ -14,12 +14,13 @@ export interface IntentApiClient {
 }
 
 export const createIntentApiClient = (
-    config: IntentApiClientConfig
+    config: IntentApiClientConfig,
+    activity?: WidgetActivity
 ): IntentApiClient => {
     const { baseUrl, store } = config;
 
     const call = async (path: string, payload: unknown) => {
-        activity('ai-engine', 'AI Engine payload', payload)
+        activity?.log('ai-engine', 'AI Engine payload', payload)
         const response = await fetch(`${baseUrl}${path}`, {
             method: "POST",
             headers: {
@@ -30,7 +31,7 @@ export const createIntentApiClient = (
         });
 
         if (!response.ok) {
-            activity('ai-engine', 'AI Engine failed',null, 'error')
+            activity?.log('ai-engine', 'AI Engine failed',null, 'error')
             throw new Error(`Intent API request failed: ${path}`);
         }
 

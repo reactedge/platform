@@ -1,10 +1,13 @@
-import {WIDGET_ID} from "../IntentDiscoveryConfig.ts";
+import {intentdiscoveryStyles} from "../styles/intentdiscovery.styles.ts";
+import {injectStyles} from "./style.ts";
 
 export function getMountedHost(hostElement: HTMLElement) {
-    hostElement.classList.add(`reactedge-${WIDGET_ID}`);
-    return hostElement;
     const shadow =
         hostElement.shadowRoot || hostElement.attachShadow({ mode: "open" });
+
+    for (const css of intentdiscoveryStyles) {
+        injectStyles(shadow, css);
+    }
 
     return shadow
 }

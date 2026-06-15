@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSystemState } from "../../state/System/useSystemState.ts";
-import { activity } from "../../activity";
 import { buildAiRecommendationPayload } from "../../lib/ai-recommendations.ts";
 import { useOptionLabelMap } from "../domain/useOptionLabelMap.ts";
 import type {AttributeFilters} from "../../integration/intent/types.ts";
@@ -8,6 +7,7 @@ import type {EnrichedSuggestion, GraphqlProduct} from "../../types/infra/magento
 import {enrichSuggestions} from "../../services/mappers/suggestions/enrichSuggestions.ts";
 import {useIntentState} from "../../state/Intent/useIntentState.ts";
 import type {MergedAttribute} from "./useMagentoLayeredData.tsx";
+import {useActivityContext} from "../../activity/Context/useActivityContext.ts";
 
 export interface AiRecommendationRequest {
     intent: {
@@ -40,6 +40,7 @@ export function useAiRecommendations(
     const optionLabelMap = useOptionLabelMap(attributeData);
     const intentApiClient = intentEngine.getApiClient()
     const { dispatch } = useIntentState()
+    const activity = useActivityContext()
 
     async function fetchSuggestions(payload: AiRecommendationRequest) {
         return intentApiClient.suggest(payload);
@@ -57,10 +58,10 @@ export function useAiRecommendations(
                 productData,
                 optionLabelMap
             );
-            activity('ai-recommendations', 'AI recommendations API payload', payload);
+            activity.log('ai-recommendations', 'AI recommendations API payload', payload);
 
             const json = await fetchSuggestions(payload);
-            activity('ai-engine', 'AI Engine Recommendations', {json, productData})
+            activity.log('ai-engine', 'AI Engine Recommendations', {json, productData})
 
             const enriched = enrichSuggestions(
                 json.suggestions ?? [],
@@ -75,7 +76,7 @@ export function useAiRecommendations(
 
             setData({ suggestions: enriched ?? [] })
         } catch (err: unknown) {
-            activity('ai-recommendations', 'AI recommendations Error', {
+            activity.log('ai-recommendations', 'AI recommendations Error', {
                 error: (err as Error).message
             }, 'error');
             setError(err instanceof Error ? err : new Error("Unknown error"))
