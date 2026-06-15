@@ -1,5 +1,5 @@
 // infra/graphqlClient.ts
-import {activity} from "../activity";
+import {WidgetActivity} from "../activity";
 import { normalizeGraphqlResponse } from "./graphqlResponseNormalizer";
 
 export type GraphqlClient = <T>(
@@ -7,7 +7,7 @@ export type GraphqlClient = <T>(
     variables?: Record<string, unknown>
 ) => Promise<T>;
 
-export function createGraphqlClient(apiEndpoint: string, storeCode: string) {
+export function createGraphqlClient(apiEndpoint: string, storeCode: string, activity: WidgetActivity) {
     return async function graphqlRequest<T>(
         query: string,
         variables?: Record<string, unknown>
@@ -22,7 +22,7 @@ export function createGraphqlClient(apiEndpoint: string, storeCode: string) {
         });
 
         if (!res.ok) {
-            activity(
+            activity.log(
                 "graphql",
                 "GraphQL error",
                 { api_endpoint: apiEndpoint, query, variables },
@@ -38,20 +38,20 @@ export function createGraphqlClient(apiEndpoint: string, storeCode: string) {
         try {
             json = JSON.parse(text);
         } catch (e) {
-            activity('graphql-failed-query', 'GraphQL Failed query', { api_endpoint: apiEndpoint, query, variables }, 'error');
-            activity('graphql-invalid-json', 'GraphQL returned non-JSON response', {
+            activity.log('graphql-failed-query', 'GraphQL Failed query', { api_endpoint: apiEndpoint, query, variables }, 'error');
+            activity.log('graphql-invalid-json', 'GraphQL returned non-JSON response', {
                 endpoint: apiEndpoint,
                 status: res.status,
                 textSnippet: text.slice(0, 500)
             });
 
             json = normalizeGraphqlResponse(text);
-            activity('graphql-invalid-json', 'GraphQL failed raw text', {
+            activity.log('graphql-invalid-json', 'GraphQL failed raw text', {
                 endpoint: apiEndpoint,
                 status: res.status,
                 textSnippet: text
             });
-            activity('graphql-invalid-json', 'GraphQL patched response', {
+            activity.log('graphql-invalid-json', 'GraphQL patched response', {
                 endpoint: apiEndpoint,
                 status: res.status,
                 json: json

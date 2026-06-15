@@ -1,4 +1,4 @@
-.navigation-arrows {
+usp-widget .navigation-arrows {
     position: absolute;
     inset: 0;
     display: flex;
@@ -7,7 +7,7 @@
     pointer-events: none;
 }
 
-.arrow-btn {
+usp-widget .arrow-btn {
     appearance: none;
     background: var(--re-usp-arrow-bg, rgba(0,0,0,0.05));
     color: var(--re-usp-arrow-color, #2563EB);
@@ -20,12 +20,12 @@
     pointer-events: auto;
 }
 
-.utton {
+usp-widget .utton {
     min-width: 0;
     padding: 0;
 }
 
-.arrow-btn svg {
+usp-widget .arrow-btn svg {
     width: var(--re-usp-arrow-size, 1.25rem);
     height: var(--re-usp-arrow-size, 1.25rem);
 }

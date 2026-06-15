@@ -1,4 +1,4 @@
-.mw-link {
+megamenu-widget .mw-link {
     font-family: var(--nav-font-family);
     display: block;
     padding: 10px;
@@ -11,10 +11,10 @@
     gap: 6px;
 }
 
-.mw-link:hover {
+megamenu-widget .mw-link:hover {
     border-bottom: var(--cta-bg-hover);
 }
 
-.mw-link.in-breadcrumb {
+megamenu-widget .mw-link.in-breadcrumb {
     border-bottom: 2px solid var(--cta-bg-hover);
 }

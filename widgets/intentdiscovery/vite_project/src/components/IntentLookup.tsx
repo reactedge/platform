@@ -1,11 +1,11 @@
 import React from "react";
-import type {ResolvedIntentDiscoveryConfig} from "../domain/intent-discovery.types.ts";
 import {IntentDiscoveryWidget} from "./IntentDiscoveryWidget.tsx";
 import {useLayoutEffect} from "react";
 import {resolveIntentCategory} from "../lib/category.ts";
+import type {WidgetConfig} from "../Config.ts";
 
 export interface Props {
-    config: ResolvedIntentDiscoveryConfig
+    config: WidgetConfig
 }
 export const IntentLookup = ({ config }: Props) => {
     const category = resolveIntentCategory(config.runtime.category, config.data.enabledCategories);

@@ -2,6 +2,7 @@
 
 import { createGraphqlClient } from "./graphqlClient";
 import {getCache, getCacheKey, setCache} from "./graphqlCache";
+import type {WidgetActivity} from "../../activity";
 
 type GraphqlOptions = {
     cache?: boolean;
@@ -10,8 +11,8 @@ type GraphqlOptions = {
 
 const inFlight = new Map<string, Promise<any>>();
 
-export function createGraphqlService(apiEndpoint: string, storeCode: string) {
-    const request = createGraphqlClient(apiEndpoint, storeCode);
+export function createGraphqlService(apiEndpoint: string, storeCode: string, activity?: WidgetActivity) {
+    const request = createGraphqlClient(apiEndpoint, storeCode, activity);
 
     return async function query<T>(
         query: string,

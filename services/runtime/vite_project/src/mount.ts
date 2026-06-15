@@ -1,5 +1,6 @@
 import {buildRuntimeConfig, stripMeta} from "./util.ts";
 import {registerInstance, startObservability} from "./observability";
+//import {context} from "@opentelemetry/api";
 
 let registryCache: any = null;
 
@@ -78,6 +79,17 @@ async function resolveGlobal(name: string, retries = 10) {
     throw new Error(`Global ${key} not found after load`);
 }
 
+function shouldMountWidgets(): boolean {
+    const params =
+        new URLSearchParams(window.location.search);
+
+    if (params.get('reactedge_mount') === '0') {
+        return false;
+    }
+
+    return true;
+}
+
 export async function mountWidget(el: HTMLElement) {
     const { type, entry } = getResolvedEntry(el);
 
@@ -86,8 +98,19 @@ export async function mountWidget(el: HTMLElement) {
 
     if (mod?.mount) {
         const runtimeConfig = buildRuntimeConfig()
+
+        if (!shouldMountWidgets()) {
+            console.info('[ReactEdge] CSR mount skipped', {
+                widget: entry?.widget,
+                instance: entry?.id
+            });
+
+            return;
+        }
+
         if (entry?.contract !== null) {
             const contract = entry?.contract ? stripMeta(entry.contract) : null;
+            console.log({contract, runtimeConfig})
             mod.mount(el, contract, runtimeConfig);
         } else {
             mod.mount(el, null, runtimeConfig);

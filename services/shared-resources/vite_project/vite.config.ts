@@ -1,44 +1,74 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import pkg from './package.json'
-import { manifestPlugin } from './manifestPlugin'
-import { visualizer } from 'rollup-plugin-visualizer';
+// build/manifestPlugin.ts
 
-const isAnalyze = process.env.ANALYZE === 'true';
+import { createHash } from 'crypto'
+import fs from 'fs'
+import path from 'path'
+import type { Plugin } from 'vite'
 
-const widgetName = pkg.name.replace(/^widget-/, '');
+type Options = {
+  widgetName: string
+}
 
-export default defineConfig({
-  plugins: [
-    react(),
-    isAnalyze && visualizer({
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-      filename: 'stats.html'
-    }),
-    manifestPlugin({ widgetName }),
-  ],
-  define: {
-    'process.env.NODE_ENV': JSON.stringify('production')
-  },
-  build: {
-    outDir: `../../../platform/cdn/www/${widgetName}/src/`,
-    cssCodeSplit: false,
-    emptyOutDir: false,
-    lib: {
-      entry: "src/widget.ts",
-      name: `ReactEdge_${widgetName}`,
-      fileName: () => `widget-${widgetName}@${pkg.version}.iife.js`,
-      formats: ["iife"],
-    },
-    rollupOptions: {
-      output: {
-        inlineDynamicImports: true,
-        assetFileNames: `widget-${widgetName}.[ext]`,
-      },
-    },
-    minify: true,
-    sourcemap: false
+export function manifestPlugin({ widgetName }: Options): Plugin {
+  if (!widgetName) {
+    throw new Error('manifestPlugin requires widgetName')
   }
-})
+
+  return {
+    name: 'reactedge-manifest-plugin',
+    apply: 'build',
+
+    generateBundle(options: any, bundle: any) {
+      const version = require('./package.json').version
+
+      const entries = Object.entries(bundle).filter(
+          ([fileName, chunk]: any) =>
+              chunk.type === 'chunk' && fileName.endsWith('.iife.js')
+      )
+
+      if (entries.length !== 1) {
+        throw new Error(
+            `Expected exactly one IIFE bundle, found ${entries.length}`
+        )
+      }
+
+      const [, chunk]: any = entries[0]
+
+      const hash = createHash('sha256')
+          .update(chunk.code)
+          .digest('base64')
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_')
+          .replace(/=+$/, '')
+
+      const newFileName = `widget-${widgetName}@${hash}.iife.js`
+      const cssFilename = `widget-${widgetName}.css`
+
+      const manifest = {
+        widget: widgetName,
+        version,
+        hash,
+        cssFilename,
+        filename: newFileName,
+        built_at: new Date().toISOString()
+      }
+
+      const outDir = options.dir || 'www'
+
+      const manifestPath = path.join(
+          outDir,
+          `widget-${widgetName}.manifest.json`
+      )
+
+      fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2))
+
+      this.emitFile({
+        type: 'asset',
+        fileName: `widget-${widgetName}.manifest.json`,
+        source: JSON.stringify(manifest, null, 2)
+      })
+
+      console.log(`✔ Manifest generated: ${manifestPath}`)
+    }
+  }
+}

@@ -7,6 +7,7 @@ import {useSystemState} from "../../state/System/useSystemState.ts";
 import {useIntentState} from "../../state/Intent/useIntentState.ts";
 import type {MagentoLayeredNavigation} from "./useLayeredNavigation.tsx";
 import type {MergedAttribute} from "../infra/useMagentoLayeredData.tsx";
+import {useActivityContext} from "../../activity/Context/useActivityContext.ts";
 
 type UseAskAiParams = {
     intent: IntentControllerState;
@@ -26,6 +27,7 @@ export const useAskAi = ({
     const { intentState, setIntentText, setPreference, resetPreference} = useIntentState()
     const intentApiClient = intentEngine.getApiClient()
     const { dispatch } = useIntentState()
+    const activity = useActivityContext()
 
     return async () => {
         const payload = buildAiInterpretationPayload(
@@ -41,6 +43,7 @@ export const useAskAi = ({
         await sendRequestToAi({
             payload,
             intentApiClient,
+            activity,
             setLoading,
             onSuccess: (json) => {
                 //dispatch({ type: "INTERPRETATION_DONE", filters: json.filters, intent: payload.intent.text});

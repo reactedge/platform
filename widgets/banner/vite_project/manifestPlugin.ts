@@ -32,7 +32,7 @@ export function manifestPlugin({ widgetName }: Options): Plugin {
                 )
             }
 
-            const [, chunk]: any = entries[0]
+            const [fileName, chunk]: any = entries[0]
 
             const hash = createHash('sha256')
                 .update(chunk.code)
@@ -43,6 +43,12 @@ export function manifestPlugin({ widgetName }: Options): Plugin {
 
             const newFileName = `widget-${widgetName}@${hash}.iife.js`
             const cssFilename = `widget-${widgetName}.css`
+
+            bundle[newFileName] = {
+                ...chunk,
+                fileName: newFileName
+            }
+            delete bundle[fileName]
 
             const manifest = {
                 widget: widgetName,
@@ -61,12 +67,6 @@ export function manifestPlugin({ widgetName }: Options): Plugin {
             )
 
             fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2))
-
-            this.emitFile({
-                type: 'asset',
-                fileName: `widget-${widgetName}.manifest.json`,
-                source: JSON.stringify(manifest, null, 2)
-            })
 
             console.log(`✔ Manifest generated: ${manifestPath}`)
         }

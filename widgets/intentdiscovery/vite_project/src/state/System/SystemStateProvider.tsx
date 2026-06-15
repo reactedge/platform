@@ -9,11 +9,13 @@ import {createIntentEngine} from "../../integration/intent/IntentEngine.ts";
 import {createIntentApiClient} from "../../integration/intent/intentApiClient.ts";
 import {createGraphqlService} from "../../services/graphql/graphql.service.ts";
 import type {BootstrapData} from "../../ssr/entry.tsx";
+import type {WidgetActivity} from "../../activity";
 
 interface SystemStateProviderProps {
     children: ReactNode;
     config: ReactEdgeRuntimeIntegrations;
     runtimeConfig: ResolvedRuntimeConfig;
+    activity?: WidgetActivity;
     bootstrap?: BootstrapData
 }
 
@@ -23,6 +25,7 @@ export const SystemStateProvider: React.FC<SystemStateProviderProps> = ({
     children,
     config,
     runtimeConfig,
+    activity,
     bootstrap
 }) => {
     if (!config?.magentoGraphql?.api) {
@@ -30,7 +33,7 @@ export const SystemStateProvider: React.FC<SystemStateProviderProps> = ({
     }
 
     const graphqlClient = useMemo(
-        () => createGraphqlService(config.magentoGraphql.api, runtimeConfig.storeCode),
+        () => createGraphqlService(config.magentoGraphql.api, runtimeConfig.storeCode, activity),
         [config.magentoGraphql?.api, runtimeConfig.storeCode]
     );
 
@@ -44,7 +47,7 @@ export const SystemStateProvider: React.FC<SystemStateProviderProps> = ({
         return createIntentApiClient({
             baseUrl: intentApi.baseUrl,
             store: runtimeConfig.storeCode
-        });
+        }, activity);
     }, [
         intentApi.baseUrl,
         runtimeConfig.storeCode

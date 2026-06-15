@@ -53,12 +53,16 @@ tmp/
 *.span
 
 # Generated SSR snapshots
-platform/widgets-ssr/snapshots/
+services/widgets-ssr/snapshots/
 
 # Deployment artifacts
 artifacts/
 
-platform/intent-engine/*
-platform/**/self-healing/*
-platform/cdn/**/contracts/*
+services/intent-engine/*
+services/**/self-healing/*
+services/cdn/**/contracts/*
 README-DEPLOY-DEMO.md
+
+
+widgets/**/.github
+widgets-cdn
