@@ -21,5 +21,6 @@ export type AttributeFilter = {
 }
 
 export type AiInterpretationResponse = {
-    filters: AttributeFilter[]
+    filters: AttributeFilter[],
+    correlation_id: string
 }

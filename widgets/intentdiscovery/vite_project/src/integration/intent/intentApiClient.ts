@@ -25,7 +25,8 @@ export const createIntentApiClient = (
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Store": store
+                "Store": store,
+                "X-Correlation-Id": activity?.getCorrelationId() || ''
             },
             body: JSON.stringify(payload),
         });

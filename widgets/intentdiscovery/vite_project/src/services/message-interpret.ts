@@ -21,6 +21,7 @@ export async function sendRequestToAi({
         setLoading(true)
 
         const json = await intentApiClient.interpret(payload)
+        activity.setCorrelationId(json?.correlation_id)
         //const json = await intentApiClient.dummy(payload)
         activity.log('ai-engine', 'AI Engine Interpretation', json)
 

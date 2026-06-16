@@ -26,6 +26,7 @@ export class WidgetActivity
 
     private readonly widget: string;
     private readonly instance?: string;
+    private correlationId?: string;
 
     constructor(
         widget: string,
@@ -84,5 +85,13 @@ export class WidgetActivity
                 }
             )
         );
+    }
+
+    setCorrelationId(id: string) {
+        this.correlationId = id;
+    }
+
+    getCorrelationId(): string | undefined {
+        return this.correlationId;
     }
 }
