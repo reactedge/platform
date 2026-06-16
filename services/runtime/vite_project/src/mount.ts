@@ -110,7 +110,6 @@ export async function mountWidget(el: HTMLElement) {
 
         if (entry?.contract !== null) {
             const contract = entry?.contract ? stripMeta(entry.contract) : null;
-            console.log({contract, runtimeConfig})
             mod.mount(el, contract, runtimeConfig);
         } else {
             mod.mount(el, null, runtimeConfig);
@@ -214,7 +213,7 @@ function scheduleOnScroll(el: HTMLElement, mode: string) {
     window.addEventListener('scroll', onScroll, { passive: true });
 }
 
-function boot() {
+export function boot() {
     startObservability();
     scheduleWidgets();
 }

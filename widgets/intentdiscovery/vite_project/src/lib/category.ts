@@ -1,18 +1,20 @@
 import type {CategoryData, MagentoCategoryChild} from "../types/infra/magento/category.types.ts";
 import type {ResolvedIntentDiscoveryConfig} from "../domain/intent-discovery.types.ts";
 
-export const categoryLayereIds = (category?: CategoryData) => {
-    let ids = category?.children.map((child: MagentoCategoryChild) => {
-        return child.id
-    })
+export const categoryLayereIds = (
+    category?: CategoryData
+): string[] => {
+    const ids =
+        category?.children.map(
+            (child: MagentoCategoryChild) => String(child.id)
+        ) ?? [];
 
-    if (!ids) {
-        ids = []
+    if (category?.id) {
+        ids.push(String(category.id));
     }
-    if (category?.id) ids.push(category?.id)
 
-    return ids
-}
+    return ids;
+};
 
 export const isCategoryActive = (
     categoryUrlKey: string,

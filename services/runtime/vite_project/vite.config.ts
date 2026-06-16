@@ -7,7 +7,7 @@ export default defineConfig({
     }
   },
   define: {
-    'process.env': {}
+    'process.env.NODE_ENV': JSON.stringify('production')
   },
   build: {
     outDir: "dist",

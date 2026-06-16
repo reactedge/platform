@@ -8,7 +8,7 @@ import type {GraphqlClient} from "../graphql/graphqlClient.ts";
 const baseCache = new Map()
 
 export async function fetchBase(
-    categoryIds: number[],
+    categoryIds: string[],
     graphqlClient: GraphqlClient
 ): Promise<MagentoProducts> {
     const key = categoryIds.join(",")

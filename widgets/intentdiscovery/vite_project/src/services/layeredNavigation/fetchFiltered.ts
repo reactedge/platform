@@ -9,7 +9,7 @@ import type {GraphqlClient} from "../graphql/graphqlClient.ts";
 const filteredCache = new Map()
 
 export async function fetchFiltered(
-    categoryIds: number[],
+    categoryIds: string[],
     graphqlClient: GraphqlClient,
     intentState?: IntentEngineState
 ): Promise<MagentoProducts> {
