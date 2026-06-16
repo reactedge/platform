@@ -49,7 +49,7 @@ jobs:
             --exclude "code" \
             --exclude "node_modules" \
             --exclude ".github" \
-            --exclude ".env" \
+            --exclude ".env*" \
             ./services/ssr/ \
             ${{ secrets.WIDGET_SSH_USER }}@${{ secrets.WIDGET_SSH_HOST }}:/var/www/ssr/
 

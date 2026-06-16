@@ -26,6 +26,7 @@ export function loadConfig(
         updateIntegrity: process.env.UPDATE_INTEGRITY
             ? process.env.UPDATE_INTEGRITY === 'true'
             : false,
+        buildServiceName: process.env.BUILD_TRACE_NAME?? 'registry-rebuild'
     };
 }
 

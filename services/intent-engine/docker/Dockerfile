@@ -9,6 +9,8 @@ RUN pip install pytest
 
 # Only copy python service
 COPY . /app
+COPY .env /app/.env
+COPY .env /.env
 
 EXPOSE 8000
 

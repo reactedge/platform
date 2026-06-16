@@ -36,11 +36,11 @@ docker build \
   -t intent-service \
   -f docker/Dockerfile \
   .
-docker run -p 8000:8000 -v $(pwd):/app intent-service
+docker run -p 3003:8000 -v $(pwd):/app intent-service
 
 docker run \
   --network observability \
-  -p 8000:8000 \
+  -p 3003:8000 \
   -v $(pwd):/app \
   intent-service
 docker run -d \
@@ -53,7 +53,23 @@ docker run -d \
   jaegertracing/all-in-one:latest
 docker network create observability
 ```
-## Access the Jaeger service
+
+```bash
+caddy trust
+cp /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt /home/herve/ReactEdge/services/intent-engine/certs/caddy-root-crt
+cp caddy-root.crt /usr/local/share/ca-certificates/
+update-ca-certificates
+```
+
+## Go live
+```bash
+docker stop intent-service
+docker rm intent-service
+docker compose up -d --build --force-recreate intent-service
+  docker logs intent-service
+```
+
+## Access the Jaeger servicez
 ```bash
 http://localhost:16686
 ```
@@ -336,3 +352,54 @@ curl -X POST "http://localhost:8000/v1/intent/suggest" \
     ]
 }'
 ```
+
+
+curl -X POST "https://openai-python.local/v1/intent/suggest" \
+-H "Content-Type: application/json" \
+-H "X-Store: en" \
+-H "X-Correlation-Id:test" \
+-d '{
+"intent": {
+"signals": {
+"climate": {
+"Cold": 1.0,
+"Wintry": 1.0,
+"Windy": 0.5
+}
+}
+},
+"products": [
+{
+"sku": "MJ11",
+"title": "Typhon Performance Jacket",
+"shortDescription": "Lightweight protection for changing weather.",
+"attributes": {
+"climate": ["All-Weather", "Spring", "Windy"]
+}
+},
+{
+"sku": "MJ08",
+"title": "Lando Gym Jacket",
+"shortDescription": "Breathable and flexible for training.",
+"attributes": {
+"climate": ["Cool", "Windy", "Mild"]
+}
+},
+{
+"sku": "MJ04",
+"title": "Kenobi Trail Jacket",
+"shortDescription": "Built for cold and harsh conditions.",
+"attributes": {
+"climate": ["Cold", "Cool", "Windy", "Wintry"]
+}
+},
+{
+"sku": "MJ07",
+"title": "Hoth Expedition Parka",
+"shortDescription": "Extreme protection for freezing climates.",
+"attributes": {
+"climate": ["Cold", "Wintry"]
+}
+}
+]
+}'

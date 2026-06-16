@@ -20,5 +20,6 @@ def setup_cors(app: FastAPI) -> None:
             "Store",
             "Accept",
             "X-Access-Token",
-        ],
+            "X-Correlation-Id"
+        ]
     )

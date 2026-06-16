@@ -6,7 +6,8 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 const isAnalyze = process.env.ANALYZE === 'true';
 
-const widgetName = 'regionmap';
+const widgetName = pkg.name.replace(/^widget-/, '');
+
 export default defineConfig({
   plugins: [
     react(),
@@ -22,7 +23,7 @@ export default defineConfig({
     'process.env.NODE_ENV': JSON.stringify('production')
   },
   build: {
-    outDir: `../../widgets-cdn/www/${widgetName}/src/`,
+    outDir: `../../../services/cdn/www/${widgetName}/src/`,
     cssCodeSplit: false,
     emptyOutDir: false,
     lib: {

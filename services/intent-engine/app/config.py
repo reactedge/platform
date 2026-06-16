@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     openai_model: Optional[str] = None
     cdn_folder: Optional[str] = None
     cdn_directory: str = str(BASE_DIR / "cdn")
+    otel_endpoint: str
 
     def allowed_origins(self) -> List[str]:
         return [origin.strip() for origin in self.frontend_url.split(",")]

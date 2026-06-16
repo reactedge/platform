@@ -6,7 +6,7 @@ import {OpenTelemetryObserver} from "./build/observability/observers/otel-observ
 import {loadRegistry} from "./build/rebuild-registry/registry-loader.ts";
 import {selectTarget} from "./build/target-selection.ts";
 import {selectWidgets} from "./build/widget-selection.ts";
-import {loadConfig} from "./config.ts";
+import {getConfig, loadConfig} from "./config.ts";
 
 const target = await selectTarget()
 loadConfig(target);
@@ -17,8 +17,10 @@ report.addObserver(
     new ConsoleObserver()
 );
 
+const CONFIG = getConfig()
+
 report.addObserver(
-    new OpenTelemetryObserver('registry-rebuild')
+    new OpenTelemetryObserver(CONFIG.buildServiceName)
 );
 
 const registry =
