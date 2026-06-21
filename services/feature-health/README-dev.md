@@ -137,3 +137,9 @@ echo "[Health] Completed."
 ```
 
 This allows the same service to be executed manually, during deployment, or from a scheduled job without embedding scheduling logic into the application itself.
+
+### SSL issue
+sudo ln -s   /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt   /usr/local/share/ca-certificates/caddy-root.crt
+export NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/caddy-root.crt
+NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/caddy-root.crt \
+npm run dev

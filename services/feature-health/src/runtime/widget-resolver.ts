@@ -1,4 +1,5 @@
 import { JSDOM } from 'jsdom';
+import { config } from "../config";
 
 let registryCache: any = null;
 
@@ -22,12 +23,12 @@ export type SsrVariant =
 export type WidgetRegistry =
     Record<string, WidgetRegistryEntry>;
 
-export async function getRegistry():WidgetRegistry {
+export async function getRegistry(): WidgetRegistry {
     if (registryCache) {
         return registryCache;
     }
 
-    const url = process.env.ENV_URL!;
+    const url = config.frontendUrl;
 
     const html = await fetch(url).then(r => r.text());
 
@@ -46,7 +47,7 @@ export async function getRegistry():WidgetRegistry {
     return registryCache;
 }
 
-export async function getResolvedEntry(registry: WidgetRegistry, instanceKey: string) {
+export async function getResolvedEntry(registry: WidgetRegistry, instanceKey: string): Promise<any> {
     const entry = registry[instanceKey];
 
     if (!entry) {
