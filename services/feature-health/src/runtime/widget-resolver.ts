@@ -1,33 +1,15 @@
 import { JSDOM } from 'jsdom';
+import { config } from "../config";
+import { WidgetRegistry } from "../types"
 
 let registryCache: any = null;
 
-export interface WidgetRegistryEntry {
-    widget?: string;
-    cdn: string;
-    css?: string;
-    ssr?: WidgetSsrConfig;
-}
-
-export interface WidgetSsrConfig {
-    strategy: SsrStrategy;
-    variants?: SsrVariant[];
-}
-
-export type SsrVariant =
-    | 'desktop'
-    | 'mobile'
-    | 'tablet';
-
-export type WidgetRegistry =
-    Record<string, WidgetRegistryEntry>;
-
-export async function getRegistry():WidgetRegistry {
+export async function getRegistry(): Promise<WidgetRegistry> {
     if (registryCache) {
         return registryCache;
     }
 
-    const url = process.env.ENV_URL!;
+    const url = config.frontendUrl;
 
     const html = await fetch(url).then(r => r.text());
 
@@ -43,10 +25,10 @@ export async function getRegistry():WidgetRegistry {
 
     registryCache = JSON.parse(el.textContent || '{}');
 
-    return registryCache;
+    return registryCache as WidgetRegistry;
 }
 
-export async function getResolvedEntry(registry: WidgetRegistry, instanceKey: string) {
+export async function getResolvedEntry(registry: WidgetRegistry, instanceKey: string): Promise<any> {
     const entry = registry[instanceKey];
 
     if (!entry) {

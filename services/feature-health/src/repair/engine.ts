@@ -1,10 +1,11 @@
-import { HealthIssue } from './health-issue';
+import { HealthIssue } from '../types';
+import { HealthRule } from '../rules/interface'
 
 export class RuleEngine {
 
     constructor(
         private readonly rules: HealthRule[]
-    ) {}
+    ) { }
 
     match(
         issues: HealthIssue[]
