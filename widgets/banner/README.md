@@ -94,9 +94,9 @@ npm run dev
 To run the widget in SSR mode:
 
 ```bash
-cd widget/usp
+cd widget/banner
 npm install
-NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../../platform/cdn/www/usp/contracts/uk.json
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../../services/cdn/www/banner/contracts/uk.json
 ```
 
 To run the test suite:

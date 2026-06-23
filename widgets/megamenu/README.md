@@ -49,9 +49,9 @@ npm run dev
 To run the widget in SSR mode:
 
 ```bash
-cd widget-megamenu
+cd widgets/megamenu
 npm install
-NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../widgets-cdn/www/megamenu/contracts/fr.json
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../../services/cdn/www/megamenu/contracts/fr.json
 ```
 
 To run the test suite:

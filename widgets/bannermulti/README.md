@@ -94,9 +94,9 @@ npm run dev
 To run the widget in SSR mode:
 
 ```bash
-cd widget-usp
+cd widget/bannermulti
 npm install
-NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../widgets-cdn/www/bannermulti/contracts/mageosuk2.json
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../../services/cdn/www/bannermulti/contracts/fr.json
 
 ```
 
