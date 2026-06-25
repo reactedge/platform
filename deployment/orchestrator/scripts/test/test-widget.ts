@@ -30,7 +30,7 @@ export function testWidget(
         );
 
         execSync(
-            `${playwright} test --config=tests/playwright.stage.config.ts widgets/${widgetName}/tests`,
+            `${playwright} test --config=tests/playwright.stage.config.ts widgets/${widgetName}/vite_project/tests`,
             {
                 cwd: config.projectRoot,
                 stdio: 'inherit'

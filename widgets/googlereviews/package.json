@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "@playwright/test": "^1.57.0"
-  },
-  "dependencies": {
-    "@vitejs/plugin-react-swc": "^4.3.0"
-  }
-}
