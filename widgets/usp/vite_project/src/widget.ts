@@ -9,6 +9,8 @@ const mount = async (el: HTMLElement, config: RawWidgetConfig) => {
 
 const api = { mount };
 
-(window as any)[`ReactEdge_${WIDGET_ID}`] = api;
+if (typeof window !== 'undefined') {
+    (window as any)[`ReactEdge_${WIDGET_ID}`] = api;
+}
 
 export { mount };

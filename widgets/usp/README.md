@@ -130,7 +130,7 @@ NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../../services/cdn
 
 To run the test suite:
 ```bash
-npx playwright test --config=tests/playwright.dev.config.ts
+npx playwright test --config=tests/playwright.stage.config.ts
 ```
 
 ## Deploying the widget

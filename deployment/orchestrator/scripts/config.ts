@@ -26,6 +26,7 @@ export function loadConfig(
         updateIntegrity: process.env.UPDATE_INTEGRITY
             ? process.env.UPDATE_INTEGRITY === 'true'
             : false,
+        sitemapUrl: process.env.SITEMAP_URL
     };
 }
 
