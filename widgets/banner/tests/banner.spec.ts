@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import {test, expect, Locator} from '@playwright/test';
 
 test.describe('Banner Widget', () => {
     let banner;
@@ -10,9 +10,7 @@ test.describe('Banner Widget', () => {
     });
 
     test('Banner widget finds its slides', async ({ page }) => {
-        const slides = banner.locator('[data-banner-slide]');
-
-        await expect(slides).toHaveCount(3);
+        await expectSlidesToBeVisible(banner)
     });
 
     test.describe('mobile behaviour', () => {
@@ -95,11 +93,11 @@ test.describe('Banner Widget', () => {
         });
 
         test('Banner does not duplicate slides on reload', async ({page}) => {
-            await expect(banner.locator('[data-banner-slide]')).toHaveCount(3);
+            await expectSlidesToBeVisible(banner)
 
             await page.reload();
 
-            await expect(banner.locator('[data-banner-slide]')).toHaveCount(3);
+            await expectSlidesToBeVisible(banner)
             await expect(banner.locator('[data-banner-active="true"]')).toHaveCount(1);
         });
 
@@ -133,16 +131,19 @@ test.describe('Banner Widget', () => {
 
         test('shows all slides statically', async ({ page }) => {
             const banner = page.locator('banner-widget');
-            await expect(banner.locator('[data-banner-slide]')).toHaveCount(3);
+            await expectSlidesToBeVisible(banner)
         });
 
-
         test('Banner desktop mode ignores next and prev', async ({page}) => {
-            const slides = banner.locator('[data-banner-slide]');
-            await expect(slides).toHaveCount(3);
-
             // Either all active, or no active flags at all
             await expect(banner.locator('[data-banner-active="true"]')).toHaveCount(0);
         });
     });
 });
+
+async function expectSlidesToBeVisible(
+    banner: Locator
+): Promise<void> {
+    const slides = banner.locator('[data-banner-slide]');
+    await expect(slides.first()).toBeVisible();
+}

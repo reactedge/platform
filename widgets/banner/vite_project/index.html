@@ -3,11 +3,12 @@
 
 <script type="module">
     import { mount } from './src/widget.ts';
-    import {loadContract} from './src/lib/contract-resolver.ts';
+    //import {loadContract} from './src/lib/contract-resolver.ts';
 
     const el = document.querySelector('banner-widget');
 
-    const config = await loadContract('mageosuk7.json');
+    //const config = await loadContract('mageosuk7.json');
+    const config = await fetch('/cdn/hero.json').then(r => r.json());
 
     mount(el, config);
 </script>
