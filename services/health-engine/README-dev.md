@@ -1,19 +1,5 @@
 # ReactEdge Feature Health Engine
 
-The Feature Health Engine continuously validates deployed ReactEdge widget configurations.
-
-Rather than validating source files, it observes the live deployment, discovers every deployed widget instance, validates each contract using the widget's own schema and reports any detected health issues.
-
-## Features
-
-* Observe deployed widget instances
-* Validate live widget contracts
-* Normalize validation failures into Health Issues
-* Match Health Rules
-* Foundation for autonomous remediation
-
----
-
 ## Installation
 
 ### Runtime
@@ -69,7 +55,7 @@ npm run dev
 The Health Engine automatically discovers deployed widget instances from the live registry.
 
 ```bash
-curl -X POST http://localhost:3002/observe
+curl -X POST http://localhost:3002/validation/widgets
 ```
 
 Example response:
@@ -97,24 +83,6 @@ Example response:
 
 ---
 
-## Observation Pipeline
-
-```text
-Observe Deployment
-        ↓
-Load Registry
-        ↓
-Resolve Widget
-        ↓
-Validate Contract
-        ↓
-Normalize Health Issues
-        ↓
-Match Rules
-```
-
----
-
 ## Cron
 
 The engine is designed to be triggered externally.
@@ -137,3 +105,53 @@ echo "[Health] Completed."
 ```
 
 This allows the same service to be executed manually, during deployment, or from a scheduled job without embedding scheduling logic into the application itself.
+
+
+---
+
+## Validate Performance
+
+The Health Engine can validate the performance of every publicly accessible page exposed by a website.
+
+The validator discovers pages from the site's public sitemap (generated natively by Magento) and verifies that those pages are healthy from a performance perspective.
+
+```bash
+curl -X POST http://localhost:3002/validation/performance
+```
+
+Example response:
+
+```json
+[
+  {
+    "id": "gear",
+    "label": "gear",
+    "url": "https://mageos-docker.magsite.co.uk/gear.html",
+    "baselineMs": 145.86,
+    "verificationMs": 153.76,
+    "improvementMs": -7.89,
+    "baselineCacheHit": true,
+    "verificationCacheHit": true,
+    "healthy": true
+  }
+]
+```
+
+The validator reads the public sitemap configured through the application configuration, for example:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset>
+    <url>
+        <loc>https://mageos-docker.magsite.co.uk/</loc>
+    </url>
+
+    <url>
+        <loc>https://mageos-docker.magsite.co.uk/gear.html</loc>
+    </url>
+
+    <url>
+        <loc>https://mageos-docker.magsite.co.uk/gear/bags.html</loc>
+    </url>
+</urlset>
+```

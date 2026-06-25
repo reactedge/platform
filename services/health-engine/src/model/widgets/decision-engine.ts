@@ -1,4 +1,4 @@
-import { HealthDecision, Assessment } from "../types"
+import { HealthDecision, Assessment } from "./types"
 
 export class DecisionEngine {
     decide(assessment: Assessment): HealthDecision {

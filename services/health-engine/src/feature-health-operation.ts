@@ -1,6 +1,5 @@
 import { SpanStatusCode } from '@opentelemetry/api';
 
-import { OpenTelemetryObserver } from './observability/activity';
 import { logger } from './logger';
 
 export class FeatureHealthOperation {

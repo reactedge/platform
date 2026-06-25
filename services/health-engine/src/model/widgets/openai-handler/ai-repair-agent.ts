@@ -1,7 +1,7 @@
 import { OpenAI } from "openai";
-import { config } from "../../config";
-import { getRepairPrompt } from "../../repair/prompt-loader";
-import { AiRepairResponse, Assessment } from "../../types";
+import { config } from "../../../config";
+import { getRepairPrompt } from "../../../repair/prompt-loader";
+import { AiRepairResponse, Assessment } from "../types";
 
 const openai = new OpenAI({ apiKey: config.openai.apiKey });
 

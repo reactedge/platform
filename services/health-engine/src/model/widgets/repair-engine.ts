@@ -1,7 +1,7 @@
-import { RepairProposal, Assessment } from "../types"
-import { StringMaxLengthRepair } from "../rules/string-maxlength-repair"
+import { RepairProposal, Assessment } from "./types"
+import { StringMaxLengthRepair } from "../../rules/string-maxlength-repair"
 import { OpenaiRepairAgent } from "./openai-handler/ai-repair-agent";
-import { config } from "../config"
+import { config } from "../../config"
 
 export class RepairEngine {
     constructor(

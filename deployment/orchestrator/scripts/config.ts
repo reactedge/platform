@@ -25,8 +25,7 @@ export function loadConfig(
         otelServiceName: 'reactedge-build',
         updateIntegrity: process.env.UPDATE_INTEGRITY
             ? process.env.UPDATE_INTEGRITY === 'true'
-            : false,
-        sitemapUrl: process.env.SITEMAP_URL
+            : false
     };
 }
 

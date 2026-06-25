@@ -7,7 +7,7 @@ export type configInfo = {
     frontendUrl: string;
     cdnFolder: string,
     route: {
-        observePrefix: string;
+        validationPrefix: string;
     },
     rootDir: string;
     observability: {
@@ -20,6 +20,10 @@ export type configInfo = {
         apiKey: string;
     },
     repairPromptVersion: string
+    sitemap: {
+        url: string,
+        maxFailures: number
+    }
 }
 
 export const config: configInfo = {
@@ -32,7 +36,7 @@ export const config: configInfo = {
      * Routes access
      */
     route: {
-        observePrefix: '/observe'
+        validationPrefix: '/validation'
     },
     rootDir: appRoot.resolve('/'),
     observability: {
@@ -44,5 +48,11 @@ export const config: configInfo = {
         performance: Number(process.env.OPENAI_PERFORMANCE ?? 0.2),
         apiKey: (process.env.OPENAI_API_KEY === undefined) ? 'rrfdf' : process.env.OPENAI_API_KEY
     },
-    repairPromptVersion: (process.env.REPAIR_PROMPT_VERSION === undefined) ? 'v1' : process.env.REPAIR_PROMPT_VERSION
+    repairPromptVersion: (process.env.REPAIR_PROMPT_VERSION === undefined) ? 'v1' : process.env.REPAIR_PROMPT_VERSION,
+    sitemap: {
+        url: process.env.SITEMAP_URL!,
+        maxFailures: process.env.SITEMAP_MAX_FAILURES
+            ? parseInt(process.env.SITEMAP_MAX_FAILURES, 10)
+            : 5,
+    }
 }
