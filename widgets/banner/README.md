@@ -46,7 +46,7 @@ This widget focuses on **delivery and safety**, not business promises.
 
 This repository contains the widget itself, along with supporting tooling used for development, testing, and community maintenance.
 
-- `vite_project/`  
+- `src/`  
   Source code for the Banner widget and its build configuration.
 
 - `tests/`  

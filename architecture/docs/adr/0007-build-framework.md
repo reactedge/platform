@@ -33,7 +33,6 @@ The widget build stack is defined as:
 - No framework-specific runtime dependencies
 ```bash
 npm create vite@latest vite_project (React/Typescript)
-cd vite_project
 npm install
 ```
 
