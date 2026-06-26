@@ -14,7 +14,8 @@ export function loadConfig(
     });
 
     CONFIG = {
-        widgetsDir: process.env.WP_WIDGETS_DIR!,
+        assetTargetDir: process.env.TARGET_ASSET_DIR!,
+        assetStoreDir: process.env.STORE_ASSET_PATH!,
         cdnUrl: process.env.WP_CDN_URL!,
         projectRoot: process.env.REACTEDGE_ROOT!,
         targetSite: process.env.TARGET_SITE!,
