@@ -4,7 +4,7 @@ import path from 'path';
 
 const ROOT = process.cwd();
 
-const VITE_DIR = path.resolve(ROOT, 'vite_project');
+const VITE_DIR = path.resolve(ROOT);
 const OUTPUT_FILE = path.resolve(VITE_DIR, 'dist/reactedge-loader.js');
 
 import {CONFIG} from "./config.ts";

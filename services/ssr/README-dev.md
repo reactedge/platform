@@ -4,11 +4,11 @@ npm install -D typescript tsx @types/node @types/express
 .env for local
 WIDGETS_CDN_URL=http://localhost:8098
 PORT=3001
-USP_ENTRY=../../widget-usp/vite_project/src/ssr/entry
+USP_ENTRY=../../usp/src/ssr/entry
 
 .env for dev
 WIDGETS_CDN_URL=http://widgets-cdn
-USP_ENTRY=/widget-usp/vite_project/src/ssr/entry
+USP_ENTRY=/usp/src/ssr/entry
 
 
 ```bash

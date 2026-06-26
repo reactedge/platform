@@ -6,7 +6,7 @@ import { OpenTelemetryObserver } from "../../observability/activity"
 import { Assessment, WidgetRegistry } from "./types"
 
 function resolveEntry(widget: string): string {
-    return `${process.env.WIDGET_ROOT}/${widget}/vite_project/src/ConfigSchema.ts`;
+    return `${process.env.WIDGET_ROOT}/${widget}/src/ConfigSchema.ts`;
 }
 
 export class WidgetAssessment {

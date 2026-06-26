@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 
 function resolveEntry(widget: string): string {
-    return `${process.env.SSR_WIDGET_ROOT}/${widget}/vite_project/src/ssr/entry.tsx`;
+    return `${process.env.SSR_WIDGET_ROOT}/${widget}/src/ssr/entry.tsx`;
 }
 
 const operation = new SsrRenderOperation();

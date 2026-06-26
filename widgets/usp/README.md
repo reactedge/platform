@@ -140,7 +140,7 @@ They do not require a server-side runtime once built.
 
 ### Build the artefact
 
-From the `vite_project` directory:
+From the `widget root` directory:
 
 ```bash
 npm run build

@@ -1,0 +1,36 @@
+import fs from 'fs/promises';
+import 'dotenv/config';
+
+function resolveEntry(widget: string): string {
+    return `${process.env.WIDGETS_ROOT}/${widget}/src/ssr/entry.tsx`;
+}
+
+const run = async () => {
+    const widgetName = process.argv[2];
+    const contractPath = process.argv[3];
+    debugger
+    if (!widgetName) {
+        throw new Error('Missing widget name');
+    }
+
+    if (!contractPath) {
+        throw new Error('Missing contract path');
+    }
+
+    const config = JSON.parse(
+        await fs.readFile(contractPath, 'utf8')
+    );
+
+    const runtime = {
+        userAgent: process.argv[4] ?? ''
+    };
+
+    const entry = resolveEntry(widgetName);
+    const { renderHtml } = await import(entry);
+
+    const finalHtml = renderHtml(config, runtime)
+
+    process.stdout.write(finalHtml);
+};
+
+run();
