@@ -7,7 +7,7 @@ type Props = {
     rawConfig: WidgetConfig;
 };
 
-export const MegamenuWidgetView = ({ rawConfig }: Props) => {
+export const WidgetView = ({ rawConfig }: Props) => {
     const config = readWidgetConfig(rawConfig);
 
     if (!config) return null;

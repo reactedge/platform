@@ -1,6 +1,6 @@
-import {OpenTelemetryObserver} from "./observability/activity";
-import {logger} from "./logger";
-import {SpanStatusCode} from "@opentelemetry/api";
+import {OpenTelemetryObserver} from "./activity";
+import {logger} from "../logger";
+import {Span} from "@opentelemetry/api";
 
 export class SsrRenderOperation {
     private readonly telemetry;
@@ -13,6 +13,8 @@ export class SsrRenderOperation {
 
     private parentSpanId: string;
 
+    private span: Span
+
     constructor() {
         this.telemetry =
             new OpenTelemetryObserver();
@@ -24,7 +26,8 @@ export class SsrRenderOperation {
         this.userAgent = headers['user-agent']?? ''
         this.requestId = crypto.randomUUID();
         
-        this.telemetry.startOperation(
+        this.span = this.telemetry.startRemoteOperation(
+            'ssr.render',
             this.traceId,
             this.parentSpanId
         );
@@ -54,13 +57,32 @@ export class SsrRenderOperation {
         })
     }
 
-    lodCompletion(resultLength: number) {
+    logWidgetImported() {
+        this.telemetry.addEvent('widget.imported', {})
+    }
+
+    logRenderingStarted() {
+        this.telemetry.addEvent('widget.ssr.started', {})
+    }
+
+    logResponseSent(waitingLock: number) {
+        logger.info('[SSR DONE]', {
+            requestId: this.requestId
+        });
+
+        this.telemetry.addEvent('lock.wait.ms', { waitingLock })
+        this.telemetry.addEvent('widget.ssr.sent', {})
+        this.telemetry.endOperation()
+    }
+
+    logCompletion(resultLength: number) {
         logger.info('[SSR DONE]', {
             requestId: this.requestId,
             responseSize: resultLength
         });
-
-        this.telemetry.endOperation(resultLength)
+        this.telemetry.addEvent('widget.ssr.completed', {
+            resultLength
+        })
     }
 
     logFailedSsr(
@@ -75,5 +97,9 @@ export class SsrRenderOperation {
 
     addEvent(name: string, payload?: any) {
         this.telemetry.addEvent(name, payload)
+    }
+
+    getSpan() {
+        return this.span
     }
 }

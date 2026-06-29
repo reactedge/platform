@@ -9,7 +9,7 @@ type Props = {
     runtimeConfig: RuntimeConfig
 };
 
-export const UspWidgetView = ({ rawConfig, runtimeConfig }: Props) => {
+export const WidgetView = ({ rawConfig, runtimeConfig }: Props) => {
     const config = readWidgetConfig(rawConfig);
 
     if (!config) return null;

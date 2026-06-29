@@ -7,7 +7,8 @@ test.describe('Intent Discovery Widget', () => {
 
     test.beforeEach(async ({ page }) => {
         widget = new IntentWidgetDriver(page);
-        await page.goto('/tops-men.html');
+        await page.goto('/men/tops-men.html');
+        await page.locator('#intent-trigger').click();
         await expect(widget.root).toBeVisible();
     });
 

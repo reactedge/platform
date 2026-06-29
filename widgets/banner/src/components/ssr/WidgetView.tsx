@@ -8,7 +8,7 @@ type Props = {
     runtimeConfig: RuntimeConfig
 };
 
-export const BannerWidgetView = ({ rawConfig, runtimeConfig }: Props) => {
+export const WidgetView = ({ rawConfig, runtimeConfig }: Props) => {
     const config = readWidgetConfig(rawConfig);
 
     if (!config) return null;
