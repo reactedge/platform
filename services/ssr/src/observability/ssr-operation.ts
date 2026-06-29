@@ -72,4 +72,8 @@ export class SsrRenderOperation {
     getRequestId() {
         return this.requestId
     }
+
+    addEvent(name: string, payload?: any) {
+        this.telemetry.addEvent(name, payload)
+    }
 }

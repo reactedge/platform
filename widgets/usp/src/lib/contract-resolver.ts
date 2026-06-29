@@ -22,6 +22,6 @@ export async function getCdnManifest() {
 }
 
 export async function loadContract(name: string) {
-    const data = await fetch(`${CDN_URL}/${WIDGET_ID}/contracts/${name}`).then(r => r.json());
+    const data = await fetch(`/cdn/${name}`).then(r => r.json());
     return data;
 }
