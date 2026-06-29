@@ -33,8 +33,13 @@ jobs:
 
           ssh-keyscan -H "${{ secrets.WIDGET_SSH_HOST }}" >> ~/.ssh/known_hosts
 
-#      - name: Build CSS bundles
-#        run: npm run build:css
+      - name: Install CDN dependencies
+        working-directory: ./services/cdn
+        run: npm ci
+
+      - name: Build CSS bundles
+        working-directory: ./services/cdn
+        run: npx tsx scripts/build-all-css-bundles.ts
 
       - name: Sync CDN assets
         run: |
