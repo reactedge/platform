@@ -1,0 +1,20 @@
+{
+  "runtime": {
+    "platform": "magento"
+  },
+  "data": {
+    "items": []
+  },
+  "settings": {
+    "theme": {
+      "dataLocale": "en-GB",
+      "fontColor": "#333",
+      "primaryColor": "#1979c3",
+      "secondaryColor": "#ff5501",
+      "urlSuffix": ".html",
+      "dropdownLayouts": {
+        "/gear": "tiles"
+      }
+    }
+  }
+}
