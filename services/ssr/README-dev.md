@@ -30,6 +30,25 @@ curl -vk -X POST https://widgets-ssr.co.uk/render \
 ```
 
 ```bash
+seq 1 5 | xargs -P5 -I{} \
+curl -vk -X POST https://widgets-ssr.co.uk/render \
+  -H "Content-Type: application/json" \
+  -d '{
+    "widget": "megamenu",
+    "contractFile": "default.json",
+    "runtime": {
+      "integrations": {
+        "googleMaps": {},
+        "magentoGraphql": {},
+        "intentApi": {}
+      },
+      "storeCode": "default",
+      "category": null
+    }
+  }' > /dev/null
+```
+
+```bash
 curl -vk -X POST https://ssr-origin.reactedge.net/render \
 -H "Content-Type: application/json" \
 -d '{

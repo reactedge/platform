@@ -5,6 +5,7 @@ import {type ReactEdgeRuntimeConfig} from "../domain/intent-discovery.types.ts";
 import type {CategoryData} from "../types/infra/magento/category.types.ts";
 import type {MagentoLayeredNavigation} from "../hooks/domain/useLayeredNavigation.tsx";
 import type {RawWidgetConfig} from "../ConfigSchema.ts";
+import {WIDGET_ID} from "../Config.ts";
 
 export interface BootstrapData {
     categoryData: CategoryData
@@ -13,10 +14,10 @@ export interface BootstrapData {
 
 export const renderHtml = (config: RawWidgetConfig, runtimeConfig: ReactEdgeRuntimeConfig, bootstrap: BootstrapData): string => {
     return renderToString(
-        <div className="reactedge-usp">
-            <WidgetView rawConfig={config} runtimeConfig={runtimeConfig} bootstrapData={bootstrap} />
+        <div className={`reactedge-${WIDGET_ID}`}>
+            <WidgetView rawConfig={config} runtimeConfig={runtimeConfig} bootstrapData={bootstrap}/>
         </div>
     );
 };
 
-export { buildBootstrap } from './bootstrap';
+export {buildBootstrap} from './bootstrap';

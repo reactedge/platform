@@ -10,7 +10,6 @@ export const WIDGET_ID = 'contactus';
 
 export async function mountWidget(hostElement: HTMLElement, config?: ContactUsRawConfig) {
     const mountedHost = getMountedHost(hostElement);
-    hostElement.classList.add(`reactedge-${WIDGET_ID}`);
 
     activity('bootstrap', 'Widget mounted', hostElement);
 

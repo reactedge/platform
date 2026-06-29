@@ -1,15 +1,13 @@
+import fs from "fs/promises";
+
 async function fetchContract(widget: string, contract: string) {
-    const contractPath = `${process.env.WIDGETS_CDN_URL}/${widget}/contracts/${contract}`
-    const response = await fetch(contractPath);
+    const contractPath = `${process.env.WIDGETS_CONTRACT_PATH}/${widget}/${contract}`
+    const parsed = JSON.parse(
+        await fs.readFile(contractPath, 'utf8')
+    );
     console.log(`SSR built with contract path: ${contractPath}`)
 
-    if (!response.ok) {
-        throw new Error(
-            `Contract fetch failed: ${response.status}`
-        );
-    }
-
-    return response.json();
+    return parsed;
 }
 
 export async function buildRenderPayload(

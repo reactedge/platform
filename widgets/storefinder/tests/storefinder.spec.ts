@@ -4,7 +4,6 @@ test.describe('StoreFinder Widget', () => {
     let widget;
 
     test.beforeEach(async ({ page }) => {
-        //await page.goto('/fixtures/storefinder.html');
         await page.goto('/');
         widget = page.locator('storefinder-widget');
     });

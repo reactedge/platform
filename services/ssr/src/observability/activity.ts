@@ -32,9 +32,35 @@ export class OpenTelemetryObserver {
     }
 
     startOperation(
+        name: string,
         traceId: string,
         parentSpanId: string
-    ): void {
+    ): Span {
+        const parentContext =
+            trace.setSpanContext(
+                context.active(),
+                {
+                    traceId,
+                    spanId: parentSpanId,
+                    traceFlags: 1
+                }
+            );
+
+        this.span =
+            this.tracer.startSpan(
+                name,
+                undefined,
+                parentContext
+            );
+
+        return this.span
+    }
+
+    startRemoteOperation(
+        name: string,
+        traceId: string,
+        parentSpanId: string
+    ): Span {
         const parentContext =
             trace.setSpanContext(
                 context.active(),
@@ -48,7 +74,7 @@ export class OpenTelemetryObserver {
 
         this.span =
             this.tracer.startSpan(
-                'ssr.render',
+                name,
                 undefined,
                 parentContext
             );
@@ -56,13 +82,11 @@ export class OpenTelemetryObserver {
         this.addEvent('ssr_reconciled',{
             remote_parent: true
         });
+
+        return this.span
     }
 
-    endOperation(resultLength: number) {
-        this.addEvent('api_reponse',{
-            'ssr.html.length': resultLength
-        });
-
+    endOperation() {
         this.span.end();
     }
 
@@ -82,7 +106,7 @@ export class OpenTelemetryObserver {
 
     addEvent(
         name: string,
-        payload: Record<string, any>
+        payload?: Record<string, any>
     ) {
         this.span.addEvent(
             name,
