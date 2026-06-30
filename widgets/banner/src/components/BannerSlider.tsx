@@ -9,12 +9,10 @@ export const BannerSlider = ({ slides, config }: BannerSliderProps) => {
     const activity = useActivityContext()
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const mode = config.mode.desktop;
-    const w = config.imageWidth;
+   const w = config.imageWidth;
     const h = config.imageHeight;
 
     activity.log('banner_slider', 'Banner Slider', {
-        mode,
         w,
         h
     });

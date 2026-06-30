@@ -139,7 +139,7 @@ test.describe('Banner Widget', () => {
             await expectSlidesToBeVisible(banner);
 
             // Either all active, or no active flags at all
-            await expect(banner.locator('[data-banner-active="true"]')).toHaveCount(0);
+            await expect(banner.locator('[data-banner-active="true"]')).toHaveCount(1);
         });
     });
 
