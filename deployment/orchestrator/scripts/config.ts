@@ -17,6 +17,7 @@ export function loadConfig(
         assetTargetDir: process.env.TARGET_ASSET_DIR!,
         assetStoreDir: process.env.STORE_ASSET_PATH!,
         hostAssetsDir: process.env.HOST_MEDIA_DIR!,
+        optimisedAssetsDir: process.env.OPTIMISED_ASSET_DIR!,
         optimisedAssetsRelativePath: process.env.REACTEDGE_MEDIA_PREFIX,
         cdnUrl: process.env.WP_CDN_URL!,
         projectRoot: process.env.REACTEDGE_ROOT!,
