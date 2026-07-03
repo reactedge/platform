@@ -8,6 +8,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 class Settings(BaseSettings):
     env: str = "dev"
     frontend_url: str = "http://localhost:3000"
+    hostname: str = "localhost"
+    environment: str = "development"
+    service: str = "platform-signals"
+    version: str = "0.1.0"
     status_prefix: str = "/status"
 
     redis_host: str = "127.0.0.1"
