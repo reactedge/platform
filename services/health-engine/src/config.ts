@@ -23,6 +23,14 @@ export type configInfo = {
     sitemap: {
         url: string,
         maxFailures: number
+    },
+    health: {
+        platformSnapshotInterval: number,
+        platformSignalsUrl: string
+        backgroundTraffic: {
+            enabled: boolean,
+            concurrentRequests: number
+        }
     }
 }
 
@@ -53,6 +61,20 @@ export const config: configInfo = {
         url: process.env.SITEMAP_URL!,
         maxFailures: process.env.SITEMAP_MAX_FAILURES
             ? parseInt(process.env.SITEMAP_MAX_FAILURES, 10)
-            : 5,
+            : 5
+    },
+    health: {
+        platformSnapshotInterval: process.env.HEALTH_PLATFORM_SNAPSHOT_INTERVAL
+            ? parseInt(process.env.HEALTH_PLATFORM_SNAPSHOT_INTERVAL, 10)
+            : 50,
+
+        platformSignalsUrl: process.env.HEALTH_PLATFORM_SIGNALS_URL!,
+
+        backgroundTraffic: {
+            enabled: process.env.HEALTH_BACKGROUND_TRAFFIC_ENABLED === 'true',
+            concurrentRequests: process.env.HEALTH_BACKGROUND_TRAFFIC_CONCURRENCY
+                ? parseInt(process.env.HEALTH_BACKGROUND_TRAFFIC_CONCURRENCY, 10)
+                : 10,
+        }
     }
 }

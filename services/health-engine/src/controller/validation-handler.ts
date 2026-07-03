@@ -7,7 +7,7 @@ import { OpenTelemetryObserver } from "../observability/activity"
 import { WidgetAssessment } from "../model/widgets/widget-health-assessor"
 import { RepairEngine } from "../model/widgets/repair-engine"
 import { PerformanceValidator } from "../model/performance/validator"
-import {PLatformStatusValidator} from "../model/platform/status";
+import {PlatformStatusValidator} from "../model/platform/status";
 
 export class ValidationHandler {
     validateFeatures = async (req: Request, res: Response): Promise<void> => {
@@ -82,7 +82,7 @@ export class ValidationHandler {
         try {
             telemetry.startOperation('health.validate_status', req.headers);
 
-            const plaftformStatusValidator = new PLatformStatusValidator()
+            const plaftformStatusValidator = new PlatformStatusValidator()
 
             const result = await plaftformStatusValidator.validate(telemetry)
 

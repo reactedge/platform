@@ -5,7 +5,6 @@ from app.config import output_config
 from app.routes.status import router as status_router
 
 app = FastAPI()
-setup_cors(app)
 
 @app.on_event("startup")
 async def startup_event():
