@@ -1,6 +1,6 @@
 import {Application} from "express";
-import {setupHealthValidationRoutes} from "./healthValidationRouter";
+import {setupValidationRoutes} from "./validationRouter";
 
 export default (app: Application) => {
-    setupHealthValidationRoutes(app)
+    setupValidationRoutes(app)
 }

@@ -90,6 +90,8 @@ export class BatchLoader {
 
                     break;
                 }
+            } else {
+                run.add(load);
             }
         }
 
