@@ -2,7 +2,7 @@ import { SpanStatusCode } from '@opentelemetry/api';
 
 import { logger } from './logger';
 
-export class FeatureHealthOperation {
+export class ValidationOperation {
     private readonly telemetry;
 
     private requestId: string;

@@ -7,8 +7,9 @@ import { OpenTelemetryObserver } from "../observability/activity"
 import { WidgetAssessment } from "../model/widgets/widget-health-assessor"
 import { RepairEngine } from "../model/widgets/repair-engine"
 import { PerformanceValidator } from "../model/performance/validator"
+import {PLatformStatusValidator} from "../model/platform/status";
 
-export class HealthValidationHandler {
+export class ValidationHandler {
     validateFeatures = async (req: Request, res: Response): Promise<void> => {
         const telemetry = req.app.locals.telemetry as OpenTelemetryObserver;
 
@@ -64,6 +65,26 @@ export class HealthValidationHandler {
             const performanceValidator = new PerformanceValidator()
 
             const result = await performanceValidator.validateSitemap(telemetry)
+
+            res.json(result);
+        } catch (e) {
+            res.status(500).json({
+                healthy: false,
+                error: e instanceof Error ? e.message : 'Unknown error'
+            });
+            telemetry.failOperation(e);
+        }
+    }
+
+    validatPlatformStatus = async (req: Request, res: Response): Promise<void> => {
+        const telemetry = req.app.locals.telemetry as OpenTelemetryObserver;
+
+        try {
+            telemetry.startOperation('health.validate_status', req.headers);
+
+            const plaftformStatusValidator = new PLatformStatusValidator()
+
+            const result = await plaftformStatusValidator.validate(telemetry)
 
             res.json(result);
         } catch (e) {

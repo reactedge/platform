@@ -1,0 +1,26 @@
+services:
+  platform-signals:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+
+    container_name: platform-signals
+
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:3000:8000"
+
+    env_file:
+      - .env
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    networks:
+      - mageos_network
+
+networks:
+  mageos_network:
+    external: true
+    name: mageos_network

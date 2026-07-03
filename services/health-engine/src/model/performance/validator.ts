@@ -13,6 +13,9 @@ export class PerformanceValidator {
         const urls =
             await sitemapReader.read(config.sitemap.url);
 
+        console.log('sitemap', config.sitemap.url)
+        console.log('urls', urls.length)
+
         const batchLoader = new BatchLoader(
             new UrlLoader()
         )
@@ -20,8 +23,12 @@ export class PerformanceValidator {
         const initial =
             await batchLoader.measure(urls, telemetry);
 
+        console.log('initial run completed', initial.getEntries().length)
+
         const verification =
             await batchLoader.measureColdUrls(initial, telemetry);
+
+        console.log('verification run completed', verification.getEntries().length)
 
         return this.compare(
             initial,
@@ -37,6 +44,8 @@ export class PerformanceValidator {
         return verification.getEntries().map(verification => {
             const baselineEntry =
                 baseline.get(verification.id);
+
+            console.log('compare', verification.id)
 
             return {
                 id: verification.id,
