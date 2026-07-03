@@ -14,7 +14,6 @@ yarn-error.log*
 
 # Build output
 dist/
-build/
 coverage/
 
 # Vite
@@ -67,3 +66,15 @@ README-DEPLOY-DEMO.md
 widgets/**/.github
 widgets-cdn
 public/*
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+
+# Test cache
+.pytest_cache/
+
