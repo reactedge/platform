@@ -2,6 +2,7 @@ import { SitemapEntry, PerformanceEntry } from "./types";
 import { UrlLoader } from "./url-loader";
 import { config } from "../../config"
 import { OpenTelemetryObserver } from "../../observability/activity"
+import { savePlatformStatusSnapshot } from "../platform/call-platform";
 
 export class BatchLoader {
     constructor(
@@ -17,8 +18,14 @@ export class BatchLoader {
 
         let failures = 0;
 
-        for (const entry of entries) {
-            const load = await this.loadUrl(entry, telemetry)
+        for (let i = 0; i < entries.length; i++) {
+            const entry = entries[i];
+
+            if (i > 0 && i % config.health.platformSnapshotInterval === 0) {
+                await savePlatformStatusSnapshot(telemetry);
+            }
+
+            const load = await this.loadUrl(entry, telemetry);
 
             if (load) {
                 run.add(load);
@@ -108,6 +115,7 @@ export class BatchLoader {
             }
         );
 
+        console.log('visit url', entry.url)
         const result =
             await this.urlLoader.fetchText(entry.url);
 

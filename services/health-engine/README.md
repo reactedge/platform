@@ -28,7 +28,7 @@ curl -X POST http://localhost:3002/validation/widgets
 ## Validate Performance
 
 ``` bash
-curl -X POST http://localhost:3002/validation/performance
+cd se   
 ```
 
 The performance validator:
