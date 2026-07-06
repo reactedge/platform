@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.8",
+    "@vitejs/plugin-react-swc": "^4.3.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "rollup-plugin-visualizer": "^7.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

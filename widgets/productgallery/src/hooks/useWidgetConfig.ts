@@ -1,6 +1,6 @@
 import {useMemo} from "react";
 import {activity} from "../activity";
-import {type GalleryWidgetConfig, readWidgetConfig} from "../ProductGalleryConfig.ts";
+import {type GalleryWidgetConfig, readWidgetConfig} from "../Config.ts";
 
 export function useWidgetConfig(
     host: HTMLElement
