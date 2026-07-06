@@ -1,0 +1,13 @@
+min_version = "2025.7.0"
+
+[tools]
+node = "22"
+python = "3.13"
+
+[tasks."widgets-install"]
+description = "Install all the widgets vite environments"
+run = "./launcher/scripts/install.sh"
+
+[tasks."widget-dev"]
+description = "Start a widget development server"
+run = "./launcher/scripts/widget-dev.sh {{arg(name='widget')}}"

@@ -47,10 +47,6 @@ export function readIntegrationConfig(): ReactEdgeRuntimeConfig {
         throw new Error(`${WIDGET_ID}: reactedge-runtime contains invalid JSON`);
     }
 
-    // if (!config.integrations?.googleMaps?.apiKey) {
-    //     throw new Error(`${WIDGET_ID}: googleMaps missing in reactedge-runtime`);
-    // }
-
     return config;
 }
 

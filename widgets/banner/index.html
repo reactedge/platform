@@ -1,22 +1,19 @@
+<!DOCTYPE html>
+<html>
 <body>
-<script type="module" src="./src/widget.ts"></script>
 
 <script type="module">
     import { mount } from './src/widget.ts';
-    //import {loadContract} from './src/lib/contract-resolver.ts';
+    import {loadContract} from "./src/lib/contract-resolver.js";
+    const config = await loadContract('hero.json')
+    const element = document.querySelector('banner-widget');
 
-    const el = document.querySelector('banner-widget');
-
-    //const config = await loadContract('mageosuk7.json');
-    const config = await fetch('/cdn/hero.json').then(r => r.json());
-
-    mount(el, config);
+    await requestAnimationFrame(() => {
+        mount(element, config);
+    })
 </script>
 
-<div class="banner">
-    <div data-load="on-scroll:100">
-        <banner-widget />
-    </div>
-</div>
+<banner-widget></banner-widget>
 
 </body>
+</html>

@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import ProductGalleryWidget from "./ProductGalleryWidget.tsx";
+import ProductGalleryWidget from "./WidgetWrapper.tsx";
 import {activity} from "./activity";
 import {getMountedHost} from "./lib/hostReader.ts";
 

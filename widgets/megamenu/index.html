@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="https://widgets-cdn.co.uk/megamenu/styles/megamenu.css">
-</head>
 <body>
 
-<h2>megamenu x2 Test</h2>
-
-
 <script type="module">
-    import {getCdnManifest} from "./src/lib/contract-resolver.js";
     import { mount } from './src/widget.ts';
-
-    const configs = await getCdnManifest();
-    const config = configs[0]
+    import {loadContract} from "./src/lib/contract-resolver.js";
+    const config = await loadContract('default.json')
     const element = document.querySelector('megamenu-widget');
 
-    console.log(config)
     await requestAnimationFrame(() => {
-        mount(element, config.data);
+        mount(element, config);
     })
 </script>
 

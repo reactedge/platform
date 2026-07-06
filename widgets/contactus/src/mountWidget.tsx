@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import ContactUsWidget from "./ContactUsWidget.tsx";
+import ContactUsWidget from "./Widget.tsx";
 import {activity} from "./activity";
 import {getMountedHost} from "./widget-runtime/lib/hostReader.ts";
 
