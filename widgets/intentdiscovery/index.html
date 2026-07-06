@@ -5,38 +5,23 @@
 </head>
 <body style="background: wheat">
 
-<h2>intentdiscovery x2 Test</h2>
+<h2>intentdiscovery Test</h2>
 <script type="module">
     import { mount } from './src/widget.ts';
     import {loadContract} from "./src/lib/contract-resolver.js";
-    import {readIntegrationConfig} from "./src/Config.js"
-    const config = await loadContract('default.json')
-    const storeCode = 'default'
-    const category = 'tops-men'
-    const element = document.querySelector('intentdiscovery-widget');
+    import {loadRuntime} from "./src/lib/load-runtime.js";
 
-    const runtimeConfig = readIntegrationConfig(storeCode, category);
+    const config = await loadContract('default.json')
+    const element = document.querySelector('intentdiscovery-widget');
+    const runtime = await loadRuntime();
 
     await requestAnimationFrame(() => {
-        mount(element, config, runtimeConfig);
+        mount(element, config, runtime);
     })
 </script>
 
 
 <intentdiscovery-widget></intentdiscovery-widget>
-
-<script type="application/json" id="reactedge-runtime">
-    {
-        "integrations": {
-            "magentoGraphql": {
-                "api": "https://mageos-docker.magsite.co.uk/graphql"
-            },
-            "intentApi": {
-                "baseUrl": "http://localhost:8000/v1"
-            }
-        }
-    }
-</script>
 
 </body>
 </html>

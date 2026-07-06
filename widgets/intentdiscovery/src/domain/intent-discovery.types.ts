@@ -4,14 +4,14 @@
 
 export interface ReactEdgeRuntimeConfig {
     readonly integrations: ReactEdgeRuntimeIntegrations;
-    category: string;
-    storeCode: string;
 }
 
 export interface ReactEdgeRuntimeIntegrations {
     readonly magentoGraphql: {
         readonly api: string;
         readonly internalApi?: string
+        readonly category: string;
+        readonly storeCode: string;
     };
     readonly intentApi?: {
         readonly baseUrl: string;

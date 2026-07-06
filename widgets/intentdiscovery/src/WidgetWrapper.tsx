@@ -19,6 +19,8 @@ export const WidgetWrapper = ({ rawConfig, runtimeConfig }: Props) => {
     const [bootReady, setBootReady] = useState(false);
     const config = readWidgetConfig(rawConfig, runtimeConfig, activity);
 
+    console.log(config)
+
     useEffect(() => {
         if (!config) return;
 

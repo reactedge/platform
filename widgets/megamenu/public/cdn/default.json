@@ -1,57 +1,211 @@
 {
   "runtime": {
-    "platform": "wordpress"
+    "platform": "magento"
   },
   "data": {
     "items": [
       {
-        "id": "1",
-        "label": "Home",
-        "url": "/",
+        "id": "38",
+        "label": "What's New",
+        "url": "https://mageos-docker.magsite.co.uk/what-is-new.html",
+        "image": null,
         "children": []
       },
       {
-        "id": "2",
-        "label": "Services",
-        "url": "/services",
+        "id": "20",
+        "label": "Women",
+        "url": "https://mageos-docker.magsite.co.uk/women.html",
+        "image": null,
         "children": [
           {
             "id": "21",
-            "label": "Web Design",
-            "url": "/services/web-design",
-            "children": []
+            "label": "Tops",
+            "url": "https://mageos-docker.magsite.co.uk/women/tops-women.html",
+            "image": null,
+            "children": [
+              {
+                "id": "23",
+                "label": "Jackets",
+                "url": "https://mageos-docker.magsite.co.uk/women/tops-women/jackets-women.html",
+                "image": null,
+                "children": []
+              },
+              {
+                "id": "24",
+                "label": "Hoodies & Sweatshirts",
+                "url": "https://mageos-docker.magsite.co.uk/women/tops-women/hoodies-and-sweatshirts-women.html",
+                "image": null,
+                "children": []
+              },
+              {
+                "id": "25",
+                "label": "Tees",
+                "url": "https://mageos-docker.magsite.co.uk/women/tops-women/tees-women.html",
+                "image": null,
+                "children": []
+              },
+              {
+                "id": "26",
+                "label": "Bras & Tanks",
+                "url": "https://mageos-docker.magsite.co.uk/women/tops-women/tanks-women.html",
+                "image": null,
+                "children": []
+              }
+            ]
           },
           {
             "id": "22",
-            "label": "SEO",
-            "url": "/services/seo",
-            "children": []
+            "label": "Bottoms",
+            "url": "https://mageos-docker.magsite.co.uk/women/bottoms-women.html",
+            "image": null,
+            "children": [
+              {
+                "id": "27",
+                "label": "Pants",
+                "url": "https://mageos-docker.magsite.co.uk/women/bottoms-women/pants-women.html",
+                "image": null,
+                "children": []
+              },
+              {
+                "id": "28",
+                "label": "Shorts",
+                "url": "https://mageos-docker.magsite.co.uk/women/bottoms-women/shorts-women.html",
+                "image": null,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "11",
+        "label": "Men",
+        "url": "https://mageos-docker.magsite.co.uk/men.html",
+        "image": null,
+        "children": [
+          {
+            "id": "12",
+            "label": "Tops",
+            "url": "https://mageos-docker.magsite.co.uk/men/tops-men.html",
+            "image": null,
+            "children": [
+              {
+                "id": "14",
+                "label": "Jackets",
+                "url": "https://mageos-docker.magsite.co.uk/men/tops-men/jackets-men.html",
+                "image": null,
+                "children": []
+              },
+              {
+                "id": "15",
+                "label": "Hoodies & Sweatshirts",
+                "url": "https://mageos-docker.magsite.co.uk/men/tops-men/hoodies-and-sweatshirts-men.html",
+                "image": null,
+                "children": []
+              },
+              {
+                "id": "16",
+                "label": "Tees",
+                "url": "https://mageos-docker.magsite.co.uk/men/tops-men/tees-men.html",
+                "image": null,
+                "children": []
+              },
+              {
+                "id": "17",
+                "label": "Tanks",
+                "url": "https://mageos-docker.magsite.co.uk/men/tops-men/tanks-men.html",
+                "image": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "13",
+            "label": "Bottoms",
+            "url": "https://mageos-docker.magsite.co.uk/men/bottoms-men.html",
+            "image": null,
+            "children": [
+              {
+                "id": "18",
+                "label": "Pants",
+                "url": "https://mageos-docker.magsite.co.uk/men/bottoms-men/pants-men.html",
+                "image": null,
+                "children": []
+              },
+              {
+                "id": "19",
+                "label": "Shorts",
+                "url": "https://mageos-docker.magsite.co.uk/men/bottoms-men/shorts-men.html",
+                "image": null,
+                "children": []
+              }
+            ]
           }
         ]
       },
       {
         "id": "3",
-        "label": "About",
-        "url": "/about",
-        "children": []
+        "label": "Gear",
+        "url": "https://mageos-docker.magsite.co.uk/gear.html",
+        "image": null,
+        "children": [
+          {
+            "id": "4",
+            "label": "Bags",
+            "url": "https://mageos-docker.magsite.co.uk/gear/bags.html",
+            "image": "https://mageos-docker.magsite.co.uk/media/catalog/category/bag.jpg",
+            "children": []
+          },
+          {
+            "id": "5",
+            "label": "Fitness Equipment",
+            "url": "https://mageos-docker.magsite.co.uk/gear/fitness-equipment.html",
+            "image": "https://mageos-docker.magsite.co.uk/media/catalog/category/equipment.jpg",
+            "children": []
+          },
+          {
+            "id": "6",
+            "label": "Watches",
+            "url": "https://mageos-docker.magsite.co.uk/gear/watches.html",
+            "image": "https://mageos-docker.magsite.co.uk/media/catalog/category/watches.jpg",
+            "children": []
+          }
+        ]
       },
       {
-        "id": "4",
-        "label": "Contact",
-        "url": "/contact",
-        "children": [],
-        "meta": {
-          "type": "cta"
-        }
+        "id": "9",
+        "label": "Training",
+        "url": "https://mageos-docker.magsite.co.uk/training.html",
+        "image": null,
+        "children": [
+          {
+            "id": "10",
+            "label": "Video Download",
+            "url": "https://mageos-docker.magsite.co.uk/training/training-video.html",
+            "image": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "37",
+        "label": "Sale",
+        "url": "https://mageos-docker.magsite.co.uk/sale.html",
+        "image": null,
+        "children": []
       }
     ]
   },
   "settings": {
     "theme": {
-      "dataLocale" : "fr-FR",
+      "dataLocale": "en-GB",
       "fontColor": "#333",
       "primaryColor": "#1979c3",
-      "secondaryColor": "#ff5501"
+      "secondaryColor": "#ff5501",
+      "urlSuffix": ".html",
+      "dropdownLayouts": {
+        "/gear": "tiles"
+      }
     }
   }
 }
