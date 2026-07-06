@@ -7,27 +7,18 @@
 <script type="module">
     import { mount } from './src/widget.ts';
     import {loadContract} from "./src/lib/contract-resolver.js";
-    import {readIntegrationConfig} from "./src/Config.js";
+    import {loadRuntime} from "./src/lib/load-runtime.js";
+
     const config = await loadContract('uk.json')
     const element = document.querySelector('storefinder-widget');
-
-    const runtimeConfig = readIntegrationConfig();
+    const runtime = await loadRuntime();
 
     await requestAnimationFrame(() => {
-        mount(element, config, runtimeConfig);
+        mount(element, config, runtime);
     })
 </script>
 
 <storefinder-widget />
 
-<script type="application/json" id="reactedge-runtime">
-    {
-        "integrations": {
-            "googleMaps": {
-                "apiKey": "AIzaSyBXDMg2bxjoLBCi7HwS_3WyHpYYOcjX3iY"
-            }
-        }
-    }
-</script>
 
 </body>

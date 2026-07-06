@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {buildInitialValues} from "../lib/form.ts";
-import {activity} from "../activity";
+import {useActivityContext} from "../activity/Context/useActivityContext.ts";
 
 type ControllerStatus = "idle" | "loading" | "success" | "error";
 
@@ -11,6 +11,7 @@ export function useContactController(
     const [values, setValues] = useState<Record<string, string>>(
         () => buildInitialValues(fields)
     );
+    const activity = useActivityContext()
 
     const [status, setStatus] = useState<ControllerStatus>("idle");
 
@@ -22,7 +23,7 @@ export function useContactController(
     };
 
     const reset = () => {
-        activity('form-submit', 'Form Submit Reset',null);
+        activity.log('form-submit', 'Form Submit Reset',null);
         setValues(buildInitialValues(fields));
         setStatus("idle");
     };
@@ -30,7 +31,7 @@ export function useContactController(
     const submit = async (extra: Record<string, unknown> = {}) => {
         setStatus("loading");
 
-        activity('submit', 'Submit Form');
+        activity.log('submit', 'Submit Form');
 
         try {
             const res = await fetch(endpoint, {
@@ -43,7 +44,7 @@ export function useContactController(
             });
 
             if (!res.ok) {
-                activity('form-submit', 'Form Submit Error',{
+                activity.log('form-submit', 'Form Submit Error',{
                     fields: values,
                     ...extra,
                 }, 'error');
@@ -52,7 +53,7 @@ export function useContactController(
 
             setStatus("success");
         } catch {
-            activity('submit', 'API error', null , 'error');
+            activity.log('submit', 'API error', null , 'error');
             setStatus("error");
         }
     };

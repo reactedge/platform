@@ -40,7 +40,7 @@
     }
   },
   "translations": {},
-  "integrations": {
-    "require": ["magentoGraphql", "intentApi"]
+  "integration": {
+    "requires": ["magentoGraphql", "intentApi"]
   }
 }

@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+const IntegrationSchema = z.enum([
+    "magentoGraphql",
+    "intentApi",
+    "googleMaps",
+    "cloudflare"
+]);
+
 export const WidgetConfigSchema = z.object({
     data: z.object({
         enabledCategories: z.array(z.string()),
@@ -27,14 +34,9 @@ export const WidgetConfigSchema = z.object({
         z.string()
     ).default({}).optional(),
 
-    integrations: z.object({
-        require: z.array(
-            z.enum([
-                'magentoGraphql',
-                'intentApi'
-            ])
-        )
-    })
+    integration: z.object({
+        requires: z.array(IntegrationSchema)
+    }).optional()
 
 }).strict();
 

@@ -23,8 +23,8 @@ export function readWidgetConfig(
     runtimeConfig: ReactEdgeRuntimeConfig,
     activity?: WidgetActivity
 ): WidgetConfig {
-    const config = parseConfig(rawConfig)
-    const resolved = resolveIntentDiscoveryConfig(config, runtimeConfig);
+    const contract = parseConfig(rawConfig);
+    const resolved = resolveIntentDiscoveryConfig(contract, runtimeConfig);
 
     activity?.log('bootstrap', 'Config resolved', {
         data: resolved.data,

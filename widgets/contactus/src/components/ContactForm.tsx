@@ -1,7 +1,7 @@
-import type {ContactUsConfig} from "../domain/contact.types.ts";
+import type {WidgetConfig} from "../domain/contact.types.ts";
 
 type ContactFormProps = {
-    config: ContactUsConfig;
+    config: WidgetConfig;
 
     values: Record<string, string>;
     category?: string;

@@ -1,10 +1,10 @@
 import {type ReactNode} from "react";
 import {LocalSystemStateContext} from "./SystemState.tsx";
-import type {ResolvedRegionMapConfig} from "../../domain/regionmap.types.ts";
+import type {WidgetConfig} from "../../domain/regionmap.types.ts";
 
 interface SystemStateProviderProps {
     children: ReactNode;
-    config: ResolvedRegionMapConfig;
+    config: WidgetConfig;
 }
 
 const LocalStateProvider = LocalSystemStateContext.Provider;

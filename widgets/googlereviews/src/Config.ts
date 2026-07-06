@@ -4,6 +4,7 @@ import type {
     WidgetConfig
 } from "./domain/googlereviews.types.ts";
 import type {WidgetActivity} from "./activity";
+import {parseConfig} from "./ConfigSchema.ts";
 
 export const WIDGET_ID = 'googlereviews';
 
@@ -22,7 +23,8 @@ export function readWidgetConfig(
     runtimeConfig: ReactEdgeRuntimeConfig,
     activity: WidgetActivity
 ): WidgetConfig {
-    const resolved = resolveGoogleReviewsConfig(rawConfig, runtimeConfig);
+    const contract = parseConfig(rawConfig);
+    const resolved = resolveWidgetConfig(contract, runtimeConfig);
 
     activity.log('bootstrap', 'Config resolved', {
         data: resolved.data,
@@ -33,24 +35,7 @@ export function readWidgetConfig(
     return Object.freeze(resolved);
 }
 
-export function readIntegrationConfig(): ReactEdgeRuntimeConfig {
-    const configScript = document.getElementById('reactedge-runtime');
-
-    if (!configScript) {
-        throw new Error(`${WIDGET_ID} widget requires a <script id='reactedge-runtime'> block.`);
-    }
-
-    let config: ReactEdgeRuntimeConfig;
-    try {
-        config = JSON.parse(configScript.textContent);
-    } catch {
-        throw new Error(`${WIDGET_ID}: reactedge-runtime contains invalid JSON`);
-    }
-
-    return config;
-}
-
-export function resolveGoogleReviewsConfig(
+export function resolveWidgetConfig(
     widget: GoogleReviewsWidgetConfig,
     runtime: ReactEdgeRuntimeConfig
 ): WidgetConfig {

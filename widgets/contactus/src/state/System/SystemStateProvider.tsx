@@ -1,10 +1,10 @@
 import {type ReactNode} from "react";
 import {LocalSystemStateContext} from "./SystemState.tsx";
-import type {ContactUsConfig} from "../../domain/contact.types.ts";
+import type {WidgetConfig} from "../../domain/contact.types.ts";
 
 interface SystemStateProviderProps {
     children: ReactNode;
-    config: ContactUsConfig;
+    config: WidgetConfig;
 }
 
 const LocalStateProvider = LocalSystemStateContext.Provider;

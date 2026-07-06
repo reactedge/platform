@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ensureTurnstileLoaded } from "../security/turnstileService";
-import {activity} from "../activity";
+import {useActivityContext} from "../activity/Context/useActivityContext.ts";
 
 type TurnstileProps = {
     siteKey: string;
@@ -10,6 +10,7 @@ type TurnstileProps = {
 
 export function Turnstile({ siteKey, onToken, containerId }: TurnstileProps) {
     const widgetId = useRef<string | null>(null);
+    const activity = useActivityContext()
 
     useEffect(() => {
         let cancelled = false;
@@ -20,7 +21,7 @@ export function Turnstile({ siteKey, onToken, containerId }: TurnstileProps) {
             const container = document.getElementById(containerId);
 
             if (!container) {
-                activity('turnstile-load', `[turnstile] container #${containerId} not found`,{
+                activity.log('turnstile-load', `[turnstile] container #${containerId} not found`,{
                     containerId,
                     siteKey
                 });

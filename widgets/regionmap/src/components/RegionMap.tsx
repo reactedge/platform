@@ -5,7 +5,7 @@ import {useSystemState} from "../state/System/useSystemState.ts";
 
 interface RegionMapProps {
     title?: string;
-    region: LatLng[];
+    region: Polygon[];
     center: LatLng;
     zoom: number;
 }

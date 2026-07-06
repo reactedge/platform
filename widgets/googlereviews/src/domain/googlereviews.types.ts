@@ -2,8 +2,33 @@
 /* Widget Contract      */
 /* -------------------- */
 
+export interface RawWidgetConfig {
+    readonly data: WidgetConfig;
+    readonly integrations?: WidgetIntegrations;
+    readonly translations: TranslationsConfig;
+}
 
-import type {RawWidgetConfig} from "../Config.ts";
+export interface WidgetConfig {
+    title: string;
+    center: LatLng;
+    zoom: number;
+    region: LatLng[];
+}
+
+export interface LatLng {
+    lat: number;
+    lng: number;
+}
+
+export interface WidgetIntegrations {
+    requires: IntegrationName[];
+}
+
+export type IntegrationName =
+    | "cloudflare"
+    | "googleMaps"
+    | "magento"
+    | "intentApi";
 
 export interface GoogleReviewsWidgetConfig {
     readonly data: GoogleReviewsDataConfig;

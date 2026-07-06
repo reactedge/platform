@@ -12,33 +12,26 @@ export interface ContactCategory {
     label: string;
 }
 
-export interface ContactUsRawConfig {
-    data: ContactUsConfig
-}
-
-export interface ContactUsConfig {
+export interface WidgetConfig {
     title?: string;
     intro?: string;
     endpoint: string | null;
     fields: ContactField[];
     categories?: ContactCategory[];
-    cloudflareKey?: string;
+    integrations: {
+        cloudflareKey?: string;
+    }
+    readonly translations?: TranslationsConfig
 }
 
-export const defaultContactUsConfig: ContactUsConfig = {
-    title: undefined,
-    intro: undefined,
-    endpoint: null,
-    categories: [],
-    fields: [],
-    cloudflareKey: ''
-};
+export type TranslationsConfig = Record<string, string> | undefined;
 
+export interface ReactEdgeRuntimeConfig {
+    readonly integrations: ReactEdgeRuntimeIntegrations;
+}
 
-export interface IntegrationConfig {
-    integrations: {
-        cloudflare: {
-            siteKey: string;
-        }
-    }
+export interface ReactEdgeRuntimeIntegrations {
+    readonly cloudflare: {
+        readonly siteKey: string;
+    };
 }

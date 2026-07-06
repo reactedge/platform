@@ -3,18 +3,19 @@ import {useState} from "react";
 import {SuccessForm} from "./SuccessForm.tsx";
 import {ContactForm} from "./ContactForm.tsx";
 import {Turnstile} from "../security/Turnstile.tsx";
-import type {ContactUsConfig} from "../domain/contact.types.ts";
-import {activity} from "../activity";
+import type {WidgetConfig} from "../domain/contact.types.ts";
 import {useSystemState} from "../state/System/useSystemState.ts";
 import {ContactHeader} from "./ContactHeader.tsx";
+import {useActivityContext} from "../activity/Context/useActivityContext.ts";
 
 type Props = {
-    config: ContactUsConfig;
+    config: WidgetConfig;
 };
 
 export function ContactUsWrapper({ config }: Props) {
     const { values, update, submit, status } =
         useContactController(config.endpoint || '', config.fields);
+    const activity = useActivityContext()
 
     const [token, setToken] = useState<string | null>(null);
     const [category, setCategory] = useState("");
@@ -28,12 +29,12 @@ export function ContactUsWrapper({ config }: Props) {
     if (status === 'success') return <SuccessForm />
 
     if (!turnstileEnabled) {
-        activity('form-ready', 'Turnstile Disabled',{
+        activity.log('form-ready', 'Turnstile Disabled',{
             cloudflareKey
         }, 'warn');
     }
 
-    activity('form-ready', 'Can submit',{
+    activity.log('form-ready', 'Can submit',{
         status,
         turnstileEnabled,
         token

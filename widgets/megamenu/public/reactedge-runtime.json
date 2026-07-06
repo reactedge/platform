@@ -1,0 +1,11 @@
+{
+  "integrations": {
+    "cloudflare": {
+      "siteKey": "0x4AAAAAACLGHYkoMP038SNT"
+    },
+    "googleMaps": {
+      "apiKey": "AIzaSyBXDMg2bxjoLBCi7HwS_3WyHpYYOcjX3iY",
+      "placeId": "ChIJF3wtymMX1I0RlV-deLj6JSE"
+    }
+  }
+}

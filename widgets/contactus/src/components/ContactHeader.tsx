@@ -1,7 +1,7 @@
-import type {ContactUsConfig} from "../domain/contact.types.ts";
+import type {WidgetConfig} from "../domain/contact.types.ts";
 
 type Props = {
-    config: ContactUsConfig;
+    config: WidgetConfig;
 };
 
 export function ContactHeader({

@@ -11,7 +11,7 @@
     ]
   },
   "translations": {},
-  "integrations": {
-    "require": ["googleMaps"]
+  "integration": {
+    "requires": ["googleMaps"]
   }
 }

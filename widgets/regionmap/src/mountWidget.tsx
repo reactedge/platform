@@ -1,18 +1,14 @@
-import { createRoot } from "react-dom/client";
-import {RegionMapWidget} from "./RegionMapWidget.tsx";
-import {activity} from "./activity";
+import {createRoot} from "react-dom/client";
+import React from "react";
+import {WidgetWrapper} from "./WidgetWrapper.tsx";
 import {getMountedHost} from "./lib/hostReader.ts";
-import type {RegionMapWidgetConfig} from "./domain/regionmap.types.ts";
+import type {RawWidgetConfig, ReactEdgeRuntimeConfig} from "./domain/regionmap.types.ts";
+import {ActivityContextProvider} from "./activity/Context/ActivityContextProvider.tsx";
 
-export const WIDGET_ID = 'regionmap';
-
-export function mountWidget(hostElement: HTMLElement, rawConfig?: RegionMapWidgetConfig) {
+export async function mountWidget(hostElement: HTMLElement, config: RawWidgetConfig, runtimeConfig: ReactEdgeRuntimeConfig) {
     const mountedHost = getMountedHost(hostElement);
-    hostElement.classList.add(`reactedge-${WIDGET_ID}`);
 
-    activity('bootstrap', 'Widget mounted', hostElement);
-
-    // Create React root inside shadow
-    const root = createRoot(mountedHost);
-    root.render(<RegionMapWidget host={hostElement} rawConfig={rawConfig} />);
+    createRoot(mountedHost).render(<ActivityContextProvider hostElement={hostElement}>
+        <WidgetWrapper rawConfig={config} runtimeConfig={runtimeConfig} />
+    </ActivityContextProvider>);
 }
