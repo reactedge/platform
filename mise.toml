@@ -6,12 +6,16 @@ python = "3.13"
 
 [tasks."widgets-install"]
 description = "Install all the widgets vite environments"
-run = "./launcher/scripts/install.sh"
+run = "./launcher/scripts/widgets-install.sh"
 
 [tasks.configure]
 description = "Configure ReactEdge integrations"
-run = "./launcher/scripts/configure.sh"
+run = "./launcher/scripts/widgets-configure.sh"
 
 [tasks."widget-dev"]
 description = "Start a widget development server"
 run = "./launcher/scripts/widget-dev.sh {{arg(name='widget')}}"
+
+[tasks.deploy]
+description = "Build the ReactEdge deployment orchestrator"
+run = "./launcher/scripts/widgets-deploy.sh"
