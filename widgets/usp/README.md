@@ -125,7 +125,7 @@ To run the widget in SSR mode:
 ```bash
 cd widgets/usp
 npm install
-NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../../services/cdn/www/usp/contracts/usp-demo1.json
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx packages/widget-build/ssr-generation/render-page.ts ./widgets/usp/public/cdn/default.json
 ```
 
 To run the test suite:

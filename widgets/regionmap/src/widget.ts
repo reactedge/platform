@@ -1,8 +1,8 @@
 import {mountWidget} from "./mountWidget.tsx";
-import type {RawWidgetConfig, ReactEdgeRuntimeConfig} from "./domain/regionmap.types.ts";
+import type { ReactEdgeRuntimeConfig} from "./domain/regionmap.types.ts";
 import {WIDGET_ID} from "./Config.ts";
 
-const mount = async (el: HTMLElement, config: RawWidgetConfig, runtimeConfig: ReactEdgeRuntimeConfig) => {
+const mount = async (el: HTMLElement, config: unknown, runtimeConfig: ReactEdgeRuntimeConfig) => {
     await mountWidget(el, config, runtimeConfig)
 }
 

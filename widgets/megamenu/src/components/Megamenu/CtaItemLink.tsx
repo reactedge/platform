@@ -1,4 +1,3 @@
-import React from 'react';
 import {renderIcon} from "./Icon.tsx";
 
 interface CtaLinkProps {

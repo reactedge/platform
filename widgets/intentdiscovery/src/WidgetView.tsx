@@ -1,4 +1,3 @@
-import React from 'react';
 import {IntentStateProvider} from "./state/Intent/IntentStateProvider.tsx";
 import {TranslationStateProvider} from "./state/Translation/TranslationStateProvider.tsx";
 import {IntentLookup} from "./components/IntentLookup.tsx";
@@ -6,10 +5,9 @@ import {SystemStateProvider} from "./state/System/SystemStateProvider.tsx";
 import type {ReactEdgeRuntimeConfig} from "./domain/intent-discovery.types.ts";
 import type {BootstrapData} from "./ssr/entry.tsx";
 import {readWidgetConfig} from "./Config.ts";
-import type {RawWidgetConfig} from "./ConfigSchema.ts";
 
 type Props = {
-    rawConfig: RawWidgetConfig;
+    rawConfig: unknown;
     runtimeConfig: ReactEdgeRuntimeConfig
     bootstrapData: BootstrapData
 };

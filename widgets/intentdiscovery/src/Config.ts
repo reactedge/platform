@@ -1,9 +1,9 @@
 import type {WidgetActivity} from "./activity";
 import type {
-    IntentDiscoveryDataConfig, IntentDiscoveryTranslationsConfig,
+    IntentDiscoveryDataConfig, TranslationsConfig,
     ReactEdgeRuntimeConfig, ReactEdgeRuntimeIntegrations, ResolvedRuntimeConfig
 } from "./domain/intent-discovery.types.ts";
-import {parseConfig, type RawWidgetConfig} from "./ConfigSchema";
+import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema";
 
 export const WIDGET_ID = 'intentdiscovery';
 
@@ -14,17 +14,17 @@ export interface WidgetConfig {
      */
     readonly data: IntentDiscoveryDataConfig
     readonly runtime: ResolvedRuntimeConfig
-    readonly translations?: IntentDiscoveryTranslationsConfig
+    readonly translations?: TranslationsConfig
     readonly integrations: ReactEdgeRuntimeIntegrations
 }
 
 export function readWidgetConfig(
-    rawConfig: RawWidgetConfig,
+    rawConfig: unknown,
     runtimeConfig: ReactEdgeRuntimeConfig,
     activity?: WidgetActivity
 ): WidgetConfig {
     const contract = parseConfig(rawConfig);
-    const resolved = resolveIntentDiscoveryConfig(contract, runtimeConfig);
+    const resolved = resolveConfig(contract, runtimeConfig);
 
     activity?.log('bootstrap', 'Config resolved', {
         data: resolved.data,
@@ -35,8 +35,8 @@ export function readWidgetConfig(
     return Object.freeze(resolved);
 }
 
-export function resolveIntentDiscoveryConfig(
-    widget: RawWidgetConfig,
+export function resolveConfig(
+    widget: SchemaWidgetConfig,
     runtime: ReactEdgeRuntimeConfig
 ): WidgetConfig {
 
@@ -50,8 +50,8 @@ export function resolveIntentDiscoveryConfig(
     return {
         data: widget.data,
         runtime: {
-            storeCode: runtime.integrations?.magentoGraphql.storeCode,
-            category: runtime.integrations?.magentoGraphql.category
+            storeCode: runtime.storeCode,
+            category: runtime.category
         },
         integrations: {
             magentoGraphql: runtime.integrations?.magentoGraphql,

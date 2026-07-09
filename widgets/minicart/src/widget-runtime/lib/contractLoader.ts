@@ -1,4 +1,3 @@
-import {activity} from "../../activity";
 
 export async function loadContract(hostElement: HTMLElement) {
     const contractUrl = hostElement.getAttribute("data-contract");
@@ -10,8 +9,6 @@ export async function loadContract(hostElement: HTMLElement) {
     const response = await fetch(contractUrl);
 
     if (!response.ok) {
-        activity('bootstrap', 'Config error', {res: response});
-
         throw new Error(`Failed to load contract: ${response.status}`);
     }
 

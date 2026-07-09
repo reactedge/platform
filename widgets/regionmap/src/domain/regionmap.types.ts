@@ -1,4 +1,4 @@
-export type Polygon = [LatLng, LatLng, LatLng, ...LatLng[]];
+export type MapPolygon = [LatLng, LatLng, LatLng, ...LatLng[]];
 export interface LatLng {
     lat: number;
     lng: number;
@@ -20,7 +20,7 @@ export interface RegionMapDataConfig {
     readonly title?: string;
     readonly center: LatLng;
     readonly zoom: number;
-    readonly region: Polygon[];
+    readonly region: MapPolygon[];
 }
 
 /* -------------------- */

@@ -1,4 +1,3 @@
-import React from 'react';
 import {ParentMenuItem} from "./ParentMenuItem.tsx";
 import {ItemLink} from "./Megamenu/ItemLink.tsx";
 import { isInBreadCrumb} from "../lib/url.ts";

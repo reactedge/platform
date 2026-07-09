@@ -40,11 +40,11 @@ export const WidgetConfigSchema = z.object({
 
 }).strict();
 
-export type RawWidgetConfig =
+export type SchemaWidgetConfig =
     z.infer<typeof WidgetConfigSchema>;
 
 export function parseConfig(
     input: unknown
-): RawWidgetConfig {
+): SchemaWidgetConfig {
     return WidgetConfigSchema.parse(input);
 }

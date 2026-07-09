@@ -2,13 +2,15 @@
 /* Widget Contract      */
 /* -------------------- */
 
+export type TranslationsConfig = Record<string, string> | undefined;
+
 export interface RawWidgetConfig {
-    readonly data: WidgetConfig;
+    readonly data: WidgetConfigData;
     readonly integrations?: WidgetIntegrations;
     readonly translations: TranslationsConfig;
 }
 
-export interface WidgetConfig {
+export interface WidgetConfigData {
     title: string;
     center: LatLng;
     zoom: number;
@@ -54,7 +56,7 @@ export interface ReactEdgeRuntimeConfig {
 }
 
 export interface ReactEdgeRuntimeIntegrations {
-    readonly googleMaps?: {
+    readonly googleMaps: {
         readonly apiKey: string;
         readonly placeId: string;
     };

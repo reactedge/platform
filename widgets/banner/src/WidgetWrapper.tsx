@@ -1,7 +1,7 @@
-import React from 'react';
-import {type RawWidgetConfig, readWidgetConfig} from "./Config.ts";
 import {BannerSlider} from "./components/BannerSlider.tsx";
 import {BannerStatic} from "./components/BannerStatic.tsx";
+import {getVisibleSlides} from "./lib/vslide.ts";
+import {type RawWidgetConfig, readWidgetConfig} from "./Config.ts";
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
 
 type Props = {
@@ -23,7 +23,13 @@ export const WidgetWrapper = ({rawConfig}: Props) => {
     else if (isTablet) currentMode = config.settings.mode.tablet;
 
     if (currentMode === "slider") {
-        return <BannerSlider slides={config.slides} config={config.settings} />;
+        const visibleSlides = getVisibleSlides(
+            isMobile,
+            isTablet,
+            config.settings.visibleSlides?? 1
+        )
+        activity.log('vibille_slides', 'Visible Slides', {isMobile, isTablet, visibleSlides});
+        return <BannerSlider slides={config.slides} config={config.settings} visibleSlides={visibleSlides} />;
     }
 
     return <BannerStatic slides={config.slides} config={config.settings} />;

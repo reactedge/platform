@@ -11,13 +11,13 @@ const LocalStateProvider = LocalSystemStateContext.Provider;
 
 export const SystemStateProvider: React.FC<SystemStateProviderProps> = ({ children, config }) => {
     const isTurnstileEnabled = () => {
-        return Boolean(config.cloudflareKey);
+        return Boolean(config.integrations.cloudflareKey);
     }
 
     return (
         <LocalStateProvider
             value={{
-                cloudflareKey: config.cloudflareKey || '',
+                cloudflareKey: config.integrations.cloudflareKey || '',
                 isTurnstileEnabled
             }}
         >

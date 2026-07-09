@@ -8,8 +8,11 @@ export class MapSearch {
         return new Promise(resolve => {
             geocoder.geocode({ address: postcode, componentRestrictions: { country: countryCode } }, (results, status) => {
                 if (status === google.maps.GeocoderStatus.OK && results && results.length > 0) {
-                    const loc = results[0].geometry.location;
-                    resolve({ lat: loc.lat(), lng: loc.lng() });
+                    const loc = results[0]?.geometry.location;
+                    if (loc === undefined)  resolve(null);
+                    else {
+                        resolve({ lat: loc.lat(), lng: loc.lng() });
+                    }
                 } else {
                     resolve(null);
                 }

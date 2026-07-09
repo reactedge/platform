@@ -65,11 +65,11 @@ export const WidgetConfigSchema =
         }).strict()
     }).strict();
 
-export type WidgetConfig =
+export type SchemaWidgetConfig =
     z.infer<typeof WidgetConfigSchema>;
 
 export function parseConfig(
     input: unknown
-): WidgetConfig {
+): SchemaWidgetConfig {
     return WidgetConfigSchema.parse(input);
 }

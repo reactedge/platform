@@ -32,7 +32,9 @@ export class WidgetActivity
         instance?: string
     ) {
         this.widget = widget;
-        this.instance = instance;
+        if (instance !== undefined) {
+            this.instance = instance;
+        }
     }
 
     public log(

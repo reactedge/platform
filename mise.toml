@@ -14,7 +14,15 @@ run = "./launcher/scripts/widgets-configure.sh"
 
 [tasks."widget-dev"]
 description = "Start a widget development server"
-run = "./launcher/scripts/widget-dev.sh {{arg(name='widget')}}"
+run = "./launcher/scripts/widget-dev.sh {{arg(name='widget', required=true)}}"
+
+[tasks."widget-build"]
+description = "Compiles a widget"
+run = "./launcher/scripts/widget-build.sh {{arg(name='widget', required=true)}}"
+
+[tasks."widget-ssr"]
+description = "Rennder a SSR view for a widget"
+run = "./launcher/scripts/widget-ssr.sh {{arg(name='widget', required=true)}}"
 
 [tasks.deploy]
 description = "Build the ReactEdge deployment orchestrator"

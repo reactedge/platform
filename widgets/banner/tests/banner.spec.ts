@@ -10,7 +10,7 @@ test.describe('Banner Widget', () => {
     });
 
     test('Banner widget finds its slides', async ({ page }) => {
-        await expectSlidesToBeVisible(banner)
+        await expectSlidesToBeVisible(banner);
     });
 
     test.describe('mobile behaviour', () => {
@@ -93,11 +93,11 @@ test.describe('Banner Widget', () => {
         });
 
         test('Banner does not duplicate slides on reload', async ({page}) => {
-            await expectSlidesToBeVisible(banner)
+            await expectSlidesToBeVisible(banner);
 
             await page.reload();
 
-            await expectSlidesToBeVisible(banner)
+            await expectSlidesToBeVisible(banner);
             await expect(banner.locator('[data-banner-active="true"]')).toHaveCount(1);
         });
 
@@ -131,12 +131,24 @@ test.describe('Banner Widget', () => {
 
         test('shows all slides statically', async ({ page }) => {
             const banner = page.locator('banner-widget');
-            await expectSlidesToBeVisible(banner)
+            await expectSlidesToBeVisible(banner);
         });
 
+
         test('Banner desktop mode ignores next and prev', async ({page}) => {
+            await expectSlidesToBeVisible(banner);
+
             // Either all active, or no active flags at all
             await expect(banner.locator('[data-banner-active="true"]')).toHaveCount(1);
+        });
+    });
+
+    test('Banner does not make API requests', async ({ page }) => {
+        page.on('request', request => {
+            const type = request.resourceType();
+            if (type === 'xhr' || type === 'fetch') {
+                throw new Error(`Unexpected API request: ${request.url()}`);
+            }
         });
     });
 });

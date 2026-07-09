@@ -1,22 +1,17 @@
-import {WidgetActivity} from "./activity";
-import type {BannerSettingConfig, BannerSlide} from "./components/Types.ts";
+import {type BannerSettingConfig, type BannerSlide} from "./components/Types.ts";
+import type {WidgetActivity} from "./activity";
 import {parseConfig} from "./ConfigSchema.ts";
 
 export interface RawWidgetConfig {
     data: WidgetConfig
 }
-
-export interface RuntimeConfig {
-    userAgent: string
-}
-
-export const WIDGET_ID = 'banner';
-
 export interface WidgetConfig {
     readonly slides: BannerSlide[]
 
     readonly settings: BannerSettingConfig;
 }
+
+export const WIDGET_ID = 'banner';
 
 export function readWidgetConfig(
     rawConfig: unknown,

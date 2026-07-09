@@ -2,11 +2,11 @@ import React from "react";
 import {type ReactNode, useMemo} from "react";
 import {LocalTranslationStateContext} from "./TranslationState.tsx";
 import {createTranslator} from "../../lib/translate.ts";
-import type {IntentDiscoveryTranslationsConfig} from "../../domain/intent-discovery.types.ts";
+import type {TranslationsConfig} from "../../domain/intent-discovery.types.ts";
 
 interface TranslationStateProviderProps {
     children: ReactNode;
-    translations: IntentDiscoveryTranslationsConfig;
+    translations:TranslationsConfig;
 }
 
 const LocalStateProvider = LocalTranslationStateContext.Provider;

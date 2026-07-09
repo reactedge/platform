@@ -9,7 +9,7 @@
     import {loadContract} from "./src/lib/contract-resolver.js";
     import {loadRuntime} from "./src/lib/load-runtime.js";
 
-    const config = await loadContract('uk.json')
+    const config = await loadContract('default.json')
     const element = document.querySelector('storefinder-widget');
     const runtime = await loadRuntime();
 

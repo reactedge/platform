@@ -4,6 +4,8 @@ export interface GalleryWidgetConfig {
     readonly tiles: GalleryTile[]
 }
 
+export const WIDGET_ID = 'productgallery';
+
 export function readWidgetConfig(
     hostElement: HTMLElement
 ): GalleryWidgetConfig {

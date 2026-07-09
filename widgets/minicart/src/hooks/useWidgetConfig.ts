@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import {activity} from "../activity";
-import {readWidgetConfig} from "../MinicartConfig.ts";
+import {readWidgetConfig} from "../Config.ts";
+import {useActivityContext} from "../activity/Context/useActivityContext.ts";
 
 export interface ResolvedMinicartConfig {
     currency: string;
@@ -21,6 +21,7 @@ export function useWidgetConfig(
     const [config, setConfig] = useState<ResolvedMinicartConfig | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState(true);
+    const activity = useActivityContext()
 
     useEffect(() => {
         let cancelled = false;
@@ -41,7 +42,7 @@ export function useWidgetConfig(
                     setError(null);
                 }
             } catch (err) {
-                activity('bootstrap', 'Config error', {
+                activity.log('bootstrap', 'Config error', {
                     error: (err as Error).message
                 });
 

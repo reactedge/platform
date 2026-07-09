@@ -1,4 +1,3 @@
-import React from 'react';
 import {isInBreadCrumb} from "../lib/url.ts";
 import type {NavItem} from "../domain/megamenu.types.ts";
 

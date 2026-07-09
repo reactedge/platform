@@ -1,4 +1,3 @@
-import React from 'react';
 import {useEffect, useRef, useState} from "react";
 import {UspStatic} from "./UspStatic.tsx";
 import {UspSlider} from "./UspSlider.tsx";
@@ -7,18 +6,23 @@ import type {WidgetConfig} from "../Config.ts";
 import {resolveMode} from "../lib/media-queries.ts";
 
 type Props = {
-    onStable?: () => void;
     config: WidgetConfig
 };
 
-export const UspWidget = ({ onStable, config }: Props) => {
+export const UspWidget = ({ config }: Props) => {
     const ref = useRef<HTMLDivElement>(null);
     const [mode, setMode] = useState(config.settings.mode.desktop);
 
     useEffect(() => {
         if (!ref.current) return;
 
-        const observer = new ResizeObserver(([entry]) => {
+        const observer = new ResizeObserver((entries) => {
+            const entry = entries[0];
+
+            if (!entry) {
+                return;
+            }
+
             const width = entry.contentRect.width;
 
             setMode(prev => {
@@ -32,16 +36,6 @@ export const UspWidget = ({ onStable, config }: Props) => {
         return () => observer.disconnect();
     }, [config]);
 
-    // fire once after first render (not every render)
-    useEffect(() => {
-        const id = requestAnimationFrame(() => {
-            onStable?.();
-        });
-
-        return () => cancelAnimationFrame(id);
-    }, []);
-
-    // --- render logic (clean, outside JSX) ---
     if (config.data.slides.length === 0) {
         return <Spinner />;
     }

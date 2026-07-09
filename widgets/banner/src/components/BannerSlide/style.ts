@@ -17,3 +17,15 @@ export const slideActive: React.CSSProperties = {
     opacity: 1,
     pointerEvents: "auto"
 };
+
+/**
+ * Main image style
+ */
+export const slideImageBase: React.CSSProperties = {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover"
+    // objectPosition is dynamic
+};
