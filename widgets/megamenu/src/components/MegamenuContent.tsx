@@ -1,4 +1,3 @@
-import React from 'react';
 import {useState} from "react";
 import {Loading} from "./Loading.tsx";
 import {getMenuType, resolveDropdownLayout} from "../lib/layout-resolver.ts";

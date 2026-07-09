@@ -2,9 +2,8 @@ import {mountWidget} from "./mountWidget.tsx";
 import {WIDGET_ID} from "./Config.ts";
 
 import type {ReactEdgeRuntimeConfig} from "./domain/intent-discovery.types.ts";
-import type {RawWidgetConfig} from "./ConfigSchema.ts";
 
-const mount = async (el: HTMLElement, config: RawWidgetConfig, runtimeConfig: ReactEdgeRuntimeConfig) => {
+const mount = async (el: HTMLElement, config: unknown, runtimeConfig: ReactEdgeRuntimeConfig) => {
     await mountWidget(el, config, runtimeConfig)
 }
 

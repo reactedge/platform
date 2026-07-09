@@ -1,4 +1,3 @@
-import React from 'react';
 import {Fragment} from "react";
 import { UspSlide } from "./UspSlide.tsx";
 import type { UspStaticProps } from "./Types.ts";

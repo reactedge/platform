@@ -10,7 +10,7 @@ interface SearchFormProps {
 
 export function StoreSearchForm({ onSearch, config }: SearchFormProps) {
     const [postcode, setPostcode] = useState("");
-    const [distance, setDistance] = useState(BASE_RADIUS_KM[0]);
+    const [distance, setDistance] = useState(BASE_RADIUS_KM[0] as number);
     const {t} = useTranslationState();
 
     function handleSubmit(e: React.FormEvent) {

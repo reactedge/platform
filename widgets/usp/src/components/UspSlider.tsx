@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState } from "react";
 import { NavigationArrows } from "./NavigationArrows.tsx";
 import type { UspSliderProps } from "./Types.ts";

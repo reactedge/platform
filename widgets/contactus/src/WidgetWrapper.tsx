@@ -2,8 +2,8 @@ import {SystemStateProvider} from "./state/System/SystemStateProvider.tsx";
 import {ContactUsWrapper} from "./components/ContactUsWrapper.tsx";
 import type {ReactEdgeRuntimeConfig} from "./domain/contact.types.ts";
 import {readWidgetConfig} from "./Config.ts";
-import type {RawWidgetConfig} from "./ConfigSchema.ts";
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
+import type {RawWidgetConfig} from "./domain/raw.contact.types.ts";
 
 type Props = {
     rawConfig: RawWidgetConfig,

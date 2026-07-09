@@ -4,16 +4,15 @@
 
 export interface ReactEdgeRuntimeConfig {
     readonly integrations: ReactEdgeRuntimeIntegrations;
+    category: string;
+    storeCode: string;
 }
 
 export interface ReactEdgeRuntimeIntegrations {
     readonly magentoGraphql: {
         readonly api: string;
-        readonly internalApi?: string
-        readonly category: string;
-        readonly storeCode: string;
     };
-    readonly intentApi?: {
+    readonly intentApi: {
         readonly baseUrl: string;
     };
 }
@@ -26,7 +25,7 @@ export interface ResolvedIntentDiscoveryConfig {
     readonly data: IntentDiscoveryDataConfig;
     readonly runtime: ResolvedRuntimeConfig;
     readonly integrations: ReactEdgeRuntimeIntegrations;
-    readonly translations: IntentDiscoveryTranslationsConfig
+    readonly translations: TranslationsConfig
 }
 
 export interface ResolvedRuntimeConfig {
@@ -34,7 +33,7 @@ export interface ResolvedRuntimeConfig {
     storeCode: string;
 }
 
-export type IntentDiscoveryTranslationsConfig = Record<string, string> | undefined;
+export type TranslationsConfig = Record<string, string> | undefined;
 
 export type OptionLabelMap = Map<string, Map<string, string>>
 

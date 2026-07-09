@@ -1,6 +1,6 @@
 # ReactEdge – Banner Widget
 
-A small, embeddable **Banner widget** designed to be safely integrated into existing websites without owning the page or application lifecycle.
+A small, embeddable **Banner (Unique Selling Points) widget** designed to be safely integrated into existing websites without owning the page or application lifecycle.
 
 This widget is part of the **ReactEdge** initiative: a collection of frontend widgets built with a strong emphasis on isolation, reversibility, and clarity.
 
@@ -46,7 +46,7 @@ This widget focuses on **delivery and safety**, not business promises.
 
 This repository contains the widget itself, along with supporting tooling used for development, testing, and community maintenance.
 
-- `src/`  
+- `vite_project/`  
   Source code for the Banner widget and its build configuration.
 
 - `tests/`  
@@ -70,7 +70,7 @@ Typical usage looks like:
 ```html
 <script src="path-to-widget.js"></script>
 
-<banner-widget data-contract="/cdn/secondary.json" />
+<reactedge-banner-widget></reactedge-banner-widget>
 ```
 
 ## Local development
@@ -94,9 +94,10 @@ npm run dev
 To run the widget in SSR mode:
 
 ```bash
-cd widget/banner
+cd widget/bannermulti
 npm install
-NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../../services/cdn/www/banner/contracts/uk.json
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx scripts/render-page.ts ../../services/cdn/www/bannermulti/contracts/fr.json
+
 ```
 
 To run the test suite:

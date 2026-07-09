@@ -29,10 +29,8 @@ export const WidgetConfigSchema = z.object({
             }).strict(),
             imageWidth: z.number(),
             imageHeight: z.number(),
-            visibleSlides: z.number().optional(),
-            ssr: z.object({
-                height: z.number()
-            }).optional()
+            visibleSlides: z.number().optional().default(1),
+            zoomActive: z.boolean().optional().default(false)
         }).strict()
     }).strict(),
 

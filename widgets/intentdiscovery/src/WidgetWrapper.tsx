@@ -7,10 +7,9 @@ import {IntentStateProvider} from "./state/Intent/IntentStateProvider.tsx";
 import {TranslationStateProvider} from "./state/Translation/TranslationStateProvider.tsx";
 import {IntentLookup} from "./components/IntentLookup.tsx";
 import {SpinnerOverlay} from "./components/global/SpinnerOverlay.tsx";
-import type {RawWidgetConfig} from "./ConfigSchema.ts";
 
 type Props = {
-    rawConfig: RawWidgetConfig;
+    rawConfig: unknown;
     runtimeConfig: ReactEdgeRuntimeConfig;
 };
 

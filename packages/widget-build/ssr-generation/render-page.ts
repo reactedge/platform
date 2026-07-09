@@ -8,7 +8,7 @@ function resolveEntry(widget: string): string {
 const run = async () => {
     const widgetName = process.argv[2];
     const contractPath = process.argv[3];
-    debugger
+
     if (!widgetName) {
         throw new Error('Missing widget name');
     }
@@ -26,8 +26,15 @@ const run = async () => {
     };
 
     const entry = resolveEntry(widgetName);
-    const { renderHtml } = await import(entry);
 
+    try {
+        await fs.access(entry);
+    } catch {
+        console.log(`Widget '${widgetName}' does not implement SSR.`);
+        return;
+    }
+
+    const { renderHtml } = await import(entry);
     const finalHtml = renderHtml(config, runtime)
 
     process.stdout.write(finalHtml);

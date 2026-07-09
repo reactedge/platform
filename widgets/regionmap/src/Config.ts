@@ -1,11 +1,11 @@
 import type {WidgetActivity} from "./activity";
-import type {RawWidgetConfig, ReactEdgeRuntimeConfig, WidgetConfig} from "./domain/regionmap.types.ts";
-import {parseConfig} from "./ConfigSchema.ts";
+import type {ReactEdgeRuntimeConfig, WidgetConfig} from "./domain/regionmap.types.ts";
+import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
 
 export const WIDGET_ID = 'regionmap';
 
 export function readWidgetConfig(
-    rawConfig: RawWidgetConfig,
+    rawConfig: unknown,
     runtimeConfig: ReactEdgeRuntimeConfig,
     activity: WidgetActivity
 ): WidgetConfig {
@@ -23,7 +23,7 @@ export function readWidgetConfig(
 
 
 export function resolveWidgetConfig(
-    widget: RawWidgetConfig,
+    widget: SchemaWidgetConfig,
     runtime: ReactEdgeRuntimeConfig
 ): WidgetConfig {
 
@@ -36,9 +36,7 @@ export function resolveWidgetConfig(
 
     return {
         data: widget.data,
-        integrations: {
-            googleMaps: runtime.integrations?.googleMaps
-        },
+        integrations: runtime.integrations,
         translations: widget.translations
     };
 }

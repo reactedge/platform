@@ -1,39 +1,39 @@
-import React from 'react';
 import type { BannerSlideProps } from "./Types";
-import {
-    slideWrapper,
-    slideActive
-} from "./BannerSlide/style";
+import {ZoomableImage} from "./BannerSlide/ZoomableImage.tsx";
 
-export const BannerSlide = ({ slide, isActive, tileMode }: BannerSlideProps) => {
-    const { image } = slide;
+export const BannerSlide = ({ slide, visibleSlides = 1, tileMode, zoomActive }: BannerSlideProps) => {
+    const { image, title } = slide;
 
-    const focal = { x: 0.5, y: 0.5 };
+    const wrapperStyle = tileMode
+        ? { flex: `0 0 calc((100% - ${(visibleSlides - 1) * 16}px) / ${visibleSlides})` }
+        : undefined;
 
-    const wrapperStyle: React.CSSProperties = tileMode
-        ? {}
-        : {
-            ...slideWrapper,
-            ...(isActive ? slideActive : {})
-        };
+    const focal = image?.focalPoint;
+
+    const objectPosition = focal
+        ? `${focal.x * 100}% ${focal.y * 100}%`
+        : undefined;
 
     return (
-        <div style={wrapperStyle}
-             data-banner-slide
-             data-banner-active={isActive || undefined}
+        <div
+            className={`re-banner-slide ${tileMode ? "re-banner-slide--tile" : ""}`}
+            style={wrapperStyle}
         >
-            <img
+            {zoomActive && <ZoomableImage
                 src={image.src}
                 srcSet={image.srcset}
                 sizes={image.sizes}
-                alt={image?.alt || ""}
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    objectPosition: `${focal.x * 100}% ${focal.y * 100}%`
-                }}
-            />
+                alt={title?.text}
+                objectPosition={objectPosition}
+                className="re-banner-image"
+            />}
+            {!zoomActive && <img
+                src={image.src}
+                srcSet={image.srcset}
+                sizes={image.sizes}
+                alt={title?.text}
+                className="re-banner-image"
+            />}
         </div>
     );
 };

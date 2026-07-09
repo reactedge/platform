@@ -7,6 +7,7 @@ export interface NavigationProps {
 export interface BannerSliderProps {
     slides:  BannerSlide[];
     config: BannerSettingConfig;
+    visibleSlides: number
 }
 
 export interface BannerStaticProps {
@@ -20,27 +21,40 @@ export interface BannerSlide {
         srcset?: string;
         sizes?: string;
         alt?: string;
+        focalPoint?: {
+            x: number; // 0 → far left, 1 → far right
+            y: number; // 0 → top, 1 → bottom
+        };
     };
+    title?:BannerTitle;
+    subtitle?:string;
+    cta?:string;
+}
+
+export interface BannerTitle {
+    text: string;
+    size?: "sm" | "md" | "lg" | "xl" | "2xl";
+    color?: string;
+    background?: string;
+    align?: "left" | "center" | "right";
 }
 
 export interface BannerSlideProps {
     slide: BannerSlide;
-    isActive: boolean;
     tileMode: boolean
-    height?: number
+    isActive: boolean
+    visibleSlides?: number
+    zoomActive?: boolean
 }
 
 export type BannerModeValue = "static" | "slider" | "none";
-
-export interface BannerSsrSettings {
-    height: number
-}
 
 export interface BannerSettingConfig {
     mode: BannerMode;
     imageHeight: number;
     imageWidth: number;
-    ssr?: BannerSsrSettings
+    visibleSlides?: number;
+    zoomActive?: boolean
 }
 
 export interface BannerMode {

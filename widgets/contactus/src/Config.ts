@@ -1,10 +1,9 @@
 import type {
-    ReactEdgeRuntimeConfig,
-    WidgetConfig
+    ReactEdgeRuntimeConfig, WidgetConfig
 } from "./domain/contact.types.ts";
 import type {WidgetActivity} from "./activity";
 import type {RawWidgetConfig} from "./domain/raw.contact.types.ts";
-import {parseConfig} from "./ConfigSchema.ts";
+import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
 
 export const WIDGET_ID = 'contactus';
 
@@ -22,12 +21,12 @@ export function readWidgetConfig(
 }
 
 export function resolveConfig(
-    widget: RawWidgetConfig,
+    widget: SchemaWidgetConfig,
     runtime: ReactEdgeRuntimeConfig
 ): WidgetConfig {
 
     if (
-        widget.integrations?.requires?.includes('cloudflare') &&
+        widget.integration?.requires?.includes('cloudflare') &&
         !runtime.integrations?.cloudflare?.siteKey
     ) {
         throw new Error(`[${WIDGET_ID}] googleMaps integration required but not configured`);

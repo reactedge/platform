@@ -1,0 +1,23 @@
+.re-banner-track--tiles {
+    display: flex;
+    gap: 1rem;
+}
+
+.re-banner-slide {
+    flex: 1;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.re-banner-slide img {
+    padding: 5px;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    object-position: top center;
+}

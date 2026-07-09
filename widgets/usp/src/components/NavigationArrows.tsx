@@ -1,4 +1,3 @@
-import React from 'react';
 import type { NavigationProps } from "./Types.ts";
 import {handleArrowButtonKeyDown} from "../lib/keyboard.ts";
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import {MenuItem} from "../MenuItem.tsx";
 import type {NavItem} from "../../domain/megamenu.types.ts";
 

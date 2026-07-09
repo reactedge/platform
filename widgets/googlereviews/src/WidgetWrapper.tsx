@@ -1,4 +1,3 @@
-import React from 'react';
 import {type RawWidgetConfig, readWidgetConfig} from "./Config.ts";
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
 import {SystemStateProvider} from "./state/System/SystemStateProvider.tsx";

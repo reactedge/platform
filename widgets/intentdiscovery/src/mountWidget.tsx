@@ -4,9 +4,8 @@ import {WidgetWrapper} from "./WidgetWrapper.tsx";
 import {getMountedHost} from "./lib/hostReader.ts";
 import {ActivityContextProvider} from "./activity/Context/ActivityContextProvider.tsx";
 import type {ReactEdgeRuntimeConfig} from "./domain/intent-discovery.types.ts";
-import type {RawWidgetConfig} from "./ConfigSchema.ts";
 
-export async function mountWidget(hostElement: HTMLElement, config: RawWidgetConfig, runtimeConfig: ReactEdgeRuntimeConfig) {
+export async function mountWidget(hostElement: HTMLElement, config: unknown, runtimeConfig: ReactEdgeRuntimeConfig) {
     const mountedHost = getMountedHost(hostElement);
 
     createRoot(mountedHost).render(<ActivityContextProvider hostElement={hostElement}>

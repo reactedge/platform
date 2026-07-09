@@ -7,7 +7,7 @@
     import {loadContract} from "./src/lib/contract-resolver.js";
     import {loadRuntime} from "./src/lib/load-runtime.js";
 
-    const config = await loadContract('reactedge.json')
+    const config = await loadContract('default.json')
     const element = document.querySelector('contactus-widget');
     const runtime = await loadRuntime();
 

@@ -73,9 +73,7 @@ export function resolveConfig(
 
     return {
         data: widget.data,
-        integrations: {
-            googleMaps: runtime.integrations?.googleMaps
-        },
+        integrations: runtime.integrations,
         translations: widget.translations
     };
 }

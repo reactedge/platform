@@ -40,7 +40,7 @@ export const WidgetIntegrationsSchema = z.object({
 export const WidgetConfigSchema = z.object({
     data: WidgetDataConfigSchema,
 
-    integration: WidgetIntegrationsSchema.optional(),
+    integration: WidgetIntegrationsSchema,
 
     translations: z.record(
         z.string(),
@@ -48,11 +48,11 @@ export const WidgetConfigSchema = z.object({
     ).default({})
 }).strict();
 
-export type RawWidgetConfig =
+export type SchemaWidgetConfig =
     z.infer<typeof WidgetConfigSchema>;
 
 export function parseConfig(
     input: unknown
-): RawWidgetConfig {
+): SchemaWidgetConfig {
     return WidgetConfigSchema.parse(input);
 }

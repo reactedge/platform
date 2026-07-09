@@ -1,4 +1,3 @@
-import React from 'react';
 import {UspWidget} from "./components/UspWidget.tsx";
 import {Spinner} from "./components/Spinner.tsx";
 import {readWidgetConfig, type RuntimeConfig, type WidgetConfig} from "./Config.ts";

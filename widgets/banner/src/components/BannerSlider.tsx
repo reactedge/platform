@@ -2,49 +2,64 @@ import { useState } from "react";
 import { BannerSlide } from "./BannerSlide.tsx";
 import { NavigationDots } from "./NavigationDots.tsx";
 import { NavigationArrows } from "./NavigationArrows.tsx";
-import type {BannerSliderProps} from "./Types.ts";
+import type { BannerSliderProps } from "./Types.ts";
 import {useActivityContext} from "../activity/Context/useActivityContext.ts";
 
-export const BannerSlider = ({ slides, config }: BannerSliderProps) => {
-    const activity = useActivityContext()
+export const BannerSlider = ({ slides, config, visibleSlides }: BannerSliderProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const activity = useActivityContext()
 
-   const w = config.imageWidth;
-    const h = config.imageHeight;
+    const totalGroups = Math.ceil(slides.length / visibleSlides);
+
+    const start = currentIndex * visibleSlides;
+    const end = start + visibleSlides;
+
+    const tileMode = visibleSlides > 1;
 
     activity.log('banner_slider', 'Banner Slider', {
-        w,
-        h
+        start,
+        end,
+        totalGroups,
+        tileMode,
+        visibleSlides
     });
 
     return (
-        <div className="banner-media">
-            <div style={{
-                width: w ?? '100%',
-                height: h ?? 'auto',
-                aspectRatio: h ? undefined : '16 / 9'
-            }}>
-                {slides.map((slide, i) => (
-                    <BannerSlide
-                        key={i}
-                        slide={slide}
-                        isActive={i === currentIndex}
-                        tileMode={false}
+        <div className="re-banner-media">
+            <div className="re-banner-viewport">
+               <div
+                    className={`re-banner-track ${
+                        tileMode
+                            ? "re-banner-track--tiles"
+                            : "re-banner-track--single"
+                    }`}
+                >
+                    {slides.slice(start, end).map((slide, i) => (
+                        <BannerSlide
+                            key={`${start}-${i}`}
+                            slide={slide}
+                            isActive={false}
+                            tileMode={tileMode}
+                            visibleSlides={visibleSlides}
+                            zoomActive={config.zoomActive}
+                        />
+                    ))}
+
+                    <NavigationArrows
+                        current={currentIndex}
+                        total={totalGroups}
+                        onChange={setCurrentIndex}
                     />
-                ))}
+               </div>
             </div>
 
-            <NavigationDots
-                current={currentIndex}
-                total={slides.length}
-                onChange={setCurrentIndex}
-            />
-
-            <NavigationArrows
-                current={currentIndex}
-                total={slides.length}
-                onChange={setCurrentIndex}
-            />
+            <div className="re-banner-navigation">
+                <NavigationDots
+                    current={currentIndex}
+                    total={totalGroups}
+                    onChange={setCurrentIndex}
+                />
+            </div>
         </div>
     );
 };
