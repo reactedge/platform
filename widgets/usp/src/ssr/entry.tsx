@@ -1,4 +1,3 @@
-//import React from 'react';
 import { renderToString } from 'react-dom/server';
 import {type RuntimeConfig, WIDGET_ID, type WidgetConfig} from "../Config.ts";
 import {WidgetView} from "../WidgetView.tsx";

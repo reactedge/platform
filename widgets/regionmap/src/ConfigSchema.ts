@@ -5,11 +5,18 @@ export const LatLngSchema = z.object({
     lng: z.number()
 }).strict();
 
+const MapPolygonSchema = z.tuple([
+    LatLngSchema,
+    LatLngSchema,
+    LatLngSchema,
+]).rest(LatLngSchema);
+
+
 export const RegionMapDataConfigSchema = z.object({
     title: z.string().optional(),
     center: LatLngSchema,
     zoom: z.number().int().positive(),
-    region: z.array(LatLngSchema)
+    region: MapPolygonSchema
 }).strict();
 
 export const WidgetConfigSchema = z.object({
@@ -34,4 +41,23 @@ export function parseConfig(
     input: unknown
 ): SchemaWidgetConfig {
     return WidgetConfigSchema.parse(input);
+}
+
+export function normalizeOptionalFields<
+    T extends Record<string, unknown>,
+    K extends keyof T
+>(
+    data: T,
+    optionalFields: K[]
+): Omit<T, K> {
+
+    const result = { ...data };
+
+    for (const field of optionalFields) {
+        if (result[field] === undefined) {
+            delete result[field];
+        }
+    }
+
+    return result;
 }

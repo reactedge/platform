@@ -1,10 +1,9 @@
 import {createRoot} from "react-dom/client";
 import {WidgetWrapper} from "./WidgetWrapper.tsx";
 import {getMountedHost} from "./lib/hostReader.ts";
-import {type RawWidgetConfig} from "./Config.ts";
 import {ActivityContextProvider} from "./activity/Context/ActivityContextProvider.tsx";
 
-export async function mountWidget(hostElement: HTMLElement, config: RawWidgetConfig) {
+export async function mountWidget(hostElement: HTMLElement, config: unknown) {
     const mountedHost = getMountedHost(hostElement);
 
     createRoot(mountedHost).render(<ActivityContextProvider hostElement={hostElement}>

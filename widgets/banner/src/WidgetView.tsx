@@ -1,9 +1,9 @@
-import {type RawWidgetConfig, readWidgetConfig} from "./Config.ts";
+import {readWidgetConfig} from "./Config.ts";
 import {BannerStatic} from "./components/BannerStatic.tsx";
 import {Spinner} from "./components/Spinner.tsx";
 
 type Props = {
-    rawConfig: RawWidgetConfig;
+    rawConfig: unknown;
 };
 
 export const WidgetView = ({ rawConfig }: Props) => {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {readWidgetConfig} from "./Config.ts";
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
 import type {ReactEdgeRuntimeConfig} from "./domain/intent-discovery.types.ts";

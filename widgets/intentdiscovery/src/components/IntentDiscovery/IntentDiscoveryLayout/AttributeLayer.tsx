@@ -1,4 +1,3 @@
-import React from "react";
 import {IntentExplanation} from "./AttributeLayer/IntentExplanation.tsx";
 import {AttributeSelectorLayer} from "./AttributeLayer/AttributeSelectorLayer.tsx";
 import {useAttributeLayerController} from "./AttributeLayer/AttributeLayer.controller.ts";

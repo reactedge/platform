@@ -1,4 +1,3 @@
-import React from "react";
 import type {MagentoLayeredNavigation} from "../../../../../../hooks/domain/useLayeredNavigation.tsx";
 import {useTranslationState} from "../../../../../../state/Translation/useTranslationState.ts";
 import {useIntentState} from "../../../../../../state/Intent/useIntentState.ts";

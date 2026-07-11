@@ -13,7 +13,7 @@ const ThemeSchema = z.object({
     fontColor: z.string(),
     primaryColor: z.string(),
     secondaryColor: z.string(),
-    urlSuffix: z.string().optional(),
+    urlSuffix: z.string().optional().default(".html"),
 
     dropdownLayouts: z.record(
         z.string(),
@@ -25,28 +25,20 @@ const ThemeSchema = z.object({
 }).strict();
 
 
-
 const MenuItemSchema: z.ZodType<NavItem> =
     z.lazy(() =>
         z.object({
             id: z.string(),
             label: z.string(),
             url: z.string(),
-            image: z.string().nullable().optional(),
+            image: z.string().nullable().optional().default(null),
             children: z.array(
                 MenuItemSchema
             ),
             meta: z.object({
-                type: z.enum([
-                    'link',
-                    'cta',
-                    'banner'
-                ]),
-                icon: z.enum([
-                    'arrow',
-                    'external'
-                ]).optional(),
-            }).optional()
+                type: z.enum(['link', 'cta', 'banner']).optional(),
+                icon: z.enum(['arrow', 'external']).optional(),
+            }).optional().default({})
         }).strict()
     );
 
@@ -72,4 +64,23 @@ export function parseConfig(
     input: unknown
 ): SchemaWidgetConfig {
     return WidgetConfigSchema.parse(input);
+}
+
+export function normalizeOptionalFields<
+    T extends Record<string, unknown>,
+    K extends keyof T
+>(
+    data: T,
+    optionalFields: K[]
+): Omit<T, K> {
+
+    const result = { ...data };
+
+    for (const field of optionalFields) {
+        if (result[field] === undefined) {
+            delete result[field];
+        }
+    }
+
+    return result;
 }

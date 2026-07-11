@@ -1,11 +1,11 @@
 import { GoogleMap, LoadScript, Polygon } from "@react-google-maps/api";
 import { useMemo } from "react";
-import type {LatLng} from "../domain/regionmap.types.ts";
+import type {LatLng, MapPolygon} from "../domain/regionmap.types.ts";
 import {useSystemState} from "../state/System/useSystemState.ts";
 
 interface RegionMapProps {
     title?: string;
-    region: Polygon[];
+    region: MapPolygon;
     center: LatLng;
     zoom: number;
 }
@@ -36,7 +36,7 @@ export function RegionMap({ title, region, center, zoom }: RegionMapProps) {
 
     return (
         <LoadScript googleMapsApiKey={googleMapsApiKey}>
-            <h3 data-regionmap-title>{title}</h3>
+            {title && <h3 data-regionmap-title>{title}</h3>}
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}

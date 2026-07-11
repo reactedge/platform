@@ -1,4 +1,3 @@
-import React from "react";
 import { useCategory } from "../hooks/domain/useCategory.tsx";
 import {IntentDiscoveryLoader} from "./IntentDiscovery/IntentDiscoveryLoader.tsx";
 import {SpinnerOverlay} from "./global/SpinnerOverlay.tsx";

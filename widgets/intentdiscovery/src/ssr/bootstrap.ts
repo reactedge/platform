@@ -37,13 +37,7 @@ function getGraphqQlAPI(runtimeConfig: ReactEdgeRuntimeConfig) {
     const magentoGraphql =
         runtimeConfig.integrations.magentoGraphql;
 
-    const graphqlApi =
-        typeof window === 'undefined'
-            ? (
-                magentoGraphql.internalApi
-                ?? magentoGraphql.api
-            )
-            : magentoGraphql.api;
+    const graphqlApi = magentoGraphql.api
 
     if (!graphqlApi) {
         throw new Error(

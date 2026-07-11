@@ -1,5 +1,3 @@
-import React from "react";
-
 type Props = {
     attribute_code: string
     size?: number

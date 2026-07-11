@@ -1,4 +1,3 @@
-import React from 'react';
 import {useZoomPan} from "../../hooks/useZoomPan.ts";
 
 type Props = {

@@ -1,4 +1,3 @@
-import React from "react";
 import type {IntentDiscoveryDataConfig} from "../../domain/intent-discovery.types.ts";
 import type {CategoryData} from "../../types/infra/magento/category.types.ts";
 import {useIntentController} from "../../hooks/domain/useIntentController.tsx";

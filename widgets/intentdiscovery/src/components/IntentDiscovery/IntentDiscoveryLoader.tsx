@@ -1,4 +1,3 @@
-import React from "react";
 import {ErrorState} from "../global/ErrorState.tsx";
 import type {IntentDiscoveryDataConfig} from "../../domain/intent-discovery.types.ts";
 import type {CategoryData} from "../../types/infra/magento/category.types.ts";

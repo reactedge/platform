@@ -1,10 +1,7 @@
 import {type BannerSettingConfig, type BannerSlide} from "./components/Types.ts";
 import type {WidgetActivity} from "./activity";
-import {parseConfig} from "./ConfigSchema.ts";
+import {normalizeOptionalFields, parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
 
-export interface RawWidgetConfig {
-    data: WidgetConfig
-}
 export interface WidgetConfig {
     readonly slides: BannerSlide[]
 
@@ -19,6 +16,7 @@ export function readWidgetConfig(
 ): WidgetConfig {
     try {
         const contract = parseConfig(rawConfig);
+        const resolved = resolvedWidgetConfig(contract)
 
         activity?.log(
             'bootstrap',
@@ -26,7 +24,7 @@ export function readWidgetConfig(
             contract
         );
 
-        return Object.freeze(contract);
+        return Object.freeze(resolved);
 
     } catch (e) {
         activity?.log(
@@ -38,4 +36,20 @@ export function readWidgetConfig(
 
         throw e;
     }
+}
+
+
+function resolvedWidgetConfig(
+    schameConfig: SchemaWidgetConfig
+): WidgetConfig {
+    return {
+        slides: schameConfig.data.slides.map((slide) => ({
+            ...slide,
+            image: normalizeOptionalFields(
+                slide.image,
+                ['srcset', 'sizes', 'alt']
+            ),
+        })),
+        settings: schameConfig.data.settings
+    };
 }

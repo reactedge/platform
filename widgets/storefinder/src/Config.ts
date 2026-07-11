@@ -38,8 +38,6 @@ export function readWidgetConfig(
             translations: resolved.translations
         });
 
-
-
         activity?.log(
             'bootstrap',
             'Config resolved',

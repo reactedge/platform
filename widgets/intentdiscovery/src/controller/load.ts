@@ -7,13 +7,17 @@ export function parseFiltersFromUrl(
     const result: Record<string, Record<string, number>> = {};
 
     params.forEach((value, key) => {
-        if (!allowedAttributes.includes(key)) return;
+        if (!allowedAttributes.includes(key)) {
+            return;
+        }
 
-        result[key] = {};
+        const values: Record<string, number> = {};
 
-        value.split(',').forEach(v => {
-            result[key][parseInt(v)] = 1;
+        value.split(',').forEach((v) => {
+            values[parseInt(v, 10)] = 1;
         });
+
+        result[key] = values;
     });
 
     return result;

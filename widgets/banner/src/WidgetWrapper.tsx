@@ -1,11 +1,11 @@
 import {BannerSlider} from "./components/BannerSlider.tsx";
 import {BannerStatic} from "./components/BannerStatic.tsx";
 import {getVisibleSlides} from "./lib/vslide.ts";
-import {type RawWidgetConfig, readWidgetConfig} from "./Config.ts";
+import {readWidgetConfig} from "./Config.ts";
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
 
 type Props = {
-    rawConfig: RawWidgetConfig
+    rawConfig: unknown
 }
 
 export const WidgetWrapper = ({rawConfig}: Props) => {

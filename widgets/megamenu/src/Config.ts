@@ -5,7 +5,7 @@ import type {
     RuntimeConfig
 } from "./domain/megamenu.types.ts";
 import type {WidgetActivity} from "./activity";
-import {parseConfig} from "./ConfigSchema.ts";
+import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
 
 export const WIDGET_ID = 'megamenu';
 
@@ -21,14 +21,15 @@ export function readWidgetConfig(
 ): WidgetConfig {
     try {
         const contract = parseConfig(rawConfig);
+        const resolved = resolvedWidgetConfig(contract)
 
         activity?.log(
             'bootstrap',
             'Config resolved',
-            contract
+            resolved
         );
 
-        return Object.freeze(contract);
+        return Object.freeze(resolved);
 
     } catch (e) {
         activity?.log(
@@ -43,3 +44,18 @@ export function readWidgetConfig(
 }
 
 
+function resolvedWidgetConfig(
+    schameConfig: SchemaWidgetConfig
+): WidgetConfig {
+    return {
+        runtime: schameConfig.runtime,
+        data: schameConfig.data,
+        settings: {
+            ...schameConfig.settings,
+            theme: {
+                ...schameConfig.settings.theme,
+                dropdownLayouts: schameConfig.settings.theme.dropdownLayouts !== undefined?  schameConfig.settings.theme.dropdownLayouts: {}
+            }
+        }
+    };
+}

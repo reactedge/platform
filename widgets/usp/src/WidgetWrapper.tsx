@@ -1,10 +1,10 @@
 import {UspWidget} from "./components/UspWidget.tsx";
 import {Spinner} from "./components/Spinner.tsx";
-import {type RawWidgetConfig, readWidgetConfig} from "./Config.ts";
+import {readWidgetConfig} from "./Config.ts";
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
 
 type Props = {
-    rawConfig: RawWidgetConfig;
+    rawConfig: unknown;
 };
 
 export const WidgetWrapper = ({ rawConfig }: Props) => {

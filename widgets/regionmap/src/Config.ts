@@ -1,6 +1,6 @@
 import type {WidgetActivity} from "./activity";
 import type {ReactEdgeRuntimeConfig, WidgetConfig} from "./domain/regionmap.types.ts";
-import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
+import {normalizeOptionalFields, parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
 
 export const WIDGET_ID = 'regionmap';
 
@@ -34,8 +34,10 @@ export function resolveWidgetConfig(
         throw new Error(`[${WIDGET_ID}] googleMaps integration required but not configured`);
     }
 
+    const data = normalizeOptionalFields(widget.data, ["title"])
+
     return {
-        data: widget.data,
+        data,
         integrations: runtime.integrations,
         translations: widget.translations
     };

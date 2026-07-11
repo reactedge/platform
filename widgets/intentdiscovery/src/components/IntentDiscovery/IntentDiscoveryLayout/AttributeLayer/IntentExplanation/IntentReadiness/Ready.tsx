@@ -1,6 +1,5 @@
 import type {MagentoLayeredNavigation} from "../../../../../../hooks/domain/useLayeredNavigation.tsx";
 import {useTranslationState} from "../../../../../../state/Translation/useTranslationState.ts";
-import React from "react";
 
 type Props = {
     attributeLayerData: MagentoLayeredNavigation

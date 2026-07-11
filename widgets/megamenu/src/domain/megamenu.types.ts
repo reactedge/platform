@@ -25,7 +25,7 @@ export type MegaMenuSettingsConfig = {
     fontColor?: string;
     primaryColor?: string;
     secondaryColour?: string;
-    urlSuffix?: string;
+    urlSuffix: string;
     dropdownLayouts?: {
         [urlPath: string]: "list" | "tiles";
     };
@@ -66,10 +66,10 @@ export type NavItem = {
     id: string
     label: string
     url: string
-    image?: string | null
+    image: string | null
     children: NavItem[]
     meta?: {
-        type?: "link" | "cta" | "banner"
-        icon?: "arrow" | "external";
+        type?: "link" | "cta" | "banner" | undefined
+        icon?: "arrow" | "external" | undefined
     }
 }

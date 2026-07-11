@@ -1,5 +1,4 @@
 import {createRoot} from "react-dom/client";
-import React from "react";
 import {WidgetWrapper} from "./WidgetWrapper.tsx";
 import {getMountedHost} from "./lib/hostReader.ts";
 import {ActivityContextProvider} from "./activity/Context/ActivityContextProvider.tsx";

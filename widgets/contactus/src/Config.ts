@@ -3,7 +3,7 @@ import type {
 } from "./domain/contact.types.ts";
 import type {WidgetActivity} from "./activity";
 import type {RawWidgetConfig} from "./domain/raw.contact.types.ts";
-import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
+import {normalizeOptionalFields, parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
 
 export const WIDGET_ID = 'contactus';
 
@@ -33,7 +33,11 @@ export function resolveConfig(
     }
 
     return {
-        ...widget.data,
+        ...widget,
+        endpoint: widget.data.endpoint,
+        fields: widget.data.fields.map((field) => {
+           return normalizeOptionalFields(field, ['type'])
+        }),
         integrations: {
             cloudflareKey: runtime.integrations?.cloudflare.siteKey
         },

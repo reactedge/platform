@@ -4,23 +4,13 @@ export interface LatLng {
     lng: number;
 }
 
-export interface RawWidgetConfig {
-    readonly data: RegionMapDataConfig;
-    readonly integration?: {
-        readonly requires?: readonly GoogleMapsIntegrationName[];
-    };
-    readonly translations: TranslationsConfig
-}
-
 export type TranslationsConfig = Record<string, string> | undefined;
-
-export type GoogleMapsIntegrationName = 'googleMaps';
 
 export interface RegionMapDataConfig {
     readonly title?: string;
     readonly center: LatLng;
     readonly zoom: number;
-    readonly region: MapPolygon[];
+    readonly region: MapPolygon;
 }
 
 /* -------------------- */

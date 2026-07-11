@@ -54,7 +54,7 @@ export interface BannerSettingConfig {
     imageHeight: number;
     imageWidth: number;
     visibleSlides?: number;
-    zoomActive?: boolean
+    zoomActive: boolean
 }
 
 export interface BannerMode {

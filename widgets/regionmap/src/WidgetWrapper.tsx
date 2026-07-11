@@ -15,14 +15,18 @@ export const WidgetWrapper = ({ rawConfig, runtimeConfig}: Props) => {
 
     if (!config) return null;
 
+    const props = {
+        region: config.data.region,
+        center: config.data.center,
+        zoom: config.data.zoom,
+        ...(config.data.title !== undefined
+            ? { title: config.data.title }
+            : {}),
+    };
+
     return (
         <SystemStateProvider config={config}>
-            <RegionMap
-                title={config.data.title}
-                region={config.data.region}
-                center={config.data.center}
-                zoom={config.data.zoom}
-            />
+            <RegionMap {...props} />
         </SystemStateProvider>
     );
 };

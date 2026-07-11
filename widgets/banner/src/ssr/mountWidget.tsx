@@ -1,8 +1,7 @@
 import {hydrateRoot} from "react-dom/client";
-import type {RawWidgetConfig} from "../Config.ts";
 import {WidgetWrapper} from "../WidgetWrapper.tsx";
 
-export async function mountWidget(hostElement: HTMLElement, config: RawWidgetConfig) {
+export async function mountWidget(hostElement: HTMLElement, config: unknown) {
     const mountedHost = hostElement;
 
     hydrateRoot(

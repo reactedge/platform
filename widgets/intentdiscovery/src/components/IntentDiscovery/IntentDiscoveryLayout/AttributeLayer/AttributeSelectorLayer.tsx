@@ -1,4 +1,3 @@
-import React from "react";
 import {AttributeTile} from "./AttributeTile.tsx";
 import type {MagentoLayeredNavigation} from "../../../../hooks/domain/useLayeredNavigation.tsx";
 import type {IntentDiscoveryDataConfig} from "../../../../domain/intent-discovery.types.ts";

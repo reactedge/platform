@@ -56,3 +56,22 @@ export function parseConfig(
 ): SchemaWidgetConfig {
     return WidgetConfigSchema.parse(input);
 }
+
+export function normalizeOptionalFields<
+    T extends Record<string, unknown>,
+    K extends keyof T
+>(
+    data: T,
+    optionalFields: K[]
+): Omit<T, K> {
+
+    const result = { ...data };
+
+    for (const field of optionalFields) {
+        if (result[field] === undefined) {
+            delete result[field];
+        }
+    }
+
+    return result;
+}

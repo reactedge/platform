@@ -1,9 +1,9 @@
 import {renderIcon} from "./Icon.tsx";
 
 interface CtaLinkProps {
-    url?: string;
+    url: string;
     label: string;
-    icon?: "arrow" | "external";
+    icon?: "arrow" | "external" | undefined;
 }
 
 export function CtaItemLink({ url, label, icon }: CtaLinkProps) {
@@ -19,7 +19,7 @@ export function CtaItemLink({ url, label, icon }: CtaLinkProps) {
                     className="mw-cta-link__icon"
                     aria-hidden="true"
                 >
-                    {renderIcon(icon)}
+                    {icon && renderIcon(icon)}
                 </span>
             )}
         </a>

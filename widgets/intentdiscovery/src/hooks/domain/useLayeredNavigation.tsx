@@ -6,7 +6,6 @@ import type {MergedAttribute} from "../infra/useMagentoLayeredData.tsx";
 import {useSystemState} from "../../state/System/useSystemState.ts";
 import {getError} from "../../lib/error.ts";
 import type {IntentDiscoveryDataConfig} from "../../domain/intent-discovery.types.ts";
-import type {BootstrapData} from "../../ssr/entry.tsx";
 
 export type MagentoLayeredNavigation = {
     attributes: MergedAttribute[] | null

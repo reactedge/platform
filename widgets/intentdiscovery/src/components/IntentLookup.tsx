@@ -1,4 +1,3 @@
-import React from "react";
 import {IntentDiscoveryWidget} from "./IntentDiscoveryWidget.tsx";
 import {useLayoutEffect} from "react";
 import {resolveIntentCategory} from "../lib/category.ts";
