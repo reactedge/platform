@@ -5,6 +5,6 @@ export interface GalleryTile {
     alt?: string;
 }
 
-export interface GalleryProps {
+export interface WidgetConfig {
     tiles:  GalleryTile[];
 }

@@ -1,15 +1,12 @@
-import { createRoot } from "react-dom/client";
-import ProductGalleryWidget from "./WidgetWrapper.tsx";
+import {createRoot} from "react-dom/client";
+import {ActivityContextProvider} from "./activity/Context/ActivityContextProvider.tsx";
 import {getMountedHost} from "./lib/hostReader.ts";
+import WidgetWrapper from "./WidgetWrapper.tsx";
 
-export const WIDGET_ID = 'productgallery';
-
-export function mountWidget(hostElement: HTMLElement) {
+export function mountWidget(hostElement: HTMLElement, rawConfig: unknown) {
     const mountedHost = getMountedHost(hostElement);
-    hostElement.classList.add(`reactedge-${WIDGET_ID}`);
 
-
-    // Create React root inside shadow
-    const root = createRoot(mountedHost);
-    root.render(<ProductGalleryWidget host={hostElement}/>);
+    createRoot(mountedHost).render(<ActivityContextProvider hostElement={hostElement}>
+        <WidgetWrapper rawConfig={rawConfig} />
+    </ActivityContextProvider>);
 }

@@ -1,29 +1,19 @@
+<!DOCTYPE html>
+<html>
 <body>
-<script type="module" src="./src/widget.ts"></script>
 
-<div id="product-gallery">
-    <productgallery-widget>
-        <script type="application/json" data-config>
-          {
-            "data": {
-                "images": [
-                  {
-                    "src": "https://m248-docker.magsite.co.uk/media/catalog/product/cache/207e23213cf636ccdef205098cf3c8a3/m/h/mh12-green_main_2.jpg",
-                    "alt": "Ajax Full-Zip Sweatshirt"
-                  },
-                  {
-                    "src": "https://m248-docker.magsite.co.uk/media/catalog/product/cache/207e23213cf636ccdef205098cf3c8a3/m/h/mh12-green_back_2.jpg",
-                    "alt": "Ajax Full-Zip Sweatshirt"
-                  },
-                  {
-                    "src": "https://m248-docker.magsite.co.uk/media/catalog/product/cache/207e23213cf636ccdef205098cf3c8a3/m/h/mh12-green_alt1_2.jpg",
-                    "alt": "Ajax Full-Zip Sweatshirt"
-                  }
-                ]
-              }
-            }
-        </script>
-    </productgallery-widget>
-</div>
+<script type="module">
+    import { mount } from './src/widget.ts';
+    import {loadContract} from "./src/lib/contract-resolver.js";
+    const config = await loadContract('default.json')
+    const element = document.querySelector('productgallery-widget');
+
+    await requestAnimationFrame(() => {
+        mount(element, config);
+    })
+</script>
+
+<productgallery-widget></productgallery-widget>
 
 </body>
+</html>

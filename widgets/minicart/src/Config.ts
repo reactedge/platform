@@ -19,7 +19,7 @@ export function readWidgetConfig(
             primaryColor: contract.settings?.primaryColor,
             secondaryColour: contract.settings?.secondaryColour,
             isReady: contract.settings?.primaryColor !== ''
-        };;
+        };
 
         activity?.log(
             'bootstrap',

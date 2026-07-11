@@ -1,36 +1,16 @@
-import { useState } from "react";
-import { ProductTiledGallery } from "./components/ProductTiledGallery";
-import { ProductGallery } from "./components/ProductGallery";
-import {useWidgetConfig} from "./hooks/useWidgetConfig.ts";
+import {useActivityContext} from "./activity/Context/useActivityContext.ts";
+import {readWidgetConfig} from "./Config.ts";
+import {ProductGalleryWidget} from "./components/ProductGalleryWidget.tsx";
 
 type Props = {
-    host: HTMLElement
+    rawConfig: unknown
 }
 
-export default function WidgetWrapper({host}: Props) {
-    const config = useWidgetConfig(host);
+export default function WidgetWrapper({rawConfig}: Props) {
+    const activity = useActivityContext()
+    const config = readWidgetConfig(rawConfig, activity);
 
     if (!config) return null;
 
-    const [mode, setMode] = useState<"tiled" | "classic">("tiled");
-
-    return (
-        <div>
-            {/* Switch Button */}
-            <button
-                className="switchButton"
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#14619e")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#1979c3")}
-                onClick={() =>
-                    setMode((prev) => (prev === "tiled" ? "classic" : "tiled"))
-                }
-                data-gallery-switch
-            >
-                Switch to {mode === "tiled" ? "Classic" : "Tiled"} View
-            </button>
-
-            {/* Render the selected component */}
-            {mode === "tiled" ? <ProductTiledGallery tiles={config.tiles} /> : <ProductGallery tiles={config.tiles} />}
-        </div>
-    );
+    return <ProductGalleryWidget config={config} />
 }
