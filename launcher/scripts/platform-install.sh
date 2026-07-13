@@ -18,14 +18,10 @@ install_project() {
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
-# Deployment Orchestrator platform
+# Core platform
 install_project "$ROOT/deployment-orchestrator"
-
-# Root platform
-install_project "$ROOT"
 
 # Widgets
 for dir in "$ROOT"/widgets/*; do
     [[ -d "$dir" ]] && install_project "$dir"
 done
-

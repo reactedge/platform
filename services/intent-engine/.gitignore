@@ -1,0 +1,18 @@
+# IDE
+.idea
+# editor temp files
+*.swp
+
+# local environment
+.env
+.env.*
+
+# generated / local artefacts
+www
+README-dev.md
+venv
+.cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd

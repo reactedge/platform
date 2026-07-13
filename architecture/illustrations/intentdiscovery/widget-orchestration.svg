@@ -1,0 +1,126 @@
+<svg width="1100" height="760" viewBox="0 0 1100 760" xmlns="http://www.w3.org/2000/svg">
+
+    <rect x="0" y="0" width="1100" height="760" fill="#fafafa"/>
+
+    <text x="550" y="30" text-anchor="middle" font-size="20" font-weight="bold">
+        useAttributeLayerController
+    </text>
+
+    <!-- Inputs -->
+    <rect x="40" y="70" width="240" height="120" fill="#fff3e0" stroke="#999"/>
+    <text x="160" y="100" text-anchor="middle" font-size="14">Inputs</text>
+    <text x="160" y="125" text-anchor="middle" font-size="12">intent</text>
+    <text x="160" y="145" text-anchor="middle" font-size="12">attributeLayerData</text>
+    <text x="160" y="165" text-anchor="middle" font-size="12">categoryData / config</text>
+
+    <!-- Hook body -->
+    <rect x="340" y="70" width="420" height="120" fill="#ffffff" stroke="#999"/>
+    <text x="550" y="100" text-anchor="middle" font-size="14">Controller State</text>
+    <text x="550" y="125" text-anchor="middle" font-size="12">loading</text>
+    <text x="550" y="145" text-anchor="middle" font-size="12">intentState</text>
+    <text x="550" y="165" text-anchor="middle" font-size="12">dispatch</text>
+
+    <!-- useAskAi -->
+    <rect x="840" y="70" width="220" height="100" fill="#e3f2fd" stroke="#999"/>
+    <text x="950" y="100" text-anchor="middle" font-size="14">useAskAi</text>
+    <text x="950" y="125" text-anchor="middle" font-size="12">askAi()</text>
+    <text x="950" y="145" text-anchor="middle" font-size="12">setLoading()</text>
+
+    <!-- useAnalyseSearch -->
+    <rect x="840" y="210" width="220" height="100" fill="#e8f5e9" stroke="#999"/>
+    <text x="950" y="240" text-anchor="middle" font-size="14">useAnalyseSearch</text>
+    <text x="950" y="265" text-anchor="middle" font-size="12">askAiRecommendations()</text>
+
+    <!-- Threshold effect -->
+    <rect x="40" y="260" width="320" height="130" fill="#f3e5f5" stroke="#999"/>
+    <text x="200" y="290" text-anchor="middle" font-size="14">Threshold Crossing Effect</text>
+    <text x="200" y="315" text-anchor="middle" font-size="12">intent.remainingChars</text>
+    <text x="200" y="335" text-anchor="middle" font-size="12">prevRemaining ref</text>
+    <text x="200" y="355" text-anchor="middle" font-size="12">dispatch INTERPRETATION_READY / STARTED</text>
+
+    <!-- Handle ask -->
+    <rect x="420" y="260" width="260" height="110" fill="#fffde7" stroke="#999"/>
+    <text x="550" y="290" text-anchor="middle" font-size="14">handleAsk()</text>
+    <text x="550" y="315" text-anchor="middle" font-size="12">dispatch INTERPRETATION_READY</text>
+    <text x="550" y="335" text-anchor="middle" font-size="12">askAi()</text>
+
+    <!-- Status-based recommendation effect -->
+    <rect x="740" y="360" width="320" height="120" fill="#ede7f6" stroke="#999"/>
+    <text x="900" y="390" text-anchor="middle" font-size="14">Recommendation Trigger Effect</text>
+    <text x="900" y="415" text-anchor="middle" font-size="12">if status === readyToRecommend</text>
+    <text x="900" y="435" text-anchor="middle" font-size="12">askAiRecommendations()</text>
+
+    <!-- Snapshot restore effect -->
+    <rect x="40" y="470" width="420" height="170" fill="#ffebee" stroke="#999"/>
+    <text x="250" y="500" text-anchor="middle" font-size="14">Snapshot Restore Effect</text>
+    <text x="250" y="525" text-anchor="middle" font-size="12">load persisted snapshot</text>
+    <text x="250" y="545" text-anchor="middle" font-size="12">isSnapshotCompatible(snapshot, intentState)</text>
+    <text x="250" y="565" text-anchor="middle" font-size="12">dispatch SUGGESTION_LOAD</text>
+    <text x="250" y="590" text-anchor="middle" font-size="12">guarded by status / bootstrap conditions</text>
+
+    <!-- Reducer / Provider -->
+    <rect x="520" y="500" width="280" height="120" fill="#ffffff" stroke="#999"/>
+    <text x="660" y="530" text-anchor="middle" font-size="14">IntentStateProvider</text>
+    <text x="660" y="555" text-anchor="middle" font-size="12">dispatch(event)</text>
+    <text x="660" y="575" text-anchor="middle" font-size="12">intentReducer + effects</text>
+
+    <!-- Visibility -->
+    <rect x="850" y="530" width="210" height="90" fill="#f1f8e9" stroke="#999"/>
+    <text x="955" y="560" text-anchor="middle" font-size="14">UI Output</text>
+    <text x="955" y="585" text-anchor="middle" font-size="12">shouldHide</text>
+
+    <!-- Return -->
+    <rect x="420" y="670" width="300" height="60" fill="#ffffff" stroke="#999"/>
+    <text x="570" y="705" text-anchor="middle" font-size="13">
+        return { handleAsk, shouldHide, intentState }
+    </text>
+
+    <!-- Arrows -->
+    <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+        </marker>
+        <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/>
+        </marker>
+        <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+        </marker>
+    </defs>
+
+    <!-- input to controller -->
+    <line x1="280" y1="130" x2="340" y2="130" stroke="#333" marker-end="url(#arrow)"/>
+
+    <!-- controller to askAi -->
+    <line x1="760" y1="120" x2="840" y2="120" stroke="#1565c0" marker-end="url(#arrowBlue)"/>
+
+    <!-- threshold into provider -->
+    <line x1="360" y1="330" x2="520" y2="540" stroke="#333" marker-end="url(#arrow)"/>
+
+    <!-- handleAsk into askAi -->
+    <line x1="680" y1="315" x2="840" y2="120" stroke="#1565c0" marker-end="url(#arrowBlue)"/>
+    <line x1="550" y1="370" x2="660" y2="500" stroke="#333" marker-end="url(#arrow)"/>
+
+    <!-- provider to recommendation effect -->
+    <line x1="800" y1="550" x2="900" y2="480" stroke="#333" marker-end="url(#arrow)"/>
+
+    <!-- recommendation effect to analyse -->
+    <line x1="900" y1="360" x2="950" y2="310" stroke="#1565c0" marker-end="url(#arrowBlue)"/>
+
+    <!-- restore effect to provider -->
+    <line x1="460" y1="555" x2="520" y2="555" stroke="#c62828" marker-end="url(#arrowRed)"/>
+
+    <!-- provider to ui output -->
+    <line x1="800" y1="575" x2="850" y2="575" stroke="#333" marker-end="url(#arrow)"/>
+
+    <!-- provider to return -->
+    <line x1="660" y1="620" x2="620" y2="670" stroke="#333" marker-end="url(#arrow)"/>
+    <line x1="955" y1="620" x2="700" y2="690" stroke="#333" marker-end="url(#arrow)"/>
+
+    <!-- Live path label -->
+    <text x="840" y="340" font-size="12" fill="#1565c0">live recommendation path</text>
+
+    <!-- Restore path label -->
+    <text x="90" y="450" font-size="12" fill="#c62828">restore path</text>
+
+</svg>

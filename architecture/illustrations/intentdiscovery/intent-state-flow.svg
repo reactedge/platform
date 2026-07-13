@@ -1,0 +1,86 @@
+<svg width="1000" height="620" viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Zones -->
+    <rect x="0" y="0" width="1000" height="620" fill="#f9f9f9"/>
+
+    <!-- Title -->
+    <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold">
+        IntentStateProvider (Actual Responsibilities)
+    </text>
+
+    <!-- External Inputs -->
+    <rect x="50" y="80" width="250" height="100" fill="#fff3e0" stroke="#999"/>
+    <text x="175" y="110" text-anchor="middle" font-size="13">External Inputs</text>
+    <text x="175" y="130" text-anchor="middle" font-size="11">URL (filters)</text>
+    <text x="175" y="145" text-anchor="middle" font-size="11">reactedge:intent</text>
+
+    <!-- Intent Engine -->
+    <rect x="350" y="80" width="300" height="100" fill="#e3f2fd" stroke="#999"/>
+    <text x="500" y="110" text-anchor="middle" font-size="13">intentEngine</text>
+    <text x="500" y="130" text-anchor="middle" font-size="11">handle(signal)</text>
+    <text x="500" y="145" text-anchor="middle" font-size="11">getState()</text>
+
+    <!-- React State -->
+    <rect x="350" y="220" width="300" height="120" fill="#ffffff" stroke="#999"/>
+    <text x="500" y="250" text-anchor="middle" font-size="13">React State</text>
+    <text x="500" y="270" text-anchor="middle" font-size="11">intentState</text>
+
+    <!-- Reducer -->
+    <rect x="350" y="370" width="300" height="140" fill="#f1f8e9" stroke="#999"/>
+    <text x="500" y="400" text-anchor="middle" font-size="13">transition()</text>
+    <text x="500" y="420" text-anchor="middle" font-size="11">state machine</text>
+
+    <!-- Side Effects -->
+    <rect x="700" y="220" width="250" height="200" fill="#ffebee" stroke="#999"/>
+    <text x="825" y="250" text-anchor="middle" font-size="13">Side Effects</text>
+    <text x="825" y="270" text-anchor="middle" font-size="11">sessionStorage</text>
+    <text x="825" y="285" text-anchor="middle" font-size="11">window.dispatchEvent</text>
+    <text x="825" y="300" text-anchor="middle" font-size="11">activity()</text>
+
+    <!-- Persistence -->
+    <rect x="50" y="220" width="250" height="120" fill="#ede7f6" stroke="#999"/>
+    <text x="175" y="250" text-anchor="middle" font-size="13">Persistence</text>
+    <text x="175" y="270" text-anchor="middle" font-size="11">intentPersistence</text>
+
+    <!-- Flows -->
+
+    <!-- URL → state -->
+    <line x1="300" y1="120" x2="350" y2="120" stroke="#333" marker-end="url(#arrow)"/>
+    <text x="305" y="110" font-size="11">parseFiltersFromUrl</text>
+
+    <!-- Event → engine -->
+    <line x1="300" y1="150" x2="350" y2="150" stroke="#333" marker-end="url(#arrow)"/>
+    <text x="305" y="165" font-size="11">reactedge:intent</text>
+
+    <!-- Engine → state -->
+    <line x1="500" y1="180" x2="500" y2="220" stroke="#333" marker-end="url(#arrow)"/>
+
+    <!-- State → reducer -->
+    <line x1="500" y1="340" x2="500" y2="370" stroke="#333" marker-end="url(#arrow)"/>
+
+    <!-- Reducer → side effects -->
+    <line x1="650" y1="420" x2="700" y2="300" stroke="#d32f2f" marker-end="url(#arrowRed)"/>
+    <text x="660" y="380" font-size="11" fill="#d32f2f">dispatch events</text>
+
+    <!-- Reducer → session -->
+    <line x1="650" y1="450" x2="700" y2="350" stroke="#d32f2f" marker-end="url(#arrowRed)"/>
+    <text x="660" y="460" font-size="11" fill="#d32f2f">persist</text>
+
+    <!-- Engine → persistence -->
+    <line x1="350" y1="150" x2="300" y2="270" stroke="#673ab7" marker-end="url(#arrowPurple)"/>
+    <text x="290" y="210" font-size="11" fill="#673ab7">save state</text>
+
+    <!-- Arrow defs -->
+    <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+        </marker>
+        <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#d32f2f"/>
+        </marker>
+        <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#673ab7"/>
+        </marker>
+    </defs>
+
+</svg>

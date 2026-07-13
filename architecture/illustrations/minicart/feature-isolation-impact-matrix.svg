@@ -1,0 +1,57 @@
+<svg width="1000" height="650" viewBox="0 0 1000 650" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Background -->
+    <rect width="100%" height="100%" fill="#ffffff"/>
+
+    <!-- Header -->
+    <text x="60" y="80" font-size="32" font-weight="bold" fill="#111">
+        MiniCart
+    </text>
+    <text x="60" y="115" font-size="18" fill="#555">
+        Feature Isolation Impact Matrix
+    </text>
+
+    <!-- Divider -->
+    <line x1="60" y1="140" x2="940" y2="140" stroke="#ddd"/>
+
+    <!-- Column Headers -->
+    <text x="60" y="180" font-size="16" font-weight="bold" fill="#333">
+        Concern
+    </text>
+    <text x="350" y="180" font-size="16" font-weight="bold" fill="#333">
+        When in Core
+    </text>
+    <text x="650" y="180" font-size="16" font-weight="bold" fill="#333">
+        When Isolated
+    </text>
+
+    <!-- Rows -->
+    <text x="60" y="220" font-size="14" fill="#111">State tangled</text>
+    <text x="350" y="220" font-size="14" fill="#444">Deep session + global state</text>
+    <text x="650" y="220" font-size="14" fill="#444">Event-based boundary</text>
+
+    <text x="60" y="260" font-size="14" fill="#111">Business logic coupled</text>
+    <text x="350" y="260" font-size="14" fill="#444">Theme-level cart mutation</text>
+    <text x="650" y="260" font-size="14" fill="#444">Contract-driven events</text>
+
+    <text x="60" y="300" font-size="14" fill="#111">Schema drift</text>
+    <text x="350" y="300" font-size="14" fill="#444">Implicit payload structure</text>
+    <text x="650" y="300" font-size="14" fill="#444">Versioned event surface</text>
+
+    <text x="60" y="340" font-size="14" fill="#111">Network dependency</text>
+    <text x="350" y="340" font-size="14" fill="#444">Global cart API calls</text>
+    <text x="650" y="340" font-size="14" fill="#444">Explicit integration</text>
+
+    <text x="60" y="380" font-size="14" fill="#111">CSS bleed</text>
+    <text x="350" y="380" font-size="14" fill="#444">Header layout dependency</text>
+    <text x="650" y="380" font-size="14" fill="#444">Scoped styling</text>
+
+    <!-- Footer Divider -->
+    <line x1="60" y1="440" x2="940" y2="440" stroke="#ddd"/>
+
+    <!-- Footer -->
+    <text x="60" y="480" font-size="16" font-weight="bold" fill="#111">
+        Primary Impact: Behaviour isolated from theme runtime
+    </text>
+
+</svg>
