@@ -78,4 +78,3 @@ venv/
 # Test cache
 .pytest_cache/
 
-**/public/reactedge-runtime.json

@@ -3,7 +3,7 @@
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/reactedge/ready ReactEdge
+git clone https://github.com/reactedge/platform ReactEdge
 cd ReactEdge
 ```
 
@@ -36,12 +36,10 @@ This installs the required Node.js and Python versions.
 
 ## 4. Install all project dependencies
 
-```bash
 chmod u+x ./launcher/scripts/*.sh
-```
 
 ```bash
-mise run platform-install
+mise run widgets-install
 ```
 
 This installs the dependencies for all ReactEdge projects and widgets.
