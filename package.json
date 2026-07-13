@@ -1,7 +1,8 @@
 {
   "devDependencies": {
     "@playwright/test": "^1.61.1",
-    "@types/node": "^25.6.2"
+    "@types/node": "^25.6.2",
+    "tsx": "^4.23.0"
   },
   "dependencies": {
     "dotenv": "^17.4.2",

@@ -8,12 +8,13 @@
       "placeId": "ChIJF3wtymMX1I0RlV-deLj6JSE"
     },
     "magentoGraphql": {
-      "api": "https://mageos-docker.magsite.co.uk/graphql",
-      "storeCode": "default",
-      "category": "tops-men"
+      "api": "https://mageos-docker.magsite.co.uk/graphql"
     },
     "intentApi": {
       "baseUrl": "http://localhost:8000/v1"
     }
-  }
+  },
+  "storeCode": "default",
+  "category": "tops-men",
+  "sku": "WJ12"
 }

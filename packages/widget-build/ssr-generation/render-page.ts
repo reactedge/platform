@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import 'dotenv/config';
+import { buildBootstrap } from "../../../widgets/productgallery/src/ssr/bootstrap";
 
 function resolveEntry(widget: string): string {
     return `${process.env.WIDGETS_ROOT}/${widget}/src/ssr/entry.tsx`;
@@ -17,11 +18,11 @@ const run = async () => {
         throw new Error('Missing contract path');
     }
 
-    const config = JSON.parse(
+    let config = JSON.parse(
         await fs.readFile(contractPath, 'utf8')
     );
 
-    const runtime = {
+    let runtime = {
         userAgent: process.argv[4] ?? ''
     };
 
@@ -34,8 +35,16 @@ const run = async () => {
         return;
     }
 
-    const { renderHtml } = await import(entry);
-    const finalHtml = renderHtml(config, runtime)
+    const { renderHtml, buildBootstrap, loadRuntime } = await import(entry);
+
+    if (loadRuntime) runtime = await loadRuntime()
+    const bootstrap =
+        buildBootstrap
+            ? await buildBootstrap(runtime)
+            : undefined;
+
+
+    const finalHtml = renderHtml(config, runtime, bootstrap)
 
     process.stdout.write(finalHtml);
 };

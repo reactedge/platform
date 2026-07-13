@@ -1,8 +1,12 @@
 import {activeThumb, arrowBase, containerStyle, mainImageStyle, thumb, thumbnailStrip} from "./ProductGallery/style.ts";
-import type {WidgetConfig} from "./Types.ts";
+import type {GalleryTile} from "./Types.ts";
 import {useGallery} from "../hooks/useGallery.tsx";
 
-export const ProductGallery = ({tiles}: WidgetConfig) => {
+interface ProductGalleryProps {
+    tiles: GalleryTile[]
+}
+
+export const ProductGallery = ({tiles}: ProductGalleryProps) => {
     const gallery = useGallery(tiles);
 
     if (tiles.length === 0 || gallery.currentImage === undefined) {

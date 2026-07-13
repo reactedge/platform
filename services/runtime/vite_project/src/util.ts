@@ -11,6 +11,7 @@ interface ReactEdgeRuntimeConfig {
     readonly integrations: ReactEdgeRuntimeIntegrations;
     category: string;
     storeCode: string;
+    sku: string
 }
 
 export function buildRuntimeConfig(): ReactEdgeRuntimeConfig | undefined {

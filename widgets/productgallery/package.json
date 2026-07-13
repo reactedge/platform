@@ -12,7 +12,8 @@
   "dependencies": {
     "init": "^0.1.2",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "rollup-plugin-visualizer": "^7.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

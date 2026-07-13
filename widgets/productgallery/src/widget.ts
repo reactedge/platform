@@ -2,9 +2,10 @@ import {mountWidget} from "./mountWidget.tsx";
 import {WIDGET_ID} from "./Config.ts";
 
 import "./styles/widget.css"
+import type {ReactEdgeRuntimeConfig} from "./components/Types.ts";
 
-const mount = async (el: HTMLElement, config: unknown) => {
-    await mountWidget(el, config)
+const mount = async (el: HTMLElement, config: unknown,  runtimeConfig: ReactEdgeRuntimeConfig) => {
+    await mountWidget(el, config, runtimeConfig)
 }
 
 const api = { mount };

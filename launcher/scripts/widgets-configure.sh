@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-CONFIG="$ROOT/.env.local"
+CONFIG="$ROOT/.env"
 
 if [[ -f "$CONFIG" ]]; then
     # Load existing configuration
@@ -69,6 +69,11 @@ prompt \
     CATEGORY \
     "tops-men"
 
+prompt \
+    "SKU" \
+    SKU \
+    "WJ12"
+
 echo
 
 for dir in "$ROOT"/widgets/*; do
@@ -86,14 +91,15 @@ for dir in "$ROOT"/widgets/*; do
       "placeId": "$GOOGLE_PLACE_ID"
     },
     "magentoGraphql": {
-      "api": "$MAGENTO_GRAPHQL_API",
-      "storeCode": "$STORE_CODE",
-      "category": "$CATEGORY"
+      "api": "$MAGENTO_GRAPHQL_API"
     },
     "intentApi": {
       "baseUrl": "$INTENT_API_BASE_URL"
     }
-  }
+  },
+  "storeCode": "$STORE_CODE",
+  "category": "$CATEGORY",
+  "sku": "$SKU"
 }
 EOF
     fi

@@ -12,6 +12,7 @@ fi
 
 NODE_TLS_REJECT_UNAUTHORIZED=0 \
 npx tsx \
-packages/widget-build/ssr-generation/render-page.ts \
-"$WIDGET" \
-"./widgets/$WIDGET/public/cdn/default.json"
+    --tsconfig "widgets/$WIDGET/tsconfig.app.json" \
+    packages/widget-build/ssr-generation/render-page.ts \
+    "$WIDGET" \
+    "./widgets/$WIDGET/public/cdn/default.json"

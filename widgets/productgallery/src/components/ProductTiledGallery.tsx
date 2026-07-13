@@ -1,9 +1,13 @@
-import type {WidgetConfig} from "./Types.ts";
+import type {GalleryTile} from "./Types.ts";
 import {ZoomView} from "./ProductTiledGallery/ZoomView.tsx";
 import {useGallery} from "../hooks/useGallery.tsx";
 import {TileGrid} from "./ProductTiledGallery/TileGrid.tsx";
 
-export const ProductTiledGallery = ({tiles}: WidgetConfig) => {
+interface ProductTiledGalleryProps {
+    tiles: GalleryTile[]
+}
+
+export const ProductTiledGallery = ({tiles}: ProductTiledGalleryProps) => {
     const gallery = useGallery(tiles);
 
     if (tiles.length === 0) return null;

@@ -1,18 +1,8 @@
 {
   "data": {
-    "images": [
-      {
-        "src": "https://mageosuk.reactedge.net/media/catalog/product/cache/207e23213cf636ccdef205098cf3c8a3/w/j/wj12-blue_main_1.jpg",
-        "alt": "Ajax Full-Zip Sweatshirt"
-      },
-      {
-        "src": "https://mageosuk.reactedge.net/media/catalog/product/cache/207e23213cf636ccdef205098cf3c8a3/w/j/wj12-blue_alt1_1.jpg",
-        "alt": "Ajax Full-Zip Sweatshirt"
-      },
-      {
-        "src": "https://mageosuk.reactedge.net/media/catalog/product/cache/207e23213cf636ccdef205098cf3c8a3/w/j/wj12-blue_back_1.jpg",
-        "alt": "Ajax Full-Zip Sweatshirt"
-      }
-    ]
+    "images": []
+  },
+  "integration": {
+    "requires": ["magentoGraphql"]
   }
 }

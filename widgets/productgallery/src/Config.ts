@@ -1,23 +1,18 @@
-import {type GalleryTile, type WidgetConfig} from "./components/Types.ts";
+import {type ReactEdgeRuntimeConfig, type WidgetConfig} from "./components/Types.ts";
 import type {WidgetActivity} from "./activity";
-import {parseConfig} from "./ConfigSchema.ts";
-
-export interface GalleryWidgetConfig {
-    readonly tiles: GalleryTile[]
-}
+import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
 
 export const WIDGET_ID = 'productgallery';
 
 export function readWidgetConfig(
     rawConfig: unknown,
+    runtimeConfig: ReactEdgeRuntimeConfig,
     activity?: WidgetActivity
 ): WidgetConfig {
     try {
         const contract = parseConfig(rawConfig);
 
-        const resolved = {
-            tiles: contract.data.images
-        };
+        const resolved = resolveConfig(contract, runtimeConfig);
 
         activity?.log(
             'bootstrap',
@@ -37,4 +32,28 @@ export function readWidgetConfig(
 
         throw e;
     }
+}
+
+export function resolveConfig(
+    widget: SchemaWidgetConfig,
+    runtime: ReactEdgeRuntimeConfig
+): WidgetConfig {
+
+    if (
+        widget.integration?.requires?.includes('magentoGraphql') &&
+        !runtime.integrations?.magentoGraphql?.api
+    ) {
+        throw new Error(`[${WIDGET_ID}] magentoGraphql integration required but not configured`);
+    }
+
+    return {
+        tiles: widget.data.images,
+        runtime: {
+            storeCode: runtime.storeCode,
+            sku: runtime.sku
+        },
+        integrations: {
+            magentoGraphql: runtime.integrations?.magentoGraphql
+        }
+    };
 }
