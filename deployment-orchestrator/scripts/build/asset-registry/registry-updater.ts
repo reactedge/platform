@@ -32,7 +32,7 @@ export function updateRegistry({ widgetName, buildTarget, registryPath, widgetAs
     entry.src = newSrc;
 
     if (baseEntry.css) {
-        cssBundle = `${cdnUrl}/${buildTarget}/styles/${baseEntry.css.replace('.css', '.bundle.css')}`;
+        cssBundle = `${cdnUrl}/${buildTarget}/src/widget-${buildTarget}.css`;
     }
 
     if (CONFIG.updateIntegrity && hash) {

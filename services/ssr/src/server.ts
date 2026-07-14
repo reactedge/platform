@@ -29,8 +29,8 @@ app.post('/render', async (req, res) => {
             const payload =
                 await buildRenderPayload({
                     ...req.body,
-                    runtimeConfig: {
-                        ...req.body.runtimeConfig,
+                    runtimeConfig: req.body.runtimeConfig,
+                    ssrContext: {
                         userAgent: resolveDevice(req.headers['user-agent'])
                     }
                 });

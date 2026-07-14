@@ -3,10 +3,10 @@ import {getMountedHost} from "./widget-runtime/lib/hostReader.ts";
 import {ActivityContextProvider} from "./activity/Context/ActivityContextProvider.tsx";
 import {WidgetWrapper} from "./WidgetWrapper.tsx";
 
-export function mountWidget(hostElement: HTMLElement, config: unknown) {
+export function mountWidget(hostElement: HTMLElement, rawConfig: unknown) {
     const mountedHost = getMountedHost(hostElement);
 
     createRoot(mountedHost).render(<ActivityContextProvider hostElement={hostElement}>
-        <WidgetWrapper rawConfig={config} />
+        <WidgetWrapper rawConfig={rawConfig} />
     </ActivityContextProvider>);
 }

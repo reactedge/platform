@@ -6,6 +6,7 @@ import type {
     StoreFinderDataConfig,
     TranslationsConfig
 } from "./domain/store.types.ts";
+import {parseRuntimeConfig} from "./ConfigSchemaRuntime.ts";
 
 export interface WidgetConfig {
     readonly data: StoreFinderDataConfig;
@@ -23,14 +24,34 @@ export interface RawWidgetConfig {
 
 export const WIDGET_ID = 'storefinder';
 
+/**
+ * Validates and resolves the Contact Us widget configuration.
+ *
+ * Both the widget contract and the runtime configuration are treated
+ * as untrusted input. Once validated, the configuration is normalized,
+ * resolved and frozen before being exposed to the React application.
+ *
+ * This function represents the trust boundary between the ReactEdge
+ * runtime and the widget implementation.
+ *
+ * The resolved configuration includes the Cloudflare integration
+ * required to render the captcha.
+ *
+ * @param rawConfig - Widget contract supplied by the host platform.
+ * @param runtimeConfig - Runtime services supplied by the orchestrator.
+ * @param activity - Activity logger for bootstrap events.
+ * @returns An immutable Contact Us configuration.
+ * @throws When either configuration is invalid.
+ */
 export function readWidgetConfig(
     rawConfig: unknown,
-    runtimeConfig: ReactEdgeRuntimeConfig,
+    runtimeConfig: unknown,
     activity: WidgetActivity
 ): WidgetConfig {
     try {
         const contract = parseConfig(rawConfig);
-        const resolved = resolveConfig(contract, runtimeConfig);
+        const runtime = parseRuntimeConfig(runtimeConfig)
+        const resolved = resolveConfig(contract, runtime);
 
         activity.log('bootstrap', 'Config resolved', {
             data: resolved.data,
@@ -62,37 +83,9 @@ export function resolveConfig(
     widget: RawWidgetConfig,
     runtime: ReactEdgeRuntimeConfig
 ): WidgetConfig {
-    if (
-        widget.integration?.requires?.includes('googleMaps') &&
-        !runtime.integrations?.googleMaps?.apiKey
-    ) {
-        throw new Error(`[${WIDGET_ID}] googleMaps integration required but not configured`);
-    }
-
     return {
         data: widget.data,
         integrations: runtime.integrations,
         translations: widget.translations
     };
-}
-
-export function readIntegrationConfig(): ReactEdgeRuntimeConfig {
-    const configScript = document.getElementById('reactedge-runtime');
-
-    if (!configScript) {
-        throw new Error(`${WIDGET_ID} widget requires a <script id='reactedge-runtime'> block.`);
-    }
-
-    let config: ReactEdgeRuntimeConfig;
-    try {
-        config = JSON.parse(configScript.textContent);
-    } catch {
-        throw new Error(`${WIDGET_ID}: reactedge-runtime contains invalid JSON`);
-    }
-
-    if (!config.integrations?.googleMaps?.apiKey) {
-        throw new Error(`${WIDGET_ID}: googleMaps missing in reactedge-runtime`);
-    }
-
-    return config;
 }

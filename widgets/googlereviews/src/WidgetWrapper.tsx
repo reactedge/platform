@@ -1,13 +1,12 @@
-import {type RawWidgetConfig, readWidgetConfig} from "./Config.ts";
+import {readWidgetConfig} from "./Config.ts";
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
 import {SystemStateProvider} from "./state/System/SystemStateProvider.tsx";
 import {GoogleReviews} from "./components/GoogleReviews.tsx";
 import {TranslationStateProvider} from "./state/Translation/TranslationStateProvider.tsx";
-import type {ReactEdgeRuntimeConfig} from "./domain/googlereviews.types.ts";
 
 type Props = {
-    rawConfig: RawWidgetConfig;
-    runtimeConfig: ReactEdgeRuntimeConfig;
+    rawConfig: unknown;
+    runtimeConfig: unknown;
 };
 
 export const WidgetWrapper = ({ rawConfig, runtimeConfig}: Props) => {

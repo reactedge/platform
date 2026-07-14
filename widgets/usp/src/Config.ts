@@ -15,7 +15,9 @@ export interface WidgetConfig {
 }
 
 export interface RuntimeConfig {
-    userAgent: string;
+    rendering: {
+        userAgent: string;
+    }
 }
 
 export interface RawWidgetConfig {
@@ -28,6 +30,21 @@ export interface RawWidgetConfig {
 
 export const WIDGET_ID = 'usp';
 
+/**
+ * Validates the widget contract and returns an immutable configuration.
+ *
+ * The contract is treated as untrusted input and is validated before
+ * being exposed to the React application.
+ *
+ * This function represents the trust boundary between the ReactEdge
+ * runtime and the widget implementation for widgets that do not require
+ * runtime integrations.
+ *
+ * @param rawConfig - Widget contract supplied by the host platform.
+ * @param activity - Optional activity logger used during bootstrap.
+ * @returns An immutable widget configuration.
+ * @throws When the widget contract is invalid.
+ */
 export function readWidgetConfig(
     rawConfig: unknown,
     activity?: WidgetActivity

@@ -1,19 +1,37 @@
-import type {
-    ReactEdgeRuntimeConfig, WidgetConfig
-} from "./domain/contact.types.ts";
+import type {WidgetConfig} from "./domain/contact.types.ts";
 import type {WidgetActivity} from "./activity";
-import type {RawWidgetConfig} from "./domain/raw.contact.types.ts";
 import {normalizeOptionalFields, parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
+import {parseRuntimeConfig, type SchemaRuntimeConfig} from "./ConfigSchemaRuntime.ts";
 
 export const WIDGET_ID = 'contactus';
 
+/**
+ * Validates and resolves the Contact Us widget configuration.
+ *
+ * Both the widget contract and the runtime configuration are treated
+ * as untrusted input. Once validated, the configuration is normalized,
+ * resolved and frozen before being exposed to the React application.
+ *
+ * This function represents the trust boundary between the ReactEdge
+ * runtime and the widget implementation.
+ *
+ * The resolved configuration includes the Cloudflare integration
+ * required to render the captcha.
+ *
+ * @param rawConfig - Widget contract supplied by the host platform.
+ * @param runtimeConfig - Runtime services supplied by the orchestrator.
+ * @param activity - Activity logger for bootstrap events.
+ * @returns An immutable Contact Us configuration.
+ * @throws When either configuration is invalid.
+ */
 export function readWidgetConfig(
-    rawConfig: RawWidgetConfig,
-    runtimeConfig: ReactEdgeRuntimeConfig,
+    rawConfig: unknown,
+    runtimeConfig: unknown,
     activity: WidgetActivity
 ): WidgetConfig {
     const contract = parseConfig(rawConfig);
-    const resolved = resolveConfig(contract, runtimeConfig);
+    const runtime = parseRuntimeConfig(runtimeConfig)
+    const resolved = resolveConfig(contract, runtime);
 
     activity.log('bootstrap', 'Config resolved', resolved);
 
@@ -22,16 +40,8 @@ export function readWidgetConfig(
 
 export function resolveConfig(
     widget: SchemaWidgetConfig,
-    runtime: ReactEdgeRuntimeConfig
+    runtime: SchemaRuntimeConfig
 ): WidgetConfig {
-
-    if (
-        widget.integration?.requires?.includes('cloudflare') &&
-        !runtime.integrations?.cloudflare?.siteKey
-    ) {
-        throw new Error(`[${WIDGET_ID}] googleMaps integration required but not configured`);
-    }
-
     return {
         ...widget,
         endpoint: widget.data.endpoint,

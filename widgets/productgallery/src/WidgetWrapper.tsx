@@ -1,14 +1,13 @@
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
 import {readWidgetConfig} from "./Config.ts";
 import {ProductGalleryWidget} from "./components/ProductGalleryWidget.tsx";
-import type {ReactEdgeRuntimeConfig} from "./components/Types.ts";
 import {useEffect, useState} from "react";
 import {SystemStateProvider} from "./state/System/SystemStateProvider.tsx";
 import {SpinnerOverlay} from "./components/global/SpinnerOverlay.tsx";
 
 type Props = {
     rawConfig: unknown,
-    runtimeConfig: ReactEdgeRuntimeConfig;
+    runtimeConfig: unknown;
 }
 
 export default function WidgetWrapper({rawConfig, runtimeConfig}: Props) {

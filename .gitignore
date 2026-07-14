@@ -79,3 +79,4 @@ venv/
 .pytest_cache/
 
 **/public/reactedge-runtime.json
+services/cdn/www/

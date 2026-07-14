@@ -1,12 +1,11 @@
-import {type RawWidgetConfig, readWidgetConfig} from "./Config.ts";
+import {readWidgetConfig} from "./Config.ts";
 import {useActivityContext} from "./activity/Context/useActivityContext.ts";
 import {TranslationStateProvider} from "./state/Translation/TranslationStateProvider.tsx";
 import {StoreFinder} from "./components/StoreListing.tsx";
-import type {ReactEdgeRuntimeConfig} from "./domain/store.types.ts";
 
 type Props = {
-    rawConfig: RawWidgetConfig;
-    runtimeConfig: ReactEdgeRuntimeConfig
+    rawConfig: unknown;
+    runtimeConfig: unknown
     onStable?: () => void;
 };
 

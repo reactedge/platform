@@ -18,13 +18,13 @@ export async function buildBootstrap(runtimeConfig: ReactEdgeRuntimeConfig) {
 
     const graphqlClient = createGraphqlService(
         graphqlApi as string,
-        runtimeConfig.storeCode
+        runtimeConfig.context.storeCode
     );
 
     const galleryData =
         await fetchMagentoGalleryData(
             graphqlClient,
-            runtimeConfig.sku
+            runtimeConfig.context.sku
         );
 
     return {
