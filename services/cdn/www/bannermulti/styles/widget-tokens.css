@@ -1,8 +1,0 @@
-/* widget-tokens.css */
-
-/* New shared tokens (canonical) */
-bannermulti-widget :host {
-    --widget-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
-
-}

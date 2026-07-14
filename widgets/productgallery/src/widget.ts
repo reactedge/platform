@@ -1,16 +1,23 @@
-import {mountWidget} from "./mountWidget.tsx";
-import {WIDGET_ID} from "./Config.ts";
+import { mountWidget } from "./mountWidget.tsx";
+import { WIDGET_ID } from "./Config.ts";
 
-import "./styles/widget.css"
-import type {ReactEdgeRuntimeConfig} from "./components/Types.ts";
+import type { WidgetApi } from "../../../packages/widget-build/shared-resources/public-api/widget";
 
-const mount = async (el: HTMLElement, config: unknown,  runtimeConfig: ReactEdgeRuntimeConfig) => {
-    await mountWidget(el, config, runtimeConfig)
-}
+import "./styles/widget.css";
 
-const api = { mount };
+const mount = async (
+    el: HTMLElement,
+    rawConfig: unknown,
+    runtime: unknown
+) => {
+    await mountWidget(el, rawConfig, runtime);
+};
 
-if (typeof window !== 'undefined') {
+const api: WidgetApi = {
+    mount,
+};
+
+if (typeof window !== "undefined") {
     (window as any)[`ReactEdge_${WIDGET_ID}`] = api;
 }
 

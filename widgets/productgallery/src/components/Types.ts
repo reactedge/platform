@@ -18,8 +18,7 @@ export interface RuntimeConfig {
 
 export interface ReactEdgeRuntimeConfig {
     readonly integrations: ReactEdgeRuntimeIntegrations;
-    readonly storeCode: string;
-    readonly sku: string;
+    readonly context: RuntimeConfig
 }
 
 export interface ReactEdgeRuntimeIntegrations {

@@ -1,0 +1,15 @@
+{
+  "runtime": {
+    "currency": "GBP",
+    "locale": "en-GB"
+  },
+  "data": {
+    "summary_count": 0,
+    "items": []
+  },
+  "translations": {},
+  "settings": {
+    "primaryColor": "#1979c3",
+    "secondaryColour": "#ff5501"
+  }
+}

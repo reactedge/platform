@@ -1,18 +1,39 @@
-import {type ReactEdgeRuntimeConfig, type WidgetConfig} from "./components/Types.ts";
+import {type WidgetConfig} from "./components/Types.ts";
 import type {WidgetActivity} from "./activity";
 import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
+import {parseRuntimeConfig, type SchemaRuntimeConfig} from "./ConfigSchemaRuntime.ts";
 
 export const WIDGET_ID = 'productgallery';
 
+/**
+ * Validates and resolves the Contact Us widget configuration.
+ *
+ * Both the widget contract and the runtime configuration are treated
+ * as untrusted input. Once validated, the configuration is normalized,
+ * resolved and frozen before being exposed to the React application.
+ *
+ * This function represents the trust boundary between the ReactEdge
+ * runtime and the widget implementation.
+ *
+ * The resolved configuration includes the Cloudflare integration
+ * required to render the captcha.
+ *
+ * @param rawConfig - Widget contract supplied by the host platform.
+ * @param runtimeConfig - Runtime services supplied by the orchestrator.
+ * @param activity - Activity logger for bootstrap events.
+ * @returns An immutable Contact Us configuration.
+ * @throws When either configuration is invalid.
+ */
 export function readWidgetConfig(
     rawConfig: unknown,
-    runtimeConfig: ReactEdgeRuntimeConfig,
+    runtimeConfig: unknown,
     activity?: WidgetActivity
 ): WidgetConfig {
     try {
         const contract = parseConfig(rawConfig);
+        const runtime = parseRuntimeConfig(runtimeConfig)
 
-        const resolved = resolveConfig(contract, runtimeConfig);
+        const resolved = resolveConfig(contract, runtime);
 
         activity?.log(
             'bootstrap',
@@ -36,21 +57,13 @@ export function readWidgetConfig(
 
 export function resolveConfig(
     widget: SchemaWidgetConfig,
-    runtime: ReactEdgeRuntimeConfig
+    runtime: SchemaRuntimeConfig
 ): WidgetConfig {
-
-    if (
-        widget.integration?.requires?.includes('magentoGraphql') &&
-        !runtime.integrations?.magentoGraphql?.api
-    ) {
-        throw new Error(`[${WIDGET_ID}] magentoGraphql integration required but not configured`);
-    }
-
     return {
         tiles: widget.data.images,
         runtime: {
-            storeCode: runtime.storeCode,
-            sku: runtime.sku
+            storeCode: runtime.context.storeCode,
+            sku: runtime.context.sku
         },
         integrations: {
             magentoGraphql: runtime.integrations?.magentoGraphql

@@ -97,9 +97,11 @@ for dir in "$ROOT"/widgets/*; do
       "baseUrl": "$INTENT_API_BASE_URL"
     }
   },
-  "storeCode": "$STORE_CODE",
-  "category": "$CATEGORY",
-  "sku": "$SKU"
+  "context": {
+    "storeCode": "$STORE_CODE",
+    "category": "$CATEGORY",
+    "sku": "$SKU"
+  }
 }
 EOF
     fi

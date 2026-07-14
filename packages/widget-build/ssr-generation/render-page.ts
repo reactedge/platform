@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
 import 'dotenv/config';
-import { buildBootstrap } from "../../../widgets/productgallery/src/ssr/bootstrap";
 
 function resolveEntry(widget: string): string {
     return `${process.env.WIDGETS_ROOT}/${widget}/src/ssr/entry.tsx`;
@@ -23,7 +22,9 @@ const run = async () => {
     );
 
     let runtime = {
-        userAgent: process.argv[4] ?? ''
+        rendering: {
+            userAgent: process.argv[4] ?? ''
+        }
     };
 
     const entry = resolveEntry(widgetName);

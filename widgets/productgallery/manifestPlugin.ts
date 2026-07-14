@@ -42,6 +42,7 @@ export function manifestPlugin({ widgetName }: Options): Plugin {
                 .replace(/=+$/, '')
 
             const newFileName = `widget-${widgetName}@${hash}.iife.js`
+            const cssFilename = `widget-${widgetName}.css`
 
             bundle[newFileName] = {
                 ...chunk,
@@ -53,6 +54,7 @@ export function manifestPlugin({ widgetName }: Options): Plugin {
                 widget: widgetName,
                 version,
                 hash,
+                cssFilename,
                 filename: newFileName,
                 built_at: new Date().toISOString()
             }
