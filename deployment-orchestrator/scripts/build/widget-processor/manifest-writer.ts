@@ -6,6 +6,7 @@ import {ReportScope} from "../report.ts";
 import fs from 'fs';
 import path from 'path';
 import {getConfig} from "../../config.ts";
+import {getWidgetGeneratedPath} from "../paths.ts";
 
 export function writeManifest(
     manifest: WidgetManifest,
@@ -21,12 +22,7 @@ export function writeManifest(
         }
     );
 
-    const filePath = path.join(
-        CONFIG.assetTargetDir,
-        CONFIG.assetStoreDir,
-        'contracts',
-        `${name}.json`
-    );
+    const filePath = getWidgetGeneratedPath(`${name}.json`);
 
     fs.writeFileSync(
         filePath,

@@ -14,19 +14,12 @@ export function loadConfig(
     });
 
     CONFIG = {
-        assetTargetDir: process.env.TARGET_ASSET_DIR!,
-        assetStoreDir: process.env.STORE_ASSET_PATH!,
-        hostAssetsDir: process.env.HOST_MEDIA_DIR!,
-        optimisedAssetsDir: process.env.OPTIMISED_ASSET_DIR!,
-        optimisedAssetsRelativePath: process.env.REACTEDGE_MEDIA_PREFIX,
-        cdnUrl: process.env.WP_CDN_URL!,
-        projectRoot: process.env.REACTEDGE_ROOT!,
-        targetSite: process.env.TARGET_SITE!,
+        storeCode: process.env.STORE_CODE!,
+        reactedgeBaseUrl: process.env.REACTEDGE_BASEURL!,
+        targetSiteUrl: process.env.TARGET_SITEURL!,
         allowedHosts: process.env.ALLOWED_HOSTS!
             .split(',')
             .map(host => host.trim()),
-        otelHost: process.env.OTEL_HOST??  'http://localhost:4318/v1/traces',
-        otelServiceName: 'reactedge-build',
         updateIntegrity: process.env.UPDATE_INTEGRITY
             ? process.env.UPDATE_INTEGRITY === 'true'
             : false

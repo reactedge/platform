@@ -9,6 +9,7 @@ import {exec} from "node:child_process";
 import {resolveContractTags} from "../contract-loader/wrapper.ts";
 import type {SsrVariant} from "../types.ts";
 import {getConfig} from "../../config.ts";
+import {getReactEdgeRoot} from "../../../../packages/widget-build/shared-resources/filesystem/reactedgeRoot.ts";
 
 export async function generateSsr(
     widgetName: string,
@@ -22,7 +23,7 @@ export async function generateSsr(
     const contractPath = getContractPath(widgetName, contractFile)
 debugger
     const rendererPath = path.join(
-        config.projectRoot,
+        getReactEdgeRoot(),
         'packages',
         'widget-build',
         'ssr-generation',
@@ -45,14 +46,17 @@ debugger
     return new Promise(
         (resolve, reject) => {
             exec(
-                `NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx ${rendererPath} ${widgetName} "${contractPath}" ${variant}`,
+                `NODE_TLS_REJECT_UNAUTHORIZED=0 npx tsx --tsconfig "widgets/${widgetName}/tsconfig.app.json" ${rendererPath} ${widgetName} "${contractPath}" ${variant}`,
                 {
-                    cwd: config.projectRoot,
+                    cwd: getReactEdgeRoot(),
                     encoding: 'utf8'
                 },
                 (error, stdout) => {
 
                     if (error ||  stdout.length === 0) {
+                        console.log('SSR Generation error', {
+                            error
+                        })
                         reject(error);
                         return;
                     }

@@ -5,10 +5,10 @@
 import type { WidgetRegistry } from '../types.ts';
 import fs from "fs";
 import {RegistrySchema} from "./schema.ts";
-import {getManifestPath} from "../paths.ts";
+import {getRegistryPath} from "../paths.ts";
 
 export function loadRegistry(): WidgetRegistry {
-    const registryPath = getManifestPath();
+    const registryPath = getRegistryPath();
 
     const rawRegistry = JSON.parse(
         fs.readFileSync(registryPath, 'utf-8')

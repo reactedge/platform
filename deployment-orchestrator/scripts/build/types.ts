@@ -77,17 +77,10 @@ export interface WidgetManifest {
 }
 
 export interface Config {
-    assetTargetDir: string;
-    assetStoreDir: string;
-    hostAssetsDir: string;
-    optimisedAssetsDir: string,
-    optimisedAssetsRelativePath: string;
-    cdnUrl: string;
-    projectRoot: string;
-    targetSite: string,
+    storeCode: string;
+    reactedgeBaseUrl: string;
+    targetSiteUrl: string,
     allowedHosts: string[],
-    otelHost: string,
-    otelServiceName: string,
     updateIntegrity: boolean
 }
 

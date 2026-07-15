@@ -5,27 +5,15 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {getConfig} from "../config.ts";
+import {getReactEdgeRoot} from "../../../packages/widget-build/shared-resources/filesystem/reactedgeRoot.ts";
 
 const __filename = fileURLToPath(import.meta.url);
-
-export function getRoot(): string {
-    const CONFIG = getConfig()
-    const root = CONFIG.projectRoot;
-
-    if (!root) {
-        throw new Error(
-            'Missing REACTEDGE_ROOT environment variable'
-        );
-    }
-
-    return root;
-}
 
 export function getWidgetPath(
     widgetName: string
 ): string {
     return path.join(
-        getRoot(),
+        getReactEdgeRoot(),
         'widgets',
         widgetName
     );
@@ -35,12 +23,24 @@ export function getWidgetAssetsPath(
     widgetName: string
 ): string {
     return path.join(
-        getRoot(),
-        'services',
-        'cdn',
-        'www',
-        widgetName,
-        'src'
+        getReactEdgeRoot(),
+        'workspace',
+        'release',
+        'source',
+        widgetName
+    );
+}
+
+export function getWidgetGeneratedPath(
+    widgetName: string
+): string {
+    const CONFIG = getConfig()
+    return path.join(
+        getReactEdgeRoot(),
+        'workspace',
+        CONFIG.storeCode,
+        'generated',
+        widgetName
     );
 }
 
@@ -50,17 +50,19 @@ export function getContractPath(
 ): string {
     const CONFIG = getConfig()
     return path.join(
-        CONFIG.assetTargetDir,
-        'raw_contracts',
+        getReactEdgeRoot(),
+        'workspace',
+        CONFIG.storeCode,
+        'contracts',
         widgetName,
         contractFile
     );
 }
 
-export function getManifestPath(): string {
-    const CONFIG = getConfig()
+export function getRegistryPath(): string {
     return path.join(
-        CONFIG.assetTargetDir,
+        getReactEdgeRoot(),
+        'workspace',
         'registry.json'
     );
 }

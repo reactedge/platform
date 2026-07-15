@@ -35,7 +35,7 @@ export class ImageOptimiser {
 
         const outputPath = path.join(
             config.assetTargetDir,
-            config.assetStoreDir,
+            config.storeCode,
             'assets',
             relativePath
         );
@@ -83,6 +83,6 @@ export class ImageOptimiser {
 
         const config = getConfig();
 
-        return `${config.targetSite}/media/${config.optimisedAssetsRelativePath}${relativePath}`;
+        return `${config.targetSiteUrl}/media/${config.optimisedAssetsRelativePath}${relativePath}`;
     }
 }

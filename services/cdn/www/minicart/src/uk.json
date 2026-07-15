@@ -1,0 +1,52 @@
+{
+  "runtime": {
+    "currency": "GBP",
+    "locale": "en-GB"
+  },
+  "data": {
+    "summary_count": 3,
+    "items": [
+      {
+        "item_id": 101,
+        "sku": "MH12-GREEN",
+        "name": "Ajax Full-Zip Sweatshirt",
+        "qty": 1,
+        "price": 29.99,
+        "thumbnail": {
+          "src": "https://mageos-docker.magsite.co.uk/media/catalog/product/cache/033f609347571ebd72d8644cf9057fec/w/j/wj06-purple_main_1.jpg",
+          "alt": "text alt",
+          "width": 140,
+          "height": 140
+        },
+        "options": [
+          {
+            "label": "Size",
+            "value": "S"
+          },
+          {
+            "label": "Color",
+            "value": "Green"
+          }
+        ]
+      },
+      {
+        "item_id": 102,
+        "sku": "JKT-RED",
+        "name": "Warm Winter Jacket",
+        "qty": 2,
+        "price": 89.50,
+        "thumbnail": {
+          "src": "https://mageos-docker.magsite.co.uk/media/catalog/product/cache/033f609347571ebd72d8644cf9057fec/m/s/ms07-green_main_1.jpg",
+          "alt": "text alt",
+          "width": 140,
+          "height": 140
+        }
+      }
+    ]
+  },
+  "translations": {},
+  "settings": {
+    "primaryColor": "#1979c3",
+    "secondaryColour": "#ff5501"
+  }
+}

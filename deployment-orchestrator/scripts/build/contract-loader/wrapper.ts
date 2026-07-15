@@ -49,11 +49,11 @@ export function resolveContractTags<T>(
         return value
             .replaceAll(
                 '{{TARGET_URL}}',
-                getConfig().targetSite
+                getConfig().targetSiteUrl
             )
             .replaceAll(
                 '{{WP_CDN_URL}}',
-                getConfig().cdnUrl
+                getConfig().reactedgeBaseUrl
             ) as T;
     }
 
