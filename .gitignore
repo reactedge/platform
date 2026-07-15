@@ -41,6 +41,7 @@ logs/
 # Runtime
 tmp/
 .temp/
+temp
 
 # SSL certificates
 *.pem
@@ -79,4 +80,4 @@ venv/
 .pytest_cache/
 
 **/public/reactedge-runtime.json
-services/cdn/www/
+workspace/*

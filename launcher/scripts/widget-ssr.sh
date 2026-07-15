@@ -15,4 +15,4 @@ npx tsx \
     --tsconfig "widgets/$WIDGET/tsconfig.app.json" \
     packages/widget-build/ssr-generation/render-page.ts \
     "$WIDGET" \
-    "./widgets/$WIDGET/public/cdn/default.json"
+    "./widgets/$WIDGET/public/default.json"

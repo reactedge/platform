@@ -1,0 +1,20 @@
+{
+  "runtime": {
+    "currency": "EUR",
+    "locale": "fr-FR"
+  },
+  "data": {},
+  "translations": {
+    "Cart": "Cart",
+    "Your Cart": "Votre Panier",
+    "Subtotal": "Sous Total",
+    "Checkout": "Payment",
+    "1 item in cart": "1 article dans votre panier",
+    "%1 items in cart": "%1 articles dans votre panier",
+    "Qty": "Qte",
+    "Proceed to Checkout": "A la caisse"
+  },
+  "settings": {
+    "primaryColor": "#1979c3"
+  }
+}

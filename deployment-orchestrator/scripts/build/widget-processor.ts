@@ -12,7 +12,7 @@ import { generateSsr } from "./widget-processor/ssr-generator.ts";
 import { writeManifest } from "./widget-processor/manifest-writer.ts";
 import { getWidgetPath } from "./paths.ts";
 import { getFilename } from "./util.ts";
-import {ContractImageProcessor} from "./contract-loader/optimiser/validate-images.ts";
+import { ContractImageProcessor } from "./contract-loader/optimiser/validate-images.ts";
 
 export async function processWidget(
     instanceName: string,
@@ -50,6 +50,7 @@ export async function processWidget(
 
         const registryResult = updateAssetRegistry(widgetName, instanceName, widgetReport);
         let contractResult = await loadContract(widgetName, registryResult.cdn, widgetReport);
+
         if (contractResult === null) {
 
             widgetReport.error(

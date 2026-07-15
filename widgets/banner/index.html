@@ -6,14 +6,14 @@
     import { mount } from './src/widget.ts';
     import {loadContract} from "./src/lib/contract-resolver.js";
     const config = await loadContract('single.json')
-    const element = document.querySelector('bannermulti-widget');
+    const element = document.querySelector('banner-widget');
 
     await requestAnimationFrame(() => {
         mount(element, config);
     })
 </script>
 
-<bannermulti-widget></bannermulti-widget>
+<banner-widget></banner-widget>
 
 </body>
 </html>

@@ -4,7 +4,7 @@
 
 import {ReportScope} from "../report.ts";
 import {updateRegistry} from "../asset-registry/registry-updater.ts";
-import {getManifestPath, getWidgetAssetsPath} from "../paths.ts";
+import {getRegistryPath, getWidgetAssetsPath} from "../paths.ts";
 import type {AssetRegistryResult} from "../types.ts";
 
 export function updateAssetRegistry(
@@ -21,7 +21,7 @@ export function updateAssetRegistry(
         }
     );
 
-    const registryPath = getManifestPath();
+    const registryPath = getRegistryPath();
     const widgetAssetsDir = getWidgetAssetsPath(widgetName);
 
     const result = updateRegistry({
