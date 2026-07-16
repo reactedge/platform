@@ -31,7 +31,7 @@ export function getWidgetAssetsPath(
     );
 }
 
-export function getWidgetGeneratedPath(
+export function getWidgetManifestsPath(
     widgetName: string
 ): string {
     const CONFIG = getConfig()
@@ -39,7 +39,7 @@ export function getWidgetGeneratedPath(
         getReactEdgeRoot(),
         'workspace',
         CONFIG.storeCode,
-        'generated',
+        'manifests',
         widgetName
     );
 }

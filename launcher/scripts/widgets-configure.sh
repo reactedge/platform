@@ -65,6 +65,21 @@ prompt \
     "default"
 
 prompt \
+    "SSR service port" \
+    SSR_PORT \
+    "4000"
+
+prompt \
+    "Target site URL" \
+    TARGET_SITEURL \
+    "https://mageos-docker.magsite.co.uk"
+
+prompt \
+    "Allowed hosts" \
+    ALLOWED_HOSTS \
+    "localhost,127.0.0.1,mageos-docker.magsite.co.uk"
+
+prompt \
     "Category" \
     CATEGORY \
     "tops-men"
@@ -110,3 +125,15 @@ done
 echo
 echo "✅ Runtime configuration generated."
 echo "✅ Configuration written to $CONFIG"
+
+source .env
+
+cat > "$ROOT/services/ssr/.env" <<EOF
+SSR_PORT=$SSR_PORT
+EOF
+
+cat > "$ROOT/deployment-orchestrator/.env.dev" <<EOF
+STORE_CODE=$STORE_CODE
+TARGET_SITEURL=$TARGET_SITEURL
+ALLOWED_HOSTS=$ALLOWED_HOSTS
+EOF

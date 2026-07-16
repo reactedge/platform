@@ -10,12 +10,13 @@ import { SsrRenderOperation } from "./observability/ssr-operation";
 import { LockOperation } from "./observability/lock-operation";
 import { resolveDevice } from "./user-agent";
 import { withRenderLock } from "./lock";
+import {getReactEdgeRoot} from "../../../packages/widget-build/shared-resources/filesystem/reactedgeRoot";
 
 const app = express();
 app.use(express.json());
 
 function resolveEntry(widget: string): string {
-    return `${process.env.SSR_WIDGET_ROOT}/${widget}/src/ssr/entry.tsx`;
+    return `${getReactEdgeRoot()}/widgets/${widget}/src/ssr/entry.tsx`;
 }
 
 app.post('/render', async (req, res) => {
@@ -73,6 +74,4 @@ app.post('/render', async (req, res) => {
 
 app.listen(process.env.SSR_PORT, '0.0.0.0', () => {
     console.log(`Widgets SSR runtime listening on :${process.env.SSR_PORT}`);
-    console.log('Widgets SSR WIDGETS_CONTRACT_PATH', process.env.WIDGETS_CONTRACT_PATH);
-    console.log('Widgets ROOT SSR_WIDGET_ROOT', process.env.SSR_WIDGET_ROOT);
 });

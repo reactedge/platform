@@ -50,10 +50,6 @@ export function resolveContractTags<T>(
             .replaceAll(
                 '{{TARGET_URL}}',
                 getConfig().targetSiteUrl
-            )
-            .replaceAll(
-                '{{WP_CDN_URL}}',
-                getConfig().reactedgeBaseUrl
             ) as T;
     }
 

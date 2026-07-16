@@ -1,6 +1,4 @@
 import {buildRuntimeConfig, stripMeta} from "./util.ts";
-import {registerInstance, startObservability} from "./observability";
-//import {context} from "@opentelemetry/api";
 
 let registryCache: any = null;
 
@@ -114,6 +112,7 @@ export async function mountWidget(el: HTMLElement) {
         } else {
             mod.mount(el, null, runtimeConfig);
         }
+        }
     }
 }
 
@@ -127,12 +126,6 @@ export function scheduleWidgets() {
     widgets.forEach(el => {
         const name = getWidgetType(el)
         if (!name) return;
-
-        const instance = el.dataset.instance;
-        registerInstance(el, {
-            widget: name,
-            instance: instance ?? name
-        });
 
         const mode = el.dataset.load || 'lazy';
 
@@ -214,7 +207,6 @@ function scheduleOnScroll(el: HTMLElement, mode: string) {
 }
 
 export function boot() {
-    startObservability();
     scheduleWidgets();
 }
 

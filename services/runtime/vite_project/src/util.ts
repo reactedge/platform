@@ -1,18 +1,5 @@
-export interface ReactEdgeRuntimeIntegrations {
-    readonly magentoGraphql: {
-        readonly api: string;
-    };
-    readonly intentApi?: {
-        readonly baseUrl: string;
-    };
-}
+import type {ReactEdgeRuntimeConfig} from "../../../../packages/widget-build/shared-resources/public-api/runtime.ts";
 
-interface ReactEdgeRuntimeConfig {
-    readonly integrations: ReactEdgeRuntimeIntegrations;
-    category: string;
-    storeCode: string;
-    sku: string
-}
 
 export function buildRuntimeConfig(): ReactEdgeRuntimeConfig | undefined {
     const configScript = document.getElementById('reactedge-runtime');
