@@ -78,7 +78,6 @@ export interface WidgetManifest {
 
 export interface Config {
     storeCode: string;
-    reactedgeBaseUrl: string;
     targetSiteUrl: string,
     allowedHosts: string[],
     updateIntegrity: boolean

@@ -11,5 +11,15 @@ echo "🚀 Building deployment orchestrator"
     npm run build
 )
 
-echo
+source .env
+
+REACTEDGE_WORKSPACE="$(dirname "$TARGET_ROOT")/reactedge"
+
+mkdir -p "$REACTEDGE_WORKSPACE"
+
+rsync -av --delete \
+    ./workspace/ \
+    "$REACTEDGE_WORKSPACE/"
+
+echo "files copied to $REACTEDGE_WORKSPACE"
 echo "✅ Deployment orchestrator built successfully"

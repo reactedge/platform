@@ -6,15 +6,13 @@ import {ReportScope} from "../report.ts";
 import fs from 'fs';
 import path from 'path';
 import {getConfig} from "../../config.ts";
-import {getWidgetGeneratedPath} from "../paths.ts";
+import {getWidgetManifestsPath} from "../paths.ts";
 
 export function writeManifest(
     manifest: WidgetManifest,
     name: string,
     report: ReportScope
 ): string {
-    const CONFIG = getConfig()
-
     report.info(
         'Writing widget manifest',
         {
@@ -22,7 +20,7 @@ export function writeManifest(
         }
     );
 
-    const filePath = getWidgetGeneratedPath(`${name}.json`);
+    const filePath = getWidgetManifestsPath(`${name}.json`);
 
     fs.writeFileSync(
         filePath,

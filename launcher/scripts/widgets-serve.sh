@@ -6,4 +6,13 @@ ROOT="$(git rev-parse --show-toplevel)"
 
 cd "$ROOT"
 
-npx serve workspace/release/source --listen 3000
+# launcher/scripts/widgets-deploy.sh
+
+source .env
+
+(
+    cd services/ssr
+
+    npm install
+    npm run start
+)

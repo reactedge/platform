@@ -4,7 +4,6 @@ import {getConfig} from "../../config.ts";
 
 export function updateRegistry({ widgetName, buildTarget, registryPath, widgetAssetsDir }) {
     const CONFIG = getConfig()
-    const cdnUrl = CONFIG.reactedgeBaseUrl
     let cssBundle= null
 
     const manifestPath = path.join(widgetAssetsDir, `widget-${buildTarget}.manifest.json`);
@@ -27,19 +26,19 @@ export function updateRegistry({ widgetName, buildTarget, registryPath, widgetAs
     // ✅ backward-compatible base resolution
     const baseEntry = registry[buildTarget];
 
-    const newSrc = `${cdnUrl}/${buildTarget}/${filename}`;
+    const newSrc = filename;
 
     entry.src = newSrc;
 
     if (baseEntry.css) {
-        cssBundle = `${cdnUrl}/${buildTarget}/widget-${buildTarget}.css`;
+        cssBundle = `widget-${buildTarget}.css`;
     }
 
     if (CONFIG.updateIntegrity && hash) {
         entry.integrity = hash;
     }
 
-    const cdn = `${cdnUrl}/${buildTarget}/contracts/${entry.cdn}`;
+    const cdn = `/${buildTarget}/contracts/${entry.cdn}`;
 
     return { src: newSrc, hash, cdn, cssBundle, cssFilename, integrity: entry.integrity };
 }

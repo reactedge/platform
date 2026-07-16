@@ -15,7 +15,6 @@ export function loadConfig(
 
     CONFIG = {
         storeCode: process.env.STORE_CODE!,
-        reactedgeBaseUrl: process.env.REACTEDGE_BASEURL!,
         targetSiteUrl: process.env.TARGET_SITEURL!,
         allowedHosts: process.env.ALLOWED_HOSTS!
             .split(',')

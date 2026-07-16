@@ -1,0 +1,25 @@
+.mw-megamenu-col {
+    min-width: 180px;
+    z-index: 1000;
+}
+
+.mw-megamenu-col__title {
+    font-family: var(--nav-font-family);
+    font-size: var(--nav-font-size);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--nav-margin-bottom);
+    color: var(--nav-color);
+    padding-left: 10px;
+}
+
+.mw-megamenu-col__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.mw-megamenu-col__item {
+    /* layout responsibility lives here */
+    line-height: 1.5rem;
+}

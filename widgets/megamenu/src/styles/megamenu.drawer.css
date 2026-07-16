@@ -1,0 +1,50 @@
+.drawer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 80%;
+    background: white;
+    transition: transform 0.3s ease;
+    z-index: 9999;
+}
+
+.drawer--right {
+    right: 0;
+    transform: translateX(100%);
+}
+
+.drawer--right.is-open {
+    transform: translateX(0);
+}
+
+.drawer {
+    left: 0;
+    transform: translateX(-100%);
+}
+
+.drawer.is-open {
+    transform: translateX(0);
+}
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.drawer-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+}

@@ -1,5 +1,12 @@
+.mw-parent-item,
 .mw-parent-link {
     text-decoration: none;
+    color: var(--nav-color);
+}
+
+.mw-parent-item {
+    position: relative;
+    cursor: pointer;
     color: var(--nav-color);
 }
 
@@ -11,6 +18,16 @@
     font-size: var(--nav-font-size);
     border-bottom: 2px solid transparent;
     white-space: nowrap;
+}
+
+.mw-parent-label.is-active {
+    border-bottom: var(--parent-border-active);
+    border-bottom: 2px solid var(--cta-bg-hover);
+}
+
+.mw-parent-label.is-breadcrumb {
+    border-bottom: var(--parent-border-breadcrumb);
+    border-bottom: 2px solid var(--cta-bg-hover);
 }
 
 .mw-parent-arrow {
