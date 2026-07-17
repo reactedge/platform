@@ -141,10 +141,6 @@ set -a
 source "$CONFIG"
 set +a
 
-cat > "$ROOT/services/ssr/.env" <<EOF
-SSR_PORT=$SSR_PORT
-EOF
-
 cat > "$ROOT/deployment-orchestrator/.env.dev" <<EOF
 STORE_CODE=$STORE_CODE
 TARGET_SITEURL=$TARGET_SITEURL

@@ -3,7 +3,7 @@
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/reactedge/ready ReactEdge
+git clone https://github.com/digitalrisedorset/ready ReactEdge
 cd ReactEdge
 ```
 
@@ -58,6 +58,9 @@ mise run platform-install
 
 ## 5. Configure ReactEdge
 
+cp .env.sample .env
+cp -R workspace.sample workspace
+
 Generate the local configuration:
 
 ```bash
@@ -67,7 +70,6 @@ mise run configure
 The configuration wizard will create:
 
 - `.env`
-- `services/ssr/.env`
 - `deployment-orchestrator/.env.dev`
 - `widgets/*/public/reactedge-runtime.json`
 
@@ -193,3 +195,4 @@ Build and publish the widgets:
 ```bash
 mise run widgets-deploy
 ```
+

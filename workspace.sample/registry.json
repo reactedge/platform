@@ -1,0 +1,55 @@
+{
+  "banner": {
+    "active": true,
+    "cdn": "mageosuk.json",
+    "css": "banner.css",
+    "ssr": {
+      "strategy": "static"
+    },
+    "imageOptimisation": {
+      "scanFormats": [
+        "jpeg",
+        "jpg",
+        "png",
+        "gif"
+      ],
+      "outputFormat": "webp",
+      "quality": 80
+    }
+  },
+  "usp": {
+    "active": true,
+    "cdn": "reactedge.json",
+    "css": "usp.css",
+    "ssr": {
+      "strategy": "static",
+      "variants": [
+        "desktop",
+        "mobile"
+      ]
+    }
+  },
+  "storefinder": {
+    "active": true,
+    "cdn": "uk.json",
+    "ssr": {
+      "strategy": "disabled"
+    }
+  },
+  "productgallery": {
+    "active": true,
+    "cdn": "mageosuk.json",
+    "css": "productgallery.css",
+    "ssr": {
+      "strategy": "dynamic"
+    }
+  },
+  "megamenu": {
+    "active": true,
+    "cdn": "default.json",
+    "css": "megamenu.css",
+    "ssr": {
+      "strategy": "dynamic"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "data": {
+    "slides": [
+      {
+        "image": {
+          "src": "https://reactedge.net/wp-content/themes/digitalrisedorset/images/banner/hero-orange.webp",
+          "srcset": "https://reactedge.net/wp-content/themes/digitalrisedorset/images/banner/hero-orange.webp 479w, https://reactedge.net/wp-content/themes/digitalrisedorset/images/banner/hero-orange-365.webp 359w",
+          "alt": "Vitalising your system without rebuilding"
+        }
+      },
+      {
+        "image": {
+          "src": "https://reactedge.net/wp-content/themes/digitalrisedorset/images/banner/dev-talk.webp",
+          "srcset": "https://reactedge.net/wp-content/themes/digitalrisedorset/images/banner/dev-talk.webp 479w, https://reactedge.net/wp-content/themes/digitalrisedorset/images/banner/dev-talk-365.webp 359w",
+          "alt": "Successful Dev Talk in Dorset with dev.talk bournemouth group"
+        }
+      }
+    ],
+    "settings": {
+      "mode": {
+        "desktop": "static",
+        "tablet": "slider",
+        "mobile": "slider"
+      },
+      "imageWidth": 538,
+      "imageHeight": 316
+    }
+  }
+}

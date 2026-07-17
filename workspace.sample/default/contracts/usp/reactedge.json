@@ -1,0 +1,23 @@
+{
+  "data": {
+    "slides": [
+      {
+        "text": "Simple Store Changes"
+      },
+      {
+        "text": "Ship Without Breaking"
+      },
+      {
+        "text": "Works Without Disruption"
+      }
+    ]
+  },
+  "settings": {
+    "mode": {
+      "desktop": "static",
+      "tablet": "slider",
+      "mobile": "slider"
+    },
+    "theme": "dark"
+  }
+}
