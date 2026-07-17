@@ -69,6 +69,25 @@ prompt \
     TARGET_ROOT \
     "/var/www/docker_mageos/magento"
 
+REACTEDGE_ROOT="$(dirname "$TARGET_ROOT")/reactedge"
+
+echo "Checking ReactEdge workspace: $REACTEDGE_ROOT"
+
+mkdir -p "$REACTEDGE_ROOT"
+
+touch "$REACTEDGE_ROOT/.reactedge-write-test" || {
+    echo
+    echo "Error: ReactEdge must be writable."
+    echo
+    echo "Expected layout:"
+    echo "  $(dirname "$TARGET_ROOT")/"
+    echo "  ├── magento/"
+    echo "  └── reactedge/"
+    exit 1
+}
+
+rm -f "$REACTEDGE_ROOT/.reactedge-write-test"
+
 prompt \
     "Allowed hosts" \
     ALLOWED_HOSTS \

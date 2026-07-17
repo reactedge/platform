@@ -24,6 +24,7 @@ coverage/
 
 # Environment
 .env.*
+!.env.sample
 
 # IDE
 .idea/
