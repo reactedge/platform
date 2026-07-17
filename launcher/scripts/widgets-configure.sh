@@ -60,11 +60,6 @@ prompt \
     "default"
 
 prompt \
-    "SSR service port" \
-    SSR_PORT \
-    "4000"
-
-prompt \
     "Target site URL" \
     TARGET_SITEURL \
     "https://mageos-docker.magsite.co.uk"
@@ -129,7 +124,6 @@ GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
 GOOGLE_PLACE_ID=$GOOGLE_PLACE_ID
 MAGENTO_GRAPHQL_API=$MAGENTO_GRAPHQL_API
 STORE_CODE=$STORE_CODE
-SSR_PORT=$SSR_PORT
 TARGET_SITEURL=$TARGET_SITEURL
 TARGET_ROOT=$TARGET_ROOT
 ALLOWED_HOSTS=$ALLOWED_HOSTS
