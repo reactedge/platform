@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import path from 'path';
-import {Report} from "../../deployment/report.ts";
+import type {Report} from "../../deployment/report.ts";
 import {getConfig} from "../../deployment/config.ts";
 
 export class WidgetBuilder {

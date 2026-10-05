@@ -130,11 +130,6 @@ export class WidgetProcessor {
                 variants: resolved?.ssr?.variants
             });
 
-            const {
-                entries: _entries,
-                ...manifestContract
-            } = contractResult;
-
             const manifest = {
                 id: instanceName,
                 widget: widgetName,
@@ -145,7 +140,7 @@ export class WidgetProcessor {
                     strategy: resolved?.ssr?.strategy
                 },
                 integrity: registryResult.integrity,
-                contract: manifestContract,
+                contract: contractResult,
                 contractFile
             };
 

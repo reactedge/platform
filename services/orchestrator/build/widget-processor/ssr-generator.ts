@@ -3,11 +3,11 @@
  */
 import fs from "fs";
 import path from "path";
-import {Report} from "../../deployment/report.ts";
-import {getContractPath, getWidgetPath} from "../paths.ts";
+import type {Report} from "../../deployment/report.ts";
+import {getContractPath} from "../paths.ts";
 import {exec} from "node:child_process";
 import {resolveContractTags} from "../../contract/wrapper.ts";
-import {SsrVariant} from "@reactedge/framework/contracts/WidgetSsrConfig.ts";
+import type {SsrVariant} from "@reactedge/framework/contracts/WidgetSsrConfig.ts";
 import {ReactEdgeRoot} from "@reactedge/filesystem/reactedgeRoot.ts";
 
 export async function generateSsr(
