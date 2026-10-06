@@ -7,8 +7,8 @@ async function main() {
     const loader = new ResourceLoader();
     const activity = new WidgetActivity(WIDGET_ID)
     const contract = await loader.loadContract("default.json");
-    const bootstrap = await loader.loadContract("data.json");
-    const runtime = await loader.loadRuntime();
+    const bootstrap = {};
+    const runtime = {};
 
     const container = document.getElementById("root")!;
 

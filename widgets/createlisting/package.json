@@ -9,7 +9,9 @@
     "build:ssr": "vite build -c vite.npm.config.ts",
     "analyze": "ANALYZE=true vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:api": "node --import tsx server/start.ts",
+    "test:api": "node --import tsx --test server/*.test.ts"
   },
   "dependencies": {
     "zod": "^4.4.3"

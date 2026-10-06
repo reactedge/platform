@@ -8,6 +8,8 @@ import { manifestPlugin } from "../../packages/widget-build/shared-resources/wid
 import { createWidgetBuildDefaults } from "../../packages/widget-build/shared-resources/widget-preset/createReactEdgeConfig.ts";
 import { reactEdgeVisualizer } from "../../packages/widget-build/shared-resources/widget-preset/reactEdgeVisualizer.ts";
 
+import { listingsPlugin } from "./server/vite-plugin.ts";
+
 const isAnalyze = process.env.ANALYZE === "true";
 const widgetName = pkg.name.replace(/^widget-/, "");
 const widgetDir = dirname(fileURLToPath(import.meta.url));
@@ -23,6 +25,7 @@ export default defineConfig({
   },
 
   plugins: [
+    listingsPlugin(),
     react(),
     reactEdgeVisualizer(isAnalyze),
     manifestPlugin({
