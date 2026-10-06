@@ -8,19 +8,20 @@ export type Listing = z.infer<typeof ListingSchema>;
 const hostPrefix = (import.meta.env.VITE_LISTINGRECORD_URL || 'http://127.0.0.1:4180').replace(/\/+$/, '');
 const listingsUrl = `${hostPrefix}/listingrecord/listings`;
 
-async function requestListings(options: RequestInit): Promise<unknown> {
+async function requestListings(options: RequestInit, id?: string): Promise<unknown> {
     let response: Response;
     try {
-        response = await fetch(listingsUrl, options);
+        response = await fetch(id ? `${listingsUrl}/${encodeURIComponent(z.uuid().parse(id))}` : listingsUrl, options);
     } catch {
         throw new Error('Cannot reach the listing service.');
     }
-    if (response.status === 404) throw new Error('The listing service route is unavailable.');
+    if (response.status === 404 && !response.headers.get('content-type')?.includes('application/json')) throw new Error('The listing service route is unavailable.');
     if ([502, 503, 504].includes(response.status)) throw new Error('The listing service is unavailable.');
     if (response.status >= 500) {
         const jsonResponse = response.headers.get('content-type')?.includes('application/json');
         throw new Error(jsonResponse ? 'The listing service could not read or save its records.' : 'The listing service is unavailable.');
     }
+    if (response.status === 204) return undefined;
     let body: unknown;
     try { body = await response.json(); }
     catch { throw new Error('The listing service returned an invalid response.'); }
@@ -46,4 +47,17 @@ export async function saveListing(name: string): Promise<Listing> {
     }));
     if (!record.success) throw new Error('The listing service returned an invalid record.');
     return record.data;
+}
+
+export async function updateListing(id: string, name: string): Promise<Listing> {
+    const record = ListingSchema.safeParse(await requestListings({
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: ListingNameSchema.parse(name) }),
+    }, id));
+    if (!record.success) throw new Error('The listing service returned an invalid record.');
+    return record.data;
+}
+
+export async function deleteListing(id: string): Promise<void> {
+    await requestListings({ method: 'DELETE' }, id);
 }

@@ -12,5 +12,7 @@ export const setupListingRoutes = (app: Application): void => {
     router.use((_req, res, next) => { res.setHeader('Cache-Control', 'no-store'); next(); });
     router.get('/listings', createRouteOperationMiddleware('listingrecord.list'), handler.list);
     router.post('/listings', createRouteOperationMiddleware('listingrecord.create'), handler.create);
+    router.put('/listings/:id', createRouteOperationMiddleware('listingrecord.update'), handler.update);
+    router.delete('/listings/:id', createRouteOperationMiddleware('listingrecord.delete'), handler.delete);
     app.use(config.route.servicePrefix, router);
 };

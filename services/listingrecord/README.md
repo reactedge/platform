@@ -50,13 +50,19 @@ runtime data is ignored by Git; keep custom storage outside tracked source.
 | GET | `/listingrecord/listings` | Saved listing records |
 | POST | `/listingrecord/listings` | Create with `{ "name": "Summer products" }`; returns 201 |
 
+| PUT | `/listingrecord/listings/:id` | Rename with `{ "name": "Updated name" }`; returns the record with the same ID |
+| DELETE | `/listingrecord/listings/:id` | Delete the record; returns 204 |
+
+Invalid IDs return 400; missing records return 404. Edit and delete use the same
+serialized, atomic JSON writes as create.
+
 The service preserves the scaffold's CORS convention. It does not implement
 application authentication; place it behind the host application's access
 controls when exposing listing data.
 
 ## Widget integration
 
-The widget uses an explicit service host prefix for both loading and saving:
+The widget uses an explicit service host prefix for loading, creating, editing and deleting:
 
 ```text
 <VITE_LISTINGRECORD_URL>/listingrecord/listings

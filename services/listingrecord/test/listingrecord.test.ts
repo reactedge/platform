@@ -78,6 +78,9 @@ test('corrupt files fail safely and are not overwritten', () => fixture(async (u
         await writeFile(file, content);
         assert.equal((await fetch(`${url}/listingrecord/listings`)).status, 500);
         assert.equal((await fetch(`${url}/listingrecord/listings`, json('New listing'))).status, 500);
+        const item = `${url}/listingrecord/listings/11111111-1111-4111-8111-111111111111`;
+        assert.equal((await fetch(item, {...json('Update'), method: 'PUT'})).status, 500);
+        assert.equal((await fetch(item, {method: 'DELETE'})).status, 500);
         assert.equal(await readFile(file, 'utf8'), content);
     }
 }));
@@ -110,3 +113,36 @@ test('access folders cannot escape the configured root', async () => {
         await rm(outside, {recursive: true, force: true});
     }
 });
+
+test('edit and delete persist, preserve IDs, validate input and handle missing records', () => fixture(async (url, directory) => {
+    const base = `${url}/listingrecord/listings`;
+    const record = await (await fetch(base, json('Original'))).json() as Listing;
+    const item = `${base}/${record.id}`;
+    const updated = await fetch(item, {...json('  Updated  '), method: 'PUT'});
+    assert.equal(updated.status, 200);
+    assert.deepEqual(await updated.json(), {...record, name: 'Updated'});
+    assert.deepEqual(await new ListingStore(directory).list(), [{...record, name: 'Updated'}]);
+    assert.equal((await fetch(item, {...json(''), method: 'PUT'})).status, 400);
+    assert.equal((await fetch(`${base}/invalid`, {method: 'DELETE'})).status, 400);
+    assert.equal((await fetch(item, {method: 'DELETE'})).status, 204);
+    assert.deepEqual(await new ListingStore(directory).list(), []);
+    assert.equal((await fetch(item, {method: 'DELETE'})).status, 404);
+    assert.equal((await fetch(item, {...json('Missing'), method: 'PUT'})).status, 404);
+    assert.equal((await fetch(base, json('After missing record'))).status, 201);
+}));
+
+test('mixed concurrent mutations retain independent changes', () => fixture(async (url, directory) => {
+    const base = `${url}/listingrecord/listings`;
+    const first = await (await fetch(base, json('First'))).json() as Listing;
+    const second = await (await fetch(base, json('Second'))).json() as Listing;
+    const responses = await Promise.all([
+        fetch(`${base}/${first.id}`, {...json('Renamed'), method: 'PUT'}),
+        fetch(`${base}/${second.id}`, {method: 'DELETE'}),
+        fetch(base, json('New')),
+    ]);
+    assert.deepEqual(responses.map(response => response.status), [200, 204, 201]);
+    const records = await new ListingStore(directory).list();
+    assert.equal(records.length, 2);
+    assert.ok(records.some(record => record.id === first.id && record.name === 'Renamed'));
+    assert.ok(records.some(record => record.name === 'New'));
+}));
