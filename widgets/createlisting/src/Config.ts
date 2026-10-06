@@ -42,7 +42,7 @@ export interface ResolvedConfigIntegrations {
     };
 }
 
-export const WIDGET_ID = 'createproduct';
+export const WIDGET_ID = 'createlisting';
 
 /**
  * Validates and resolves the Contact Us widget configuration.
@@ -69,7 +69,6 @@ export function readWidgetConfig(
     activity?: WidgetActivity
 ): WidgetConfig {
     try {
-        console.log('runtime', runtime)
         const parsedContract = parseConfig(contract);
         const parsedRuntime = parseRuntimeConfig(runtime)
         const resolved = resolveConfig(parsedContract, parsedRuntime);

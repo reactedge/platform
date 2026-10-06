@@ -1,26 +1,26 @@
 import { expect, test } from "@playwright/test";
 import type { Locator } from "@playwright/test";
 
-test.describe('Createproduct Widget', () => {
-    let createproduct: Locator;
+test.describe('Createlisting Widget', () => {
+    let createlisting: Locator;
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/?reactedge_debug=eager');
-        createproduct = page.locator('createproduct-widget');
-        await expect(createproduct).toBeVisible();
+        createlisting = page.locator('createlisting-widget');
+        await expect(createlisting).toBeVisible();
     });
 
-    test('Createproduct widget renders its configured title', async () => {
-        const title = createproduct.locator(
-            '[data-createproduct-title]'
+    test('Createlisting widget renders its configured title', async () => {
+        const title = createlisting.locator(
+            '[data-createlisting-title]'
         );
 
         await expect(title).toBeVisible();
     });
 
-    test('Createproduct widget renders the title colour', async () => {
-        const title = createproduct.locator(
-            '[data-createproduct-title]'
+    test('Createlisting widget renders the title colour', async () => {
+        const title = createlisting.locator(
+            '[data-createlisting-title]'
         );
 
         const colour = await title.evaluate(
@@ -30,9 +30,9 @@ test.describe('Createproduct Widget', () => {
         expect(colour).not.toBe('rgb(0, 0, 0)');
     });
 
-    test('Createproduct widget renders product data', async () => {
-        const product = createproduct.locator(
-            '[data-createproduct-product]'
+    test('Createlisting widget renders product data', async () => {
+        const product = createlisting.locator(
+            '[data-createlisting-product]'
         );
 
         await expect(product).toBeVisible();
@@ -46,9 +46,9 @@ test.describe('Createproduct Widget', () => {
         ).toBeVisible();
     });
 
-    test('Createproduct widget loads product data from GraphQL', async () => {
-        const product = createproduct.locator(
-            '[data-createproduct-product]'
+    test('Createlisting widget loads product data from GraphQL', async () => {
+        const product = createlisting.locator(
+            '[data-createlisting-product]'
         );
 
         await expect(product).toBeVisible();

@@ -1,7 +1,7 @@
 import type {BootstrapData} from "./entrypoints/ssr.tsx";
 import {readWidgetConfig} from "./Config.ts";
 import {SystemStateProvider} from "./state/System/SystemStateProvider.tsx";
-import {WidgetCreateproduct} from "./components/WidgetCreateproduct.tsx";
+import {WidgetCreatelisting} from "./components/WidgetCreatelisting.tsx";
 
 type Props = {
     contract: unknown;
@@ -16,7 +16,7 @@ export const WidgetView = ({ contract, runtime, bootstrapData }: Props) => {
     if (!config) return null;
 
     return <SystemStateProvider config={config.integrations} runtime={config.runtime} >
-        <WidgetCreateproduct config={config} bootstrap={bootstrapData} />
+        <WidgetCreatelisting config={config} bootstrap={bootstrapData} />
     </SystemStateProvider>
 };
 

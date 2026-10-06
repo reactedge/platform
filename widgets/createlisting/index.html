@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<createproduct-widget></createproduct-widget>
+<createlisting-widget></createlisting-widget>
 
 <script type="module">
     import { mount } from "./api/runtime-shadow-widget.tsx";
@@ -14,11 +14,11 @@
     const runtime = await loader.loadRuntime();
     const bootstrap = undefined
 
-    const element = document.querySelector("createproduct-widget");
+    const element = document.querySelector("createlisting-widget");
 
     if (!element) {
         throw new Error(
-            "createproduct-widget element not found"
+            "createlisting-widget element not found"
         );
     }
 

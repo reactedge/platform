@@ -1,6 +1,6 @@
 {
-  "id": "createproduct",
-  "widget": "createproduct",
+  "id": "createlisting",
+  "widget": "createlisting",
   "description": "",
   "signals": {
     "consumes": [],

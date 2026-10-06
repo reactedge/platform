@@ -7,7 +7,7 @@ type Props = {
     bootstrap?: BootstrapData;
 };
 
-export const WidgetCreateproduct = ({
+export const WidgetCreatelisting = ({
      config,
      bootstrap
  }: Props) => {
@@ -28,14 +28,14 @@ export const WidgetCreateproduct = ({
     return (
         <>
             <h1
-                data-createproduct-title
+                data-createlisting-title
                 style={{ color: config.settings.colour }}
             >
                 {config.data.title}
             </h1>
 
             {productData && (
-                <dl data-createproduct-product>
+                <dl data-createlisting-product>
                     <dt>SKU</dt>
                     <dd>{productData.sku}</dd>
 
