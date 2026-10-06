@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
-const IntegrationSchema = z.enum([
-    "magentoGraphql"
-]);
+const IntegrationSchema = z.string();
 
 const WidgetDataSchema = z.object({
     title: z.string(),
