@@ -56,21 +56,41 @@ controls when exposing listing data.
 
 ## Widget integration
 
-In a second terminal, from the repository root:
+The widget uses an explicit service host prefix for both loading and saving:
 
-```bash
-npm run dev --workspace widget-createlisting -- --config src/lib/listingsDevConfig.mjs
+```text
+<VITE_LISTINGRECORD_URL>/listingrecord/listings
 ```
 
-This existing widget helper now only proxies `/listingrecord` to the Express
-service. It no longer writes files. Set `LISTINGRECORD_URL` to override its
-upstream (default `http://127.0.0.1:4180`). Template-owned widget files stay
-unchanged. The default Vite command without this helper has no API proxy.
+The default is `http://127.0.0.1:4180`. In a second terminal, from the
+repository root, run the normal widget server:
 
-For deployment, route `/listingrecord` on the storefront's origin to this
-service through the existing web server/reverse proxy. The widget calls that
-same-origin path for both loading and saving. Records are owned by the service,
-not by the widget's public build assets.
+```bash
+mise run widget-dev -- createlisting
+```
+
+For another service host, set `VITE_LISTINGRECORD_URL` in the widget's existing
+local environment configuration (`widgets/createlisting/.env.local`), or pass
+it when starting Vite:
+
+```bash
+VITE_LISTINGRECORD_URL=https://api.example.com mise run widget-dev -- createlisting
+```
+
+Set the Express service's `FRONTEND_URL` to the exact widget/storefront origin
+including its port, for example `http://127.0.0.1:5173`. CORS must allow that
+origin for these direct requests. Restart Express after changing its `.env`;
+restart Vite after changing the widget host prefix.
+
+For deployment, set `VITE_LISTINGRECORD_URL` to the browser-accessible service
+host **before building the widget**, and add the storefront origin to
+`FRONTEND_URL`. Use HTTPS when the storefront uses HTTPS. Vite embeds `VITE_`
+values in the frontend bundle; they are public configuration, not secrets.
+Records remain owned by the service's configured storage folder.
+
+The widget's canonical Vite configuration and launch scripts are unchanged.
+All requests go directly to the configured Express host; no custom Vite
+middleware or proxy configuration is required.
 
 ## Validate
 
@@ -82,4 +102,4 @@ npm test --prefix services/listingrecord
 Tests exercise the actual Express routes, configured access folder, CORS,
 JSON persistence across store restarts, validation, simultaneous saves,
 corrupt-file protection and paths escaping the configured root. Browser
-integration was also checked through the Vite proxy with mocked Magento data.
+integration was also checked with direct-host requests and mocked Magento data.

@@ -26,8 +26,9 @@ export const ListingForm = ({ onSave }: Props) => {
             await onSave(trimmedName);
             setName('');
             input.current?.focus();
-        } catch {
-            setError('Unable to save the listing. Your entered name has been kept.');
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unable to save the listing.';
+            setError(`${message} Your entered name has been kept.`);
         } finally {
             setSaving(false);
         }
