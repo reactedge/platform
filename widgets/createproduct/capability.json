@@ -1,0 +1,15 @@
+{
+  "id": "createproduct",
+  "widget": "createproduct",
+  "description": "",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}

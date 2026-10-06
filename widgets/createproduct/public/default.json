@@ -1,0 +1,11 @@
+{
+  "data": {
+    "title": "I am runtime in ShadowDOM createproduct ready to work"
+  },
+  "settings": {
+    "colour": "red"
+  },
+  "integration": {
+    "requires": ["magentoGraphql"]
+  }
+}
