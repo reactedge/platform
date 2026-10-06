@@ -1,37 +1,30 @@
 import { useEffect, useState } from "react";
 import { ListingForm } from "./ListingForm.tsx";
-import { loadListings, saveListing, updateListing, deleteListing, type Listing } from "../lib/listings.ts";
+import { Listing, type ListingRecord } from "../Model/Listing.ts";
+import { ListingSelector } from "./ListingSelector.tsx";
 import type { WidgetConfig } from "../Config";
-import { useProductData } from "../hooks/domain/useProductData";
-import type {BootstrapData} from "../entrypoints/ssr";
 
 type Props = {
     config: WidgetConfig;
-    bootstrap?: BootstrapData;
 };
 
-export const WidgetCreatelisting = ({
-     config,
-     bootstrap
- }: Props) => {
-    const {
-        productData,
-        productError,
-        productLoading,
-    } = useProductData(config.runtime.sku, bootstrap);
+const listingModel = new Listing();
 
+export const WidgetCreatelisting = ({ config }: Props) => {
     const [mode, setMode] = useState<'create' | 'edit' | 'delete' | null>(null);
     const [selectedId, setSelectedId] = useState('');
     const [busy, setBusy] = useState(false);
-    const [listings, setListings] = useState<Listing[]>([]);
+    const [listings, setListings] = useState<ListingRecord[]>([]);
+    const [loading, setLoading] = useState(true);
     const [listingError, setListingError] = useState('');
     const [message, setMessage] = useState('');
     const selected = listings.find(listing => listing.id === selectedId);
 
     useEffect(() => {
         let active = true;
-        void loadListings().then(records => { if (active) setListings(records); })
-            .catch(() => { if (active) setListingError('Unable to load saved listings.'); });
+        void listingModel.list().then(records => { if (active) setListings(records); })
+            .catch(error => { if (active) setListingError(error instanceof Error ? error.message : 'Unable to load saved listings.'); })
+            .finally(() => { if (active) setLoading(false); });
         return () => { active = false; };
     }, []);
 
@@ -40,7 +33,7 @@ export const WidgetCreatelisting = ({
         setBusy(true);
         try {
             const listing = mode === 'edit' && selected
-                ? await updateListing(selected.id, name) : await saveListing(name);
+                ? await listingModel.update(selected.id, name) : await listingModel.create(name);
             setListings(current => mode === 'edit'
                 ? current.map(record => record.id === listing.id ? listing : record)
                 : [...current, listing]);
@@ -56,7 +49,7 @@ export const WidgetCreatelisting = ({
         setListingError('');
         setMessage('');
         try {
-            await deleteListing(selected.id);
+            await listingModel.delete(selected.id);
             setListings(current => current.filter(record => record.id !== selected.id));
             setMessage(`Listing “${selected.name}” deleted.`);
             setSelectedId('');
@@ -88,7 +81,7 @@ export const WidgetCreatelisting = ({
                         {(['create', 'edit', 'delete'] as const).map(action => (
                             <li key={action}>
                                 <button type="button" className="word-editor__block" aria-pressed={mode === action}
-                                    disabled={busy} onClick={() => { setMode(action); setSelectedId(''); setMessage(''); setListingError(''); }}>
+                                    disabled={busy || loading} onClick={() => { setMode(action); setSelectedId(''); setMessage(''); setListingError(''); }}>
                                     {action === 'create' ? 'Create listing' : action === 'edit' ? 'Edit listing' : 'Delete listing'}
                                 </button>
                             </li>
@@ -100,42 +93,27 @@ export const WidgetCreatelisting = ({
                     <div className="word-editor__document listing-workspace__content">
                         {mode === 'create' && <ListingForm key="create" onSave={save} onCancel={() => setMode(null)} />}
                         {(mode === 'edit' || mode === 'delete') && (
-                            <>
-                                <label htmlFor="listing-selection">Select listing to {mode}</label>
-                                <select id="listing-selection" value={selectedId} disabled={busy}
-                                    onChange={event => { setSelectedId(event.target.value); setListingError(''); }}>
-                                    <option value="">Choose a listing</option>
-                                    {listings.map(listing => <option key={listing.id} value={listing.id}>{listing.name}</option>)}
-                                </select>
-                                {listings.length === 0 && <p>No saved listings yet.</p>}
-                            </>
+                            <ListingSelector listings={listings} selectedId={selectedId} action={mode}
+                                disabled={busy || loading} onSelect={id => { setSelectedId(id); setListingError(''); }} />
                         )}
                         {mode === 'edit' && selected && <ListingForm key={selected.id} editing initialName={selected.name}
                             onSave={save} onCancel={() => { setMode(null); setSelectedId(''); }} />}
                         {mode === 'delete' && selected && (
-                            <section aria-label="Confirm deletion">
+                            <section className="listing-workspace__confirmation" aria-label="Confirm deletion">
                                 <p>Delete listing “{selected.name}”? This cannot be undone.</p>
-                                <button type="button" disabled={busy} onClick={() => { void remove(); }}>{busy ? 'Deleting…' : 'Confirm delete'}</button>
+                                <button type="button" className="listing-workspace__danger" disabled={busy} onClick={() => { void remove(); }}>{busy ? 'Deleting…' : 'Confirm delete'}</button>
                                 <button type="button" disabled={busy} onClick={() => { setMode(null); setSelectedId(''); }}>Cancel</button>
                             </section>
                         )}
-                        {message && <p role="status">{message}</p>}
-                        {listingError && <p role="alert">{listingError}</p>}
+                        {loading && <p role="status">Loading listings…</p>}
+                        {!loading && !mode && <p className="listing-workspace__intro">Choose a capability to create, edit or delete a listing.</p>}
+                        {message && <p className="listing-workspace__status" role="status">{message}</p>}
+                        {listingError && <p className="listing-workspace__error" role="alert">{listingError}</p>}
                         {listings.length > 0 && (
-                            <section aria-label="Saved listings">
-                                <h2>Saved listings</h2>
+                            <section className="listing-workspace__saved" aria-label="Saved listings">
+                                <h2>Saved listings <span className="listing-workspace__count">{listings.length}</span></h2>
                                 <ul>{listings.map(listing => <li key={listing.id}>{listing.name}</li>)}</ul>
                             </section>
-                        )}
-                        {productLoading && <p role="status">Loading product...</p>}
-                        {productError && <p role="alert">Unable to load product.</p>}
-                        {!productLoading && !productError && productData && (
-                            <dl data-createlisting-product>
-                                <dt>SKU</dt>
-                                <dd>{productData.sku}</dd>
-                                <dt>Name</dt>
-                                <dd>{productData.name}</dd>
-                            </dl>
                         )}
                     </div>
                 </div>

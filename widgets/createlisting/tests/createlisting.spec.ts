@@ -5,6 +5,9 @@ test.describe('Createlisting Widget', () => {
     let createlisting: Locator;
 
     test.beforeEach(async ({ page }) => {
+        await page.route('**/reactedge-runtime.json', route => route.fulfill({
+            json: { integrations: {}, context: {} },
+        }));
         await page.goto('/?reactedge_debug=eager');
         createlisting = page.locator('createlisting-widget');
         await expect(createlisting).toBeVisible();
@@ -30,33 +33,10 @@ test.describe('Createlisting Widget', () => {
         expect(colour).not.toBe('rgb(0, 0, 0)');
     });
 
-    test('Createlisting widget renders product data', async () => {
-        const product = createlisting.locator(
-            '[data-createlisting-product]'
-        );
-
-        await expect(product).toBeVisible();
-
-        await expect(
-            product.getByText('SKU', { exact: true })
-        ).toBeVisible();
-
-        await expect(
-            product.getByText('Name', { exact: true })
-        ).toBeVisible();
-    });
-
-    test('Createlisting widget loads product data from GraphQL', async () => {
-        const product = createlisting.locator(
-            '[data-createlisting-product]'
-        );
-
-        await expect(product).toBeVisible();
-
-        const values = product.locator('dd');
-
-        await expect(values).toHaveCount(2);
-        await expect(values.nth(0)).toHaveText(/\S+/);
-        await expect(values.nth(1)).toHaveText(/\S+/);
+    test('listing widget does not render the scaffold product example', async () => {
+        await expect(createlisting.locator('[data-createlisting-product]')).toHaveCount(0);
+        await expect(createlisting.getByRole('button', { name: 'Create listing', exact: true })).toBeVisible();
+        await createlisting.getByRole('button', { name: 'Edit listing', exact: true }).click();
+        await expect(createlisting.getByLabel('Select listing to edit')).toBeVisible();
     });
 });

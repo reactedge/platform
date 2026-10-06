@@ -15,37 +15,19 @@ export interface WidgetConfig {
     readonly integrations: ResolvedConfigIntegrations
 }
 
-export interface ProductData {
-    sku: string
-    name: string
-}
-
-export interface RuntimeConfig {
-    storeCode: string;
-    sku: string;
-}
+export type RuntimeConfig = Record<string, never>;
+export type ReactEdgeRuntimeIntegrations = Record<string, never>;
+export type ResolvedConfigIntegrations = Record<string, never>;
 
 export interface ReactEdgeRuntimeConfig {
     readonly integrations: ReactEdgeRuntimeIntegrations;
-    readonly context: RuntimeConfig
-}
-
-export interface ReactEdgeRuntimeIntegrations {
-    readonly magentoGraphql: {
-        readonly api: string
-    };
-}
-
-export interface ResolvedConfigIntegrations {
-    readonly magentoGraphql: {
-        readonly api: string
-    };
+    readonly context: RuntimeConfig;
 }
 
 export const WIDGET_ID = 'createlisting';
 
 /**
- * Validates and resolves the Contact Us widget configuration.
+ * Validates and resolves the listing widget configuration.
  *
  * Both the widget contract and the runtime configuration are treated
  * as untrusted input. Once validated, the configuration is normalized,
@@ -54,13 +36,10 @@ export const WIDGET_ID = 'createlisting';
  * This function represents the trust boundary between the ReactEdge
  * runtime and the widget implementation.
  *
- * The resolved configuration includes the Cloudflare integration
- * required to render the captcha.
- *
  * @param contract - Widget contract supplied by the host platform.
  * @param runtime - Runtime services supplied by the orchestrator.
  * @param activity - Activity logger for bootstrap events.
- * @returns An immutable Contact Us configuration.
+ * @returns An immutable listing configuration.
  * @throws When either configuration is invalid.
  */
 export function readWidgetConfig(
@@ -100,12 +79,7 @@ export function resolveConfig(
     return {
         data: widget.data,
         settings: widget.settings,
-        runtime: {
-            storeCode: runtime.context.storeCode,
-            sku: runtime.context.sku
-        },
-        integrations: {
-            magentoGraphql: runtime.integrations?.magentoGraphql
-        }
+        runtime: runtime.context,
+        integrations: runtime.integrations,
     };
 }
