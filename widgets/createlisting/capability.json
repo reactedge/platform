@@ -1,0 +1,15 @@
+{
+  "id": "createlisting",
+  "widget": "createlisting",
+  "description": "",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
