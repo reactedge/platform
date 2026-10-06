@@ -13,3 +13,29 @@ dd {
     margin: 0;
     font-size: 1.2rem;
 }
+
+.listing-workspace__capabilities {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.listing-workspace__capabilities .word-editor__block {
+    cursor: default;
+    user-select: text;
+}
+
+.listing-workspace__content {
+    padding: 20px;
+    min-height: 240px;
+}
+
+.listing-workspace .word-editor__block-palette-title {
+    margin-top: 0;
+}
+
+@media (max-width: 600px) {
+    .listing-workspace .word-editor__workspace {
+        grid-template-columns: 1fr;
+    }
+}

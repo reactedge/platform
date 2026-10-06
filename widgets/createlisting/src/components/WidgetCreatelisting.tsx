@@ -17,32 +17,48 @@ export const WidgetCreatelisting = ({
         productLoading,
     } = useProductData(config.runtime.sku, bootstrap);
 
-    if (productLoading) {
-        return <p>Loading product...</p>;
-    }
-
-    if (productError) {
-        return <p>Unable to load product.</p>;
-    }
-
     return (
-        <>
-            <h1
-                data-createlisting-title
-                style={{ color: config.settings.colour }}
-            >
-                {config.data.title}
-            </h1>
+        <section className="word-editor listing-workspace">
+            <header className="word-editor__header">
+                <h1
+                    data-createlisting-title
+                    className="word-editor__title"
+                    style={{ color: config.settings.colour }}
+                >
+                    {config.data.title}
+                </h1>
+                <p className="word-editor__subtitle">
+                    Listing capabilities
+                </p>
+            </header>
 
-            {productData && (
-                <dl data-createlisting-product>
-                    <dt>SKU</dt>
-                    <dd>{productData.sku}</dd>
+            <div className="word-editor__workspace">
+                <aside className="word-editor__block-palette" aria-label="Listing capabilities">
+                    <h2 className="word-editor__block-palette-title">Capabilities</h2>
+                    <ul className="listing-workspace__capabilities">
+                        {['Create listing', 'Edit listing', 'Delete listing'].map(capability => (
+                            <li key={capability} className="word-editor__block">
+                                {capability}
+                            </li>
+                        ))}
+                    </ul>
+                </aside>
 
-                    <dt>Name</dt>
-                    <dd>{productData.name}</dd>
-                </dl>
-            )}
-        </>
+                <div className="word-editor__document-area">
+                    <div className="word-editor__document listing-workspace__content">
+                        {productLoading && <p role="status">Loading product...</p>}
+                        {productError && <p role="alert">Unable to load product.</p>}
+                        {!productLoading && !productError && productData && (
+                            <dl data-createlisting-product>
+                                <dt>SKU</dt>
+                                <dd>{productData.sku}</dd>
+                                <dt>Name</dt>
+                                <dd>{productData.name}</dd>
+                            </dl>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </section>
     );
 };
