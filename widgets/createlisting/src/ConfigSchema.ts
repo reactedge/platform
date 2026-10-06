@@ -1,13 +1,30 @@
 import { z } from 'zod';
 
+const IntegrationSchema = z.enum([
+    "magentoGraphql"
+]);
+
+const WidgetDataSchema = z.object({
+    title: z.string(),
+});
+
+const WidgetSettingsSchema = z.object({
+    colour: z.string(),
+});
+
 export const WidgetConfigSchema = z.object({
-    data: z.object({ title: z.string() }),
-    settings: z.object({
-        colour: z.string(),
-        listingsApi: z.string().refine(value => value.startsWith('/') && !value.startsWith('//'),
-            'Listing API must be a same-origin path.').default('/api/listings'),
-    }),
+    data: WidgetDataSchema,
+    settings: WidgetSettingsSchema,
+    integration: z.object({
+        requires: z.array(IntegrationSchema)
+    }).optional()
 }).strict();
 
-export type SchemaWidgetConfig = z.infer<typeof WidgetConfigSchema>;
-export function parseConfig(input: unknown): SchemaWidgetConfig { return WidgetConfigSchema.parse(input); }
+export type SchemaWidgetConfig =
+    z.infer<typeof WidgetConfigSchema>;
+
+export function parseConfig(
+    input: unknown
+): SchemaWidgetConfig {
+    return WidgetConfigSchema.parse(input);
+}

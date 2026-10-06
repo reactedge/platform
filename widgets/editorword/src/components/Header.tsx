@@ -1,12 +1,10 @@
 import type {WidgetConfig} from "../Config.ts";
 
 type Props = {
-    config: Pick<WidgetConfig, "data" | "settings">;
-    subtitle?: string
+    config: WidgetConfig
 };
 export const Header = ({
-    config,
-    subtitle = "Create, edit and export documents"
+    config
 }: Props) => {
     return (
         <header className="word-editor__header">
@@ -18,7 +16,7 @@ export const Header = ({
                     {config.data.title}
                 </h1>
                 <p className="word-editor__subtitle">
-                    {subtitle}
+                    Create, edit and export documents
                 </p>
             </div>
         </header>

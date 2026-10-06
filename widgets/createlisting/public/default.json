@@ -1,4 +1,11 @@
 {
-  "data": { "title": "Listings" },
-  "settings": { "colour": "#1f2937", "listingsApi": "/api/listings" }
+  "data": {
+    "title": "I am runtime in ShadowDOM createlisting ready to work"
+  },
+  "settings": {
+    "colour": "red"
+  },
+  "integration": {
+    "requires": ["magentoGraphql"]
+  }
 }

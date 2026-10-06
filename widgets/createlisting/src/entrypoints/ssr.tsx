@@ -1,9 +1,20 @@
 import { renderToString } from 'react-dom/server';
-import { WidgetView } from '../WidgetView.tsx';
-import type { ReactEdgeRuntimeConfig } from '../Config.ts';
+import {WIDGET_ID} from "../Config.ts";
+import type { ReactEdgeRuntimeConfig, ProductData } from "../Config.ts";
+import { WidgetView } from "../WidgetView.tsx";
 
-export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig): string =>
-    renderToString(<WidgetView contract={config} runtime={runtime} />);
+export interface BootstrapData {
+    productData: ProductData | undefined;
+}
 
-export async function buildBootstrap() { return {}; }
-export async function loadRuntime(): Promise<ReactEdgeRuntimeConfig> { return {}; }
+export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig, bootstrap: BootstrapData): string => {
+    return renderToString(
+        <div className={`reactedge-${WIDGET_ID}`}>
+            <WidgetView contract={config} runtime={runtime} bootstrapData={bootstrap} />
+        </div>
+    );
+};
+
+export { buildBootstrap } from '../ssr/bootstrap';
+
+export { loadRuntime } from '../ssr/bootstrap';

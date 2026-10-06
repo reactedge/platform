@@ -1,4 +1,5 @@
-import main from './main.css?inline';
-import { styles as wordEditorStyles } from '../../../editorword/src/styles/entry.ts';
+import main from "./main.css?inline";
 
-export const styles = [...wordEditorStyles, main];
+export const styles = [
+    main,
+];

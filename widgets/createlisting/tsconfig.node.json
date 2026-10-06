@@ -5,7 +5,6 @@
   },
   "include": [
     "vite.config.ts",
-    "vite.npm.config.ts",
-    "server"
+    "vite.npm.config.ts"
   ]
 }
