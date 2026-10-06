@@ -39,3 +39,34 @@ dd {
         grid-template-columns: 1fr;
     }
 }
+
+.listing-workspace__capabilities button.word-editor__block {
+    display: block;
+    width: 100%;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.listing-workspace__capabilities button[aria-pressed="true"] {
+    border-color: #666;
+    background: #eee;
+}
+
+.listing-workspace__form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.listing-workspace__form h2 {
+    margin: 0;
+}
+
+.listing-workspace__form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font: inherit;
+}
