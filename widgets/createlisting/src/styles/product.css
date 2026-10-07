@@ -35,13 +35,16 @@
 }
 
 .listing-workspace__product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     margin-top: 8px;
     padding-top: 16px;
     border-top: 1px solid #ddd;
 }
 
 .listing-workspace__product-details > p {
-    margin: 0 0 8px;
+    margin: 0;
 }
 
 .listing-workspace__product-form {
@@ -57,4 +60,15 @@
 .listing-workspace__product-form label {
     font-size: 14px;
     font-weight: 600;
+}
+
+.listing-workspace__product-delete {
+    padding: 16px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fff7f7;
+}
+
+.listing-workspace__product-delete p {
+    margin: 0 0 16px;
 }

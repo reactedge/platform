@@ -1,8 +1,9 @@
-import { useId, useState, type FormEvent } from "react";
-import type { ProductInput } from "../../Model/Product.ts";
+import { useEffect, useId, useState, type FormEvent } from "react";
+import type { ProductInput, ProductRecord } from "../../Model/Product.ts";
 
 type Props = {
     listingId: string;
+    initial?: ProductRecord;
     disabled?: boolean;
     onCancel: () => void;
     onSave: (input: ProductInput) => Promise<unknown>;
@@ -10,21 +11,30 @@ type Props = {
 
 export const ProductForm = ({
     listingId,
+    initial,
     disabled = false,
     onCancel,
     onSave,
 }: Props) => {
-    const [sku, setSku] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [image, setImage] = useState('');
+    const [sku, setSku] = useState(initial?.sku ?? '');
+    const [title, setTitle] = useState(initial?.title ?? '');
+    const [description, setDescription] = useState(initial?.description ?? '');
+    const [price, setPrice] = useState(initial ? String(initial.price) : '');
+    const [image, setImage] = useState(initial?.image ?? '');
 
     const skuId = useId();
     const titleId = useId();
     const descriptionId = useId();
     const priceId = useId();
     const imageId = useId();
+
+    useEffect(() => {
+        setSku(initial?.sku ?? '');
+        setTitle(initial?.title ?? '');
+        setDescription(initial?.description ?? '');
+        setPrice(initial ? String(initial.price) : '');
+        setImage(initial?.image ?? '');
+    }, [initial]);
 
     const submit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -40,7 +50,7 @@ export const ProductForm = ({
 
     return (
         <form className="listing-workspace__product-form" onSubmit={event => { void submit(event); }}>
-            <h3>Product details</h3>
+            <h3>{initial ? 'Edit product' : 'Product details'}</h3>
 
             <label htmlFor={skuId}>SKU</label>
             <input id={skuId} name="sku" type="text" autoComplete="off" value={sku}

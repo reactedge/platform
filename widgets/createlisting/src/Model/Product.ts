@@ -11,6 +11,8 @@ export const ProductInputSchema = z.object({
 }).strict();
 
 const ProductRecordSchema = ProductInputSchema.extend({ id: z.uuid() });
+const ProductRecordsSchema = z.array(ProductRecordSchema);
+
 export type ProductInput = z.infer<typeof ProductInputSchema>;
 export type ProductRecord = z.infer<typeof ProductRecordSchema>;
 
@@ -21,10 +23,32 @@ export class Product {
         this.url = `${host.replace(/\/+$/, '')}/listingrecord/products`;
     }
 
-    async create(input: ProductInput): Promise<ProductRecord> {
+    async list(): Promise<ProductRecord[]> {
+        const records = ProductRecordsSchema.safeParse(await requestListing(this.url, { cache: 'no-store' }));
+        if (!records.success) throw new Error('The listing service returned invalid products.');
+        return records.data;
+    }
+
+    create(input: ProductInput): Promise<ProductRecord> {
+        return this.save(this.url, 'POST', input);
+    }
+
+    update(id: string, input: ProductInput): Promise<ProductRecord> {
+        return this.save(this.recordUrl(id), 'PUT', input);
+    }
+
+    async delete(id: string): Promise<void> {
+        await requestListing(this.recordUrl(id), { method: 'DELETE' });
+    }
+
+    private recordUrl(id: string): string {
+        return `${this.url}/${z.uuid().parse(id)}`;
+    }
+
+    private async save(url: string, method: 'POST' | 'PUT', input: ProductInput): Promise<ProductRecord> {
         const data = ProductInputSchema.parse(input);
-        const record = ProductRecordSchema.safeParse(await requestListing(this.url, {
-            method: 'POST',
+        const record = ProductRecordSchema.safeParse(await requestListing(url, {
+            method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
         }));
