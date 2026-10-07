@@ -169,6 +169,20 @@ prompt \
     INTENT_DISCOVERY_ENABLED \
     "0"
 
+prompt \
+    "Enable Seller Listing (0 or 1)" \
+    SELLER_LISTING_ENABLED \
+    "0"
+
+if [[ "$SELLER_LISTING_ENABLED" == "1" ]]; then
+    prompt \
+        "Default Seller ID" \
+        DEFAULT_SELLER_ID \
+        "default-seller"
+else
+    DEFAULT_SELLER_ID=""
+fi
+
   prompt \
       "Enable Cloudflare Turnstile (0 or 1)" \
       CLOUDFLARE_TURNSTILE_ENABLED \
@@ -273,7 +287,13 @@ fi
 
 for dir in "$ROOT"/widgets/*; do
     if [[ -d "$dir" && -d "$dir/public" ]]; then
-        echo "📦 Generating runtime for $(basename "$dir")"
+        WIDGET_NAME="$(basename "$dir")"
+        echo "📦 Generating runtime for $WIDGET_NAME"
+
+        SELLER_CONTEXT_CONFIG=""
+        if [[ "$SELLER_LISTING_ENABLED" == "1" && "$WIDGET_NAME" == "createlisting" ]]; then
+            SELLER_CONTEXT_CONFIG=',\n    "sellerId": "'"$DEFAULT_SELLER_ID"'"'
+        fi
 
         cat > "$dir/public/reactedge-runtime.json" <<EOF
 {
@@ -285,7 +305,7 @@ for dir in "$ROOT"/widgets/*; do
   "context": {
     "storeCode": "$STORE_CODE",
     "sku": "$SKU",
-    "category": "$CATEGORY"
+    "category": "$CATEGORY"$SELLER_CONTEXT_CONFIG
   }
 }
 EOF
@@ -332,6 +352,8 @@ SSR_BASE_URL="${SSR_BASE_URL:-}"
 SKU=$SKU
 CATEGORY=$CATEGORY
 INTENT_DISCOVERY_ENABLED=$INTENT_DISCOVERY_ENABLED
+SELLER_LISTING_ENABLED=$SELLER_LISTING_ENABLED
+DEFAULT_SELLER_ID="${DEFAULT_SELLER_ID:-}"
 CLOUDFLARE_TURNSTILE_ENABLED=$CLOUDFLARE_TURNSTILE_ENABLED
 CLOUDFLARE_TURNSTILE_SITE_KEY=$CLOUDFLARE_TURNSTILE_SITE_KEY
 GOOGLE_REVIEWS_ENABLED=$GOOGLE_REVIEWS_ENABLED
