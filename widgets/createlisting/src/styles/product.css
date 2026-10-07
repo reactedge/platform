@@ -72,3 +72,40 @@
 .listing-workspace__product-delete p {
     margin: 0 0 16px;
 }
+
+.listing-workspace__product-image {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.listing-workspace__product-image-hint {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.listing-workspace__product-image-previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 12px;
+}
+
+.listing-workspace__product-image-preview {
+    margin: 0;
+}
+
+.listing-workspace__product-image-preview img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.listing-workspace__product-image-preview figcaption {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 12px;
+}

@@ -1,6 +1,7 @@
 import type {Request, Response} from 'express';
 import {z} from 'zod';
 import type {ListingStore} from '../model/listing/listing-store';
+import type {CloudinaryImageStore} from '../model/product/cloudinary-image-store';
 import {ProductNotFoundError} from '../model/product/product-store';
 import type {ProductStore} from '../model/product/product-store';
 import {ProductInputSchema} from '../model/product/types';
@@ -65,8 +66,11 @@ export class ProductHandler {
         if (!id) return;
 
         try {
+            const product = await this.store(res).get(id);
+            await this.imageStore(res).deleteMany(product.images.map(image => image.publicId));
             await this.store(res).delete(id);
             operation.setAttribute('listingrecord.product_id', id);
+            operation.setAttribute('listingrecord.deleted_image_count', product.images.length);
             operation.succeed();
             res.status(204).end();
         } catch (error) {
@@ -80,6 +84,10 @@ export class ProductHandler {
 
     private store(res: Response): ProductStore {
         return res.app.locals.products as ProductStore;
+    }
+
+    private imageStore(res: Response): CloudinaryImageStore {
+        return res.app.locals.productImages as CloudinaryImageStore;
     }
 
     private productId(req: Request, res: Response, operation: Operation): string | undefined {

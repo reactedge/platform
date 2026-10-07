@@ -15,6 +15,12 @@ export type Config = {
         otelHost: string;
         serviceName: string;
     };
+    cloudinary: {
+        cloudName: string;
+        apiKey: string;
+        apiSecret: string;
+        folder: string;
+    };
 };
 
 export const config: Config = {
@@ -28,5 +34,11 @@ export const config: Config = {
     observability: {
         otelHost: process.env.OTEL_HOST ?? 'http://localhost:4318',
         serviceName: process.env.OTEL_SERVICE_NAME ?? 'reactedge-listingrecord'
-    }
+    },
+    cloudinary: {
+        cloudName: process.env.CLOUDINARY_CLOUD_NAME ?? '',
+        apiKey: process.env.CLOUDINARY_API_KEY ?? '',
+        apiSecret: process.env.CLOUDINARY_API_SECRET ?? '',
+        folder: process.env.CLOUDINARY_FOLDER ?? 'reactedge/products',
+    },
 };
