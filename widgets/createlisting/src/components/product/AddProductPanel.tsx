@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 import type { ListingRecord } from "../../Model/Listing.ts";
+import { ProductForm } from "./ProductForm.tsx";
 
 type Props = {
     listings: ListingRecord[];
@@ -47,21 +48,12 @@ export const AddProductPanel = ({
                     </p>
                     <p>{selectedListing.name}</p>
 
-                    <div className="listing-workspace__product-placeholder">
-                        <h3>Product details</h3>
-                        <p>Product fields will be added in the next step.</p>
-                    </div>
+                    <ProductForm
+                        disabled={disabled}
+                        onCancel={onCancel}
+                    />
                 </div>
             )}
-
-            <div className="word-editor__save-or-export">
-                <button type="button" disabled>
-                    Save product
-                </button>
-                <button type="button" disabled={disabled} onClick={onCancel}>
-                    Cancel
-                </button>
-            </div>
         </section>
     );
 };

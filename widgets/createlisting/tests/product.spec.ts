@@ -10,7 +10,7 @@ test.describe('Createlisting product capability', () => {
         }));
     });
 
-    test('opens the add product experiment against an existing listing', async ({ page }) => {
+    test('opens a product form against an existing listing', async ({ page }) => {
         await page.goto('/?reactedge_debug=eager');
 
         const createlisting = page.locator('createlisting-widget');
@@ -18,16 +18,18 @@ test.describe('Createlisting product capability', () => {
 
         await createlisting.getByRole('button', { name: 'Add product' }).click();
 
-        await expect(
-            createlisting.getByRole('heading', { name: 'Add product' })
-        ).toBeVisible();
-
         const listing = createlisting.getByLabel('Listing', { exact: true });
         await expect(listing).toBeVisible();
         await listing.selectOption('11111111-1111-4111-8111-111111111111');
 
         await expect(createlisting.getByText('Existing listing', { exact: true })).toBeVisible();
         await expect(createlisting.getByRole('heading', { name: 'Product details' })).toBeVisible();
+
+        await expect(createlisting.getByLabel('SKU', { exact: true })).toBeVisible();
+        await expect(createlisting.getByLabel('Title', { exact: true })).toBeVisible();
+        await expect(createlisting.getByLabel('Description', { exact: true })).toBeVisible();
+        await expect(createlisting.getByLabel('Price', { exact: true })).toBeVisible();
+        await expect(createlisting.getByLabel('Image', { exact: true })).toBeVisible();
 
         await expect(
             createlisting.getByRole('button', { name: 'Save product' })
