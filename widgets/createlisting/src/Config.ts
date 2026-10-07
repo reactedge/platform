@@ -65,7 +65,13 @@ export function resolveConfig(
     return {
         data: widget.data,
         settings: widget.settings,
-        runtime: runtime.context,
+        runtime: resolveRuntimeConfig(runtime),
         integrations: runtime.integrations,
     };
+}
+
+function resolveRuntimeConfig(runtime: SchemaRuntimeConfig): RuntimeConfig {
+    return runtime.context.sellerId === undefined
+        ? {}
+        : {sellerId: runtime.context.sellerId};
 }
