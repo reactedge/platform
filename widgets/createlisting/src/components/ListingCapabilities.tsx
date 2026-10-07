@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { ListingMode } from '../controller/useListingController.ts';
 
 const capabilities: { action: ListingMode; label: string }[] = [
@@ -10,9 +11,10 @@ type Props = {
     mode: ListingMode | null;
     disabled: boolean;
     onChoose: (action: ListingMode) => void;
+    children?: ReactNode;
 };
 
-export const ListingCapabilities = ({ mode, disabled, onChoose }: Props) => (
+export const ListingCapabilities = ({ mode, disabled, onChoose, children }: Props) => (
     <aside className="word-editor__block-palette" aria-label="Listing capabilities">
         <h2 className="word-editor__block-palette-title">Capabilities</h2>
         <ul className="listing-workspace__capabilities">
@@ -22,6 +24,7 @@ export const ListingCapabilities = ({ mode, disabled, onChoose }: Props) => (
                         disabled={disabled} onClick={() => onChoose(action)}>{label}</button>
                 </li>
             ))}
+            {children}
         </ul>
     </aside>
 );

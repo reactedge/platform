@@ -1,0 +1,18 @@
+.word-editor__header {
+    margin-bottom: 20px;
+}
+
+.word-editor__title {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.word-editor__subtitle {
+    margin: 6px 0 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #666;
+}
