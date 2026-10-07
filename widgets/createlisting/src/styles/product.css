@@ -72,3 +72,28 @@
 .listing-workspace__product-delete p {
     margin: 0 0 16px;
 }
+
+.listing-workspace__product-image {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.listing-workspace__product-image-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.listing-workspace__product-image-preview img {
+    display: block;
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.listing-workspace__product-image-preview p {
+    margin: 0;
+}

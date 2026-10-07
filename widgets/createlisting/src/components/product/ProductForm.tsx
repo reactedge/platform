@@ -1,5 +1,6 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
 import type { ProductInput, ProductRecord } from "../../Model/Product.ts";
+import { ProductImageField } from "./ProductImageField.tsx";
 
 type Props = {
     listingId: string;
@@ -68,12 +69,18 @@ export const ProductForm = ({
             <input id={priceId} name="price" type="number" min="0" step="0.01" inputMode="decimal" value={price}
                 onChange={event => setPrice(event.target.value)} disabled={disabled} required />
 
-            <label htmlFor={imageId}>Image</label>
-            <input id={imageId} name="image" type="url" placeholder="https://example.com/image.jpg" value={image}
-                onChange={event => setImage(event.target.value)} disabled={disabled} required />
+            {initial ? (
+                <>
+                    <label htmlFor={imageId}>Image</label>
+                    <input id={imageId} name="image" type="url" value={image}
+                        onChange={event => setImage(event.target.value)} disabled={disabled} required />
+                </>
+            ) : (
+                <ProductImageField value={image} disabled={disabled} onChange={setImage} />
+            )}
 
             <div className="word-editor__save-or-export">
-                <button type="submit" disabled={disabled}>
+                <button type="submit" disabled={disabled || !image}>
                     {disabled ? 'Saving…' : 'Save product'}
                 </button>
                 <button type="button" disabled={disabled} onClick={onCancel}>Cancel</button>
