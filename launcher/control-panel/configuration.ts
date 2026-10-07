@@ -13,6 +13,8 @@ const defaults = {
     observabilityEnabled: false,
     otelHost: 'https://otel.reactedge.net/v1/traces',
     intentDiscoveryEnabled: false,
+    sellerListingEnabled: false,
+    defaultSellerId: 'default-seller',
     turnstileEnabled: false,
     turnstileSiteKey: '',
     googleMapsEnabled: false,
@@ -80,6 +82,8 @@ export function readConfiguration(root: string, storeCode: string, includeStoreE
         observabilityEnabled: enabled('OBSERVABILITY_ENABLED', Boolean(env.OTEL_HOST)),
         otelHost: env.OTEL_HOST || defaults.otelHost,
         intentDiscoveryEnabled: enabled('INTENT_DISCOVERY_ENABLED', false),
+        sellerListingEnabled: enabled('SELLER_LISTING_ENABLED', false),
+        defaultSellerId: env.DEFAULT_SELLER_ID || defaults.defaultSellerId,
         turnstileEnabled: enabled('CLOUDFLARE_TURNSTILE_ENABLED', false),
         turnstileSiteKey: env.CLOUDFLARE_TURNSTILE_SITE_KEY || '',
         googleMapsEnabled: enabled('GOOGLE_MAPS_ENABLED', Boolean(env.GOOGLE_MAPS_API_KEY) && !enabled('GOOGLE_REVIEWS_ENABLED', false)),
@@ -145,6 +149,9 @@ export function validateConfiguration(input: unknown): Configuration {
             if (!['http:', 'https:'].includes(url.protocol) || !url.hostname) throw new Error();
         } catch { throw new Error(`${name} must be an http(s) URL.`); }
     }
+    if (config.sellerListingEnabled && !config.defaultSellerId.trim()) {
+        throw new Error('Default Seller ID is required when Seller Listing is enabled.');
+    }
     if (config.turnstileEnabled && !config.turnstileSiteKey) throw new Error('Turnstile site key is required when enabled.');
     if ((config.googleMapsEnabled || config.googleReviewsEnabled) && !config.googleMapsApiKey) {
         throw new Error('Google Maps API key is required for maps or reviews.');
@@ -177,8 +184,16 @@ export function planConfiguration(root: string, input: unknown) {
         };
     }
     if (c.turnstileEnabled) integrations.cloudflare = { siteKey: c.turnstileSiteKey };
-    const context = { storeCode: c.storeCode, ...(c.hasCatalog ? { sku: c.sku, category: c.category } : {}) };
-    const runtime = JSON.stringify({ integrations, context }, null, 2) + '\n';
+    const baseContext = { storeCode: c.storeCode, ...(c.hasCatalog ? { sku: c.sku, category: c.category } : {}) };
+    const runtimeFor = (widgetName: string) => JSON.stringify({
+        integrations,
+        context: {
+            ...baseContext,
+            ...(c.sellerListingEnabled && widgetName === 'createlisting'
+                ? { sellerId: c.defaultSellerId }
+                : {}),
+        },
+    }, null, 2) + '\n';
     const bool = (value: boolean) => value ? '1' : '0';
     const files = new Map<string, string>();
     files.set(join(root, `.env.${c.storeCode}`), envFile({
@@ -187,7 +202,10 @@ export function planConfiguration(root: string, input: unknown) {
         SSR_ENABLED: bool(c.ssrEnabled), SSR_PORT: c.ssrPort, SSR_BASE_URL: c.ssrBaseUrl,
         ...(c.hasCatalog ? { SKU: c.sku, CATEGORY: c.category } : {}),
         OBSERVABILITY_ENABLED: bool(c.observabilityEnabled),
-        INTENT_DISCOVERY_ENABLED: bool(c.intentDiscoveryEnabled), CLOUDFLARE_TURNSTILE_ENABLED: bool(c.turnstileEnabled),
+        INTENT_DISCOVERY_ENABLED: bool(c.intentDiscoveryEnabled),
+        SELLER_LISTING_ENABLED: bool(c.sellerListingEnabled),
+        DEFAULT_SELLER_ID: c.sellerListingEnabled ? c.defaultSellerId : '',
+        CLOUDFLARE_TURNSTILE_ENABLED: bool(c.turnstileEnabled),
         CLOUDFLARE_TURNSTILE_SITE_KEY: c.turnstileEnabled ? c.turnstileSiteKey : '',
         GOOGLE_MAPS_ENABLED: bool(c.googleMapsEnabled), GOOGLE_REVIEWS_ENABLED: bool(c.googleReviewsEnabled),
         GOOGLE_MAPS_API_KEY: c.googleMapsEnabled || c.googleReviewsEnabled ? c.googleMapsApiKey : '',
@@ -217,7 +235,9 @@ export function planConfiguration(root: string, input: unknown) {
         if (!existsSync(dir)) continue;
         for (const entry of readdirSync(dir, { withFileTypes: true }).filter(entry => entry.isDirectory())) {
             const publicPath = join(dir, entry.name, 'public');
-            if (existsSync(publicPath)) files.set(join(publicPath, 'reactedge-runtime.json'), runtime);
+            if (existsSync(publicPath)) {
+                files.set(join(publicPath, 'reactedge-runtime.json'), runtimeFor(entry.name));
+            }
         }
     }
     return { config: c, files, workspaceRoot, storePath, samplePath, targetWorkspace: join(dirname(c.targetRoot), 'reactedge') };
