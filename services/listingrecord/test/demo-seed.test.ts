@@ -59,7 +59,7 @@ test('demo seed rejects listing responses without a valid UUID', async () => {
         const url = String(input);
 
         if (url.endsWith('/listings') && init?.method === 'GET') {
-            return Response.json([{id: '', name: 'Seed Listing 1'}]);
+            return Response.json([{id: '', name: 'Seed Listing 1', status: 'active', sellerId: 'seed-seller'}]);
         }
         if (url.endsWith('/products') && init?.method === 'GET') {
             return Response.json([]);

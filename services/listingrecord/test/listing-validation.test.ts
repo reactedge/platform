@@ -36,7 +36,7 @@ test('listing validation distinguishes name and status errors', () => fixture(as
     const invalidName = await fetch(`${url}/listingrecord/listings`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name: '', status: 'active'}),
+        body: JSON.stringify({name: '', status: 'active', sellerId: 'test-seller'}),
     });
     assert.equal(invalidName.status, 400);
     assert.deepEqual(await invalidName.json(), {
@@ -46,7 +46,7 @@ test('listing validation distinguishes name and status errors', () => fixture(as
     const invalidStatus = await fetch(`${url}/listingrecord/listings`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name: 'Gallery', status: 'archived'}),
+        body: JSON.stringify({name: 'Gallery', status: 'archived', sellerId: 'test-seller'}),
     });
     assert.equal(invalidStatus.status, 400);
     assert.deepEqual(await invalidStatus.json(), {

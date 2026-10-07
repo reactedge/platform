@@ -2,7 +2,7 @@ import type {Request, Response} from 'express';
 import {z} from 'zod';
 import {ListingNotFoundError} from '../model/listing/listing-store';
 import type {ListingStore} from '../model/listing/listing-store';
-import {ListingInputSchema} from '../model/listing/types';
+import {ListingCreateSchema, ListingUpdateSchema} from '../model/listing/types';
 import type {ProductStore} from '../model/product/product-store';
 import type {Operation} from '../observability/operation';
 
@@ -28,7 +28,7 @@ export class ListingHandler {
 
     create = async (req: Request, res: Response): Promise<void> => {
         const operation = res.locals.routeOperation as Operation;
-        const input = ListingInputSchema.safeParse(req.body);
+        const input = ListingCreateSchema.safeParse(req.body);
         if (!input.success) {
             this.invalidInput(res, operation, input.error);
             return;
@@ -37,6 +37,7 @@ export class ListingHandler {
         try {
             const record = await (res.app.locals.listings as ListingStore).create(input.data);
             operation.setAttribute('listingrecord.record_id', record.id);
+            operation.setAttribute('listingrecord.seller_id', record.sellerId);
             operation.succeed();
             res.status(201).json(record);
         } catch (error) {
@@ -62,7 +63,7 @@ export class ListingHandler {
             return;
         }
 
-        const input = deleting ? null : ListingInputSchema.safeParse(req.body);
+        const input = deleting ? null : ListingUpdateSchema.safeParse(req.body);
         if (input && !input.success) {
             this.invalidInput(res, operation, input.error);
             return;
@@ -93,10 +94,13 @@ export class ListingHandler {
     }
 
     private invalidInput(res: Response, operation: Operation, error: z.ZodError): void {
+        const sellerInvalid = error.issues.some(issue => issue.path[0] === 'sellerId');
         const statusInvalid = error.issues.some(issue => issue.path[0] === 'status');
-        const message = statusInvalid
-            ? 'Choose a valid listing status.'
-            : 'Enter a listing name between 1 and 50 characters.';
+        const message = sellerInvalid
+            ? 'A seller identity is required to create a listing.'
+            : statusInvalid
+                ? 'Choose a valid listing status.'
+                : 'Enter a listing name between 1 and 50 characters.';
         this.invalid(res, operation, message);
     }
 

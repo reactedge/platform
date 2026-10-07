@@ -12,7 +12,7 @@ import type {Listing} from '../src/model/listing/types';
 const listingRequest = (name: string) => ({
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({name}),
+    body: JSON.stringify({name, sellerId: 'test-seller'}),
 });
 
 test('listing deletion is blocked while products reference the listing', async () => {

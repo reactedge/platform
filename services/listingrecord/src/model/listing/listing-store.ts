@@ -2,7 +2,7 @@ import {constants} from 'node:fs';
 import {randomUUID} from 'node:crypto';
 import {open, rename, rm, writeFile} from 'node:fs/promises';
 import path from 'node:path';
-import {ListingInputSchema, ListingsSchema} from './types';
+import {ListingCreateSchema, ListingUpdateSchema, ListingsSchema} from './types';
 import type {Listing} from './types';
 
 export class ListingNotFoundError extends Error {
@@ -47,7 +47,7 @@ export class ListingStore {
     }
 
     create(input: unknown): Promise<Listing> {
-        const data = ListingInputSchema.parse(input);
+        const data = ListingCreateSchema.parse(input);
         return this.mutate(records => {
             const record = {id: randomUUID(), ...data};
             records.push(record);
@@ -56,7 +56,7 @@ export class ListingStore {
     }
 
     update(id: string, input: unknown): Promise<Listing> {
-        const data = ListingInputSchema.parse(input);
+        const data = ListingUpdateSchema.parse(input);
         return this.mutate(records => {
             const record = records.find(record => record.id === id);
             if (!record) throw new ListingNotFoundError();

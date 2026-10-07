@@ -15,7 +15,9 @@ export interface WidgetConfig {
     readonly integrations: ResolvedConfigIntegrations
 }
 
-export type RuntimeConfig = Record<string, never>;
+export type RuntimeConfig = {
+    readonly sellerId?: string;
+};
 export type ReactEdgeRuntimeIntegrations = Record<string, never>;
 export type ResolvedConfigIntegrations = Record<string, never>;
 
@@ -26,22 +28,6 @@ export interface ReactEdgeRuntimeConfig {
 
 export const WIDGET_ID = 'createlisting';
 
-/**
- * Validates and resolves the listing widget configuration.
- *
- * Both the widget contract and the runtime configuration are treated
- * as untrusted input. Once validated, the configuration is normalized,
- * resolved and frozen before being exposed to the React application.
- *
- * This function represents the trust boundary between the ReactEdge
- * runtime and the widget implementation.
- *
- * @param contract - Widget contract supplied by the host platform.
- * @param runtime - Runtime services supplied by the orchestrator.
- * @param activity - Activity logger for bootstrap events.
- * @returns An immutable listing configuration.
- * @throws When either configuration is invalid.
- */
 export function readWidgetConfig(
     contract: unknown,
     runtime: unknown,

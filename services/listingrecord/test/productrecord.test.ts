@@ -13,7 +13,7 @@ import type {Product} from '../src/model/product/types';
 const listingRequest = (name: string) => ({
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({name}),
+    body: JSON.stringify({name, sellerId: 'test-seller'}),
 });
 
 const images = [

@@ -11,7 +11,7 @@ import {prepareStorageAccess, storageDirectory} from '../src/access/staticFile';
 import {ListingStore} from '../src/model/listing/listing-store';
 import type {Listing} from '../src/model/listing/types';
 
-const json = (name: unknown) => ({method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({name})});
+const json = (name: unknown) => ({method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({name, sellerId: 'test-seller'})});
 
 async function fixture(run: (url: string, directory: string) => Promise<void>) {
     const root = await mkdtemp(path.join(tmpdir(), 'listingrecord-'));
