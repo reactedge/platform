@@ -31,10 +31,15 @@ test('demo seed creates four listings and three products per listing without dup
         assert.deepEqual(await seedDemoData(url), {listingsCreated: 0, productsCreated: 0});
 
         const listings = await (await fetch(`${url}/listingrecord/listings`)).json() as Array<{id: string; name: string}>;
-        const products = await (await fetch(`${url}/listingrecord/products`)).json() as Array<{listingId: string; sku: string}>;
+        const products = await (await fetch(`${url}/listingrecord/products`)).json() as Array<{
+            listingId: string;
+            sku: string;
+            images: unknown[];
+        }>;
 
         assert.equal(listings.length, 4);
         assert.equal(products.length, 12);
+        assert.ok(products.every(product => product.images.length === 0));
 
         for (const seed of seedListings) {
             const listing = listings.find(record => record.name === seed.name);

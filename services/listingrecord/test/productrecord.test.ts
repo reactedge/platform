@@ -68,11 +68,19 @@ test('products are saved against an existing listing with image identities', () 
     assert.deepEqual(JSON.parse(await readFile(path.join(directory, 'products.json'), 'utf8')), [product]);
 }));
 
+test('products may be saved without images', () => fixture(async (url) => {
+    const listing = await (await fetch(`${url}/listingrecord/listings`, listingRequest('Artworks'))).json() as Listing;
+    const response = await fetch(`${url}/listingrecord/products`, productRequest(listing.id, {images: []}));
+
+    assert.equal(response.status, 201);
+    const product = await response.json() as Product;
+    assert.deepEqual(product.images, []);
+}));
+
 test('products reject invalid image collections', () => fixture(async (url) => {
     const listing = await (await fetch(`${url}/listingrecord/listings`, listingRequest('Artworks'))).json() as Listing;
 
     for (const overrides of [
-        {images: []},
         {images: [{url: 'not-a-url', publicId: 'one'}]},
         {images: [{url: 'https://example.com/a.jpg', publicId: ''}]},
         {images: Array.from({length: 11}, (_, index) => ({

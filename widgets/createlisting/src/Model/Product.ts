@@ -12,7 +12,7 @@ export const ProductInputSchema = z.object({
     title: z.string().trim().min(1).max(150),
     description: z.string().trim().min(1).max(5000),
     price: z.number().finite().nonnegative(),
-    images: z.array(ProductImageSchema).min(1).max(10),
+    images: z.array(ProductImageSchema).max(10),
 }).strict();
 
 const ProductRecordSchema = ProductInputSchema.extend({ id: z.uuid() });
