@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ListingForm } from "./ListingForm.tsx";
+import { AddProductPanel } from "./product/AddProductPanel.tsx";
 import { loadListings, saveListing, updateListing, deleteListing, type Listing } from "../lib/listings.ts";
 import type { WidgetConfig } from "../Config";
 import { useProductData } from "../hooks/domain/useProductData";
@@ -20,7 +21,7 @@ export const WidgetCreatelisting = ({
         productLoading,
     } = useProductData(config.runtime.sku, bootstrap);
 
-    const [mode, setMode] = useState<'create' | 'edit' | 'delete' | null>(null);
+    const [mode, setMode] = useState<'create' | 'edit' | 'delete' | 'product' | null>(null);
     const [selectedId, setSelectedId] = useState('');
     const [busy, setBusy] = useState(false);
     const [listings, setListings] = useState<Listing[]>([]);
@@ -34,6 +35,13 @@ export const WidgetCreatelisting = ({
             .catch(() => { if (active) setListingError('Unable to load saved listings.'); });
         return () => { active = false; };
     }, []);
+
+    const selectMode = (nextMode: 'create' | 'edit' | 'delete' | 'product') => {
+        setMode(nextMode);
+        setSelectedId('');
+        setMessage('');
+        setListingError('');
+    };
 
     const save = async (name: string) => {
         setMessage('');
@@ -88,11 +96,22 @@ export const WidgetCreatelisting = ({
                         {(['create', 'edit', 'delete'] as const).map(action => (
                             <li key={action}>
                                 <button type="button" className="word-editor__block" aria-pressed={mode === action}
-                                    disabled={busy} onClick={() => { setMode(action); setSelectedId(''); setMessage(''); setListingError(''); }}>
+                                    disabled={busy} onClick={() => selectMode(action)}>
                                     {action === 'create' ? 'Create listing' : action === 'edit' ? 'Edit listing' : 'Delete listing'}
                                 </button>
                             </li>
                         ))}
+                        <li className="listing-workspace__product-capability">
+                            <button
+                                type="button"
+                                className="word-editor__block"
+                                aria-pressed={mode === 'product'}
+                                disabled={busy}
+                                onClick={() => selectMode('product')}
+                            >
+                                Add product
+                            </button>
+                        </li>
                     </ul>
                 </aside>
 
@@ -118,6 +137,13 @@ export const WidgetCreatelisting = ({
                                 <button type="button" disabled={busy} onClick={() => { void remove(); }}>{busy ? 'Deleting…' : 'Confirm delete'}</button>
                                 <button type="button" disabled={busy} onClick={() => { setMode(null); setSelectedId(''); }}>Cancel</button>
                             </section>
+                        )}
+                        {mode === 'product' && (
+                            <AddProductPanel
+                                listings={listings}
+                                disabled={busy}
+                                onCancel={() => setMode(null)}
+                            />
                         )}
                         {message && <p role="status">{message}</p>}
                         {listingError && <p role="alert">{listingError}</p>}
