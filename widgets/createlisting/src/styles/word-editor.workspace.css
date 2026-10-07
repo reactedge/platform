@@ -1,0 +1,43 @@
+.word-editor__workspace {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.word-editor__block-palette {
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.word-editor__block-palette-title {
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #666;
+}
+
+.word-editor__block {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+
+    font-size: 14px;
+    cursor: grab;
+    user-select: none;
+}
+
+.word-editor__block:hover {
+    background: #f1f1f1;
+}
+
+.word-editor__block:active {
+    cursor: grabbing;
+}
