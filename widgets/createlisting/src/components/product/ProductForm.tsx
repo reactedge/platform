@@ -1,5 +1,10 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
-import type { ProductImageRecord, ProductInput, ProductRecord } from "../../Model/Product.ts";
+import type {
+    ProductImageRecord,
+    ProductInput,
+    ProductRecord,
+    ProductStatus,
+} from "../../Model/Product.ts";
 import { ProductImageField } from "./ProductImageField.tsx";
 
 type Props = {
@@ -21,18 +26,21 @@ export const ProductForm = ({
     const [title, setTitle] = useState(initial?.title ?? '');
     const [description, setDescription] = useState(initial?.description ?? '');
     const [price, setPrice] = useState(initial ? String(initial.price) : '');
+    const [status, setStatus] = useState<ProductStatus>(initial?.status ?? 'active');
     const [images, setImages] = useState<ProductImageRecord[]>(initial?.images ?? []);
 
     const skuId = useId();
     const titleId = useId();
     const descriptionId = useId();
     const priceId = useId();
+    const statusId = useId();
 
     useEffect(() => {
         setSku(initial?.sku ?? '');
         setTitle(initial?.title ?? '');
         setDescription(initial?.description ?? '');
         setPrice(initial ? String(initial.price) : '');
+        setStatus(initial?.status ?? 'active');
         setImages(initial?.images ?? []);
     }, [initial]);
 
@@ -44,6 +52,7 @@ export const ProductForm = ({
             title,
             description,
             price: Number(price),
+            status,
             images,
         });
     };
@@ -67,6 +76,14 @@ export const ProductForm = ({
             <label htmlFor={priceId}>Price</label>
             <input id={priceId} name="price" type="number" min="0" step="0.01" inputMode="decimal" value={price}
                 onChange={event => setPrice(event.target.value)} disabled={disabled} required />
+
+            <label htmlFor={statusId}>Status</label>
+            <select id={statusId} value={status} disabled={disabled}
+                onChange={event => setStatus(event.target.value as ProductStatus)}>
+                <option value="active">Active</option>
+                <option value="disable">Disabled</option>
+                <option value="inreview">In review</option>
+            </select>
 
             <ProductImageField value={images} disabled={disabled} onChange={setImages} />
 

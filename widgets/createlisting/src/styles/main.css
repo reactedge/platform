@@ -64,6 +64,7 @@
 }
 
 .listing-workspace__form input,
+.listing-workspace__form select,
 .listing-workspace__selector select {
     width: 100%;
     min-width: 0;
@@ -76,6 +77,7 @@
     font: inherit;
 }
 
+.listing-workspace__form select,
 .listing-workspace__selector select {
     padding-right: 40px;
     appearance: none;
