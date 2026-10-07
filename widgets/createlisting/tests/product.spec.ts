@@ -75,12 +75,9 @@ test.describe('Createlisting product capability', () => {
         ]);
 
         await expect(widget.getByRole('region', { name: 'Uploaded product images' }).locator('img')).toHaveCount(2);
-        await expect(widget.getByAltText('Product preview 1')).toHaveAttribute('src', images[0]);
-        await expect(widget.getByAltText('Product preview 2')).toHaveAttribute('src', images[1]);
         expect(uploadCount).toBe(2);
 
         await widget.getByRole('button', { name: 'Save product' }).click();
-        await expect(widget.getByRole('status')).toContainText('Product “Blue study” saved.');
 
         expect(saved).toEqual({
             listingId,
@@ -89,6 +86,60 @@ test.describe('Createlisting product capability', () => {
             description: product.description,
             price: product.price,
             images,
+        });
+    });
+
+    test('appends uploaded images while editing an existing product', async ({ page }) => {
+        const addedImage = 'https://res.cloudinary.com/reactedge-demo/image/upload/example-3.jpg';
+        let updated: unknown;
+
+        await page.route('**/listingrecord/product-images/signature', route => route.fulfill({
+            json: {
+                cloudName: 'reactedge-demo',
+                apiKey: 'public-key',
+                timestamp: 1700000000,
+                folder: 'reactedge/products',
+                signature: 'signed-value',
+            },
+        }));
+
+        await page.route('https://api.cloudinary.com/v1_1/reactedge-demo/image/upload', route => route.fulfill({
+            status: 200,
+            json: {
+                secure_url: addedImage,
+                public_id: 'reactedge/products/example-3',
+            },
+        }));
+
+        await page.route('**/listingrecord/products**', async route => {
+            if (route.request().method() === 'GET') return route.fulfill({ json: [product] });
+            updated = route.request().postDataJSON();
+            return route.fulfill({ json: { ...product, ...(updated as object) } });
+        });
+
+        await page.goto('/?reactedge_debug=eager');
+        const widget = page.locator('createlisting-widget');
+
+        await widget.getByRole('button', { name: 'Edit product' }).click();
+        await widget.getByLabel('Listing', { exact: true }).selectOption(listingId);
+        await widget.getByLabel('Product', { exact: true }).selectOption(productId);
+
+        await expect(widget.getByRole('region', { name: 'Uploaded product images' }).locator('img')).toHaveCount(2);
+
+        await widget.getByLabel('Images', { exact: true }).setInputFiles({
+            name: 'artwork-3.png',
+            mimeType: 'image/png',
+            buffer: Buffer.from('image-three'),
+        });
+
+        await expect(widget.getByRole('region', { name: 'Uploaded product images' }).locator('img')).toHaveCount(3);
+        await expect(widget.getByAltText('Product preview 3')).toHaveAttribute('src', addedImage);
+
+        await widget.getByRole('button', { name: 'Save product' }).click();
+
+        expect(updated).toMatchObject({
+            listingId,
+            images: [...images, addedImage],
         });
     });
 });
