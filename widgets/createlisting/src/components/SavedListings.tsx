@@ -1,9 +1,15 @@
-import type { ListingRecord } from '../Model/Listing.ts';
+import type { ListingRecord, ListingStatus } from '../Model/Listing.ts';
 import type { ProductRecord } from '../Model/Product.ts';
 
 type Props = {
     listings: ListingRecord[];
     products: ProductRecord[];
+};
+
+const statusLabel: Record<ListingStatus, string> = {
+    active: 'Active',
+    disable: 'Disabled',
+    inreview: 'In review',
 };
 
 export const SavedListings = ({ listings, products }: Props) => {
@@ -20,7 +26,12 @@ export const SavedListings = ({ listings, products }: Props) => {
                     const productCount = countProducts(listing.id);
                     return (
                         <li key={listing.id}>
-                            <span>{listing.name}</span>
+                            <div className="listing-workspace__listing-summary">
+                                <span>{listing.name}</span>
+                                <span className={`listing-workspace__status-flag listing-workspace__status-flag--${listing.status}`}>
+                                    {statusLabel[listing.status]}
+                                </span>
+                            </div>
                             <span className="listing-workspace__product-count">
                                 {productCount} {productCount === 1 ? 'product' : 'products'}
                             </span>

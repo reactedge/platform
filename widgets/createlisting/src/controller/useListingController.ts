@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Listing, type ListingRecord } from '../Model/Listing.ts';
+import { Listing, type ListingInput, type ListingRecord } from '../Model/Listing.ts';
 
 export type ListingMode = 'create' | 'edit' | 'delete';
 
@@ -23,12 +23,13 @@ export function useListingController() {
         return () => { active = false; };
     }, []);
 
-    const save = async (name: string) => {
+    const save = async (input: ListingInput) => {
         setMessage('');
         setBusy(true);
         try {
             const listing = mode === 'edit' && selected
-                ? await listingModel.update(selected.id, name) : await listingModel.create(name);
+                ? await listingModel.update(selected.id, input)
+                : await listingModel.create(input);
             setListings(current => mode === 'edit'
                 ? current.map(record => record.id === listing.id ? listing : record)
                 : [...current, listing]);

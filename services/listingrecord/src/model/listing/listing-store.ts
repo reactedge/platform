@@ -49,7 +49,7 @@ export class ListingStore {
     create(input: unknown): Promise<Listing> {
         const data = ListingInputSchema.parse(input);
         return this.mutate(records => {
-            const record = {id: randomUUID(), name: data.name};
+            const record = {id: randomUUID(), ...data};
             records.push(record);
             return record;
         });
@@ -60,7 +60,7 @@ export class ListingStore {
         return this.mutate(records => {
             const record = records.find(record => record.id === id);
             if (!record) throw new ListingNotFoundError();
-            record.name = data.name;
+            Object.assign(record, data);
             return record;
         });
     }

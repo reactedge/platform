@@ -219,3 +219,33 @@
         flex-wrap: wrap;
     }
 }
+
+.listing-workspace__listing-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.listing-workspace__status-flag {
+    flex: 0 0 auto;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.listing-workspace__status-flag--active {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.listing-workspace__status-flag--disable {
+    color: #475569;
+    background: #e2e8f0;
+}
+
+.listing-workspace__status-flag--inreview {
+    color: #92400e;
+    background: #fef3c7;
+}

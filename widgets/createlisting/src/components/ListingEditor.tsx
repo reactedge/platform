@@ -18,7 +18,8 @@ export const ListingEditor = ({ controller, selectedProductCount }: Props) => {
         <>
             <ListingSelector listings={listings} selectedId={selectedId} action={mode}
                 disabled={disabled} onSelect={select} />
-            {mode === 'edit' && selected && <ListingForm key={selected.id} editing initialName={selected.name}
+            {mode === 'edit' && selected && <ListingForm key={selected.id} editing
+                initialName={selected.name} initialStatus={selected.status}
                 onSave={save} onCancel={cancel} />}
             {mode === 'delete' && selected && <ListingDeleteConfirmation listing={selected}
                 productCount={selectedProductCount} busy={busy} onConfirm={remove} onCancel={cancel} />}
