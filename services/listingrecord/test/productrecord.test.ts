@@ -26,7 +26,7 @@ const productPayload = (listingId: string, overrides: Record<string, unknown> = 
     sku: 'ART-001',
     title: 'Blue study',
     description: 'Oil on canvas',
-    price: 450,
+    price: 3.70,
     images,
     ...overrides,
 });
@@ -58,13 +58,15 @@ async function fixture(run: (url: string, directory: string, app: Application) =
     }
 }
 
-test('products are saved against an existing listing with image identities', () => fixture(async (url, directory) => {
+test('products accept UUID listing IDs, hyphenated SKUs and two-decimal prices', () => fixture(async (url, directory) => {
     const listing = await (await fetch(`${url}/listingrecord/listings`, listingRequest('Artworks'))).json() as Listing;
-    const response = await fetch(`${url}/listingrecord/products`, productRequest(listing.id));
+    const response = await fetch(`${url}/listingrecord/products`, productRequest(listing.id, {sku: 'ART-001-2026'}));
 
     assert.equal(response.status, 201);
     const product = await response.json() as Product;
-    assert.deepEqual(product.images, images);
+    assert.equal(product.listingId, listing.id);
+    assert.equal(product.sku, 'ART-001-2026');
+    assert.equal(product.price, 3.7);
     assert.deepEqual(JSON.parse(await readFile(path.join(directory, 'products.json'), 'utf8')), [product]);
 }));
 
@@ -75,6 +77,20 @@ test('products may be saved without images', () => fixture(async (url) => {
     assert.equal(response.status, 201);
     const product = await response.json() as Product;
     assert.deepEqual(product.images, []);
+}));
+
+test('products reject invalid product details', () => fixture(async (url) => {
+    const listing = await (await fetch(`${url}/listingrecord/listings`, listingRequest('Artworks'))).json() as Listing;
+
+    for (const [listingId, overrides] of [
+        ['', {}],
+        [listing.id, {sku: 'TOO-LONG-SKU-1234'}],
+        [listing.id, {sku: 'ART_001'}],
+        [listing.id, {title: '<b>Blue study</b>'}],
+        [listing.id, {price: 3.701}],
+    ] as Array<[string, Record<string, unknown>]>) {
+        assert.equal((await fetch(`${url}/listingrecord/products`, productRequest(listingId, overrides))).status, 400);
+    }
 }));
 
 test('products reject invalid image collections', () => fixture(async (url) => {

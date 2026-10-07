@@ -1,9 +1,5 @@
-import type {Product} from '../model/product/types.ts';
-
-type ListingRecord = {
-    id: string;
-    name: string;
-};
+import {ListingSchema, ListingsSchema, type Listing} from '../model/listing/types.ts';
+import {ProductSchema, ProductsSchema, type Product} from '../model/product/types.ts';
 
 type SeedProduct = Omit<Product, 'id' | 'listingId'>;
 
@@ -28,15 +24,17 @@ export async function seedDemoData(
     fetcher: typeof fetch = fetch,
 ): Promise<{listingsCreated: number; productsCreated: number}> {
     const baseUrl = `${host.replace(/\/+$/, '')}/listingrecord`;
-    const listings = await getJson<ListingRecord[]>(fetcher, `${baseUrl}/listings`);
-    const products = await getJson<Product[]>(fetcher, `${baseUrl}/products`);
+    const listings = ListingsSchema.parse(await getJson(fetcher, `${baseUrl}/listings`));
+    const products = ProductsSchema.parse(await getJson(fetcher, `${baseUrl}/products`));
 
     let listingsCreated = 0;
     let productsCreated = 0;
 
     for (const seed of seedListings) {
         const existing = listings.find(listing => listing.name === seed.name);
-        const listing = existing ?? await postJson<ListingRecord>(fetcher, `${baseUrl}/listings`, {name: seed.name});
+        const listing = existing ?? ListingSchema.parse(
+            await postJson(fetcher, `${baseUrl}/listings`, {name: seed.name}),
+        );
 
         if (!existing) {
             listings.push(listing);
@@ -45,10 +43,11 @@ export async function seedDemoData(
 
         for (const product of seed.products) {
             if (products.some(record => record.sku === product.sku)) continue;
-            const created = await postJson<Product>(fetcher, `${baseUrl}/products`, {
+
+            const created = ProductSchema.parse(await postJson(fetcher, `${baseUrl}/products`, {
                 ...product,
                 listingId: listing.id,
-            });
+            }));
             products.push(created);
             productsCreated += 1;
         }
@@ -57,21 +56,21 @@ export async function seedDemoData(
     return {listingsCreated, productsCreated};
 }
 
-async function getJson<T>(fetcher: typeof fetch, url: string): Promise<T> {
-    return requestJson<T>(fetcher, url, {method: 'GET'});
+async function getJson(fetcher: typeof fetch, url: string): Promise<unknown> {
+    return requestJson(fetcher, url, {method: 'GET'});
 }
 
-async function postJson<T>(fetcher: typeof fetch, url: string, body: unknown): Promise<T> {
-    return requestJson<T>(fetcher, url, {
+async function postJson(fetcher: typeof fetch, url: string, body: unknown): Promise<unknown> {
+    return requestJson(fetcher, url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(body),
     });
 }
 
-async function requestJson<T>(fetcher: typeof fetch, url: string, options: RequestInit): Promise<T> {
+async function requestJson(fetcher: typeof fetch, url: string, options: RequestInit): Promise<unknown> {
     const response = await fetcher(url, options);
-    const body = await response.json() as T | {error?: string};
+    const body = await response.json() as unknown;
 
     if (!response.ok) {
         const message = typeof body === 'object' && body && 'error' in body && typeof body.error === 'string'
@@ -80,5 +79,5 @@ async function requestJson<T>(fetcher: typeof fetch, url: string, options: Reque
         throw new Error(message);
     }
 
-    return body as T;
+    return body;
 }

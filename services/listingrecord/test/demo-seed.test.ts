@@ -39,6 +39,7 @@ test('demo seed creates four listings and three products per listing without dup
 
         assert.equal(listings.length, 4);
         assert.equal(products.length, 12);
+        assert.ok(products.every(product => product.listingId.length > 0));
         assert.ok(products.every(product => product.images.length === 0));
 
         for (const seed of seedListings) {
@@ -51,4 +52,24 @@ test('demo seed creates four listings and three products per listing without dup
         Object.assign(config, original);
         await rm(root, {recursive: true, force: true});
     }
+});
+
+test('demo seed rejects listing responses without a valid UUID', async () => {
+    const fetcher = async (input: string | URL | Request, init?: RequestInit): Promise<Response> => {
+        const url = String(input);
+
+        if (url.endsWith('/listings') && init?.method === 'GET') {
+            return Response.json([{id: '', name: 'Seed Listing 1'}]);
+        }
+        if (url.endsWith('/products') && init?.method === 'GET') {
+            return Response.json([]);
+        }
+
+        return Response.json({error: 'Unexpected request'}, {status: 500});
+    };
+
+    await assert.rejects(
+        () => seedDemoData('http://127.0.0.1:4180', fetcher as typeof fetch),
+        /Invalid UUID|invalid/i,
+    );
 });
