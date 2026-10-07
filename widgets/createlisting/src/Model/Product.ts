@@ -1,18 +1,24 @@
 import { z } from 'zod';
 import { requestListing } from '../lib/listingRequest.ts';
 
+export const ProductImageSchema = z.object({
+    url: z.url(),
+    publicId: z.string().trim().min(1).max(500),
+}).strict();
+
 export const ProductInputSchema = z.object({
     listingId: z.uuid(),
     sku: z.string().trim().min(1).max(100),
     title: z.string().trim().min(1).max(150),
     description: z.string().trim().min(1).max(5000),
     price: z.number().finite().nonnegative(),
-    images: z.array(z.url()).min(1).max(10),
+    images: z.array(ProductImageSchema).min(1).max(10),
 }).strict();
 
 const ProductRecordSchema = ProductInputSchema.extend({ id: z.uuid() });
 const ProductRecordsSchema = z.array(ProductRecordSchema);
 
+export type ProductImageRecord = z.infer<typeof ProductImageSchema>;
 export type ProductInput = z.infer<typeof ProductInputSchema>;
 export type ProductRecord = z.infer<typeof ProductRecordSchema>;
 

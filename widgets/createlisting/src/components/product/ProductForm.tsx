@@ -1,5 +1,5 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
-import type { ProductInput, ProductRecord } from "../../Model/Product.ts";
+import type { ProductImageRecord, ProductInput, ProductRecord } from "../../Model/Product.ts";
 import { ProductImageField } from "./ProductImageField.tsx";
 
 type Props = {
@@ -21,7 +21,7 @@ export const ProductForm = ({
     const [title, setTitle] = useState(initial?.title ?? '');
     const [description, setDescription] = useState(initial?.description ?? '');
     const [price, setPrice] = useState(initial ? String(initial.price) : '');
-    const [images, setImages] = useState<string[]>(initial?.images ?? []);
+    const [images, setImages] = useState<ProductImageRecord[]>(initial?.images ?? []);
 
     const skuId = useId();
     const titleId = useId();

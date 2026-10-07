@@ -38,6 +38,13 @@ export class ProductStore {
         return this.read();
     }
 
+    async get(id: string): Promise<Product> {
+        await this.pending;
+        const record = (await this.read()).find(product => product.id === id);
+        if (!record) throw new ProductNotFoundError();
+        return record;
+    }
+
     create(input: unknown): Promise<Product> {
         const data = ProductInputSchema.parse(input);
         return this.mutate(records => {

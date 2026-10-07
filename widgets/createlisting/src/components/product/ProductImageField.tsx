@@ -1,10 +1,11 @@
 import { useId } from 'react';
+import type { ProductImageRecord } from '../../Model/Product.ts';
 import { useProductImageController } from '../../controller/useProductImageController.ts';
 
 type Props = {
-    value: string[];
+    value: ProductImageRecord[];
     disabled?: boolean;
-    onChange: (urls: string[]) => void;
+    onChange: (images: ProductImageRecord[]) => void;
 };
 
 export const ProductImageField = ({ value, disabled = false, onChange }: Props) => {
@@ -18,7 +19,7 @@ export const ProductImageField = ({ value, disabled = false, onChange }: Props) 
         controller.clear();
         try {
             const uploaded = await controller.upload(selected, value.length);
-            onChange([...value, ...uploaded.map(image => image.url)]);
+            onChange([...value, ...uploaded]);
         } catch {
             // Error state is owned by the image controller.
         }
@@ -46,9 +47,9 @@ export const ProductImageField = ({ value, disabled = false, onChange }: Props) 
 
             {value.length > 0 && (
                 <div className="listing-workspace__product-image-previews" aria-label="Uploaded product images">
-                    {value.map((url, index) => (
-                        <figure key={url} className="listing-workspace__product-image-preview">
-                            <img src={url} alt={`Product preview ${index + 1}`} />
+                    {value.map((image, index) => (
+                        <figure key={image.publicId} className="listing-workspace__product-image-preview">
+                            <img src={image.url} alt={`Product preview ${index + 1}`} />
                             <figcaption>Image {index + 1}</figcaption>
                         </figure>
                     ))}

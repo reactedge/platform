@@ -9,7 +9,10 @@ type Props = {
 
 export const ProductDeleteConfirmation = ({ product, disabled = false, onConfirm, onCancel }: Props) => (
     <section className="listing-workspace__product-delete" aria-label="Confirm product deletion">
-        <p>Delete product “{product.title}”? This cannot be undone.</p>
+        <p>
+            Delete product “{product.title}” and its {product.images.length} uploaded
+            {product.images.length === 1 ? ' image' : ' images'}? This cannot be undone.
+        </p>
         <div className="word-editor__save-or-export">
             <button type="button" disabled={disabled} onClick={() => { void onConfirm(); }}>
                 {disabled ? 'Deleting…' : 'Confirm delete'}
