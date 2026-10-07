@@ -50,7 +50,7 @@ export const WidgetCreatelisting = ({ config }: Props) => {
                                     message={listingController.message} error={listingController.error} />
                             </>
                         )}
-                        <SavedListings listings={listingController.listings} />
+                        <SavedListings listings={listingController.listings} products={productController.products} />
                     </div>
                 </div>
             </div>

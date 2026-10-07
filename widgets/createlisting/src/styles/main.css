@@ -161,9 +161,19 @@
 }
 
 .listing-workspace__saved li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
     padding: 12px 0;
     border-bottom: 1px solid #f1f5f9;
     overflow-wrap: anywhere;
+}
+
+.listing-workspace__product-count {
+    flex: 0 0 auto;
+    color: #64748b;
+    font-size: 13px;
 }
 
 .listing-workspace__count {
