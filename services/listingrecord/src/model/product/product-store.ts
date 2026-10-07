@@ -5,6 +5,12 @@ import path from 'node:path';
 import {ProductInputSchema, ProductsSchema} from './types';
 import type {Product} from './types';
 
+export class ProductNotFoundError extends Error {
+    constructor() {
+        super('The product no longer exists.');
+    }
+}
+
 export class ProductStore {
     private readonly file: string;
     private pending: Promise<unknown> = Promise.resolve();
@@ -32,12 +38,37 @@ export class ProductStore {
         return this.read();
     }
 
+    async get(id: string): Promise<Product> {
+        await this.pending;
+        const record = (await this.read()).find(product => product.id === id);
+        if (!record) throw new ProductNotFoundError();
+        return record;
+    }
+
     create(input: unknown): Promise<Product> {
         const data = ProductInputSchema.parse(input);
         return this.mutate(records => {
             const record = {id: randomUUID(), ...data};
             records.push(record);
             return record;
+        });
+    }
+
+    update(id: string, input: unknown): Promise<Product> {
+        const data = ProductInputSchema.parse(input);
+        return this.mutate(records => {
+            const record = records.find(product => product.id === id);
+            if (!record) throw new ProductNotFoundError();
+            Object.assign(record, data);
+            return record;
+        });
+    }
+
+    delete(id: string): Promise<void> {
+        return this.mutate(records => {
+            const index = records.findIndex(product => product.id === id);
+            if (index < 0) throw new ProductNotFoundError();
+            records.splice(index, 1);
         });
     }
 

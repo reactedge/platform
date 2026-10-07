@@ -1,28 +1,30 @@
-import { useState } from 'react';
 import type { WidgetConfig } from '../Config';
 import { useListingController } from '../controller/useListingController.ts';
+import { useProductController } from '../controller/useProductController.ts';
 import { ListingCapabilities } from './ListingCapabilities.tsx';
 import { ListingEditor } from './ListingEditor.tsx';
 import { ListingFeedback } from './ListingFeedback.tsx';
 import { SavedListings } from './SavedListings.tsx';
-import { AddProductPanel } from './product/AddProductPanel.tsx';
-import { ProductCapabilityButton } from './product/ProductCapabilityButton.tsx';
+import { ProductCapabilities } from './product/ProductCapabilities.tsx';
+import { ProductWorkspace } from './product/ProductWorkspace.tsx';
 
 type Props = { config: WidgetConfig };
 
 export const WidgetCreatelisting = ({ config }: Props) => {
-    const controller = useListingController();
-    const [productActive, setProductActive] = useState(false);
+    const listingController = useListingController();
+    const productController = useProductController();
 
-    const chooseListing = (action: Parameters<typeof controller.begin>[0]) => {
-        setProductActive(false);
-        controller.begin(action);
+    const chooseListing = (action: Parameters<typeof listingController.begin>[0]) => {
+        productController.cancel();
+        listingController.begin(action);
     };
 
-    const chooseProduct = () => {
-        controller.cancel();
-        setProductActive(true);
+    const chooseProduct = (mode: Parameters<typeof productController.begin>[0]) => {
+        listingController.cancel();
+        productController.begin(mode);
     };
+
+    const productActive = productController.mode !== null;
 
     return (
         <section className="word-editor listing-workspace">
@@ -33,22 +35,22 @@ export const WidgetCreatelisting = ({ config }: Props) => {
                 <p className="word-editor__subtitle">Listing capabilities</p>
             </header>
             <div className="word-editor__workspace">
-                <ListingCapabilities mode={controller.mode} disabled={controller.disabled} onChoose={chooseListing}>
-                    <ProductCapabilityButton active={productActive} disabled={controller.disabled} onSelect={chooseProduct} />
+                <ListingCapabilities mode={listingController.mode} disabled={listingController.disabled} onChoose={chooseListing}>
+                    <ProductCapabilities mode={productController.mode}
+                        disabled={listingController.disabled || productController.disabled} onChoose={chooseProduct} />
                 </ListingCapabilities>
                 <div className="word-editor__document-area">
                     <div className="word-editor__document listing-workspace__content">
                         {productActive ? (
-                            <AddProductPanel listings={controller.listings} disabled={controller.disabled}
-                                onCancel={() => setProductActive(false)} />
+                            <ProductWorkspace listings={listingController.listings} controller={productController} />
                         ) : (
                             <>
-                                <ListingEditor controller={controller} />
-                                <ListingFeedback loading={controller.loading} mode={controller.mode}
-                                    message={controller.message} error={controller.error} />
+                                <ListingEditor controller={listingController} />
+                                <ListingFeedback loading={listingController.loading} mode={listingController.mode}
+                                    message={listingController.message} error={listingController.error} />
                             </>
                         )}
-                        <SavedListings listings={controller.listings} />
+                        <SavedListings listings={listingController.listings} />
                     </div>
                 </div>
             </div>

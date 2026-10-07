@@ -16,6 +16,8 @@ export const setupProductRoutes = (app: Application): void => {
     });
     router.get('/products', createRouteOperationMiddleware('listingrecord.product.list'), handler.list);
     router.post('/products', createRouteOperationMiddleware('listingrecord.product.create'), handler.create);
+    router.put('/products/:id', createRouteOperationMiddleware('listingrecord.product.update'), handler.update);
+    router.delete('/products/:id', createRouteOperationMiddleware('listingrecord.product.delete'), handler.delete);
 
     app.use(config.route.servicePrefix, router);
 };

@@ -1,8 +1,10 @@
-import { useId, useState, type FormEvent } from "react";
-import type { ProductInput } from "../../Model/Product.ts";
+import { useEffect, useId, useState, type FormEvent } from "react";
+import type { ProductImageRecord, ProductInput, ProductRecord } from "../../Model/Product.ts";
+import { ProductImageField } from "./ProductImageField.tsx";
 
 type Props = {
     listingId: string;
+    initial?: ProductRecord;
     disabled?: boolean;
     onCancel: () => void;
     onSave: (input: ProductInput) => Promise<unknown>;
@@ -10,21 +12,29 @@ type Props = {
 
 export const ProductForm = ({
     listingId,
+    initial,
     disabled = false,
     onCancel,
     onSave,
 }: Props) => {
-    const [sku, setSku] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [image, setImage] = useState('');
+    const [sku, setSku] = useState(initial?.sku ?? '');
+    const [title, setTitle] = useState(initial?.title ?? '');
+    const [description, setDescription] = useState(initial?.description ?? '');
+    const [price, setPrice] = useState(initial ? String(initial.price) : '');
+    const [images, setImages] = useState<ProductImageRecord[]>(initial?.images ?? []);
 
     const skuId = useId();
     const titleId = useId();
     const descriptionId = useId();
     const priceId = useId();
-    const imageId = useId();
+
+    useEffect(() => {
+        setSku(initial?.sku ?? '');
+        setTitle(initial?.title ?? '');
+        setDescription(initial?.description ?? '');
+        setPrice(initial ? String(initial.price) : '');
+        setImages(initial?.images ?? []);
+    }, [initial]);
 
     const submit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -34,13 +44,13 @@ export const ProductForm = ({
             title,
             description,
             price: Number(price),
-            image,
+            images,
         });
     };
 
     return (
         <form className="listing-workspace__product-form" onSubmit={event => { void submit(event); }}>
-            <h3>Product details</h3>
+            <h3>{initial ? 'Edit product' : 'Product details'}</h3>
 
             <label htmlFor={skuId}>SKU</label>
             <input id={skuId} name="sku" type="text" autoComplete="off" value={sku}
@@ -58,12 +68,10 @@ export const ProductForm = ({
             <input id={priceId} name="price" type="number" min="0" step="0.01" inputMode="decimal" value={price}
                 onChange={event => setPrice(event.target.value)} disabled={disabled} required />
 
-            <label htmlFor={imageId}>Image</label>
-            <input id={imageId} name="image" type="url" placeholder="https://example.com/image.jpg" value={image}
-                onChange={event => setImage(event.target.value)} disabled={disabled} required />
+            <ProductImageField value={images} disabled={disabled} onChange={setImages} />
 
             <div className="word-editor__save-or-export">
-                <button type="submit" disabled={disabled}>
+                <button type="submit" disabled={disabled || images.length === 0}>
                     {disabled ? 'Saving…' : 'Save product'}
                 </button>
                 <button type="button" disabled={disabled} onClick={onCancel}>Cancel</button>
