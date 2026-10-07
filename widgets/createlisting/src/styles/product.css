@@ -18,12 +18,14 @@
 
 .listing-workspace__product select,
 .listing-workspace__product-form input,
+.listing-workspace__product-form select,
 .listing-workspace__product-form textarea {
     width: 100%;
     min-width: 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    min-height: 46px;
+    padding: 10px 14px;
+    border: 1px solid #94a3b8;
+    border-radius: 8px;
     background: #fff;
     color: inherit;
     box-sizing: border-box;
@@ -108,4 +110,14 @@
     margin-top: 6px;
     color: #64748b;
     font-size: 12px;
+}
+
+.listing-workspace__product select,
+.listing-workspace__product-form select {
+    padding-right: 40px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%23475569' stroke-width='1.5'%3E%3Cpath d='m5 8 5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
 }

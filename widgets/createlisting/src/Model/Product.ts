@@ -6,6 +6,9 @@ export const ProductImageSchema = z.object({
     publicId: z.string().trim().min(1).max(500),
 }).strict();
 
+export const ProductStatusSchema = z.enum(['active', 'disable', 'inreview']);
+export type ProductStatus = z.infer<typeof ProductStatusSchema>;
+
 export const ProductInputSchema = z.object({
     listingId: z.uuid(),
     sku: z.string()
@@ -20,6 +23,7 @@ export const ProductInputSchema = z.object({
         .regex(/^[^<>]*$/, 'Title must not contain HTML'),
     description: z.string().trim().min(1).max(5000),
     price: z.number().finite().nonnegative().multipleOf(0.01),
+    status: ProductStatusSchema.default('active'),
     images: z.array(ProductImageSchema).max(10),
 }).strict();
 

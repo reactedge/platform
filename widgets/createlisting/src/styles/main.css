@@ -64,6 +64,7 @@
 }
 
 .listing-workspace__form input,
+.listing-workspace__form select,
 .listing-workspace__selector select {
     width: 100%;
     min-width: 0;
@@ -76,6 +77,7 @@
     font: inherit;
 }
 
+.listing-workspace__form select,
 .listing-workspace__selector select {
     padding-right: 40px;
     appearance: none;
@@ -161,9 +163,19 @@
 }
 
 .listing-workspace__saved li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
     padding: 12px 0;
     border-bottom: 1px solid #f1f5f9;
     overflow-wrap: anywhere;
+}
+
+.listing-workspace__product-count {
+    flex: 0 0 auto;
+    color: #64748b;
+    font-size: 13px;
 }
 
 .listing-workspace__count {
@@ -208,4 +220,34 @@
     .listing-workspace .word-editor__save-or-export {
         flex-wrap: wrap;
     }
+}
+
+.listing-workspace__listing-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.listing-workspace__status-flag {
+    flex: 0 0 auto;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.listing-workspace__status-flag--active {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.listing-workspace__status-flag--disable {
+    color: #475569;
+    background: #e2e8f0;
+}
+
+.listing-workspace__status-flag--inreview {
+    color: #92400e;
+    background: #fef3c7;
 }

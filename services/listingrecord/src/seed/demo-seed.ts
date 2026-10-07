@@ -15,6 +15,7 @@ export const seedListings: SeedListing[] = Array.from({length: 4}, (_, listingIn
         title: `Seed Product ${listingIndex + 1}.${productIndex + 1}`,
         description: `Deterministic seed product ${productIndex + 1} for Seed Listing ${listingIndex + 1}.`,
         price: 100 + (listingIndex * 25) + (productIndex * 10),
+        status: 'active',
         images: [],
     })),
 }));

@@ -1,17 +1,27 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
+import type { ListingInput, ListingStatus } from '../Model/Listing.ts';
 
 type Props = {
     initialName?: string;
+    initialStatus?: ListingStatus;
     editing?: boolean;
     onCancel: () => void;
-    onSave: (name: string) => void | Promise<void>;
+    onSave: (input: ListingInput) => void | Promise<void>;
 };
 
-export const ListingForm = ({ onSave, initialName = '', editing = false, onCancel }: Props) => {
+export const ListingForm = ({
+    onSave,
+    initialName = '',
+    initialStatus = 'active',
+    editing = false,
+    onCancel,
+}: Props) => {
     const [name, setName] = useState(initialName);
+    const [status, setStatus] = useState<ListingStatus>(initialStatus);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
-    const inputId = useId();
+    const nameId = useId();
+    const statusId = useId();
     const input = useRef<HTMLInputElement>(null);
 
     useEffect(() => { input.current?.focus(); }, []);
@@ -23,15 +33,19 @@ export const ListingForm = ({ onSave, initialName = '', editing = false, onCance
             setError('Enter a listing name between 1 and 50 characters.');
             return;
         }
+
         setSaving(true);
         setError('');
         try {
-            await onSave(trimmedName);
-            if (!editing) setName('');
+            await onSave({name: trimmedName, status});
+            if (!editing) {
+                setName('');
+                setStatus('active');
+            }
             input.current?.focus();
         } catch (error) {
             const message = error instanceof Error ? error.message : 'Unable to save the listing.';
-            setError(`${message} Your entered name has been kept.`);
+            setError(`${message} Your entered details have been kept.`);
         } finally {
             setSaving(false);
         }
@@ -40,10 +54,21 @@ export const ListingForm = ({ onSave, initialName = '', editing = false, onCance
     return (
         <form className="listing-workspace__form" onSubmit={event => { void save(event); }}>
             <h2>{editing ? 'Edit listing' : 'Create listing'}</h2>
-            <label htmlFor={inputId}>Listing name</label>
-            <input ref={input} id={inputId} value={name} maxLength={50} required
+
+            <label htmlFor={nameId}>Listing name</label>
+            <input ref={input} id={nameId} value={name} maxLength={50} required
                 disabled={saving} onChange={event => setName(event.target.value)} />
+
+            <label htmlFor={statusId}>Status</label>
+            <select id={statusId} value={status} disabled={saving}
+                onChange={event => setStatus(event.target.value as ListingStatus)}>
+                <option value="active">Active</option>
+                <option value="disable">Disabled</option>
+                <option value="inreview">In review</option>
+            </select>
+
             {error && <p role="alert">{error}</p>}
+
             <div className="word-editor__save-or-export">
                 <button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save listing'}</button>
                 <button type="button" disabled={saving} onClick={onCancel}>Cancel</button>
