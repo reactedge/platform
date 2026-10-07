@@ -21,20 +21,19 @@ export const ProductForm = ({
     const [title, setTitle] = useState(initial?.title ?? '');
     const [description, setDescription] = useState(initial?.description ?? '');
     const [price, setPrice] = useState(initial ? String(initial.price) : '');
-    const [image, setImage] = useState(initial?.image ?? '');
+    const [images, setImages] = useState<string[]>(initial?.images ?? []);
 
     const skuId = useId();
     const titleId = useId();
     const descriptionId = useId();
     const priceId = useId();
-    const imageId = useId();
 
     useEffect(() => {
         setSku(initial?.sku ?? '');
         setTitle(initial?.title ?? '');
         setDescription(initial?.description ?? '');
         setPrice(initial ? String(initial.price) : '');
-        setImage(initial?.image ?? '');
+        setImages(initial?.images ?? []);
     }, [initial]);
 
     const submit = async (event: FormEvent<HTMLFormElement>) => {
@@ -45,7 +44,7 @@ export const ProductForm = ({
             title,
             description,
             price: Number(price),
-            image,
+            images,
         });
     };
 
@@ -70,17 +69,23 @@ export const ProductForm = ({
                 onChange={event => setPrice(event.target.value)} disabled={disabled} required />
 
             {initial ? (
-                <>
-                    <label htmlFor={imageId}>Image</label>
-                    <input id={imageId} name="image" type="url" value={image}
-                        onChange={event => setImage(event.target.value)} disabled={disabled} required />
-                </>
+                <div className="listing-workspace__product-image">
+                    <p><strong>Images</strong></p>
+                    <div className="listing-workspace__product-image-previews" aria-label="Existing product images">
+                        {images.map((url, index) => (
+                            <figure key={url} className="listing-workspace__product-image-preview">
+                                <img src={url} alt={`Product preview ${index + 1}`} />
+                                <figcaption>Image {index + 1}</figcaption>
+                            </figure>
+                        ))}
+                    </div>
+                </div>
             ) : (
-                <ProductImageField value={image} disabled={disabled} onChange={setImage} />
+                <ProductImageField value={images} disabled={disabled} onChange={setImages} />
             )}
 
             <div className="word-editor__save-or-export">
-                <button type="submit" disabled={disabled || !image}>
+                <button type="submit" disabled={disabled || images.length === 0}>
                     {disabled ? 'Saving…' : 'Save product'}
                 </button>
                 <button type="button" disabled={disabled} onClick={onCancel}>Cancel</button>

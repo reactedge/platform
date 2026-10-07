@@ -2,21 +2,23 @@ import { useId } from 'react';
 import { useProductImageController } from '../../controller/useProductImageController.ts';
 
 type Props = {
-    value: string;
+    value: string[];
     disabled?: boolean;
-    onChange: (url: string) => void;
+    onChange: (urls: string[]) => void;
 };
 
 export const ProductImageField = ({ value, disabled = false, onChange }: Props) => {
     const inputId = useId();
     const controller = useProductImageController();
 
-    const select = async (file?: File) => {
-        if (!file) return;
+    const select = async (files: FileList | null) => {
+        const selected = files ? Array.from(files) : [];
+        if (selected.length === 0) return;
+
         controller.clear();
         try {
-            const uploaded = await controller.upload(file);
-            onChange(uploaded.url);
+            const uploaded = await controller.upload(selected);
+            onChange(uploaded.map(image => image.url));
         } catch {
             // Error state is owned by the image controller.
         }
@@ -24,24 +26,32 @@ export const ProductImageField = ({ value, disabled = false, onChange }: Props) 
 
     return (
         <div className="listing-workspace__product-image">
-            <label htmlFor={inputId}>Image</label>
+            <label htmlFor={inputId}>Images</label>
             <input
                 id={inputId}
-                name="imageFile"
+                name="imageFiles"
                 type="file"
                 accept="image/*"
+                multiple
                 disabled={disabled || controller.busy}
-                required={!value}
-                onChange={event => { void select(event.target.files?.[0]); }}
+                required={value.length === 0}
+                onChange={event => { void select(event.target.files); }}
             />
+            <p className="listing-workspace__product-image-hint">
+                Select up to 10 images from the same folder.
+            </p>
 
-            {controller.busy && <p role="status">Uploading image…</p>}
+            {controller.busy && <p role="status">Uploading images…</p>}
             {controller.error && <p role="alert">{controller.error}</p>}
 
-            {value && (
-                <div className="listing-workspace__product-image-preview">
-                    <img src={value} alt="Product preview" />
-                    <p>Image uploaded.</p>
+            {value.length > 0 && (
+                <div className="listing-workspace__product-image-previews" aria-label="Uploaded product images">
+                    {value.map((url, index) => (
+                        <figure key={url} className="listing-workspace__product-image-preview">
+                            <img src={url} alt={`Product preview ${index + 1}`} />
+                            <figcaption>Image {index + 1}</figcaption>
+                        </figure>
+                    ))}
                 </div>
             )}
         </div>

@@ -7,13 +7,13 @@ export function useProductImageController() {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState('');
 
-    const upload = async (file: File): Promise<ProductImageUpload> => {
+    const upload = async (files: File[]): Promise<ProductImageUpload[]> => {
         setBusy(true);
         setError('');
         try {
-            return await productImageModel.upload(file);
+            return await productImageModel.upload(files);
         } catch (error) {
-            setError(error instanceof Error ? error.message : 'Unable to upload image.');
+            setError(error instanceof Error ? error.message : 'Unable to upload images.');
             throw error;
         } finally {
             setBusy(false);

@@ -6,7 +6,7 @@ export const ProductInputSchema = z.object({
     title: z.string().trim().min(1).max(150),
     description: z.string().trim().min(1).max(5000),
     price: z.number().finite().nonnegative(),
-    image: z.url(),
+    images: z.array(z.url()).min(1).max(10),
 }).strict();
 
 export const ProductSchema = ProductInputSchema.extend({id: z.uuid()});
