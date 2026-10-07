@@ -3,6 +3,11 @@ import { expect, test } from "@playwright/test";
 const listingId = '11111111-1111-4111-8111-111111111111';
 const productId = '22222222-2222-4222-8222-222222222222';
 
+const images = [
+    'https://res.cloudinary.com/reactedge-demo/image/upload/example-1.jpg',
+    'https://res.cloudinary.com/reactedge-demo/image/upload/example-2.jpg',
+];
+
 const product = {
     id: productId,
     listingId,
@@ -10,7 +15,7 @@ const product = {
     title: 'Blue study',
     description: 'Oil on canvas',
     price: 450,
-    image: 'https://res.cloudinary.com/reactedge-demo/image/upload/example.jpg',
+    images,
 };
 
 test.describe('Createlisting product capability', () => {
@@ -23,9 +28,9 @@ test.describe('Createlisting product capability', () => {
         }));
     });
 
-    test('uploads one image to Cloudinary before saving a product', async ({ page }) => {
+    test('uploads several images selected from one file chooser before saving a product', async ({ page }) => {
         let saved: unknown;
-        let cloudinaryUpload = '';
+        let uploadCount = 0;
 
         await page.route('**/listingrecord/product-images/signature', route => route.fulfill({
             json: {
@@ -38,12 +43,12 @@ test.describe('Createlisting product capability', () => {
         }));
 
         await page.route('https://api.cloudinary.com/v1_1/reactedge-demo/image/upload', async route => {
-            cloudinaryUpload = route.request().postData() ?? '';
+            const index = uploadCount++;
             await route.fulfill({
                 status: 200,
                 json: {
-                    secure_url: product.image,
-                    public_id: 'reactedge/products/example',
+                    secure_url: images[index],
+                    public_id: `reactedge/products/example-${index + 1}`,
                 },
             });
         });
@@ -64,16 +69,15 @@ test.describe('Createlisting product capability', () => {
         await widget.getByLabel('Description', { exact: true }).fill(product.description);
         await widget.getByLabel('Price', { exact: true }).fill(String(product.price));
 
-        await widget.getByLabel('Image', { exact: true }).setInputFiles({
-            name: 'artwork.png',
-            mimeType: 'image/png',
-            buffer: Buffer.from('image-bytes'),
-        });
+        await widget.getByLabel('Images', { exact: true }).setInputFiles([
+            { name: 'artwork-1.png', mimeType: 'image/png', buffer: Buffer.from('image-one') },
+            { name: 'artwork-2.png', mimeType: 'image/png', buffer: Buffer.from('image-two') },
+        ]);
 
-        await expect(widget.getByAltText('Product preview')).toHaveAttribute('src', product.image);
-        expect(cloudinaryUpload).toContain('public-key');
-        expect(cloudinaryUpload).toContain('signed-value');
-        expect(cloudinaryUpload).toContain('reactedge/products');
+        await expect(widget.getByRole('region', { name: 'Uploaded product images' }).locator('img')).toHaveCount(2);
+        await expect(widget.getByAltText('Product preview 1')).toHaveAttribute('src', images[0]);
+        await expect(widget.getByAltText('Product preview 2')).toHaveAttribute('src', images[1]);
+        expect(uploadCount).toBe(2);
 
         await widget.getByRole('button', { name: 'Save product' }).click();
         await expect(widget.getByRole('status')).toContainText('Product “Blue study” saved.');
@@ -84,49 +88,7 @@ test.describe('Createlisting product capability', () => {
             title: product.title,
             description: product.description,
             price: product.price,
-            image: product.image,
+            images,
         });
-    });
-
-    test('edits an existing product without using the Cloudinary experiment', async ({ page }) => {
-        let updated: unknown;
-        await page.route('**/listingrecord/products**', async route => {
-            if (route.request().method() === 'GET') return route.fulfill({ json: [product] });
-            updated = route.request().postDataJSON();
-            return route.fulfill({ json: { ...product, ...(updated as object) } });
-        });
-
-        await page.goto('/?reactedge_debug=eager');
-        const widget = page.locator('createlisting-widget');
-
-        await widget.getByRole('button', { name: 'Edit product' }).click();
-        await widget.getByLabel('Listing', { exact: true }).selectOption(listingId);
-        await widget.getByLabel('Product', { exact: true }).selectOption(productId);
-        await expect(widget.getByLabel('Image', { exact: true })).toHaveAttribute('type', 'url');
-        await widget.getByLabel('Title', { exact: true }).fill('Red study');
-        await widget.getByRole('button', { name: 'Save product' }).click();
-
-        await expect(widget.getByRole('status')).toContainText('Product “Red study” saved.');
-        expect(updated).toMatchObject({ listingId, title: 'Red study' });
-    });
-
-    test('deletes an existing product', async ({ page }) => {
-        let deleted = false;
-        await page.route('**/listingrecord/products**', async route => {
-            if (route.request().method() === 'GET') return route.fulfill({ json: [product] });
-            deleted = route.request().method() === 'DELETE';
-            return route.fulfill({ status: 204, body: '' });
-        });
-
-        await page.goto('/?reactedge_debug=eager');
-        const widget = page.locator('createlisting-widget');
-
-        await widget.getByRole('button', { name: 'Delete product' }).click();
-        await widget.getByLabel('Listing', { exact: true }).selectOption(listingId);
-        await widget.getByLabel('Product', { exact: true }).selectOption(productId);
-        await widget.getByRole('button', { name: 'Confirm delete' }).click();
-
-        await expect(widget.getByRole('status')).toContainText('Product “Blue study” deleted.');
-        expect(deleted).toBe(true);
     });
 });

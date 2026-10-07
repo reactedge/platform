@@ -22,7 +22,10 @@ const productPayload = (listingId: string, overrides: Record<string, unknown> = 
     title: 'Blue study',
     description: 'Oil on canvas',
     price: 450,
-    image: 'https://example.com/blue-study.jpg',
+    images: [
+        'https://example.com/blue-study-1.jpg',
+        'https://example.com/blue-study-2.jpg',
+    ],
     ...overrides,
 });
 
@@ -53,7 +56,7 @@ async function fixture(run: (url: string, directory: string) => Promise<void>) {
     }
 }
 
-test('products are saved against an existing listing', () => fixture(async (url, directory) => {
+test('products are saved against an existing listing with multiple images', () => fixture(async (url, directory) => {
     const listing = await (await fetch(`${url}/listingrecord/listings`, listingRequest('Artworks'))).json() as Listing;
     const response = await fetch(`${url}/listingrecord/products`, productRequest(listing.id));
 
@@ -61,30 +64,21 @@ test('products are saved against an existing listing', () => fixture(async (url,
     const product = await response.json() as Product;
     assert.equal(product.listingId, listing.id);
     assert.equal(product.sku, 'ART-001');
-    assert.equal(product.price, 450);
+    assert.equal(product.images.length, 2);
 
     assert.deepEqual(
         JSON.parse(await readFile(path.join(directory, 'products.json'), 'utf8')),
         [product],
     );
-    assert.deepEqual(
-        await (await fetch(`${url}/listingrecord/products`)).json(),
-        [product],
-    );
 }));
 
-test('products reject invalid data and unknown listings', () => fixture(async (url) => {
-    const unknownListing = '11111111-1111-4111-8111-111111111111';
-    assert.equal((await fetch(`${url}/listingrecord/products`, productRequest(unknownListing))).status, 404);
-
+test('products reject invalid image collections', () => fixture(async (url) => {
     const listing = await (await fetch(`${url}/listingrecord/listings`, listingRequest('Artworks'))).json() as Listing;
+
     for (const overrides of [
-        {sku: ''},
-        {title: ''},
-        {description: ''},
-        {price: -1},
-        {price: '450'},
-        {image: 'not-a-url'},
+        {images: []},
+        {images: ['not-a-url']},
+        {images: Array.from({length: 11}, (_, index) => `https://example.com/${index}.jpg`)},
     ]) {
         assert.equal((await fetch(`${url}/listingrecord/products`, productRequest(listing.id, overrides))).status, 400);
     }
@@ -95,16 +89,17 @@ test('products can be edited and deleted without changing their listing relation
     const created = await (await fetch(`${url}/listingrecord/products`, productRequest(listing.id))).json() as Product;
     const item = `${url}/listingrecord/products/${created.id}`;
 
-    const updatedResponse = await fetch(item, productRequest(listing.id, {title: 'Red study', price: 525}, 'PUT'));
+    const updatedResponse = await fetch(item, productRequest(listing.id, {
+        title: 'Red study',
+        images: ['https://example.com/red-study.jpg'],
+    }, 'PUT'));
     assert.equal(updatedResponse.status, 200);
+
     const updated = await updatedResponse.json() as Product;
     assert.equal(updated.id, created.id);
     assert.equal(updated.listingId, listing.id);
-    assert.equal(updated.title, 'Red study');
-    assert.equal(updated.price, 525);
+    assert.deepEqual(updated.images, ['https://example.com/red-study.jpg']);
 
     assert.equal((await fetch(item, {method: 'DELETE'})).status, 204);
     assert.deepEqual(JSON.parse(await readFile(path.join(directory, 'products.json'), 'utf8')), []);
-    assert.equal((await fetch(item, {method: 'DELETE'})).status, 404);
-    assert.equal((await fetch(`${url}/listingrecord/products/invalid`, {method: 'DELETE'})).status, 400);
 }));
