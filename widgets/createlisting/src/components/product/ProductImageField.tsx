@@ -17,8 +17,8 @@ export const ProductImageField = ({ value, disabled = false, onChange }: Props) 
 
         controller.clear();
         try {
-            const uploaded = await controller.upload(selected);
-            onChange(uploaded.map(image => image.url));
+            const uploaded = await controller.upload(selected, value.length);
+            onChange([...value, ...uploaded.map(image => image.url)]);
         } catch {
             // Error state is owned by the image controller.
         }
@@ -33,12 +33,12 @@ export const ProductImageField = ({ value, disabled = false, onChange }: Props) 
                 type="file"
                 accept="image/*"
                 multiple
-                disabled={disabled || controller.busy}
+                disabled={disabled || controller.busy || value.length >= 10}
                 required={value.length === 0}
                 onChange={event => { void select(event.target.files); }}
             />
             <p className="listing-workspace__product-image-hint">
-                Select up to 10 images from the same folder.
+                Select additional images from one folder, up to 10 images in total.
             </p>
 
             {controller.busy && <p role="status">Uploading images…</p>}

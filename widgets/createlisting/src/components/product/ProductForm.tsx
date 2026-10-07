@@ -68,21 +68,7 @@ export const ProductForm = ({
             <input id={priceId} name="price" type="number" min="0" step="0.01" inputMode="decimal" value={price}
                 onChange={event => setPrice(event.target.value)} disabled={disabled} required />
 
-            {initial ? (
-                <div className="listing-workspace__product-image">
-                    <p><strong>Images</strong></p>
-                    <div className="listing-workspace__product-image-previews" aria-label="Existing product images">
-                        {images.map((url, index) => (
-                            <figure key={url} className="listing-workspace__product-image-preview">
-                                <img src={url} alt={`Product preview ${index + 1}`} />
-                                <figcaption>Image {index + 1}</figcaption>
-                            </figure>
-                        ))}
-                    </div>
-                </div>
-            ) : (
-                <ProductImageField value={images} disabled={disabled} onChange={setImages} />
-            )}
+            <ProductImageField value={images} disabled={disabled} onChange={setImages} />
 
             <div className="word-editor__save-or-export">
                 <button type="submit" disabled={disabled || images.length === 0}>
