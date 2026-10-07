@@ -25,6 +25,9 @@ export const WidgetCreatelisting = ({ config }: Props) => {
     };
 
     const productActive = productController.mode !== null;
+    const selectedProductCount = listingController.selected
+        ? productController.products.filter(product => product.listingId === listingController.selected?.id).length
+        : 0;
 
     return (
         <section className="word-editor listing-workspace">
@@ -45,7 +48,7 @@ export const WidgetCreatelisting = ({ config }: Props) => {
                             <ProductWorkspace listings={listingController.listings} controller={productController} />
                         ) : (
                             <>
-                                <ListingEditor controller={listingController} />
+                                <ListingEditor controller={listingController} selectedProductCount={selectedProductCount} />
                                 <ListingFeedback loading={listingController.loading} mode={listingController.mode}
                                     message={listingController.message} error={listingController.error} />
                             </>

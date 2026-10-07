@@ -3,7 +3,14 @@ import {z} from 'zod';
 import {ListingNotFoundError} from '../model/listing/listing-store';
 import type {ListingStore} from '../model/listing/listing-store';
 import {ListingInputSchema} from '../model/listing/types';
+import type {ProductStore} from '../model/product/product-store';
 import type {Operation} from '../observability/operation';
+
+class ListingHasProductsError extends Error {
+    constructor(count: number) {
+        super(`Delete the ${count} ${count === 1 ? 'product' : 'products'} assigned to this listing before deleting it.`);
+    }
+}
 
 export class ListingHandler {
     list = async (_req: Request, res: Response): Promise<void> => {
@@ -37,6 +44,7 @@ export class ListingHandler {
             res.status(500).json({error: 'Unable to save listing.'});
         }
     };
+
     update = async (req: Request, res: Response): Promise<void> => {
         await this.modify(req, res, false);
     };
@@ -57,6 +65,7 @@ export class ListingHandler {
         }
         try {
             const store = res.app.locals.listings as ListingStore;
+            if (deleting) await this.ensureNoProducts(res, id.data);
             const record = deleting ? await store.delete(id.data) : await store.update(id.data, input.data);
             operation.setAttribute('listingrecord.record_id', id.data);
             operation.succeed();
@@ -65,7 +74,18 @@ export class ListingHandler {
         } catch (error) {
             operation.fail(error);
             const missing = error instanceof ListingNotFoundError;
-            res.status(missing ? 404 : 500).json({error: missing ? error.message : deleting ? 'Unable to delete listing.' : 'Unable to save listing.'});
+            const inUse = error instanceof ListingHasProductsError;
+            const status = missing ? 404 : inUse ? 409 : 500;
+            const message = missing || inUse
+                ? error.message
+                : deleting ? 'Unable to delete listing.' : 'Unable to save listing.';
+            res.status(status).json({error: message});
         }
+    }
+
+    private async ensureNoProducts(res: Response, listingId: string): Promise<void> {
+        const products = await (res.app.locals.products as ProductStore).list();
+        const count = products.filter(product => product.listingId === listingId).length;
+        if (count > 0) throw new ListingHasProductsError(count);
     }
 }

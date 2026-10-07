@@ -3,9 +3,12 @@ import { ListingForm } from './ListingForm.tsx';
 import { ListingSelector } from './ListingSelector.tsx';
 import { ListingDeleteConfirmation } from './ListingDeleteConfirmation.tsx';
 
-type Props = { controller: ListingController };
+type Props = {
+    controller: ListingController;
+    selectedProductCount: number;
+};
 
-export const ListingEditor = ({ controller }: Props) => {
+export const ListingEditor = ({ controller, selectedProductCount }: Props) => {
     const { mode, listings, selectedId, selected, disabled, busy, select, save, remove, cancel } = controller;
 
     if (mode === 'create') return <ListingForm key="create" onSave={save} onCancel={cancel} />;
@@ -17,8 +20,8 @@ export const ListingEditor = ({ controller }: Props) => {
                 disabled={disabled} onSelect={select} />
             {mode === 'edit' && selected && <ListingForm key={selected.id} editing initialName={selected.name}
                 onSave={save} onCancel={cancel} />}
-            {mode === 'delete' && selected && <ListingDeleteConfirmation listing={selected} busy={busy}
-                onConfirm={remove} onCancel={cancel} />}
+            {mode === 'delete' && selected && <ListingDeleteConfirmation listing={selected}
+                productCount={selectedProductCount} busy={busy} onConfirm={remove} onCancel={cancel} />}
         </>
     );
 };
