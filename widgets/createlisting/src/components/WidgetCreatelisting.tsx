@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ListingForm } from "./ListingForm.tsx";
 import { AddProductPanel } from "./product/AddProductPanel.tsx";
+import { ProductCapabilityButton } from "./product/ProductCapabilityButton.tsx";
 import { loadListings, saveListing, updateListing, deleteListing, type Listing } from "../lib/listings.ts";
 import type { WidgetConfig } from "../Config";
 import { useProductData } from "../hooks/domain/useProductData";
@@ -35,13 +36,6 @@ export const WidgetCreatelisting = ({
             .catch(() => { if (active) setListingError('Unable to load saved listings.'); });
         return () => { active = false; };
     }, []);
-
-    const selectMode = (nextMode: 'create' | 'edit' | 'delete' | 'product') => {
-        setMode(nextMode);
-        setSelectedId('');
-        setMessage('');
-        setListingError('');
-    };
 
     const save = async (name: string) => {
         setMessage('');
@@ -96,22 +90,16 @@ export const WidgetCreatelisting = ({
                         {(['create', 'edit', 'delete'] as const).map(action => (
                             <li key={action}>
                                 <button type="button" className="word-editor__block" aria-pressed={mode === action}
-                                    disabled={busy} onClick={() => selectMode(action)}>
+                                    disabled={busy} onClick={() => { setMode(action); setSelectedId(''); setMessage(''); setListingError(''); }}>
                                     {action === 'create' ? 'Create listing' : action === 'edit' ? 'Edit listing' : 'Delete listing'}
                                 </button>
                             </li>
                         ))}
-                        <li className="listing-workspace__product-capability">
-                            <button
-                                type="button"
-                                className="word-editor__block"
-                                aria-pressed={mode === 'product'}
-                                disabled={busy}
-                                onClick={() => selectMode('product')}
-                            >
-                                Add product
-                            </button>
-                        </li>
+                        <ProductCapabilityButton
+                            active={mode === 'product'}
+                            disabled={busy}
+                            onSelect={() => { setMode('product'); setSelectedId(''); setMessage(''); setListingError(''); }}
+                        />
                     </ul>
                 </aside>
 

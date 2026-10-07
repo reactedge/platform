@@ -53,48 +53,20 @@ dd {
     background: #eee;
 }
 
-.listing-workspace__product-capability {
-    margin-top: 18px;
-    padding-top: 18px;
-    border-top: 1px solid #ddd;
-}
-
-.listing-workspace__form,
-.listing-workspace__product {
+.listing-workspace__form {
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-bottom: 24px;
 }
 
-.listing-workspace__form h2,
-.listing-workspace__product h2,
-.listing-workspace__product h3 {
+.listing-workspace__form h2 {
     margin: 0;
 }
 
-.listing-workspace__form input,
-.listing-workspace__product select,
-.listing-workspace__content > select {
+.listing-workspace__form input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font: inherit;
-}
-
-.listing-workspace__product-details {
-    margin-top: 8px;
-    padding-top: 16px;
-    border-top: 1px solid #ddd;
-}
-
-.listing-workspace__product-details p {
-    margin: 0 0 8px;
-}
-
-.listing-workspace__product-placeholder {
-    margin-top: 16px;
-    padding: 16px;
-    border: 1px dashed #bbb;
-    border-radius: 4px;
 }

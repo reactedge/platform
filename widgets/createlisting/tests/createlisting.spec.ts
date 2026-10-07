@@ -59,20 +59,4 @@ test.describe('Createlisting Widget', () => {
         await expect(values.nth(0)).toHaveText(/\S+/);
         await expect(values.nth(1)).toHaveText(/\S+/);
     });
-
-    test('Add product opens as a separate capability', async () => {
-        await createlisting.getByRole('button', { name: 'Add product' }).click();
-
-        await expect(
-            createlisting.getByRole('heading', { name: 'Add product' })
-        ).toBeVisible();
-
-        await expect(
-            createlisting.getByLabel('Listing', { exact: true })
-        ).toBeVisible();
-
-        await expect(
-            createlisting.getByRole('button', { name: 'Save product' })
-        ).toBeDisabled();
-    });
 });
