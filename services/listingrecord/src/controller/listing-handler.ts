@@ -30,10 +30,10 @@ export class ListingHandler {
         const operation = res.locals.routeOperation as Operation;
         const input = ListingInputSchema.safeParse(req.body);
         if (!input.success) {
-            operation.fail(new Error('Invalid listing name.'));
-            res.status(400).json({error: 'Enter a listing name between 1 and 50 characters.'});
+            this.invalidInput(res, operation, input.error);
             return;
         }
+
         try {
             const record = await (res.app.locals.listings as ListingStore).create(input.data);
             operation.setAttribute('listingrecord.record_id', record.id);
@@ -56,19 +56,28 @@ export class ListingHandler {
     private async modify(req: Request, res: Response, deleting: boolean): Promise<void> {
         const operation = res.locals.routeOperation as Operation;
         const id = z.uuid().safeParse(req.params.id);
-        const input = ListingInputSchema.safeParse(req.body);
-        if (!id.success || (!deleting && !input.success)) {
-            const message = !id.success ? 'Invalid listing ID.' : 'Enter a listing name between 1 and 50 characters.';
-            operation.fail(new Error(message));
-            res.status(400).json({error: message});
+
+        if (!id.success) {
+            this.invalid(res, operation, 'Invalid listing ID.');
             return;
         }
+
+        const input = deleting ? null : ListingInputSchema.safeParse(req.body);
+        if (input && !input.success) {
+            this.invalidInput(res, operation, input.error);
+            return;
+        }
+
         try {
             const store = res.app.locals.listings as ListingStore;
             if (deleting) await this.ensureNoProducts(res, id.data);
-            const record = deleting ? await store.delete(id.data) : await store.update(id.data, input.data);
+            const record = deleting
+                ? await store.delete(id.data)
+                : await store.update(id.data, input!.data);
+
             operation.setAttribute('listingrecord.record_id', id.data);
             operation.succeed();
+
             if (deleting) res.status(204).end();
             else res.json(record);
         } catch (error) {
@@ -81,6 +90,19 @@ export class ListingHandler {
                 : deleting ? 'Unable to delete listing.' : 'Unable to save listing.';
             res.status(status).json({error: message});
         }
+    }
+
+    private invalidInput(res: Response, operation: Operation, error: z.ZodError): void {
+        const statusInvalid = error.issues.some(issue => issue.path[0] === 'status');
+        const message = statusInvalid
+            ? 'Choose a valid listing status.'
+            : 'Enter a listing name between 1 and 50 characters.';
+        this.invalid(res, operation, message);
+    }
+
+    private invalid(res: Response, operation: Operation, message: string): void {
+        operation.fail(new Error(message));
+        res.status(400).json({error: message});
     }
 
     private async ensureNoProducts(res: Response, listingId: string): Promise<void> {
