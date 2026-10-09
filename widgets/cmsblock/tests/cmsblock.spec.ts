@@ -38,4 +38,24 @@ test('shows three image references and remembers the selected reference', async 
     await page.reload();
     await widget.getByRole('button', {name: 'Edit', exact: true}).click();
     await expect(widget.getByRole('button', {name: 'Use Promotional reference'})).toHaveAttribute('aria-pressed', 'true');
+    await expect(widget.getByRole('img', {name: 'Large preview of Promotional visual reference'})).toBeVisible();
+    await expect(widget.locator('.cmsblock-editor__reference-selected')).toHaveCount(1);
+    await expect(widget.getByRole('button', {name: 'Use Editorial reference'})).toHaveAttribute('aria-pressed', 'false');
+});
+
+test('updates the larger reference preview when selecting a different image', async ({page}) => {
+    await page.goto('/?reactedge_debug=eager');
+    const widget = page.locator('cmsblock-widget');
+    await widget.getByRole('button', {name: 'Edit', exact: true}).click();
+
+    await widget.getByRole('button', {name: 'Use Editorial reference'}).click();
+    await expect(widget.getByRole('img', {name: 'Large preview of Editorial visual reference'})).toBeVisible();
+    await expect(widget.getByRole('button', {name: 'Use Editorial reference'})).toHaveAttribute('aria-pressed', 'true');
+    await expect(widget.locator('.cmsblock-editor__reference-selected')).toHaveCount(1);
+
+    await widget.getByRole('button', {name: 'Use Feature reference'}).click();
+    await expect(widget.getByRole('img', {name: 'Large preview of Feature visual reference'})).toBeVisible();
+    await expect(widget.getByRole('button', {name: 'Use Feature reference'})).toHaveAttribute('aria-pressed', 'true');
+    await expect(widget.getByRole('button', {name: 'Use Editorial reference'})).toHaveAttribute('aria-pressed', 'false');
+    await expect(widget.locator('.cmsblock-editor__reference-selected')).toHaveCount(1);
 });
