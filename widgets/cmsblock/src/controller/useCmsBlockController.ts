@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import type {WidgetConfig} from '../Config.ts';
-import type {CmsBlockDraft, CmsBlockTemplateId} from '../Model/CmsBlock.ts';
+import {legacyLayoutForTemplate, type CmsBlockDraft, type CmsBlockTemplateId} from '../Model/CmsBlock.ts';
 import type {CmsBlockLayoutId} from '../Model/CmsBlockLayout.ts';
 import {CmsBlockApi, type CmsBlockRecord} from '../Model/CmsBlockApi.ts';
 
@@ -8,6 +8,7 @@ export function useCmsBlockController(config: WidgetConfig) {
     const initialDraft = (): CmsBlockDraft => ({
         source: {...config.data.source},
         templateId: config.data.templateId,
+        layoutId: config.data.layoutId ?? legacyLayoutForTemplate(config.data.templateId),
     });
 
     const [draft, setDraft] = useState<CmsBlockDraft>(initialDraft);
@@ -19,8 +20,6 @@ export function useCmsBlockController(config: WidgetConfig) {
     const [message, setMessage] = useState('');
     const [mode, setMode] = useState<'edit' | 'review' | 'view'>('edit');
     const [showSourcePreview, setShowSourcePreview] = useState(false);
-    // Local-only preview. Deliberately excluded from CmsBlockDraft and save().
-    const [layoutId, setLayoutId] = useState<CmsBlockLayoutId>('image-above');
 
     useEffect(() => {
         let active = true;
@@ -28,8 +27,13 @@ export function useCmsBlockController(config: WidgetConfig) {
             .then(found => {
                 if (!active || !found) return;
                 setRecord(found);
-                setSavedDraft({source: found.source, templateId: found.templateId});
-                setDraft({source: found.source, templateId: found.templateId});
+                const saved = {
+                    source: found.source,
+                    templateId: found.templateId,
+                    layoutId: found.layoutId ?? legacyLayoutForTemplate(found.templateId),
+                };
+                setSavedDraft(saved);
+                setDraft(saved);
                 if (found.pending) setMode('review');
                 else if (found.published) setMode('view');
             })
@@ -48,6 +52,9 @@ export function useCmsBlockController(config: WidgetConfig) {
     }));
     const updateTemplate = (templateId: CmsBlockTemplateId) => setDraft(current => ({
         ...current, templateId,
+    }));
+    const updateLayout = (layoutId: CmsBlockLayoutId) => setDraft(current => ({
+        ...current, layoutId,
     }));
     const reset = () => setDraft({...savedDraft, source: {...savedDraft.source}});
 
@@ -76,7 +83,11 @@ export function useCmsBlockController(config: WidgetConfig) {
         }
         const next = await execute(() => CmsBlockApi.save(draft), 'Source and template saved.');
         if (next) {
-            setSavedDraft({source: next.source, templateId: next.templateId});
+            setSavedDraft({
+                source: next.source,
+                templateId: next.templateId,
+                layoutId: next.layoutId ?? legacyLayoutForTemplate(next.templateId),
+            });
             setMode('edit');
         }
     };
@@ -98,9 +109,8 @@ export function useCmsBlockController(config: WidgetConfig) {
 
     return {
         draft, record, changed, busy, loading, error, message, mode, setMode,
-        layoutId, setLayoutId,
         showSourcePreview, setShowSourcePreview,
-        updateContent, updateFormat, updateTemplate, reset, save, generate, approve, reject,
+        updateContent, updateFormat, updateTemplate, updateLayout, reset, save, generate, approve, reject,
     };
 }
 

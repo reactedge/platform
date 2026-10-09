@@ -16,8 +16,15 @@ export const CMS_BLOCK_STYLES = [
 ] as const;
 
 export type CmsBlockTemplateId = (typeof CMS_BLOCK_STYLES)[number]['id'];
+import type {CmsBlockLayoutId} from './CmsBlockLayout.ts';
+
+/** Existing saved blocks had an implied image arrangement based on style. */
+export function legacyLayoutForTemplate(id: CmsBlockTemplateId): CmsBlockLayoutId {
+    return id === 'feature' ? 'image-left' : id === 'promotion' ? 'image-right' : 'image-above';
+}
 
 export type CmsBlockDraft = {
     source: CmsBlockSource;
     templateId: CmsBlockTemplateId;
+    layoutId: CmsBlockLayoutId;
 };

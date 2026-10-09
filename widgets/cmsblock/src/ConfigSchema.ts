@@ -9,6 +9,8 @@ const WidgetDataSchema = z.object({
     title: z.string().min(1),
     source: WidgetSourceSchema.default({format: 'text', content: ''}),
     templateId: z.enum(['editorial', 'feature', 'promotion']).default('editorial'),
+    // Optional for existing widget contracts.
+    layoutId: z.enum(['image-above', 'image-left', 'image-right']).optional(),
 }).strict();
 
 const WidgetSettingsSchema = z.object({
