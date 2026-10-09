@@ -9,7 +9,8 @@
     "build:ssr": "vite build -c vite.npm.config.ts",
     "analyze": "ANALYZE=true vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "complexity": "lizard src api -C 10 -a 5"
   },
   "dependencies": {
     "zod": "^4.4.3"

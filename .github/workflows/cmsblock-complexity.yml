@@ -1,0 +1,32 @@
+name: CMSBlock complexity
+
+on:
+  push:
+    branches:
+      - feat/cms-block
+    paths:
+      - 'widgets/cmsblock/**'
+      - '.github/workflows/cmsblock-complexity.yml'
+  pull_request:
+    paths:
+      - 'widgets/cmsblock/**'
+      - '.github/workflows/cmsblock-complexity.yml'
+  workflow_dispatch:
+
+jobs:
+  lizard:
+    name: Lizard (CCN <= 10)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Lizard
+        run: python -m pip install lizard==1.24.1
+      - name: Analyze CMSBlock source and widget API
+        run: |
+          cd widgets/cmsblock
+          lizard src api -C 10 -a 5
