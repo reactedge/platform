@@ -5,6 +5,7 @@ import WidgetWrapper from "./WidgetWrapper.tsx";
 interface WidgetRootProps {
     contract: unknown;
     runtime: unknown;
+    bootstrap?: unknown;
     hostElement?: HTMLElement;
 }
 
