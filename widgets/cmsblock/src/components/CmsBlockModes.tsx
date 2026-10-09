@@ -27,29 +27,43 @@ export const CmsBlockFeedback = ({controller}: Props) => (
     </>
 );
 
-export const CmsBlockEditMode = ({controller}: Props) => {
-    const {record, busy, changed, showSourcePreview, draft} = controller;
+const CmsBlockEditActions = ({controller}: Props) => {
+    const {record, busy, changed, showSourcePreview} = controller;
+    const saveDisabled = busy || (!changed && Boolean(record));
+    const generateDisabled = busy || !record || changed;
     return (
-        <>
-            <CmsBlockEditor controller={controller} />
-            <div className="cmsblock-editor__actions">
-                <button type="button" disabled={busy || (!changed && Boolean(record))}
-                    onClick={() => { void controller.save(); }}>Save source</button>
-                <button type="button" disabled={busy || !record || changed}
-                    onClick={() => { void controller.generate(); }}>Generate draft</button>
-                <button type="button" disabled={busy || !changed}
-                    onClick={controller.reset}>Reset changes</button>
-                <button type="button" disabled={busy} onClick={() =>
-                    controller.setShowSourcePreview(!showSourcePreview)}>
-                    {showSourcePreview ? 'Hide source preview' : 'Inspect source'}
-                </button>
-                <span>{changed ? 'Unsaved working copy' : 'Changes saved'}</span>
-            </div>
-            {showSourcePreview && <CmsBlockSourcePreview draft={draft} />}
-            {record?.published && <p>Published revision {record.published.revision} remains live while editing.</p>}
-        </>
+        <div className="cmsblock-editor__actions">
+            <button type="button" disabled={saveDisabled}
+                onClick={() => { void controller.save(); }}>Save source</button>
+            <button type="button" disabled={generateDisabled}
+                onClick={() => { void controller.generate(); }}>Generate draft</button>
+            <button type="button" disabled={busy || !changed}
+                onClick={controller.reset}>Reset changes</button>
+            <button type="button" disabled={busy} onClick={() =>
+                controller.setShowSourcePreview(!showSourcePreview)}>
+                {showSourcePreview ? 'Hide source preview' : 'Inspect source'}
+            </button>
+            <span>{changed ? 'Unsaved working copy' : 'Changes saved'}</span>
+        </div>
     );
 };
+
+const CmsBlockEditPreviews = ({controller}: Props) => (
+    <>
+        {controller.showSourcePreview && <CmsBlockSourcePreview draft={controller.draft} />}
+        {controller.record?.published && <p>
+            Published revision {controller.record.published.revision} remains live while editing.
+        </p>}
+    </>
+);
+
+export const CmsBlockEditMode = ({controller}: Props) => (
+    <>
+        <CmsBlockEditor controller={controller} />
+        <CmsBlockEditActions controller={controller} />
+        <CmsBlockEditPreviews controller={controller} />
+    </>
+);
 
 export const CmsBlockReviewMode = ({controller}: Props) => {
     const {record, busy} = controller;
