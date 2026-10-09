@@ -22,11 +22,13 @@ test('persist, generate, review, approve, reload and regenerate while published 
         };
 
         assert.equal((await request('', 'GET')).status, 404);
-        assert.equal((await request('', 'PUT', draft)).data.templateId, 'feature');
+        assert.equal((await request('', 'PUT', {...draft, layoutId: 'image-right'})).data.layoutId, 'image-right');
 
         const generated = (await request('/generate', 'POST')).data;
         assert.equal(generated.pending.status, 'inreview');
         assert.equal(generated.pending.templateId, 'feature');
+        assert.equal(generated.pending.layoutId, 'image-right');
+        assert.match(generated.pending.html, /cmsblock-layout--image-right/);
         assert.match(generated.pending.html, /Welcome/);
         assert.doesNotMatch(generated.pending.html, /<script/i);
         assert.match(generated.pending.css, /data-cmsblock="demo"/);
@@ -42,6 +44,7 @@ test('persist, generate, review, approve, reload and regenerate while published 
         const regeneration = (await request('/generate', 'POST')).data;
         assert.equal(regeneration.pending.revision, 2);
         assert.equal(regeneration.pending.templateId, 'promotion');
+        assert.equal(regeneration.pending.layoutId, 'image-right');
         assert.equal(regeneration.published.templateId, 'feature');
         assert.equal(regeneration.published.revision, 1);
         await request('/reject', 'POST');
@@ -81,4 +84,17 @@ test('three image references map to distinct responsive layouts', async () => {
     assert.match(promotion.css, /cmsblock--promotion \.cmsblock-media \{ grid-column: 2;/);
     assert.notEqual(editorial.css, feature.css);
     assert.notEqual(feature.css, promotion.css);
+});
+
+test('style and layout are independent and old records keep previous placement', async () => {
+    const {generateBlock, validateDraft} = await import('../src/generator.mjs');
+    const source = {format: 'html', content: '<h2>Art</h2><p>Original work</p><img src="https://example.com/art.jpg" alt="Artwork">'};
+    const editorialLeft = generateBlock({source, templateId: 'editorial', layoutId: 'image-left'});
+    const promotionalLeft = generateBlock({source, templateId: 'promotion', layoutId: 'image-left'});
+    assert.match(editorialLeft.html, /cmsblock-layout--image-left/);
+    assert.match(promotionalLeft.html, /cmsblock-layout--image-left/);
+    assert.match(editorialLeft.css, /cmsblock-layout--image-left \.cmsblock-media/);
+    assert.notEqual(editorialLeft.css, promotionalLeft.css);
+    assert.equal(validateDraft({source, templateId: 'feature'}).layoutId, 'image-left');
+    assert.throws(() => validateDraft({source, templateId: 'feature', layoutId: 'invalid'}));
 });

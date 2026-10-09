@@ -25,7 +25,7 @@ test.describe('CMSBlock E2E workflow', () => {
         await expect(widget.getByRole('heading', {name: /Published revision/})).toBeVisible();
     });
 
-    test('keeps editorial style separate from the layout preview', async ({page}) => {
+    test('keeps editorial style separate from the image layout', async ({page}) => {
         const widget = page.locator('cmsblock-widget');
         await widget.getByRole('button', {name: 'Edit', exact: true}).click();
         await expect(widget.locator('.cmsblock-editor__style')).toHaveCount(3);
@@ -40,10 +40,10 @@ test.describe('CMSBlock E2E workflow', () => {
         await expect(widget.getByRole('button', {name: 'Use Promotional style'})).toHaveAttribute('aria-pressed', 'true');
         await expect(widget.getByRole('button', {name: 'Use Image left layout'})).toHaveAttribute('aria-pressed', 'true');
         await expect(widget.locator('.cmsblock-editor__reference-selected')).toHaveCount(1);
-        await expect(widget.getByText(/Layout selection is a UI preview only/)).toBeVisible();
+        await expect(widget.getByText(/Your layout is saved independently/)).toBeVisible();
     });
 
-    test('saves editorial style but does not submit the preview-only layout', async ({page}) => {
+    test('saves editorial style and image layout independently', async ({page}) => {
         const widget = page.locator('cmsblock-widget');
         await widget.getByRole('button', {name: 'Edit', exact: true}).click();
         await widget.getByLabel('Source content').fill('Choose a style and inspect the image arrangement');
@@ -56,21 +56,35 @@ test.describe('CMSBlock E2E workflow', () => {
         const request = await saveRequest;
         const payload = request.postDataJSON() as {templateId: string; layoutId?: string};
         expect(payload.templateId).toBe('promotion');
-        expect(payload).not.toHaveProperty('layoutId');
+        expect(payload.layoutId).toBe('image-right');
         await expect(widget.getByText('Source and template saved.')).toBeVisible();
 
         await page.reload();
         await widget.getByRole('button', {name: 'Edit', exact: true}).click();
         await expect(widget.getByRole('button', {name: 'Use Promotional style'})).toHaveAttribute('aria-pressed', 'true');
-        await expect(widget.getByRole('button', {name: 'Use Image above layout'})).toHaveAttribute('aria-pressed', 'true');
+        await expect(widget.getByRole('button', {name: 'Use Image right layout'})).toHaveAttribute('aria-pressed', 'true');
     });
 
-    test('changing the layout preview does not mark saved source as changed', async ({page}) => {
+    test('changing the image layout marks the source as unsaved', async ({page}) => {
         const widget = page.locator('cmsblock-widget');
         await widget.getByRole('button', {name: 'Edit', exact: true}).click();
         await widget.getByRole('button', {name: 'Use Image right layout'}).click();
         await expect(widget.getByRole('img', {name: 'Large preview of Image right layout'})).toBeVisible();
         await expect(widget.getByRole('button', {name: 'Use Image right layout'})).toHaveAttribute('aria-pressed', 'true');
         await expect(widget.locator('.cmsblock-editor__reference-selected')).toHaveCount(1);
+        await expect(widget.getByRole('button', {name: 'Reset changes'})).toBeEnabled();
+    });
+
+    test('generated CSS follows image layout rather than editorial style', async ({page}) => {
+        const widget = page.locator('cmsblock-widget');
+        await widget.getByRole('button', {name: 'Edit', exact: true}).click();
+        await widget.getByLabel('Content format').selectOption('html');
+        await widget.getByLabel('Source content').fill('<h2>Gallery</h2><p>Art</p><img src="https://example.com/art.jpg" alt="Art">');
+        await widget.getByRole('button', {name: 'Use Editorial style'}).click();
+        await widget.getByRole('button', {name: 'Use Image right layout'}).click();
+        await widget.getByRole('button', {name: 'Save source'}).click();
+        await expect(widget.getByText('Source and template saved.')).toBeVisible();
+        await widget.getByRole('button', {name: 'Generate draft'}).click();
+        await expect(widget.frameLocator('iframe[title="Generated CMSBlock draft"]').locator('.cmsblock-layout--image-right')).toHaveCount(1);
     });
 });
