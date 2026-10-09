@@ -5,6 +5,7 @@ export const ListingStatusSchema = z.enum(['active', 'disable', 'inreview']);
 export const ListingInputSchema = z.object({
     name: z.string().trim().min(1).max(50),
     status: ListingStatusSchema.default('active'),
+    sellerId: z.string().trim().min(10).max(30),
 }).strict();
 
 export const ListingSchema = ListingInputSchema.extend({id: z.uuid()});
