@@ -1,8 +1,13 @@
 {
   "data": {
-    "title": "I am standard cmsblock ready to work"
+    "title": "CMS Block",
+    "source": {
+      "format": "text",
+      "content": "Add your content here. Select a template to prepare it for AI-assisted styling."
+    },
+    "templateId": "editorial"
   },
   "settings": {
-    "colour": "red"
+    "colour": "#1f2937"
   }
 }

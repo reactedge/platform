@@ -1,73 +1,130 @@
-.cmsblock-slider-bar.dark, .cmsblock-static-bar.dark {
-    --cmsblock-bg: #1f2937;      /* slate-800 */
-    --cmsblock-color: #e5e7eb;   /* soft white */
-
-    --arrow-bg: #374151;    /* subtle contrast */
-    --arrow-color: #f9fafb;
-}
-
-.cmsblock-slider-bar.light, .cmsblock-static-bar.light {
-    --cmsblock-bg: #f8fafc;
-    --cmsblock-color: #1e3a8a;
-
-    --arrow-bg: #e5e7eb;   /* light gray */
-    --arrow-color: #374151;
-}
-
-.cmsblock-slider-bar.promo, .cmsblock-static-bar.promo {
-    --cmsblock-bg: linear-gradient(60deg, #f97316, #f5a623); /* orange gradient */
-    --cmsblock-color: #ffffff;
-
-    --arrow-bg: rgba(255,255,255,0.2);
-    --arrow-color: #ffffff;
-}
-
-.cmsblock-slider-bar, .cmsblock-static-bar {
-    background: var(--cmsblock-bg);
-    color: var(--cmsblock-color);
-}
-
-.arrow-btn {
-    background: var(--arrow-bg);
-    color: var(--arrow-color);
-
-    border-radius: 9999px;
-    width: 28px;
-    height: 28px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    transition: all 0.2s ease;
-}
-
-.cmsblock-static-bar {
-    display: flex;
+.cmsblock-editor {
+    box-sizing: border-box;
     width: 100%;
-    padding: 2rem;
-
+    max-width: 1100px;
+    padding: clamp(16px, 3vw, 32px);
+    margin: 0 auto;
+    font: inherit;
+    line-height: 1.5;
+    color: #1f2937;
     background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    box-shadow:
-            0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
 
-    text-align: center;
+.cmsblock-editor *, .cmsblock-editor *::before, .cmsblock-editor *::after {
+    box-sizing: border-box;
+}
 
-    .cmsblock-slide {
-        flex: 1;
-    }
+.cmsblock-editor__header h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
 
-    .cmsblock-slide__heading {
-        margin: 0;
-        font-weight: 600;
-    }
+.cmsblock-editor__header p, .cmsblock-editor__note {
+    margin: 0 0 24px;
+    color: #64748b;
+}
 
-    .cmsblock-slide__text {
-        margin: 0.5rem 0 0;
-        font-size: 1rem;
-        line-height: 1.25rem;
-        color: #4b5563;
+.cmsblock-editor__fields, .cmsblock-editor__options > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cmsblock-editor__fields label {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.cmsblock-editor__fields textarea, .cmsblock-editor__fields select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #94a3b8;
+    border-radius: 8px;
+    color: inherit;
+    background: #fff;
+    font: inherit;
+}
+
+.cmsblock-editor__fields textarea {
+    resize: vertical;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    line-height: 1.6;
+}
+
+.cmsblock-editor__options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin: 12px 0 20px;
+}
+
+.cmsblock-editor__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.cmsblock-editor__actions button {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: #1f2937;
+    background: #f8fafc;
+    cursor: pointer;
+    font: inherit;
+}
+
+.cmsblock-editor__actions button:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.cmsblock-editor__actions span {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.cmsblock-editor :is(textarea, select, button):focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.cmsblock-editor__preview {
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.cmsblock-editor__preview h2 {
+    font-size: 1.125rem;
+    margin: 0 0 8px;
+}
+
+.cmsblock-editor__preview p {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.cmsblock-editor__preview pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+}
+
+.cmsblock-editor__note {
+    margin: 16px 0 0;
+    font-size: 0.875rem;
+}
+
+@media (max-width: 600px) {
+    .cmsblock-editor__options {
+        grid-template-columns: 1fr;
+        gap: 14px;
     }
 }
