@@ -30,3 +30,14 @@ into the ordinary document.
 HTML input is simplified for this experiment: it is converted to text, with
 up to three HTTPS image references retained. Complex HTML formatting is not
 preserved by the mock generator.
+
+## Visual template references
+
+Three bundled SVG reference images replace the template dropdown:
+Editorial (image above copy), Feature (image left), Promotional (image right).
+The selection is saved using the existing `templateId` field and recorded
+in the generated revision, preserving the reference used for publication.
+
+The generator does **not** analyse these images yet. It maps each reference
+ID to a hard-coded responsive layout so the full image-selection → save →
+generate → review → approve → reload flow can be verified before adding AI.

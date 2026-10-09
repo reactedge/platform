@@ -61,7 +61,7 @@ export class CmsBlockStore {
             return {
                 ...current,
                 revision,
-                pending: {...generateBlock(current), revision, status: 'inreview'},
+                pending: {...generateBlock(current), templateId: current.templateId, revision, status: 'inreview'},
             };
         });
     }

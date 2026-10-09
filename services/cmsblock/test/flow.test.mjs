@@ -26,6 +26,7 @@ test('persist, generate, review, approve, reload and regenerate while published 
 
         const generated = (await request('/generate', 'POST')).data;
         assert.equal(generated.pending.status, 'inreview');
+        assert.equal(generated.pending.templateId, 'feature');
         assert.match(generated.pending.html, /Welcome/);
         assert.doesNotMatch(generated.pending.html, /<script/i);
         assert.match(generated.pending.css, /data-cmsblock="demo"/);
@@ -40,6 +41,8 @@ test('persist, generate, review, approve, reload and regenerate while published 
         assert.equal(next.published.revision, 1);
         const regeneration = (await request('/generate', 'POST')).data;
         assert.equal(regeneration.pending.revision, 2);
+        assert.equal(regeneration.pending.templateId, 'promotion');
+        assert.equal(regeneration.published.templateId, 'feature');
         assert.equal(regeneration.published.revision, 1);
         await request('/reject', 'POST');
         const persisted = (await request('', 'GET')).data;
@@ -60,4 +63,22 @@ test('generated markup escapes authored HTML and allows only https images', asyn
     assert.doesNotMatch(generated.html, /javascript:/i);
     assert.match(generated.html, /https:\/\/example.com\/image.jpg/);
     assert.match(generated.html, /Hello/);
+});
+
+test('three image references map to distinct responsive layouts', async () => {
+    const {generateBlock} = await import('../src/generator.mjs');
+    const source = {format: 'html', content: '<h2>Welcome</h2><p>The same content</p><img src="https://example.com/image.jpg" alt="Art">'};
+    const editorial = generateBlock({source, templateId: 'editorial'});
+    const feature = generateBlock({source, templateId: 'feature'});
+    const promotion = generateBlock({source, templateId: 'promotion'});
+    for (const output of [editorial, feature, promotion]) {
+        assert.match(output.html, /Welcome/);
+        assert.match(output.html, /https:\/\/example.com\/image.jpg/);
+        assert.match(output.css, /@media \(min-width: 800px\)/);
+    }
+    assert.match(editorial.css, /cmsblock--editorial \.cmsblock-media \{ grid-row: 1;/);
+    assert.match(feature.css, /cmsblock--feature \.cmsblock-media \{ grid-column: 1;/);
+    assert.match(promotion.css, /cmsblock--promotion \.cmsblock-media \{ grid-column: 2;/);
+    assert.notEqual(editorial.css, feature.css);
+    assert.notEqual(feature.css, promotion.css);
 });

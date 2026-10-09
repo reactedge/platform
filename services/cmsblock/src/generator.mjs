@@ -1,8 +1,10 @@
 // Deterministic stand-in for the future AI editor. No user-authored HTML is executed.
+// Hard-coded compositions corresponding to the three visual reference images.
+// AI image interpretation will replace this mapping in a later iteration.
 const templates = {
-    editorial: {background: '#ffffff', foreground: '#17212d', accent: '#23629c'},
-    feature: {background: '#f0f7ff', foreground: '#142f52', accent: '#1453a0'},
-    promotion: {background: '#fff4e7', foreground: '#572e15', accent: '#a94714'},
+    editorial: {background: '#F7F4EF', foreground: '#243F3A', accent: '#456A63'},
+    feature: {background: '#F1F8F8', foreground: '#234453', accent: '#24717E'},
+    promotion: {background: '#1D2C39', foreground: '#FFFFFF', accent: '#F2B65C'},
 };
 
 export function validateDraft(value) {
@@ -80,7 +82,20 @@ export function generateBlock(draft) {
 [data-cmsblock="demo"] h2 { color: ${palette.accent}; font-size: clamp(1.6rem, 3vw, 2.6rem); margin: 0 0 1rem; line-height: 1.15; }
 [data-cmsblock="demo"] p { max-width: 68ch; margin: 0 0 0.85rem; line-height: 1.7; overflow-wrap: anywhere; }
 [data-cmsblock="demo"] .cmsblock-media { margin: 0; display: flex; gap: 0.75rem; flex-wrap: wrap; }
-[data-cmsblock="demo"] img { display: block; max-width: 100%; width: auto; height: auto; max-height: 360px; border-radius: 0.75rem; object-fit: cover; }
-@media (min-width: 800px) { [data-cmsblock="demo"]:has(.cmsblock-media) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; } }`;
+[data-cmsblock="demo"] img { display: block; width: 100%; max-width: 100%; height: auto; max-height: 360px; border-radius: 0.75rem; object-fit: cover; }
+[data-cmsblock="demo"].cmsblock--editorial .cmsblock-media { grid-row: 1; }
+[data-cmsblock="demo"].cmsblock--editorial .cmsblock-copy { grid-row: 2; }
+[data-cmsblock="demo"].cmsblock--promotion h2 { font-weight: 800; text-transform: uppercase; }
+[data-cmsblock="demo"].cmsblock--promotion p { color: #E2E8F0; }
+@media (min-width: 800px) {
+  [data-cmsblock="demo"].cmsblock--feature:has(.cmsblock-media),
+  [data-cmsblock="demo"].cmsblock--promotion:has(.cmsblock-media) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center;
+  }
+  [data-cmsblock="demo"].cmsblock--feature .cmsblock-media { grid-column: 1; grid-row: 1; }
+  [data-cmsblock="demo"].cmsblock--feature .cmsblock-copy { grid-column: 2; grid-row: 1; }
+  [data-cmsblock="demo"].cmsblock--promotion .cmsblock-copy { grid-column: 1; grid-row: 1; }
+  [data-cmsblock="demo"].cmsblock--promotion .cmsblock-media { grid-column: 2; grid-row: 1; }
+}`;
     return {html, css};
 }
