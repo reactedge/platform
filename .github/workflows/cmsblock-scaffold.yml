@@ -28,6 +28,8 @@ jobs:
         run: npm ci
       - name: Typecheck scaffold
         run: npm run typecheck
+      - name: Verify CMSBlock legacy HTTP lifecycle
+        run: npm test
       - name: Start scaffold and verify status
         shell: bash
         run: |
