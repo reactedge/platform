@@ -28,7 +28,7 @@ export function useListingController(sellerId?: string) {
         setBusy(true);
         try {
             const listing = mode === 'edit' && selected
-                ? await listingModel.update(selected.id, input)
+                ? await listingModel.update(selected.id, {...input, sellerId: requireSellerId(sellerId)})
                 : await listingModel.create({...input, sellerId: requireSellerId(sellerId)});
             setListings(current => mode === 'edit'
                 ? current.map(record => record.id === listing.id ? listing : record)

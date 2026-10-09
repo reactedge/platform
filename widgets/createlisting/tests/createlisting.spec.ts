@@ -40,6 +40,9 @@ test.describe('Createlisting Widget', () => {
         await expect(createlisting.getByLabel('Select listing to edit')).toBeVisible();
     });
     test('failed edits retain the entered name and can be cancelled', async ({ page }) => {
+        await page.route('**/reactedge-runtime.json', route => route.fulfill({
+            json: {integrations: {}, context: {sellerId: 'seller-123'}},
+        }));
         const record = { id: '11111111-1111-4111-8111-111111111111', name: 'Original listing' };
         await page.route('**/listingrecord/listings**', route => route.fulfill(
             route.request().method() === 'PUT'

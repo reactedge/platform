@@ -15,6 +15,12 @@ export const ListingCreateSchema = ListingUpdateSchema.extend({
     sellerId: SellerIdSchema,
 }).strict();
 
+// Seller ID travels with both create and update requests. This is not
+// authorization: ListingRecord must verify ownership independently.
+export const ListingUpdateRequestSchema = ListingUpdateSchema.extend({
+    sellerId: SellerIdSchema,
+}).strict();
+
 const RecordSchema = ListingUpdateSchema.extend({
     id: z.uuid(),
     sellerId: SellerIdSchema.optional(),
@@ -22,6 +28,7 @@ const RecordSchema = ListingUpdateSchema.extend({
 
 export type ListingUpdateInput = z.infer<typeof ListingUpdateSchema>;
 export type ListingCreateInput = z.infer<typeof ListingCreateSchema>;
+export type ListingUpdateRequest = z.infer<typeof ListingUpdateRequestSchema>;
 export type ListingRecord = z.infer<typeof RecordSchema>;
 
 export class Listing {
@@ -41,8 +48,8 @@ export class Listing {
         return this.save(this.url, 'POST', ListingCreateSchema.parse(input));
     }
 
-    update(id: string, input: ListingUpdateInput): Promise<ListingRecord> {
-        return this.save(this.recordUrl(id), 'PUT', ListingUpdateSchema.parse(input));
+    update(id: string, input: ListingUpdateRequest): Promise<ListingRecord> {
+        return this.save(this.recordUrl(id), 'PUT', ListingUpdateRequestSchema.parse(input));
     }
 
     async delete(id: string): Promise<void> {
@@ -53,7 +60,7 @@ export class Listing {
         return `${this.url}/${z.uuid().parse(id)}`;
     }
 
-    private async save(url: string, method: 'POST' | 'PUT', input: ListingCreateInput | ListingUpdateInput): Promise<ListingRecord> {
+    private async save(url: string, method: 'POST' | 'PUT', input: ListingCreateInput | ListingUpdateRequest): Promise<ListingRecord> {
         const record = RecordSchema.safeParse(await requestListing(url, {
             method,
             headers: { 'Content-Type': 'application/json' },
