@@ -4,12 +4,8 @@ import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
 
 type Props = {controller: CmsBlockController};
 
-/**
- * Image arrangement is preview-only. The backend must gain an independent
- * layoutId before this selection can affect generation or be persisted.
- */
 export const CmsBlockLayoutPicker = ({controller}: Props) => {
-    const selectedLayout = CMS_BLOCK_LAYOUTS.find(layout => layout.id === controller.layoutId)
+    const selectedLayout = CMS_BLOCK_LAYOUTS.find(layout => layout.id === controller.draft.layoutId)
         ?? CMS_BLOCK_LAYOUTS[0];
 
     return (
@@ -18,7 +14,7 @@ export const CmsBlockLayoutPicker = ({controller}: Props) => {
             <p>Select where the content image should appear.</p>
             <div className="cmsblock-editor__reference-list">
                 {CMS_BLOCK_LAYOUTS.map(layout => {
-                    const selected = controller.layoutId === layout.id;
+                    const selected = controller.draft.layoutId === layout.id;
                     return (
                         <button
                             type="button"
@@ -27,7 +23,7 @@ export const CmsBlockLayoutPicker = ({controller}: Props) => {
                             data-layout-id={layout.id}
                             aria-label={`Use ${layout.label} layout`}
                             aria-pressed={selected}
-                            onClick={() => controller.setLayoutId(layout.id)}
+                            onClick={() => controller.updateLayout(layout.id)}
                         >
                             <span className="cmsblock-editor__reference-image">
                                 <img src={CMS_BLOCK_LAYOUT_IMAGES[layout.id]}
@@ -49,8 +45,7 @@ export const CmsBlockLayoutPicker = ({controller}: Props) => {
                     <h2 aria-live="polite">{selectedLayout.label}</h2>
                     <p>{selectedLayout.description}</p>
                     <p className="cmsblock-editor__layout-notice">
-                        Layout selection is a UI preview only. It is not saved or used by
-                        the current generator yet; generated layout still follows the saved style.
+                        Your layout is saved independently and applied to the next generated revision.
                     </p>
                 </div>
             </div>

@@ -5,7 +5,8 @@ export interface CmsBlockRevision {
     css: string;
     revision: number;
     status: 'inreview' | 'approved';
-}
+    layoutId?: CmsBlockDraft['layoutId'];
+
 
 export interface CmsBlockRecord extends CmsBlockDraft {
     id: 'demo';

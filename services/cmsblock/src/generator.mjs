@@ -7,6 +7,9 @@ const templates = {
     promotion: {background: '#1D2C39', foreground: '#FFFFFF', accent: '#F2B65C'},
 };
 
+const layouts = new Set(['image-above', 'image-left', 'image-right']);
+const legacyLayouts = {editorial: 'image-above', feature: 'image-left', promotion: 'image-right'};
+
 export function validateDraft(value) {
     if (!value || typeof value !== 'object' ||
         !value.source || typeof value.source !== 'object' ||
@@ -14,12 +17,14 @@ export function validateDraft(value) {
         typeof value.source.content !== 'string' ||
         value.source.content.trim().length === 0 ||
         value.source.content.length > 100_000 ||
-        !Object.hasOwn(templates, value.templateId)) {
+        !Object.hasOwn(templates, value.templateId) ||
+        (value.layoutId !== undefined && !layouts.has(value.layoutId))) {
         throw new Error('Provide content (up to 100,000 characters) and a valid template.');
     }
     return {
         source: {format: value.source.format, content: value.source.content},
         templateId: value.templateId,
+        layoutId: value.layoutId ?? legacyLayouts[value.templateId],
     };
 }
 
@@ -60,7 +65,7 @@ function extractImages(source) {
 }
 
 export function generateBlock(draft) {
-    const {source, templateId} = validateDraft(draft);
+    const {source, templateId, layoutId} = validateDraft(draft);
     const palette = templates[templateId];
     const lines = extractText(source).split(/\n+/).map(x => x.trim()).filter(Boolean);
     const heading = escapeHtml(lines.shift() ?? 'Content block');
@@ -68,7 +73,7 @@ export function generateBlock(draft) {
     const images = extractImages(source);
     const gallery = images.length ? `<figure class="cmsblock-media">${images.join('')}</figure>` : '';
     // The data attribute is the boundary for generated CSS on standard DOM.
-    const html = `<section data-cmsblock="demo" class="cmsblock-content cmsblock--${templateId}">
+    const html = `<section data-cmsblock="demo" class="cmsblock-content cmsblock--${templateId} cmsblock-layout--${layoutId}">
   <div class="cmsblock-copy"><h2>${heading}</h2>${paragraphs}</div>
   ${gallery}
 </section>`;
@@ -83,19 +88,19 @@ export function generateBlock(draft) {
 [data-cmsblock="demo"] p { max-width: 68ch; margin: 0 0 0.85rem; line-height: 1.7; overflow-wrap: anywhere; }
 [data-cmsblock="demo"] .cmsblock-media { margin: 0; display: flex; gap: 0.75rem; flex-wrap: wrap; }
 [data-cmsblock="demo"] img { display: block; width: 100%; max-width: 100%; height: auto; max-height: 360px; border-radius: 0.75rem; object-fit: cover; }
-[data-cmsblock="demo"].cmsblock--editorial .cmsblock-media { grid-row: 1; }
-[data-cmsblock="demo"].cmsblock--editorial .cmsblock-copy { grid-row: 2; }
+[data-cmsblock="demo"].cmsblock-layout--image-above .cmsblock-media { grid-row: 1; }
+[data-cmsblock="demo"].cmsblock-layout--image-above .cmsblock-copy { grid-row: 2; }
 [data-cmsblock="demo"].cmsblock--promotion h2 { font-weight: 800; text-transform: uppercase; }
 [data-cmsblock="demo"].cmsblock--promotion p { color: #E2E8F0; }
 @media (min-width: 800px) {
-  [data-cmsblock="demo"].cmsblock--feature:has(.cmsblock-media),
-  [data-cmsblock="demo"].cmsblock--promotion:has(.cmsblock-media) {
+  [data-cmsblock="demo"].cmsblock-layout--image-left:has(.cmsblock-media),
+  [data-cmsblock="demo"].cmsblock-layout--image-right:has(.cmsblock-media) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center;
   }
-  [data-cmsblock="demo"].cmsblock--feature .cmsblock-media { grid-column: 1; grid-row: 1; }
-  [data-cmsblock="demo"].cmsblock--feature .cmsblock-copy { grid-column: 2; grid-row: 1; }
-  [data-cmsblock="demo"].cmsblock--promotion .cmsblock-copy { grid-column: 1; grid-row: 1; }
-  [data-cmsblock="demo"].cmsblock--promotion .cmsblock-media { grid-column: 2; grid-row: 1; }
+  [data-cmsblock="demo"].cmsblock-layout--image-left .cmsblock-media { grid-column: 1; grid-row: 1; }
+  [data-cmsblock="demo"].cmsblock-layout--image-left .cmsblock-copy { grid-column: 2; grid-row: 1; }
+  [data-cmsblock="demo"].cmsblock-layout--image-right .cmsblock-copy { grid-column: 1; grid-row: 1; }
+  [data-cmsblock="demo"].cmsblock-layout--image-right .cmsblock-media { grid-column: 2; grid-row: 1; }
 }`;
     return {html, css};
 }
