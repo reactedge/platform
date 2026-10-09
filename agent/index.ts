@@ -5,7 +5,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
-// Fixed first goal: verify the build of every active widget in one environment.
+// Fixed first goal: verify the build and tests of every ready active widget in one environment.
 // Run from the platform root: npm --prefix agent start -- default
 const environment = process.argv[2] ?? 'default';
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -19,7 +19,7 @@ const transport = new StdioClientTransport({
 
 export type Row = {
     instance: string;
-    status: 'PASS' | 'FAIL' | 'ERROR';
+    status: 'PASS' | 'FAIL' | 'ERROR' | 'SKIP';
     detail: string;
     result?: Record<string, unknown>;
 };
@@ -68,19 +68,26 @@ try {
     } catch (error) {
         report.error = [report.error, `MCP cleanup failed: ${message(error)}`].filter(Boolean).join('; ');
     }
+
+    const checked = report.results.filter(row => row.status !== 'SKIP');
+    const skipped = report.results.filter(row => row.status === 'SKIP');
     const completedReport = {
         ...report,
         summary: {
-            checked: report.results.length,
-            passed: report.results.filter(row => row.status === 'PASS').length,
-            failed: report.results.filter(row => row.status === 'FAIL').length,
-            errors: report.results.filter(row => row.status === 'ERROR').length,
+            checked: checked.length,
+            passed: checked.filter(row => row.status === 'PASS').length,
+            failed: checked.filter(row => row.status === 'FAIL').length,
+            errors: checked.filter(row => row.status === 'ERROR').length,
+            skipped: skipped.length,
         },
-        outcome: report.error ? 'ERROR' : report.results.length === 0 ? 'NO_ACTIVE_WIDGETS' :
-            report.results.every(row => row.status === 'PASS') ? 'PASS' : 'FAIL',
+        outcome: report.error ? 'ERROR' :
+            report.results.length === 0 ? 'NO_ACTIVE_WIDGETS' :
+            checked.length === 0 ? 'NO_READY_WIDGETS' :
+            checked.some(row => row.status === 'FAIL' || row.status === 'ERROR') ? 'FAIL' :
+            skipped.length > 0 ? 'PARTIAL' : 'PASS',
     };
     console.log(JSON.stringify(completedReport, null, 2));
-    process.exitCode = report.error || report.results.some(row => row.status !== 'PASS') ? 1 : 0;
+    process.exitCode = report.error || checked.some(row => row.status === 'FAIL' || row.status === 'ERROR') ? 1 : 0;
     try {
         const directory = await exportReport(completedReport, resolve(root, 'artifacts', 'agent'));
         console.error(`Reports saved: ${directory}/report.json and ${directory}/report.html`);
