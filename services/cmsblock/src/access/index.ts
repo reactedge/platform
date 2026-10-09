@@ -1,6 +1,6 @@
-import type {Application} from 'express';
-import {setupJsonBodyParse} from './jsonParser';
+import {setupJsonBodyParse} from "./jsonParser.js";
+import {Application} from "express";
 
-export default function setupAccess(app: Application): void {
-    setupJsonBodyParse(app);
+export default (app: Application) => {
+    setupJsonBodyParse(app)
 }
