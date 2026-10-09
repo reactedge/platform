@@ -12,7 +12,7 @@ export const startServer = async () => {
 
     try {
         await new Promise<void>((resolve, reject) => {
-            const server = app.listen(port, (error?: Error) => {
+            const server = app.listen(port, '127.0.0.1', (error?: Error) => {
                 if (error) {
                     reject(error);
                     return;

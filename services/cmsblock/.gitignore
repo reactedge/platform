@@ -1,0 +1,3 @@
+# CMSBlock drafts and environment secrets are runtime data.
+data/
+.env
