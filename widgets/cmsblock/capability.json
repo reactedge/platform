@@ -1,0 +1,15 @@
+{
+  "id": "cmsblock",
+  "widget": "cmsblock",
+  "description": "",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
