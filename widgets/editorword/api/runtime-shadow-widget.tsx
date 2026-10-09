@@ -11,6 +11,7 @@ import {styles} from "../src/styles/entry.ts";
 const mount = (
     el: HTMLElement,
     contract: unknown,
+    bootstrap: unknown,
     runtime: ReactEdgeRuntimeConfig
 ) => {
     const hostProvider = new ShadowHostProvider(styles)
@@ -19,6 +20,7 @@ const mount = (
         <WidgetRoot
             hostElement={el}
             contract={contract}
+            bootstrap={bootstrap}
             runtime={runtime}
         />
     )
