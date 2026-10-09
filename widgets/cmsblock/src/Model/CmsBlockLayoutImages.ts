@@ -1,10 +1,10 @@
-import type {CmsBlockTemplateId} from './CmsBlock.ts';
+import type {CmsBlockLayoutId} from './CmsBlockLayout.ts';
 
 /**
- * Hard-coded image references representing three visual compositions.
+ * Hard-coded layout illustrations. They do not define editorial style.
  * Bundled as data images so the gallery works on any ReactEdge host.
  */
-const editorial = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328">
+const imageAbove = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328">
 <rect width="540" height="328" fill="#F7F4EF"/>
 <rect x="22" y="20" width="496" height="170" rx="5" fill="#B6C8C5"/>
 <path d="M22 157L145 77L246 161L376 63L518 153V190H22Z" fill="#698D84"/>
@@ -16,7 +16,7 @@ const editorial = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328"
 <rect x="22" y="290" width="115" height="18" rx="3" fill="#456A63"/>
 </svg>`;
 
-const feature = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328">
+const imageLeft = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328">
 <rect width="540" height="328" fill="#F0F8F8"/>
 <rect x="22" y="20" width="233" height="288" rx="5" fill="#C4DBCD"/>
 <rect x="48" y="45" width="177" height="239" rx="5" fill="#E2E8DE"/>
@@ -32,7 +32,7 @@ const feature = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328">
 <rect x="284" y="228" width="130" height="33" rx="5" fill="#24717E"/>
 </svg>`;
 
-const promotion = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328">
+const imageRight = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328">
 <rect width="540" height="328" fill="#1D2C39"/>
 <rect x="275" y="20" width="243" height="288" rx="4" fill="#DA9468"/>
 <circle cx="400" cy="147" r="95" fill="#F8D2A0"/>
@@ -47,9 +47,9 @@ const promotion = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 328"
 
 const asImage = (svg: string) => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 
-// The same IDs select deterministic layouts on the CMSBlock demo service.
-export const CMS_BLOCK_REFERENCE_IMAGES: Record<CmsBlockTemplateId, string> = {
-    editorial: asImage(editorial),
-    feature: asImage(feature),
-    promotion: asImage(promotion),
+// Purely visual selectors in this iteration; the backend has no layoutId yet.
+export const CMS_BLOCK_LAYOUT_IMAGES: Record<CmsBlockLayoutId, string> = {
+    'image-above': asImage(imageAbove),
+    'image-left': asImage(imageLeft),
+    'image-right': asImage(imageRight),
 };

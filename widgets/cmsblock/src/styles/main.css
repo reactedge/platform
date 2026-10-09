@@ -36,7 +36,7 @@
 .cmsblock-editor :is(textarea, select, button):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
 @media (max-width: 600px) { .cmsblock-editor__options { grid-template-columns: 1fr; } }
 
-/* Three visual reference cards; no layout/alignment controls are exposed. */
+/* Two independent controls: saved editorial style and preview-only image layout. */
 .cmsblock-editor__references {
     margin: 0 0 24px; padding: 0; border: 0; min-width: 0;
 }
@@ -135,4 +135,116 @@
         grid-template-columns: minmax(0, 1fr);
         padding: 12px;
     }
+}
+
+.cmsblock-editor__styles {
+    min-width: 0;
+    margin: 0 0 26px;
+    padding: 0;
+    border: 0;
+}
+.cmsblock-editor__styles legend {
+    margin: 0 0 4px;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+.cmsblock-editor__styles > p {
+    margin: 0 0 14px;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+.cmsblock-editor__style-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+.cmsblock-editor__style-list .cmsblock-editor__style {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    padding: 8px;
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    color: #1f2937;
+    background: #fff;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+}
+.cmsblock-editor__style-list .cmsblock-editor__style[aria-pressed="true"] {
+    border-color: #2563eb;
+    background: #eff6ff;
+    box-shadow: 0 0 0 1px #2563eb;
+}
+.cmsblock-editor__style-sample {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 11px;
+    min-height: 117px;
+    padding: 22px 18px;
+    border-radius: 5px;
+    background: var(--cmsblock-style-bg);
+    color: var(--cmsblock-style-fg);
+}
+.cmsblock-editor__style--editorial {
+    --cmsblock-style-bg: #f7f4ef;
+    --cmsblock-style-fg: #2d4440;
+}
+.cmsblock-editor__style--feature {
+    --cmsblock-style-bg: #f0f8f8;
+    --cmsblock-style-fg: #214953;
+}
+.cmsblock-editor__style--promotion {
+    --cmsblock-style-bg: #1d2c39;
+    --cmsblock-style-fg: #ffffff;
+}
+.cmsblock-editor__style-heading {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1.1;
+}
+.cmsblock-editor__style--editorial .cmsblock-editor__style-heading {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 500;
+}
+.cmsblock-editor__style--promotion .cmsblock-editor__style-heading {
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+.cmsblock-editor__style-line {
+    display: block;
+    height: 6px;
+    width: 88%;
+    border-radius: 4px;
+    background: currentColor;
+    opacity: 0.32;
+}
+.cmsblock-editor__style-line--short { width: 60%; }
+.cmsblock-editor__style strong {
+    margin: 4px 3px 0;
+    font-size: 0.95rem;
+}
+.cmsblock-editor__style-description {
+    margin: 0 3px;
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.45;
+}
+.cmsblock-editor__style-selected {
+    margin: auto 3px 3px;
+    color: #1d4ed8;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.cmsblock-editor__layout-notice {
+    font-size: 0.85rem;
+    color: #475569;
+    border-left: 3px solid #94a3b8;
+    padding-left: 12px;
+}
+@media (max-width: 700px) {
+    .cmsblock-editor__style-list { grid-template-columns: 1fr; }
 }

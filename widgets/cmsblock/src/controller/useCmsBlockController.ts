@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import type {WidgetConfig} from '../Config.ts';
 import type {CmsBlockDraft, CmsBlockTemplateId} from '../Model/CmsBlock.ts';
+import type {CmsBlockLayoutId} from '../Model/CmsBlockLayout.ts';
 import {CmsBlockApi, type CmsBlockRecord} from '../Model/CmsBlockApi.ts';
 
 export function useCmsBlockController(config: WidgetConfig) {
@@ -18,6 +19,8 @@ export function useCmsBlockController(config: WidgetConfig) {
     const [message, setMessage] = useState('');
     const [mode, setMode] = useState<'edit' | 'review' | 'view'>('edit');
     const [showSourcePreview, setShowSourcePreview] = useState(false);
+    // Local-only preview. Deliberately excluded from CmsBlockDraft and save().
+    const [layoutId, setLayoutId] = useState<CmsBlockLayoutId>('image-above');
 
     useEffect(() => {
         let active = true;
@@ -95,6 +98,7 @@ export function useCmsBlockController(config: WidgetConfig) {
 
     return {
         draft, record, changed, busy, loading, error, message, mode, setMode,
+        layoutId, setLayoutId,
         showSourcePreview, setShowSourcePreview,
         updateContent, updateFormat, updateTemplate, reset, save, generate, approve, reject,
     };
