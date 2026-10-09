@@ -1,29 +1,25 @@
 # CMSBlock complexity
 
-Use [Lizard](https://github.com/terryyin/lizard) to keep TypeScript/TSX
-function complexity low in the CMSBlock widget (service and AI generator are
-explicitly outside this check).
-
-Install once:
+Complexity analysis is shared by all ReactEdge widgets via a root-level
+[mise](https://mise.jdx.dev/) task. Run from the platform root:
 
 ```bash
-python -m pip install lizard==1.24.1
+mise run complexity -- cmsblock
 ```
 
-From the ReactEdge platform root, run:
+Replace `cmsblock` with any directory name under `widgets/`. The task uses
+a pinned Lizard **1.24.1** CLI, installed automatically by mise through the
+task-specific `uv`/Python environment. There is no per-widget npm complexity
+script and no separate Python package installation to maintain.
 
-```bash
-npm run complexity --prefix widgets/cmsblock
-```
+The launcher analyzes whichever of `src` and `api` exist under the widget:
 
-The script checks only `widgets/cmsblock/src` and `widgets/cmsblock/api`:
+- Cyclomatic complexity (CCN): maximum **10** per function.
+- Parameter count: maximum **5** per function.
 
-- Cyclomatic complexity (CCN) must not exceed **10** per function.
-- Parameter count must not exceed **5** per function.
+Lizard also reports function NLOC and tokens. Investigate unusually long
+functions even if their cyclomatic complexity is acceptable.
 
-Lizard reports function NLOC and token counts as well. Review unusually long
-functions for separation of responsibilities even if their CCN is low.
-For TSX, length metrics can include markup and should be interpreted accordingly.
-
-The GitHub Actions workflow `cmsblock-complexity.yml` runs the same
-command on relevant changes. No service code or generation logic is affected.
+The `cmsblock-complexity.yml` GitHub Actions workflow runs the same command
+on CMSBlock-related changes. The CMSBlock service and AI generator are not
+included.
