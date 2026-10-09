@@ -10,7 +10,6 @@ export class CmsBlockStore {
     private queue: Promise<unknown> = Promise.resolve();
 
     constructor(private readonly directory: string) {
-        this.directory = directory;
         this.file = join(directory, 'demo.json');
     }
 
@@ -19,7 +18,7 @@ export class CmsBlockStore {
         try {
             return JSON.parse(await readFile(this.file, 'utf8')) as CmsBlockRecord;
         } catch (error) {
-            if (error?.code === 'ENOENT') return null;
+            if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
             throw error;
         }
     }
@@ -30,7 +29,7 @@ export class CmsBlockStore {
             try {
                 current = JSON.parse(await readFile(this.file, 'utf8'));
             } catch (error) {
-                if (error?.code !== 'ENOENT') throw error;
+                if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
             }
             const next = change(current);
             await mkdir(this.directory, {recursive: true});
@@ -66,9 +65,9 @@ export class CmsBlockStore {
                 ...current,
                 revision,
                 pending: {
-                    ...generateBlock(current),
+                    ...generateBlock(validateDraft(current)),
                     templateId: current.templateId,
-                    layoutId: current.layoutId ?? ({editorial: 'image-above', feature: 'image-left', promotion: 'image-right'})[current.templateId],
+                    layoutId: validateDraft(current).layoutId,
                     revision, status: 'inreview',
                 },
             };
