@@ -1,15 +1,13 @@
 import {useId} from 'react';
-import {CMS_BLOCK_TEMPLATES, type CmsBlockDraft, type CmsBlockTemplateId} from '../Model/CmsBlock.ts';
+import {CMS_BLOCK_TEMPLATES, type CmsBlockDraft} from '../Model/CmsBlock.ts';
+import {CMS_BLOCK_REFERENCE_IMAGES} from '../Model/CmsBlockTemplateImages.ts';
 import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
 
-type Props = {
-    controller: CmsBlockController;
-};
+type Props = {controller: CmsBlockController};
 
 export const CmsBlockEditor = ({controller}: Props) => {
     const contentId = useId();
     const formatId = useId();
-    const templateId = useId();
     const {draft} = controller;
 
     return (
@@ -34,19 +32,33 @@ export const CmsBlockEditor = ({controller}: Props) => {
                         <option value="html">HTML source</option>
                     </select>
                 </div>
-                <div>
-                    <label htmlFor={templateId}>Template</label>
-                    <select
-                        id={templateId}
-                        value={draft.templateId}
-                        onChange={event => controller.updateTemplate(event.target.value as CmsBlockTemplateId)}
-                    >
-                        {CMS_BLOCK_TEMPLATES.map(template =>
-                            <option key={template.id} value={template.id}>{template.label}</option>
-                        )}
-                    </select>
-                </div>
             </div>
+
+            <fieldset className="cmsblock-editor__references">
+                <legend>Visual reference</legend>
+                <p>Select one of the three reference images. The mock generator will match its general composition.</p>
+                <div className="cmsblock-editor__reference-list">
+                    {CMS_BLOCK_TEMPLATES.map(template => (
+                        <button
+                            type="button"
+                            key={template.id}
+                            className="cmsblock-editor__reference"
+                            data-template-id={template.id}
+                            aria-label={`Use ${template.label} reference`}
+                            aria-pressed={draft.templateId === template.id}
+                            onClick={() => controller.updateTemplate(template.id)}
+                        >
+                            <img
+                                src={CMS_BLOCK_REFERENCE_IMAGES[template.id]}
+                                alt={`${template.label} layout reference image`}
+                                loading="lazy"
+                            />
+                            <strong>{template.label}</strong>
+                            <span>{template.description}</span>
+                        </button>
+                    ))}
+                </div>
+            </fieldset>
         </div>
     );
 };

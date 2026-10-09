@@ -5,9 +5,9 @@ export type CmsBlockSource = {
 };
 
 export const CMS_BLOCK_TEMPLATES = [
-    {id: 'editorial', label: 'Editorial'},
-    {id: 'feature', label: 'Feature'},
-    {id: 'promotion', label: 'Promotional'},
+    {id: 'editorial', label: 'Editorial', description: 'Image above the text'},
+    {id: 'feature', label: 'Feature', description: 'Image left, text right'},
+    {id: 'promotion', label: 'Promotional', description: 'Bold text left, image right'},
 ] as const;
 
 export type CmsBlockTemplateId = (typeof CMS_BLOCK_TEMPLATES)[number]['id'];

@@ -11,7 +11,8 @@ test.describe('CMSBlock E2E workflow', () => {
         await expect(widget.locator('[data-cmsblock-title]')).toBeVisible();
         await widget.getByRole('button', {name: 'Edit', exact: true}).click();
         await widget.getByLabel('Source content').fill('Welcome to CMSBlock\nA beautiful responsive content block.');
-        await widget.getByLabel('Template').selectOption('feature');
+        await widget.getByRole('button', {name: 'Use Feature reference'}).click();
+        await expect(widget.getByRole('button', {name: 'Use Feature reference'})).toHaveAttribute('aria-pressed', 'true');
         await widget.getByRole('button', {name: 'Save source'}).click();
         await expect(widget.getByText('Source and template saved.')).toBeVisible();
         await widget.getByRole('button', {name: 'Generate draft'}).click();
@@ -23,4 +24,18 @@ test.describe('CMSBlock E2E workflow', () => {
         await page.reload();
         await expect(widget.getByRole('heading', {name: /Published revision/})).toBeVisible();
     });
+});
+
+test('shows three image references and remembers the selected reference', async ({page}) => {
+    await page.goto('/?reactedge_debug=eager');
+    const widget = page.locator('cmsblock-widget');
+    await widget.getByRole('button', {name: 'Edit', exact: true}).click();
+    await expect(widget.locator('.cmsblock-editor__reference img')).toHaveCount(3);
+    await widget.getByLabel('Source content').fill('Choose a template by its image');
+    await widget.getByRole('button', {name: 'Use Promotional reference'}).click();
+    await widget.getByRole('button', {name: 'Save source'}).click();
+    await expect(widget.getByText('Source and template saved.')).toBeVisible();
+    await page.reload();
+    await widget.getByRole('button', {name: 'Edit', exact: true}).click();
+    await expect(widget.getByRole('button', {name: 'Use Promotional reference'})).toHaveAttribute('aria-pressed', 'true');
 });

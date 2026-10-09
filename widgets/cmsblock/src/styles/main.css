@@ -35,3 +35,34 @@
 .cmsblock-editor__message { padding: 12px; color: #166534; background: #f0fdf4; }
 .cmsblock-editor :is(textarea, select, button):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
 @media (max-width: 600px) { .cmsblock-editor__options { grid-template-columns: 1fr; } }
+
+/* Three visual reference cards; no layout/alignment controls are exposed. */
+.cmsblock-editor__references {
+    margin: 0 0 24px; padding: 0; border: 0; min-width: 0;
+}
+.cmsblock-editor__references legend {
+    margin-bottom: 4px; padding: 0; font-weight: 700; font-size: 1rem;
+}
+.cmsblock-editor__references > p { margin: 0 0 14px; color: #64748b; font-size: 0.875rem; }
+.cmsblock-editor__reference-list {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+}
+.cmsblock-editor__reference-list .cmsblock-editor__reference {
+    display: flex; flex-direction: column; gap: 5px; min-width: 0; width: 100%;
+    border: 2px solid #cbd5e1; border-radius: 10px; padding: 8px;
+    color: #1f2937; background: #fff; font: inherit; text-align: left; cursor: pointer;
+}
+.cmsblock-editor__reference img {
+    display: block; width: 100%; height: auto; aspect-ratio: 540 / 328;
+    border-radius: 5px; object-fit: cover; background: #f1f5f9;
+}
+.cmsblock-editor__reference strong { margin: 4px 3px 0; font-size: 0.95rem; }
+.cmsblock-editor__reference span {
+    margin: 0 3px 3px; color: #64748b; font-size: 0.82rem; line-height: 1.45;
+}
+.cmsblock-editor__reference-list .cmsblock-editor__reference[aria-pressed="true"] {
+    border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 1px #2563eb;
+}
+@media (max-width: 700px) {
+    .cmsblock-editor__reference-list { grid-template-columns: 1fr; }
+}
