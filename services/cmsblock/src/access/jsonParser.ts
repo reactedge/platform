@@ -1,8 +1,6 @@
-import express, {Application} from "express";
+import type {Application} from 'express';
+import express from 'express';
 
-export const setupJsonBodyParse = (app: Application) => {
-    app.use(express.json())
-    app.use(express.urlencoded({
-        extended: true
-    }))
+export function setupJsonBodyParse(app: Application): void {
+    app.use(express.json({limit: '120kb'}));
 }

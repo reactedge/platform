@@ -1,3 +1,3 @@
-import {startServer} from "./lib/server";
+import {startServer} from './lib/server';
 
-startServer()
+void startServer();

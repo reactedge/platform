@@ -1,22 +1,8 @@
-import {config} from "../config";
-import cors from "cors"
+import cors from 'cors';
+import {config} from '../config';
 
-// https://brianflove.com/posts/2017-03-22-express-cors-typescript/
-export const corsOptions = () => {
-    const allowedOrigins = config.frontendUrl
-        .split(',')
-        .map(origin => origin.trim())
-
-    const options = {
-        allowedHeaders: [
-            'Origin',
-            'Accept'
-        ],
-        credentials: true,
-        methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-        origin: allowedOrigins,
-        preflightContinue: false,
-    };
-
-    return cors(options)
+export function corsOptions() {
+    const allowed = config.frontendUrl.split(',').map(x => x.trim()).filter(Boolean);
+    const checker = cors({origin: allowed, methods: 'GET,HEAD,OPTIONS,PUT,POST', allowedHeaders: ['Content-Type']});
+    return checker;
 }

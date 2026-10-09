@@ -2,12 +2,13 @@
   "name": "@reactedge/cmsblock",
   "version": "0.1.0",
   "private": true,
-  "description": "Cmsblock Express service",
+  "description": "CMSBlock Express service",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node --import tsx src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.1",
