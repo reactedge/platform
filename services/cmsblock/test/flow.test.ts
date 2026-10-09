@@ -14,6 +14,9 @@ test('legacy CMSBlock routes preserve the author -> review -> publish lifecycle'
     const directory = await mkdtemp(join(tmpdir(), 'reactedge-cmsblock-'));
     const app = express();
     app.locals.cmsblocks = new CmsBlockStore(directory);
+    app.locals.telemetry = {
+        startChildOperation: () => ({succeed() {}, fail() {}, complete() {}}),
+    };
     // Route operation is a harmless test double; the production initializer sets up OTEL.
     app.use((req, res, next) => {
         res.locals.routeOperation = {succeed() {}, fail() {}, complete() {}};
