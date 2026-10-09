@@ -37,7 +37,7 @@ test('product status defaults to active and can be updated', () => fixture(async
     const listingResponse = await fetch(`${url}/listingrecord/listings`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name: 'Gallery'}),
+        body: JSON.stringify({name: 'Gallery', sellerId: 'test-seller'}),
     });
     const listing = await listingResponse.json() as Listing;
 
@@ -81,7 +81,7 @@ test('product status rejects unknown values', () => fixture(async url => {
     const listingResponse = await fetch(`${url}/listingrecord/listings`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name: 'Gallery'}),
+        body: JSON.stringify({name: 'Gallery', sellerId: 'test-seller'}),
     });
     const listing = await listingResponse.json() as Listing;
 

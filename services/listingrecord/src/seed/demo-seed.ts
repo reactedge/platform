@@ -8,6 +8,8 @@ type SeedListing = {
     products: SeedProduct[];
 };
 
+const seedSellerId = 'seed-seller';
+
 export const seedListings: SeedListing[] = Array.from({length: 4}, (_, listingIndex) => ({
     name: `Seed Listing ${listingIndex + 1}`,
     products: Array.from({length: 3}, (_, productIndex) => ({
@@ -34,7 +36,10 @@ export async function seedDemoData(
     for (const seed of seedListings) {
         const existing = listings.find(listing => listing.name === seed.name);
         const listing = existing ?? ListingSchema.parse(
-            await postJson(fetcher, `${baseUrl}/listings`, {name: seed.name}),
+            await postJson(fetcher, `${baseUrl}/listings`, {
+                name: seed.name,
+                sellerId: seedSellerId,
+            }),
         );
 
         if (!existing) {

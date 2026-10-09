@@ -11,7 +11,7 @@ import { ProductWorkspace } from './product/ProductWorkspace.tsx';
 type Props = { config: WidgetConfig };
 
 export const WidgetCreatelisting = ({ config }: Props) => {
-    const listingController = useListingController();
+    const listingController = useListingController(config.runtime.sellerId);
     const productController = useProductController();
 
     const chooseListing = (action: Parameters<typeof listingController.begin>[0]) => {

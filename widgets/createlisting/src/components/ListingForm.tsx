@@ -1,12 +1,12 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import type { ListingInput, ListingStatus } from '../Model/Listing.ts';
+import type { ListingStatus, ListingUpdateInput } from '../Model/Listing.ts';
 
 type Props = {
     initialName?: string;
     initialStatus?: ListingStatus;
     editing?: boolean;
     onCancel: () => void;
-    onSave: (input: ListingInput) => void | Promise<void>;
+    onSave: (input: ListingUpdateInput) => void | Promise<void>;
 };
 
 export const ListingForm = ({

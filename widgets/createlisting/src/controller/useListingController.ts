@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Listing, type ListingInput, type ListingRecord } from '../Model/Listing.ts';
+import { Listing, type ListingRecord, type ListingUpdateInput } from '../Model/Listing.ts';
 
 export type ListingMode = 'create' | 'edit' | 'delete';
 
 const listingModel = new Listing();
 
-export function useListingController() {
+export function useListingController(sellerId?: string) {
     const [mode, setMode] = useState<ListingMode | null>(null);
     const [selectedId, setSelectedId] = useState('');
     const [busy, setBusy] = useState(false);
@@ -23,13 +23,13 @@ export function useListingController() {
         return () => { active = false; };
     }, []);
 
-    const save = async (input: ListingInput) => {
+    const save = async (input: ListingUpdateInput) => {
         setMessage('');
         setBusy(true);
         try {
             const listing = mode === 'edit' && selected
-                ? await listingModel.update(selected.id, input)
-                : await listingModel.create(input);
+                ? await listingModel.update(selected.id, {...input, sellerId: requireSellerId(sellerId)})
+                : await listingModel.create({...input, sellerId: requireSellerId(sellerId)});
             setListings(current => mode === 'edit'
                 ? current.map(record => record.id === listing.id ? listing : record)
                 : [...current, listing]);
@@ -77,6 +77,12 @@ export function useListingController() {
         disabled: busy || loading,
         begin, select, cancel, save, remove,
     };
+}
+
+function requireSellerId(sellerId?: string): string {
+    const value = sellerId?.trim();
+    if (!value) throw new Error('No authenticated seller is available for this listing.');
+    return value;
 }
 
 export type ListingController = ReturnType<typeof useListingController>;

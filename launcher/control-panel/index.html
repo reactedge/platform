@@ -37,6 +37,11 @@
       <label class="inline"><input type="checkbox" name="observabilityEnabled">Observability</label>
       <div class="dependent" data-for="observabilityEnabled"><label><span>OpenTelemetry collector URL</span><input name="otelHost" type="url"></label></div>
       <label class="inline"><input type="checkbox" name="intentDiscoveryEnabled">Intent Discovery</label>
+      <label class="inline"><input type="checkbox" name="sellerListingEnabled">Seller Listing</label>
+      <div class="dependent" data-for="sellerListingEnabled">
+        <label><span>Default Seller ID</span><input name="defaultSellerId"></label>
+        <small>Used for generated runtime/SSR. Authenticated Next.js requests should supply the real seller ID.</small>
+      </div>
       <label class="inline"><input type="checkbox" name="turnstileEnabled">Cloudflare Turnstile</label>
       <div class="dependent" data-for="turnstileEnabled"><label><span>Turnstile site key</span><input name="turnstileSiteKey"></label></div>
       <label class="inline"><input type="checkbox" name="googleMapsEnabled">Google Maps for Store Finder or Seller Finder</label>

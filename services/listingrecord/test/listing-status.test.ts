@@ -36,7 +36,7 @@ test('listing status defaults to active and can be updated', () => fixture(async
     const createdResponse = await fetch(`${url}/listingrecord/listings`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name: 'Gallery'}),
+        body: JSON.stringify({name: 'Gallery', sellerId: 'test-seller'}),
     });
     assert.equal(createdResponse.status, 201);
 
@@ -58,7 +58,7 @@ test('listing status rejects unknown values', () => fixture(async url => {
     const response = await fetch(`${url}/listingrecord/listings`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name: 'Gallery', status: 'archived'}),
+        body: JSON.stringify({name: 'Gallery', status: 'archived', sellerId: 'test-seller'}),
     });
 
     assert.equal(response.status, 400);

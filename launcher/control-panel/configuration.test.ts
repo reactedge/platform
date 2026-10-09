@@ -204,3 +204,49 @@ test('fresh clones have no environments and create a store from the sample layou
         rmSync(targetParent, { recursive: true, force: true });
     }
 });
+
+test('seller listing settings write only the createlisting seller runtime context', () => {
+    const root = mkdtempSync(join(tmpdir(), 'reactedge-config-'));
+    const targetParent = mkdtempSync(join(tmpdir(), 'reactedge-target-'));
+    try {
+        writeWorkspaceSample(root);
+        mkdirSync(join(root, 'widgets/createlisting/public'), { recursive: true });
+        mkdirSync(join(root, 'widgets/usp/public'), { recursive: true });
+
+        const defaults = readConfiguration(root, 'seller');
+        const config = {
+            ...defaults,
+            targetRoot: join(targetParent, 'site'),
+            sellerListingEnabled: true,
+            defaultSellerId: 'seller-123',
+        };
+
+        applyConfiguration(root, config);
+
+        const listingRuntime = JSON.parse(
+            readFileSync(join(root, 'widgets/createlisting/public/reactedge-runtime.json'), 'utf8')
+        );
+        const uspRuntime = JSON.parse(
+            readFileSync(join(root, 'widgets/usp/public/reactedge-runtime.json'), 'utf8')
+        );
+
+        assert.equal(listingRuntime.context.sellerId, 'seller-123');
+        assert.equal(uspRuntime.context.sellerId, undefined);
+
+        const env = readFileSync(join(root, '.env.seller'), 'utf8');
+        assert.match(env, /SELLER_LISTING_ENABLED='1'/);
+        assert.match(env, /DEFAULT_SELLER_ID='seller-123'/);
+
+        const loaded = readConfiguration(root, 'seller');
+        assert.equal(loaded.sellerListingEnabled, true);
+        assert.equal(loaded.defaultSellerId, 'seller-123');
+
+        assert.throws(
+            () => previewConfiguration(root, { ...config, defaultSellerId: '' }),
+            /Default Seller ID/
+        );
+    } finally {
+        rmSync(root, { recursive: true, force: true });
+        rmSync(targetParent, { recursive: true, force: true });
+    }
+});
