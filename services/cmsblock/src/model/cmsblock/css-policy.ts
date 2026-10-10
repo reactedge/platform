@@ -25,7 +25,17 @@ function validateSelector(selector: string): void {
 
 function validateDeclaration(declaration: Declaration): void {
     const name = declaration.prop.toLowerCase();
-    if (DISALLOWED_PROPS.test(name)) return declaration.remove();
+    // AI controls colour and typography identity, not legibility or geometry.
+    const permitted = new Set([
+        'color', 'background-color', 'font-family', 'font-weight',
+        'font-style', 'letter-spacing', 'word-spacing',
+        'text-decoration', 'text-decoration-color', 'text-align',
+        'border-color', 'border-style', 'border-width',
+    ]);
+    if (DISALLOWED_PROPS.test(name) || !permitted.has(name)) {
+        declaration.remove();
+        return;
+    }
     const value = declaration.value;
     // Disallow active URLs, obfuscated escapes, and priority escalation.
     if (declaration.important || !name || !value ||
@@ -39,6 +49,10 @@ function validateDeclaration(declaration: Declaration): void {
 function validateRule(rule: Rule): void {
     if (!rule.selectors.length || !rule.nodes?.length) {
         throw new CmsBlockCssError('AI CSS contains an empty rule.');
+    }
+    if (rule.selectors.some(selector => /::|:first-|:before|:after/i.test(selector))) {
+        rule.remove();
+        return;
     }
     for (const selector of rule.selectors) validateSelector(selector);
     let declarations = 0;

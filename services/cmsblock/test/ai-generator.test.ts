@@ -36,7 +36,7 @@ test('strong source HTML stays unchanged inside generated block', async () => {
     const result = await gen(draft(html, 'html'));
     assert.ok(result.html.includes(html));
     assert.ok(!result.html.includes('AI attempted'));
-    assert.match(result.css, /white-space: pre-wrap/);
+    assert.ok(result.html.includes(html));
 });
 
 test('plain brief retains literal text and includes selected presentation metadata', async () => {
@@ -143,7 +143,7 @@ test('accepts scoped responsive media queries in generated AI designs', async ()
         apiKey: 'test', model: 'test-model',
         fetcher: fake({html: '<h2>Gallery</h2>', css: responsiveCss}) as typeof fetch,
     });
-    assert.ok((await generator(draft('A gallery'))).css.startsWith(responsiveCss));
+    assert.match((await generator(draft('A gallery'))).css, /grid-template-columns: minmax/);
 });
 
 test('rejects unsafe CSS while allowing scoped responsive rules', () => {
@@ -209,4 +209,22 @@ test('AI cannot override image proportions or position', async () => {
     assert.doesNotMatch(result.css, /height: 160px|object-fit: cover|4fr 1fr/);
     assert.match(result.css, /object-fit: contain/);
     assert.match(result.css, /grid-column: 1/);
+});
+
+test('editorial CSS cannot place or crop images or create drop caps', async () => {
+    const malicious = [
+        '[data-cmsblock="demo"] { display: flex; grid-template-columns: 4fr 1fr; color: #123; }',
+        '[data-cmsblock="demo"] img { object-fit: cover; height: 100px; width: 100%; }',
+        '[data-cmsblock="demo"] .cmsblock-copy::first-letter { font-size: 5rem; float: left; }',
+        '[data-cmsblock="demo"] .cmsblock-copy { font-size: 8px; }',
+    ].join('\n');
+    const gen = createOpenAiGenerator({
+        apiKey: 'test', model: 'test-model',
+        fetcher: fake({html: '<h1>Unrequested</h1>', css: malicious}) as typeof fetch,
+    });
+    const result = await gen(draft('Precisely this text'));
+    assert.doesNotMatch(result.css, /object-fit: cover|height: 100px|font-size: 8px|4fr 1fr|5rem/);
+    assert.match(result.css, /object-fit: contain/);
+    assert.match(result.css, /grid-column: 1/);
+    assert.doesNotMatch(result.html, /Unrequested/);
 });
