@@ -2,7 +2,9 @@ import {readFile, mkdir, rename, writeFile, rm} from 'node:fs/promises';
 import {join} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {generateBlock, validateDraft} from './generator';
-import {CmsBlockWorkflowError} from './errors';
+import {CmsBlockWorkflowError, CmsBlockValidationError} from './errors';
+import {assertSafeMarkup} from './source-policy';
+import {parse} from 'postcss';
 import type {CmsBlockRecord, CmsBlockDraft} from './types';
 import type {BlockGenerator} from './ai-generator';
 
@@ -81,6 +83,47 @@ export class CmsBlockStore {
                     revision, status: 'inreview',
                 },
             };
+        });
+    }
+
+    updatePending(input: unknown): Promise<CmsBlockRecord> {
+        if (!input || typeof input !== 'object') throw new CmsBlockValidationError('Invalid revision.');
+        const data = input as Record<string, unknown>;
+        if (typeof data.html !== 'string' || typeof data.css !== 'string' ||
+            !Number.isInteger(data.revision) || !data.html.trim() ||
+            data.html.length > 100_000 || !data.css.trim() || data.css.length > 25_000) {
+            throw new CmsBlockValidationError('Invalid HTML, CSS or revision.');
+        }
+        try { assertSafeMarkup(data.html); }
+        catch { throw new CmsBlockValidationError('Unsafe HTML.'); }
+        // The manually edited CSS is allowed more freedom than AI-generated CSS.
+        // Keep it scoped to the block and reject active URLs and imports.
+        let stylesheet: ReturnType<typeof parse>;
+        try { stylesheet = parse(data.css); }
+        catch { throw new CmsBlockValidationError('Invalid CSS.'); }
+        let rules = 0;
+        stylesheet.walk(node => {
+            if (node.type === 'atrule' && node.name !== 'media')
+                throw new CmsBlockValidationError('Unsupported CSS at-rule.');
+            if (node.type === 'rule') {
+                rules++;
+                if (node.selectors.some(selector =>
+                    !selector.trim().startsWith('[data-cmsblock="demo"]') ||
+                    /[+~\\\\]/.test(selector))) {
+                    throw new CmsBlockValidationError('CSS must stay scoped to CMSBlock.');
+                }
+            }
+            if (node.type === 'decl' && (node.important ||
+                /url\\s*\\(|expression\\s*\\(|[<>]/i.test(node.value))) {
+                throw new CmsBlockValidationError('Unsafe CSS declaration.');
+            }
+        });
+        if (!rules) throw new CmsBlockValidationError('CSS contains no rules.');
+        return this.mutate(current => {
+            if (!current?.pending) throw new CmsBlockWorkflowError('No pending draft to edit.');
+            if (current.pending.revision !== data.revision)
+                throw new CmsBlockWorkflowError('Draft changed. Reload before editing.');
+            return {...current, pending: {...current.pending, html: data.html as string, css: data.css as string}};
         });
     }
 
