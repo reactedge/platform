@@ -17,7 +17,7 @@ export interface CmsBlockRecord extends CmsBlockDraft {
 
 const base = `${(import.meta.env.VITE_CMSBLOCK_URL || 'http://127.0.0.1:4190').replace(/\/+$/, '')}/cmsblock/blocks/demo`;
 
-async function request(path: string, method: 'GET' | 'PUT' | 'POST', body?: CmsBlockDraft | {html: string; css: string; revision: number}): Promise<CmsBlockRecord | null> {
+async function request<T>(path: string, method: 'GET' | 'PUT' | 'POST', body?: CmsBlockDraft | {html: string; css: string; revision: number}): Promise<T | null> {
     let response: Response;
     try {
         response = await fetch(base + path, {
@@ -36,14 +36,18 @@ async function request(path: string, method: 'GET' | 'PUT' | 'POST', body?: CmsB
             typeof data.error === 'string' ? data.error : 'CMSBlock service request failed.';
         throw new Error(error);
     }
-    return data as CmsBlockRecord;
+    return data as T;
 }
 
 export const CmsBlockApi = {
-    get: () => request('', 'GET'),
-    save: (draft: CmsBlockDraft) => request('', 'PUT', draft),
-    generate: () => request('/generate', 'POST'),
-    updatePending: (input: {html: string; css: string; revision: number}) => request('/pending', 'PUT', input),
-    approve: () => request('/approve', 'POST'),
-    reject: () => request('/reject', 'POST'),
+    get: () => request<CmsBlockRecord>('', 'GET'),
+    getPublished: async () => {
+        const result = await request<{published: CmsBlockRevision | null}>('/published', 'GET');
+        return result?.published ?? null;
+    },
+    save: (draft: CmsBlockDraft) => request<CmsBlockRecord>('', 'PUT', draft),
+    generate: () => request<CmsBlockRecord>('/generate', 'POST'),
+    updatePending: (input: {html: string; css: string; revision: number}) => request<CmsBlockRecord>('/pending', 'PUT', input),
+    approve: () => request<CmsBlockRecord>('/approve', 'POST'),
+    reject: () => request<CmsBlockRecord>('/reject', 'POST'),
 };

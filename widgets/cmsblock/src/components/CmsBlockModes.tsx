@@ -85,8 +85,8 @@ export const CmsBlockReviewMode = ({controller}: Props) => {
 };
 
 export const CmsBlockViewMode = ({controller}: Props) => {
-    const published = controller.record?.published;
-    if (!published) return null;
+    const published = controller.published ?? controller.record?.published;
+    if (!published) return <p role="status">The published CMS block is temporarily unavailable.</p>;
     return (
         <>
             <h2>Published revision {published.revision}</h2>

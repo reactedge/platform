@@ -8,11 +8,21 @@ import {
     CmsBlockViewMode,
 } from './CmsBlockModes.tsx';
 
-type Props = {config: WidgetConfig};
+type Props = {config: WidgetConfig; viewOnly?: boolean};
 
-export const WidgetCmsblock = ({config}: Props) => {
-    const controller = useCmsBlockController(config);
+export const WidgetCmsblock = ({config, viewOnly = false}: Props) => {
+    const controller = useCmsBlockController(config, {viewOnly});
     const {loading, mode} = controller;
+
+    if (viewOnly) {
+        return (
+            <section className="cmsblock-editor" aria-label="Published CMS block">
+                {loading && <p role="status">Loading published CMS block…</p>}
+                {!loading && mode === 'view' && <CmsBlockViewMode controller={controller} />}
+            </section>
+        );
+    }
+
     return (
         <section className="cmsblock-editor" aria-label="CMS block editor">
             <header className="cmsblock-editor__header">
