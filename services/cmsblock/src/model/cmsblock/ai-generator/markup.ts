@@ -7,7 +7,7 @@ export function escapeHtml(value: string): string {
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
-export function renderAuthoredHtml(draft: CmsBlockDraft, strategy: 'brief' | 'html-guardrail'): string {
+export function renderAuthoredHtml(draft: CmsBlockDraft, strategy: SourceStrategy): string {
     const text = strategy === 'html-guardrail'
         ? '<div class="cmsblock-copy">' + draft.source.content + '</div>'
         : '<div class="cmsblock-copy cmsblock-literal-text">' +
