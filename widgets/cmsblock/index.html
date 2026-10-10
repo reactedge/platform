@@ -13,7 +13,8 @@
     const element = document.querySelector('cmsblock-widget');
 
     await requestAnimationFrame(() => {
-        mount(element, contract);
+        mount(element, contract)
+        //mount(element, contract, {viewOnly:true});
     })
 </script>
 

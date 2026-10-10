@@ -43,7 +43,7 @@ export const CmsBlockApi = {
     get: () => request<CmsBlockRecord>('', 'GET'),
     getPublished: async () => {
         const result = await request<{published: CmsBlockRevision | null}>('/published', 'GET');
-        return result?.published ?? null;
+        return result ?? null;
     },
     save: (draft: CmsBlockDraft) => request<CmsBlockRecord>('', 'PUT', draft),
     generate: () => request<CmsBlockRecord>('/generate', 'POST'),
