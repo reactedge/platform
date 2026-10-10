@@ -2,9 +2,9 @@ import {useEffect, useState} from 'react';
 import type {WidgetConfig} from '../Config.ts';
 import {legacyLayoutForTemplate, type CmsBlockDraft, type CmsBlockTemplateId} from '../Model/CmsBlock.ts';
 import type {CmsBlockLayoutId} from '../Model/CmsBlockLayout.ts';
-import {CmsBlockApi, type CmsBlockRecord} from '../Model/CmsBlockApi.ts';
+import {CmsBlockApi, type CmsBlockRecord, type CmsBlockRevision} from '../Model/CmsBlockApi.ts';
 
-export function useCmsBlockController(config: WidgetConfig) {
+export function useCmsBlockController(config: WidgetConfig, options: {viewOnly?: boolean} = {}) {
     const initialDraft = (): CmsBlockDraft => ({
         source: {...config.data.source},
         templateId: config.data.templateId,
@@ -15,6 +15,7 @@ export function useCmsBlockController(config: WidgetConfig) {
     const [draft, setDraft] = useState<CmsBlockDraft>(initialDraft);
     const [savedDraft, setSavedDraft] = useState<CmsBlockDraft>(initialDraft);
     const [record, setRecord] = useState<CmsBlockRecord | null>(null);
+    const [published, setPublished] = useState<CmsBlockRevision | null>(null);
     const [busy, setBusy] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -24,25 +25,38 @@ export function useCmsBlockController(config: WidgetConfig) {
 
     useEffect(() => {
         let active = true;
-        void CmsBlockApi.get()
+        const load = options.viewOnly ? CmsBlockApi.getPublished() : CmsBlockApi.get();
+        void load
             .then(found => {
-                if (!active || !found) return;
-                setRecord(found);
+                if (!active) return;
+                if (options.viewOnly) {
+                    setPublished(found as CmsBlockRevision | null);
+                    setMode('view');
+                    return;
+                }
+                if (!found) return;
+                const savedRecord = found as CmsBlockRecord;
+                setRecord(savedRecord);
+                setPublished(savedRecord.published);
                 const saved = {
-                    source: found.source,
-                    templateId: found.templateId,
-                    layoutId: found.layoutId ?? legacyLayoutForTemplate(found.templateId),
-                    ...(found.image ? {image: found.image} : {}),
+                    source: savedRecord.source,
+                    templateId: savedRecord.templateId,
+                    layoutId: savedRecord.layoutId ?? legacyLayoutForTemplate(savedRecord.templateId),
+                    ...(savedRecord.image ? {image: savedRecord.image} : {}),
                 };
                 setSavedDraft(saved);
                 setDraft(saved);
-                if (found.pending) setMode('review');
-                else if (found.published) setMode('view');
+                if (savedRecord.pending) setMode('review');
+                else if (savedRecord.published) setMode('view');
             })
-            .catch(reason => { if (active) setError(reason instanceof Error ? reason.message : 'Could not load CMSBlock.'); })
+            .catch(reason => {
+                if (!active) return;
+                setError(reason instanceof Error ? reason.message : 'Could not load CMSBlock.');
+                if (options.viewOnly) setMode('view');
+            })
             .finally(() => { if (active) setLoading(false); });
         return () => { active = false; };
-    }, []);
+    }, [options.viewOnly]);
 
     const changed = JSON.stringify(draft) !== JSON.stringify(savedDraft);
 
@@ -114,7 +128,7 @@ export function useCmsBlockController(config: WidgetConfig) {
     };
 
     return {
-        draft, record, setRecord, changed, busy, loading, error, message, mode, setMode,
+        draft, record, published, setPublished, setRecord, changed, busy, loading, error, message, mode, setMode,
         showSourcePreview, setShowSourcePreview,
         updateContent, updateFormat, updateTemplate, updateLayout, updateImage, reset, save, generate, approve, reject,
     };

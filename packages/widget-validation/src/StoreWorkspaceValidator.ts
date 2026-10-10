@@ -46,6 +46,40 @@ export interface StoreWorkspaceValidationResult {
 
 type JsonObject = Record<string, unknown>;
 
+type UrlWalkContext = {
+    storeRoot: string;
+    targetHost: string;
+    invalidUrls: InvalidWorkspaceUrl[];
+};
+
+function checkUrl(value: string, file: string, path: string, context: UrlWalkContext): void {
+    if (!value.startsWith("http://") && !value.startsWith("https://")) return;
+    try {
+        const url = new URL(value);
+        if (url.hostname !== context.targetHost) {
+            context.invalidUrls.push({file: relative(context.storeRoot, file), path, url: value});
+        }
+    } catch {
+        // Not a valid URL.
+    }
+}
+
+function walkValue(value: unknown, file: string, path: string, context: UrlWalkContext): void {
+    if (typeof value === "string") {
+        checkUrl(value, file, path, context);
+        return;
+    }
+    if (Array.isArray(value)) {
+        value.forEach((item, index) => walkValue(item, file, `${path}[${index}]`, context));
+        return;
+    }
+    if (value !== null && typeof value === "object") {
+        for (const [key, child] of Object.entries(value)) {
+            walkValue(child, file, path ? `${path}.${key}` : key, context);
+        }
+    }
+}
+
 export class StoreWorkspaceValidator {
     private readonly repositoryRoot: string;
 
@@ -145,180 +179,116 @@ export class StoreWorkspaceValidator {
         };
     }
 
-    private validateDeployment(
-        storeRoot: string,
-        manifestPath: string,
-    ): DeploymentValidationResult {
+    private validateDeployment(storeRoot: string, manifestPath: string): DeploymentValidationResult {
         const instance = basename(manifestPath, ".json");
         const manifestErrors: string[] = [];
-        const manifest = this.readJsonObject(
-            manifestPath,
-            manifestErrors,
-        );
+        const manifest = this.readJsonObject(manifestPath, manifestErrors);
+        const manifestCheck = this.validateManifest(instance, manifestPath, manifest, manifestErrors);
 
-        const manifestId = manifest?.id;
-        const widget = manifest?.widget;
-        const src = manifest?.src;
+        if (!manifest || !manifestCheck.valid) return this.blockedDeployment(instance, manifestCheck);
 
-        if (manifest && manifestId !== instance) {
-            manifestErrors.push(
-                `Manifest id "${String(manifestId)}" does not match instance "${instance}".`,
-            );
-        }
-
-        if (manifest && (typeof widget !== "string" || widget.length === 0)) {
-            manifestErrors.push("Manifest widget is missing.");
-        }
-
-        if (manifest && (typeof src !== "string" || src.length === 0)) {
-            manifestErrors.push("Manifest src is missing.");
-        }
-
-        const manifestCheck: DeploymentCheck = {
-            valid: manifestErrors.length === 0,
-            path: relative(this.repositoryRoot, manifestPath),
-            errors: manifestErrors,
-        };
-
-        if (!manifestCheck.valid || !manifest) {
-            const blocked = ["Cannot validate deployment artifacts without a valid manifest."];
-
-            return {
-                instance,
-                valid: false,
-                manifest: manifestCheck,
-                release: {
-                    valid: false,
-                    path: "",
-                    errors: blocked,
-                },
-                ssr: {
-                    required: false,
-                    valid: false,
-                    path: "",
-                    errors: blocked,
-                    artifacts: [],
-                },
-            };
-        }
-
-        const release = this.validateRelease(
-            manifest,
-            widget as string,
-            src as string,
-        );
-
-        const ssr = this.validateSsr(
-            storeRoot,
-            instance,
-            manifest,
-        );
-
+        const widget = manifest.widget as string;
+        const src = manifest.src as string;
+        const release = this.validateRelease(manifest, widget, src);
+        const ssr = this.validateSsr(storeRoot, instance, manifest);
         return {
             instance,
-            widget: widget as string,
-            valid:
-                manifestCheck.valid &&
-                release.valid &&
-                ssr.valid,
+            widget,
+            valid: release.valid && ssr.valid,
             manifest: manifestCheck,
             release,
             ssr,
         };
     }
 
-    private validateRelease(
-        manifest: JsonObject,
-        widget: string,
-        src: string,
+    private validateManifest(
+        instance: string,
+        manifestPath: string,
+        manifest: JsonObject | null,
+        errors: string[],
     ): DeploymentCheck {
-        const releaseRoot = resolve(
-            this.repositoryRoot,
-            "workspace",
-            "release",
-            "source",
-            widget,
-        );
+        if (manifest && manifest.id !== instance) {
+            errors.push(`Manifest id "${String(manifest.id)}" does not match instance "${instance}".`);
+        }
+        if (manifest && (typeof manifest.widget !== "string" || manifest.widget.length === 0)) {
+            errors.push("Manifest widget is missing.");
+        }
+        if (manifest && (typeof manifest.src !== "string" || manifest.src.length === 0)) {
+            errors.push("Manifest src is missing.");
+        }
+        return {valid: errors.length === 0, path: relative(this.repositoryRoot, manifestPath), errors};
+    }
 
+    private blockedDeployment(instance: string, manifest: DeploymentCheck): DeploymentValidationResult {
+        const blocked = ["Cannot validate deployment artifacts without a valid manifest."];
+        return {
+            instance,
+            valid: false,
+            manifest,
+            release: {valid: false, path: "", errors: blocked},
+            ssr: {required: false, valid: false, path: "", errors: blocked, artifacts: []},
+        };
+    }
+
+    private validateRelease(manifest: JsonObject, widget: string, src: string): DeploymentCheck {
+        const releaseRoot = resolve(this.repositoryRoot, "workspace", "release", "source", widget);
         const errors: string[] = [];
         const files: string[] = [];
-
         if (!existsSync(releaseRoot)) {
             errors.push("Release directory is missing.");
-
-            return {
-                valid: false,
-                path: relative(this.repositoryRoot, releaseRoot),
-                errors,
-                files,
-            };
+            return {valid: false, path: relative(this.repositoryRoot, releaseRoot), errors, files};
         }
 
+        this.validateReleaseSources(releaseRoot, manifest, src, files, errors);
+        this.validateBuildManifest({releaseRoot, manifest, widget, src, files, errors});
+        return {valid: errors.length === 0, path: relative(this.repositoryRoot, releaseRoot), errors, files};
+    }
+
+    private validateReleaseSources(
+        releaseRoot: string,
+        manifest: JsonObject,
+        src: string,
+        files: string[],
+        errors: string[],
+    ): void {
         const sourcePath = join(releaseRoot, src);
         files.push(relative(this.repositoryRoot, sourcePath));
+        if (!existsSync(sourcePath)) errors.push(`Release source is missing: ${src}`);
 
-        if (!existsSync(sourcePath)) {
-            errors.push(`Release source is missing: ${src}`);
-        }
+        if (typeof manifest.css !== "string" || manifest.css.length === 0) return;
+        const cssPath = join(releaseRoot, manifest.css);
+        files.push(relative(this.repositoryRoot, cssPath));
+        if (!existsSync(cssPath)) errors.push(`Release CSS is missing: ${manifest.css}`);
+    }
 
-        if (typeof manifest.css === "string" && manifest.css.length > 0) {
-            const cssPath = join(releaseRoot, manifest.css);
-            files.push(relative(this.repositoryRoot, cssPath));
-
-            if (!existsSync(cssPath)) {
-                errors.push(`Release CSS is missing: ${manifest.css}`);
-            }
-        }
-
-        const buildManifestPath = join(
-            releaseRoot,
-            `widget-${widget}.manifest.json`,
-        );
-
-        files.push(relative(this.repositoryRoot, buildManifestPath));
-
-        if (!existsSync(buildManifestPath)) {
+    private validateBuildManifest(options: {
+        releaseRoot: string;
+        manifest: JsonObject;
+        widget: string;
+        src: string;
+        files: string[];
+        errors: string[];
+    }): void {
+        const {releaseRoot, manifest, widget, src, files, errors} = options;
+        const manifestPath = join(releaseRoot, `widget-${widget}.manifest.json`);
+        files.push(relative(this.repositoryRoot, manifestPath));
+        if (!existsSync(manifestPath)) {
             errors.push("Release build manifest is missing.");
-        } else {
-            const buildManifestErrors: string[] = [];
-            const buildManifest = this.readJsonObject(
-                buildManifestPath,
-                buildManifestErrors,
-            );
-
-            errors.push(...buildManifestErrors);
-
-            if (buildManifest) {
-                if (buildManifest.filename !== src) {
-                    errors.push(
-                        `Release build manifest filename "${String(buildManifest.filename)}" does not match deployment src "${src}".`,
-                    );
-                }
-
-                const deployedCss =
-                    typeof manifest.css === "string"
-                        ? manifest.css
-                        : undefined;
-
-                const releaseCss =
-                    typeof buildManifest.cssFilename === "string"
-                        ? buildManifest.cssFilename
-                        : undefined;
-
-                if (deployedCss !== releaseCss) {
-                    errors.push(
-                        `Release CSS "${String(releaseCss)}" does not match deployment CSS "${String(deployedCss)}".`,
-                    );
-                }
-            }
+            return;
         }
 
-        return {
-            valid: errors.length === 0,
-            path: relative(this.repositoryRoot, releaseRoot),
-            errors,
-            files,
-        };
+        const manifestErrors: string[] = [];
+        const buildManifest = this.readJsonObject(manifestPath, manifestErrors);
+        errors.push(...manifestErrors);
+        if (!buildManifest) return;
+        if (buildManifest.filename !== src) {
+            errors.push(`Release build manifest filename "${String(buildManifest.filename)}" does not match deployment src "${src}".`);
+        }
+        const deployedCss = typeof manifest.css === "string" ? manifest.css : undefined;
+        const releaseCss = typeof buildManifest.cssFilename === "string" ? buildManifest.cssFilename : undefined;
+        if (deployedCss !== releaseCss) {
+            errors.push(`Release CSS "${String(releaseCss)}" does not match deployment CSS "${String(deployedCss)}".`);
+        }
     }
 
     private validateSsr(
@@ -427,89 +397,26 @@ export class StoreWorkspaceValidator {
         }
     }
 
-    private validateUrls(
-        storeRoot: string,
-        targetSiteUrl: string,
-    ): InvalidWorkspaceUrl[] {
-        const invalidUrls: InvalidWorkspaceUrl[] = [];
-        const targetHost = new URL(targetSiteUrl).hostname;
-
-        const walkValue = (
-            value: unknown,
-            file: string,
-            path: string,
-        ): void => {
-            if (typeof value === "string") {
-                if (!value.startsWith("http://") &&
-                    !value.startsWith("https://")) {
-                    return;
-                }
-
-                try {
-                    const url = new URL(value);
-
-                    if (url.hostname !== targetHost) {
-                        invalidUrls.push({
-                            file: relative(storeRoot, file),
-                            path,
-                            url: value,
-                        });
-                    }
-                } catch {
-                    // Not a valid URL.
-                }
-
-                return;
-            }
-
-            if (Array.isArray(value)) {
-                value.forEach((item, index) => {
-                    walkValue(
-                        item,
-                        file,
-                        `${path}[${index}]`,
-                    );
-                });
-
-                return;
-            }
-
-            if (value !== null && typeof value === "object") {
-                for (const [key, child] of Object.entries(value)) {
-                    walkValue(
-                        child,
-                        file,
-                        path ? `${path}.${key}` : key,
-                    );
-                }
-            }
+    private validateUrls(storeRoot: string, targetSiteUrl: string): InvalidWorkspaceUrl[] {
+        const context = {
+            storeRoot,
+            targetHost: new URL(targetSiteUrl).hostname,
+            invalidUrls: [] as InvalidWorkspaceUrl[],
         };
-
         const walkDirectory = (directory: string): void => {
-            for (const entry of readdirSync(directory, {
-                withFileTypes: true,
-            })) {
+            for (const entry of readdirSync(directory, {withFileTypes: true})) {
                 const entryPath = join(directory, entry.name);
-
                 if (entry.isDirectory()) {
                     walkDirectory(entryPath);
                     continue;
                 }
-
-                if (!entry.isFile() || !entry.name.endsWith(".json")) {
-                    continue;
-                }
-
-                const content = JSON.parse(
-                    readFileSync(entryPath, "utf8"),
-                );
-
-                walkValue(content, entryPath, "");
+                if (!entry.isFile() || !entry.name.endsWith(".json")) continue;
+                const content = JSON.parse(readFileSync(entryPath, "utf8"));
+                walkValue(content, entryPath, "", context);
             }
         };
-
         walkDirectory(storeRoot);
-
-        return invalidUrls;
+        return context.invalidUrls;
     }
+
 }
