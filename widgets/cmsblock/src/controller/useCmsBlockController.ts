@@ -114,7 +114,7 @@ export function useCmsBlockController(config: WidgetConfig) {
     };
 
     return {
-        draft, record, changed, busy, loading, error, message, mode, setMode,
+        draft, record, setRecord, changed, busy, loading, error, message, mode, setMode,
         showSourcePreview, setShowSourcePreview,
         updateContent, updateFormat, updateTemplate, updateLayout, updateImage, reset, save, generate, approve, reject,
     };

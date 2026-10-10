@@ -1,6 +1,7 @@
 import {CmsBlockEditor} from './CmsBlockEditor.tsx';
 import {CmsBlockSourcePreview} from './CmsBlockSourcePreview.tsx';
 import {CmsBlockRenderedPreview} from './CmsBlockRenderedPreview.tsx';
+import {CmsBlockRevisionEditor} from './CmsBlockRevisionEditor.tsx';
 import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
 
 type Props = {controller: CmsBlockController};
@@ -71,7 +72,7 @@ export const CmsBlockReviewMode = ({controller}: Props) => {
     return (
         <>
             <h2>Review generated revision {record.pending.revision}</h2>
-            <CmsBlockRenderedPreview title="Generated CMSBlock draft" revision={record.pending} />
+            <CmsBlockRevisionEditor controller={controller} />
             <div className="cmsblock-editor__actions">
                 <button type="button" disabled={busy} onClick={() => { void controller.approve(); }}>Approve and publish</button>
                 <button type="button" disabled={busy} onClick={() => { void controller.reject(); }}>Reject draft</button>

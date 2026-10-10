@@ -17,7 +17,7 @@ export interface CmsBlockRecord extends CmsBlockDraft {
 
 const base = `${(import.meta.env.VITE_CMSBLOCK_URL || 'http://127.0.0.1:4190').replace(/\/+$/, '')}/cmsblock/blocks/demo`;
 
-async function request(path: string, method: 'GET' | 'PUT' | 'POST', body?: CmsBlockDraft): Promise<CmsBlockRecord | null> {
+async function request(path: string, method: 'GET' | 'PUT' | 'POST', body?: CmsBlockDraft | {html: string; css: string; revision: number}): Promise<CmsBlockRecord | null> {
     let response: Response;
     try {
         response = await fetch(base + path, {
@@ -43,6 +43,7 @@ export const CmsBlockApi = {
     get: () => request('', 'GET'),
     save: (draft: CmsBlockDraft) => request('', 'PUT', draft),
     generate: () => request('/generate', 'POST'),
+    updatePending: (input: {html: string; css: string; revision: number}) => request('/pending', 'PUT', input),
     approve: () => request('/approve', 'POST'),
     reject: () => request('/reject', 'POST'),
 };
