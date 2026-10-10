@@ -38,6 +38,9 @@ export class CmsBlockHandler {
     generate = (_req: Request, res: Response): Promise<void> =>
         this.handle(res, () => this.store(res).generate());
 
+    updatePending = (req: Request, res: Response): Promise<void> =>
+        this.handle(res, () => this.store(res).updatePending(req.body));
+
     approve = (_req: Request, res: Response): Promise<void> =>
         this.handle(res, () => this.store(res).approve());
 

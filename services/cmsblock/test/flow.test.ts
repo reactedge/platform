@@ -55,6 +55,23 @@ test('legacy CMSBlock routes preserve the author -> review -> publish lifecycle'
         assert.match(review.data.pending.html, /cmsblock-layout--image-right/);
         assert.equal(review.data.published, null);
 
+        const revisedHtml = '<section data-cmsblock="demo"><h2>Manually refined</h2></section>';
+        const revisedCss = '[data-cmsblock="demo"] h2 { font-size: 1.5rem; }';
+        const manual = await request('/pending', 'PUT', {
+            revision: 1, html: revisedHtml, css: revisedCss,
+        });
+        assert.equal(manual.status, 200);
+        assert.equal(manual.data.pending.html, revisedHtml);
+        assert.equal(manual.data.pending.css, revisedCss);
+        const invalidRevision = await request('/pending', 'PUT', {
+            revision: 999, html: revisedHtml, css: revisedCss,
+        });
+        assert.equal(invalidRevision.status, 400);
+        const unscoped = await request('/pending', 'PUT', {
+            revision: 1, html: revisedHtml, css: 'body { color: red; }',
+        });
+        assert.equal(unscoped.status, 400);
+
         const approved = await request('/approve', 'POST');
         assert.equal(approved.data.published.revision, 1);
         assert.equal(approved.data.pending, null);

@@ -16,6 +16,7 @@ export function setupCmsBlockRoutes(app: Application): void {
     router.get('/blocks/demo', createRouteOperationMiddleware('cmsblock.get'), handler.get);
     router.put('/blocks/demo', createRouteOperationMiddleware('cmsblock.save'), handler.save);
     router.post('/blocks/demo/generate', createRouteOperationMiddleware('cmsblock.generate'), handler.generate);
+    router.put('/blocks/demo/pending', createRouteOperationMiddleware('cmsblock.update_pending'), handler.updatePending);
     router.post('/blocks/demo/approve', createRouteOperationMiddleware('cmsblock.approve'), handler.approve);
     router.post('/blocks/demo/reject', createRouteOperationMiddleware('cmsblock.reject'), handler.reject);
     app.use(config.route.servicePrefix, router);

@@ -11,6 +11,7 @@ const WidgetDataSchema = z.object({
     templateId: z.enum(['editorial', 'feature', 'promotion']).default('editorial'),
     // Optional for existing widget contracts.
     layoutId: z.enum(['image-above', 'image-left', 'image-right']).optional(),
+    image: z.object({src: z.string().url().max(2000), alt: z.string().max(500)}).strict().optional(),
 }).strict();
 
 const WidgetSettingsSchema = z.object({

@@ -248,3 +248,11 @@
 @media (max-width: 700px) {
     .cmsblock-editor__style-list { grid-template-columns: 1fr; }
 }
+
+.cmsblock-editor__fields input { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid #94a3b8; border-radius: 8px; background: #fff; color: inherit; font: inherit; }
+.cmsblock-editor :is(input):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+
+.cmsblock-editor__revision-code { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:16px 0; }
+.cmsblock-editor__revision-code label { display:flex; flex-direction:column; gap:8px; font-weight:600; }
+.cmsblock-editor__revision-code textarea { box-sizing:border-box; width:100%; min-width:0; padding:12px; border:1px solid #94a3b8; border-radius:8px; font-family:ui-monospace,monospace; }
+@media(max-width:700px){.cmsblock-editor__revision-code{grid-template-columns:1fr;}}

@@ -9,6 +9,7 @@ export function useCmsBlockController(config: WidgetConfig) {
         source: {...config.data.source},
         templateId: config.data.templateId,
         layoutId: config.data.layoutId ?? legacyLayoutForTemplate(config.data.templateId),
+        ...(config.data.image ? {image: config.data.image} : {}),
     });
 
     const [draft, setDraft] = useState<CmsBlockDraft>(initialDraft);
@@ -31,6 +32,7 @@ export function useCmsBlockController(config: WidgetConfig) {
                     source: found.source,
                     templateId: found.templateId,
                     layoutId: found.layoutId ?? legacyLayoutForTemplate(found.templateId),
+                    ...(found.image ? {image: found.image} : {}),
                 };
                 setSavedDraft(saved);
                 setDraft(saved);
@@ -52,6 +54,9 @@ export function useCmsBlockController(config: WidgetConfig) {
     }));
     const updateTemplate = (templateId: CmsBlockTemplateId) => setDraft(current => ({
         ...current, templateId,
+    }));
+    const updateImage = (field: 'src' | 'alt', value: string) => setDraft(current => ({
+        ...current, image: {...(current.image ?? {src: '', alt: ''}), [field]: value},
     }));
     const updateLayout = (layoutId: CmsBlockLayoutId) => setDraft(current => ({
         ...current, layoutId,
@@ -87,6 +92,7 @@ export function useCmsBlockController(config: WidgetConfig) {
                 source: next.source,
                 templateId: next.templateId,
                 layoutId: next.layoutId ?? legacyLayoutForTemplate(next.templateId),
+                ...(next.image ? {image: next.image} : {}),
             });
             setMode('edit');
         }
@@ -108,9 +114,9 @@ export function useCmsBlockController(config: WidgetConfig) {
     };
 
     return {
-        draft, record, changed, busy, loading, error, message, mode, setMode,
+        draft, record, setRecord, changed, busy, loading, error, message, mode, setMode,
         showSourcePreview, setShowSourcePreview,
-        updateContent, updateFormat, updateTemplate, updateLayout, reset, save, generate, approve, reject,
+        updateContent, updateFormat, updateTemplate, updateLayout, updateImage, reset, save, generate, approve, reject,
     };
 }
 

@@ -9,6 +9,8 @@ type Props = {controller: CmsBlockController};
 export const CmsBlockEditor = ({controller}: Props) => {
     const contentId = useId();
     const formatId = useId();
+    const imageUrlId = useId();
+    const imageAltId = useId();
     const {draft} = controller;
 
     return (
@@ -27,6 +29,17 @@ export const CmsBlockEditor = ({controller}: Props) => {
                     </select>
                 </div>
             </div>
+            <fieldset className="cmsblock-editor__fields">
+                <legend>Content image</legend>
+                <p>Provide an HTTPS image URL and alt text. AI will not invent imagery.</p>
+                <label htmlFor={imageUrlId}>Image URL</label>
+                <input id={imageUrlId} type="url" value={draft.image?.src ?? ''}
+                    onChange={event => controller.updateImage('src', event.target.value)}
+                    placeholder="https://example.com/image.jpg"/>
+                <label htmlFor={imageAltId}>Image alt text</label>
+                <input id={imageAltId} value={draft.image?.alt ?? ''}
+                    onChange={event => controller.updateImage('alt', event.target.value)}/>
+            </fieldset>
             <CmsBlockStylePicker controller={controller}/>
             <CmsBlockLayoutPicker controller={controller}/>
         </div>
