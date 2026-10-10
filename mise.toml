@@ -45,3 +45,8 @@ run = "./launcher/scripts/widgets-deploy.sh"
 [tasks."widgets-test"]
 description = "Test the ReactEdge deployed widgets"
 run = "./launcher/scripts/widgets-test.sh"
+
+[tasks.complexity]
+description = "Check Lizard complexity for one widget: mise run complexity -- <widget>"
+tools = {uv = "latest", "pipx:lizard" = "1.24.1"}
+run = "./launcher/scripts/widget-complexity.sh {{arg(name='widget', required=true)}}"

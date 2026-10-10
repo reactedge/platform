@@ -1,0 +1,13 @@
+{
+  "data": {
+    "title": "CMS Block",
+    "source": {
+      "format": "text",
+      "content": "Add your content here. Select a template to prepare it for AI-assisted styling."
+    },
+    "templateId": "editorial"
+  },
+  "settings": {
+    "colour": "#1f2937"
+  }
+}
