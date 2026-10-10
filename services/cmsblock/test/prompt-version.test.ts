@@ -39,7 +39,7 @@ test('loads the selected versioned prompt asset from the CDN', async () => {
 
     await generator(draft);
     assert.equal(promptUrl, 'https://cdn.example.com/cmsblock/prompt.v1.json');
-    assert.match(requestBody?.input[0].content ?? '', /CDN prompt version v1/);
+    assert.match(requestBody?.input.find(item => item.role === 'developer')?.content ?? '', /CDN prompt version v1/);
 });
 
 test('loads the default versioned prompt asset from the service CDN directory', async () => {
@@ -54,7 +54,7 @@ test('loads the default versioned prompt asset from the service CDN directory', 
     });
 
     await generator(draft);
-    assert.match(requestBody?.input[0].content ?? '', /You design an accessible, responsive CMS content block/);
+    assert.match(requestBody?.input.find(item => item.role === 'developer')?.content ?? '', /You design an accessible, responsive CMS content block/);
 });
 
 test('rejects a CDN prompt whose version does not match configuration', async () => {
