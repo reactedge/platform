@@ -114,7 +114,7 @@ export class CmsBlockStore {
                 }
             }
             if (node.type === 'decl' && (node.important ||
-                /url\\s*\\(|expression\\s*\\(|[<>]/i.test(node.value))) {
+                /url\s*\(|expression\s*\(|[<>]/i.test(node.value))) {
                 throw new CmsBlockValidationError('Unsafe CSS declaration.');
             }
         });
