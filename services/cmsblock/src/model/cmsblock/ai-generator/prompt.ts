@@ -20,9 +20,11 @@ const instructions = [
     'The selected image layout is implemented by the server. Do not override it.',
 ].join('\n');
 
-export function buildInstructions(strategy: SourceStrategy): string {
-    const mode = strategy === 'html-guardrail'
-        ? 'The author provided HTML. It is immutable; supply only CSS to style it.'
-        : 'The author provided literal text. The server will render that exact text; supply only CSS.';
-    return instructions + '\n' + mode;
+export class CmsBlockPromptBuilder {
+    buildInstructions(strategy: SourceStrategy): string {
+        const mode = strategy === 'html-guardrail'
+            ? 'The author provided HTML. It is immutable; supply only CSS to style it.'
+            : 'The author provided literal text. The server will render that exact text; supply only CSS.';
+        return instructions + '\n' + mode;
+    }
 }
