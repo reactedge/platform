@@ -1,14 +1,19 @@
 import type {CmsBlockDraft} from './types';
 import {chooseSourceStrategy} from './source-policy';
-import {buildInstructions, outputSchema} from './ai-generator/prompt';
-import {renderAuthoredHtml} from './ai-generator/markup';
-import {layoutCss} from './ai-generator/layout-css';
-import {CmsBlockGenerationError, readGeneratedCss} from './ai-generator/response';
+import {outputSchema, CmsBlockPromptBuilder} from './ai-generator/prompt';
+import {CmsBlockMarkupRenderer} from './ai-generator/markup';
+import {CmsBlockLayoutCss} from './ai-generator/layout-css';
+import {CmsBlockGenerationError, OpenAiResponseParser} from './ai-generator/response';
 
 export type GeneratedMarkup = {html: string; css: string};
 export type BlockGenerator = (draft: CmsBlockDraft) => Promise<GeneratedMarkup>;
 type Fetcher = typeof fetch;
 export {CmsBlockGenerationError};
+
+const promptBuilder = new CmsBlockPromptBuilder();
+const markupRenderer = new CmsBlockMarkupRenderer();
+const layoutCss = new CmsBlockLayoutCss();
+const responseParser = new OpenAiResponseParser();
 
 export function createOpenAiGenerator(options: {
     apiKey: string;
@@ -19,12 +24,12 @@ export function createOpenAiGenerator(options: {
     return async draft => {
         if (!options.apiKey) throw new CmsBlockGenerationError('OPENAI_API_KEY is required for AI generation.');
         const strategy = chooseSourceStrategy(draft.source);
-        const html = renderAuthoredHtml(draft, strategy);
+        const html = markupRenderer.render(draft, strategy);
         const request = {
             model: options.model,
             store: false,
             input: [
-                {role: 'developer', content: buildInstructions(strategy)},
+                {role: 'developer', content: promptBuilder.buildInstructions(strategy)},
                 {role: 'user', content: JSON.stringify({
                     authoredHtml: html, editorialStyle: draft.templateId,
                     imageLayout: draft.layoutId, strategy,
@@ -44,7 +49,7 @@ export function createOpenAiGenerator(options: {
         } catch {
             throw new CmsBlockGenerationError('AI generation request failed or timed out.');
         }
-        const css = await readGeneratedCss(response);
-        return {html, css: css + layoutCss(draft.layoutId, strategy)};
+        const css = await responseParser.readCss(response);
+        return {html, css: css + layoutCss.build(draft.layoutId, strategy)};
     };
 }
