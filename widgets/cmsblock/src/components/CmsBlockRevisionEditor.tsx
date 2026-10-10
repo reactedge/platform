@@ -3,7 +3,7 @@ import {CmsBlockRenderedPreview} from './CmsBlockRenderedPreview.tsx';
 import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
 import {CmsBlockApi} from '../Model/CmsBlockApi.ts';
 
-export function CmsBlockRevisionEditor({controller}: {controller: CmsBlockController}) {
+export function CmsBlockRevisionEditor({controller, onDirtyChange}: {controller: CmsBlockController; onDirtyChange: (dirty: boolean) => void}) {
     const pending = controller.record?.pending;
     const [html, setHtml] = useState(pending?.html ?? '');
     const [css, setCss] = useState(pending?.css ?? '');
@@ -18,8 +18,9 @@ export function CmsBlockRevisionEditor({controller}: {controller: CmsBlockContro
         setMessage('');
     }, [pending?.revision]);
 
+    const dirty = Boolean(pending && (html !== pending.html || css !== pending.css));
+    useEffect(() => { onDirtyChange(dirty); }, [dirty, onDirtyChange]);
     if (!pending) return null;
-    const dirty = html !== pending.html || css !== pending.css;
     const save = async () => {
         setBusy(true);
         setError('');
