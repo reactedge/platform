@@ -1,13 +1,16 @@
 import type {CmsBlockLayoutId} from '../types';
+import type {SourceStrategy} from '../source-policy';
 
-export function layoutCss(layout: CmsBlockLayoutId, strategy: 'brief' | 'html-guardrail'): string {
-    const root = '[data-cmsblock="demo"]';
-    const cols = layout === 'image-left' || layout === 'image-right';
-    const imageFirst = layout === 'image-left' || layout === 'image-above';
-    const placement = cols ? `@media (min-width: 800px) {
+/** Fixed presentation structure: AI is not allowed to reposition or distort media. */
+export class CmsBlockLayoutCss {
+    build(layout: CmsBlockLayoutId, strategy: SourceStrategy): string {
+        const root = '[data-cmsblock="demo"]';
+        const cols = layout === 'image-left' || layout === 'image-right';
+        const imageFirst = layout === 'image-left' || layout === 'image-above';
+        const placement = cols ? `@media (min-width: 800px) {
 ${root}:has(> .cmsblock-media) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
 }` : '';
-    return `
+        return `
 ${root} { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
 ${root} > .cmsblock-copy { min-width: 0; grid-row: ${imageFirst ? 2 : 1}; }
 ${root} > .cmsblock-media { min-width: 0; margin: 0; grid-row: ${imageFirst ? 1 : 2}; }
@@ -20,4 +23,5 @@ ${root} > .cmsblock-media { grid-row: 1; grid-column: ${imageFirst ? 1 : 2}; }
 ${root} > .cmsblock-copy { grid-row: 1; grid-column: ${imageFirst ? 2 : 1}; }
 }` : ''}
 `;
+    }
 }
