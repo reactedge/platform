@@ -1,66 +1,39 @@
-import {useEffect, useState} from 'react';
 import {CmsBlockRenderedPreview} from './CmsBlockRenderedPreview.tsx';
 import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
-import {CmsBlockApi} from '../Model/CmsBlockApi.ts';
+import {useCmsBlockRevisionDraft} from './useCmsBlockRevisionDraft.ts';
 
-export function CmsBlockRevisionEditor({controller, onDirtyChange}: {controller: CmsBlockController; onDirtyChange: (dirty: boolean) => void}) {
+type Props = {controller: CmsBlockController; onDirtyChange: (dirty: boolean) => void};
+
+export function CmsBlockRevisionEditor({controller, onDirtyChange}: Props) {
     const pending = controller.record?.pending;
-    const [html, setHtml] = useState(pending?.html ?? '');
-    const [css, setCss] = useState(pending?.css ?? '');
-    const [busy, setBusy] = useState(false);
-    const [error, setError] = useState('');
-    const [message, setMessage] = useState('');
-
-    useEffect(() => {
-        setHtml(pending?.html ?? '');
-        setCss(pending?.css ?? '');
-        setError('');
-        setMessage('');
-    }, [pending?.revision]);
-
-    const dirty = Boolean(pending && (html !== pending.html || css !== pending.css));
-    useEffect(() => { onDirtyChange(dirty); }, [dirty, onDirtyChange]);
+    const draft = useCmsBlockRevisionDraft({controller, pending, onDirtyChange});
     if (!pending) return null;
-    const save = async () => {
-        setBusy(true);
-        setError('');
-        setMessage('');
-        try {
-            const updated = await CmsBlockApi.updatePending({html, css, revision: pending.revision});
-            if (!updated?.pending) throw new Error('Pending revision was not returned.');
-            controller.setRecord(updated);
-            setMessage('Manual changes saved to pending revision.');
-        } catch (cause) {
-            setError(cause instanceof Error ? cause.message : 'Could not save edits.');
-        } finally { setBusy(false); }
-    };
 
     return (
         <div className="cmsblock-editor__revision">
             <div className="cmsblock-editor__revision-code">
                 <label>Generated HTML
-                    <textarea aria-label="Generated HTML" value={html} rows={13}
-                        onChange={event => setHtml(event.target.value)} />
+                    <textarea aria-label="Generated HTML" value={draft.html} rows={13}
+                        onChange={event => draft.setHtml(event.target.value)} />
                 </label>
                 <label>Generated CSS
-                    <textarea aria-label="Generated CSS" value={css} rows={13}
-                        onChange={event => setCss(event.target.value)} />
+                    <textarea aria-label="Generated CSS" value={draft.css} rows={13}
+                        onChange={event => draft.setCss(event.target.value)} />
                 </label>
             </div>
             <h3>Live preview</h3>
             <CmsBlockRenderedPreview title="Generated CMSBlock draft"
-                revision={{...pending, html, css}} />
+                revision={{...pending, html: draft.html, css: draft.css}} />
             <div className="cmsblock-editor__actions">
-                <button type="button" disabled={busy || !dirty} onClick={() => { void save(); }}>
+                <button type="button" disabled={draft.busy || !draft.dirty} onClick={() => { void draft.save(); }}>
                     Save HTML/CSS
                 </button>
-                <button type="button" disabled={busy || !dirty}
-                    onClick={() => { setHtml(pending.html); setCss(pending.css); }}>
+                <button type="button" disabled={draft.busy || !draft.dirty} onClick={draft.discard}>
                     Discard manual changes
                 </button>
-                {dirty && <span>Unsaved manual changes</span>}
-                {message && <span role="status">{message}</span>}
-                {error && <span role="alert">{error}</span>}
+                {draft.dirty && <span>Unsaved manual changes</span>}
+                {draft.message && <span role="status">{draft.message}</span>}
+                {draft.error && <span role="alert">{draft.error}</span>}
             </div>
             <p>Save manual edits before approving. The original submitted source is unchanged.</p>
         </div>
