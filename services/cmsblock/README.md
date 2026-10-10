@@ -70,14 +70,14 @@ HTTP lifecycle test.
 
 ## AI-assisted generation (opt in)
 
-By default \`CMSBLOCK_GENERATOR=deterministic\` preserves the existing local
+By default `CMSBLOCK_GENERATOR=deterministic` preserves the existing local
 demo behavior. To use the server-side OpenAI Responses API, configure:
 
-\`\`\`dotenv
+```dotenv
 CMSBLOCK_GENERATOR=openai
 OPENAI_API_KEY=your-server-only-key
 CMSBLOCK_AI_MODEL=gpt-4.1-mini
-\`\`\`
+```
 
 The key must **never** be placed in the widget or bundled frontend assets.
 
