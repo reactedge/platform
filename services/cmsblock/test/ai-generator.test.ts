@@ -87,12 +87,17 @@ test('AI generation is rejected if a new source replaces the draft before comple
     try {
         let unblock!: () => void;
         const wait = new Promise<void>(resolve => { unblock = resolve; });
+        let signalStarted!: () => void;
+        const started = new Promise<void>(resolve => { signalStarted = resolve; });
         const store = new CmsBlockStore(dir, async () => {
+            signalStarted();
             await wait;
             return {html: '<p>Old</p>', css};
         });
         await store.save(draft('Old source'));
         const pending = store.generate();
+        // Ensure the generator has captured the old draft before saving a replacement.
+        await started;
         await store.save(draft('New source'));
         unblock();
         await assert.rejects(pending, /Source changed/);
