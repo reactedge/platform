@@ -8,7 +8,61 @@ import { enrichSuggestions } from "../../services/mappers/suggestions/enrichSugg
 import { useIntentState } from "../../state/Intent/useIntentState.ts";
 import type { MergedAttribute } from "../../types/infra/magento/attribute.types.ts";
 import { useActivityContext } from "../../activity/Context/useActivityContext.ts";
-import type { AiRecommendationRequest, AiRecommendationResponse } from "../../types/domain/ai.recommendations.types.ts"
+import type {AiRecommendationResponse} from "../../types/domain/ai.recommendations.types.ts"
+
+type RecommendationLoadOptions = {
+    attributeScore: AttributeFilters;
+    attributeData: MergedAttribute[] | undefined;
+    productData: GraphqlProduct[] | undefined;
+    enabled: boolean;
+    optionLabelMap: ReturnType<typeof useOptionLabelMap>;
+    activity: ReturnType<typeof useActivityContext>;
+    intentApiClient: ReturnType<ReturnType<typeof useSystemState>['intentEngine']['getApiClient']>;
+    dispatch: ReturnType<typeof useIntentState>['dispatch'];
+    intentText: string;
+    setData: (value: AiRecommendationResponse | null) => void;
+    setLoading: (value: boolean) => void;
+    setError: (value: Error | null) => void;
+};
+
+function hasRecommendationInputs(options: RecommendationLoadOptions): boolean {
+    return Object.keys(options.attributeScore).length > 0 &&
+        Boolean(options.attributeData?.length) && Boolean(options.productData?.length) && options.enabled;
+}
+
+function applyRecommendationResponse(
+    options: RecommendationLoadOptions,
+    json: AiRecommendationResponse,
+): void {
+    const {attributeScore, productData, optionLabelMap, activity, intentText, dispatch, setData} = options;
+    activity.log('ai-engine', 'AI Engine Recommendations', {json, productData});
+    const enriched = enrichSuggestions(json.suggestions ?? [], productData ?? [], optionLabelMap);
+    const event = enriched.length > 0
+        ? {type: 'SUGGESTION_SUCCESS' as const, recommendations: enriched, filters: attributeScore, intent: intentText}
+        : {type: 'SUGGESTION_EMPTY' as const};
+    dispatch(event);
+    setData({suggestions: enriched});
+}
+
+async function loadRecommendations(options: RecommendationLoadOptions): Promise<void> {
+    if (!hasRecommendationInputs(options)) return;
+    const {attributeScore, productData, optionLabelMap, activity, intentApiClient, setLoading, setError} = options;
+    setLoading(true);
+    setError(null);
+    try {
+        const payload = buildAiRecommendationPayload(attributeScore, productData ?? [], optionLabelMap);
+        activity.log('ai-recommendations', 'AI recommendations API payload', payload);
+        const json = await intentApiClient.suggest(payload);
+        applyRecommendationResponse(options, json);
+    } catch (error: unknown) {
+        activity.log('ai-recommendations', 'AI recommendations Error', {
+            error: (error as Error).message,
+        }, 'error');
+        setError(error instanceof Error ? error : new Error('Unknown error'));
+    } finally {
+        setLoading(false);
+    }
+}
 
 export function useAiRecommendations(
     attributeData: MergedAttribute[] | undefined,
@@ -27,48 +81,8 @@ export function useAiRecommendations(
     const { dispatch } = useIntentState()
     const activity = useActivityContext()
 
-    const load = useCallback(async (attributeScore: AttributeFilters) => {
-        if (!attributeScore || Object.keys(attributeScore).length === 0 || !attributeData?.length || !productData?.length || !enabled) return
-
-        async function fetchSuggestions(payload: AiRecommendationRequest) {
-            return intentApiClient.suggest(payload);
-        }
-
-        setLoading(true)
-        setError(null)
-
-        try {
-            const payload = buildAiRecommendationPayload(
-                attributeScore,
-                productData,
-                optionLabelMap
-            );
-            activity.log('ai-recommendations', 'AI recommendations API payload', payload);
-
-            const json = await fetchSuggestions(payload);
-            activity.log('ai-engine', 'AI Engine Recommendations', { json, productData })
-
-            const enriched = enrichSuggestions(
-                json.suggestions ?? [],
-                productData,
-                optionLabelMap
-            );
-
-            dispatch(enriched.length > 0 ?
-                { type: "SUGGESTION_SUCCESS", recommendations: enriched, filters: attributeScore, intent: intentState.intentText } :
-                { type: "SUGGESTION_EMPTY" }
-            );
-
-            setData({ suggestions: enriched ?? [] })
-        } catch (err: unknown) {
-            activity.log('ai-recommendations', 'AI recommendations Error', {
-                error: (err as Error).message
-            }, 'error');
-            setError(err instanceof Error ? err : new Error("Unknown error"))
-        } finally {
-            setLoading(false)
-        }
-    }, [
+    const load = useCallback((score: AttributeFilters) => loadRecommendations({
+        attributeScore: score,
         attributeData,
         productData,
         enabled,
@@ -76,8 +90,20 @@ export function useAiRecommendations(
         activity,
         intentApiClient,
         dispatch,
-        intentState.intentText
-    ])
+        intentText: intentState.intentText,
+        setData,
+        setLoading,
+        setError,
+    }), [
+        attributeData,
+        productData,
+        enabled,
+        optionLabelMap,
+        activity,
+        intentApiClient,
+        dispatch,
+        intentState.intentText,
+    ]);
 
 
     useEffect(() => {

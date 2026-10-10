@@ -1,11 +1,11 @@
-import { useEffect, useId, useState, type FormEvent } from "react";
+import {useEffect, useId, useState, type FormEvent} from 'react';
 import type {
     ProductImageRecord,
     ProductInput,
     ProductRecord,
     ProductStatus,
-} from "../../Model/Product.ts";
-import { ProductImageField } from "./ProductImageField.tsx";
+} from '../../Model/Product.ts';
+import {ProductImageField} from './ProductImageField.tsx';
 
 type Props = {
     listingId: string;
@@ -15,19 +15,36 @@ type Props = {
     onSave: (input: ProductInput) => Promise<unknown>;
 };
 
-export const ProductForm = ({
-    listingId,
-    initial,
-    disabled = false,
-    onCancel,
-    onSave,
-}: Props) => {
-    const [sku, setSku] = useState(initial?.sku ?? '');
-    const [title, setTitle] = useState(initial?.title ?? '');
-    const [description, setDescription] = useState(initial?.description ?? '');
-    const [price, setPrice] = useState(initial ? String(initial.price) : '');
-    const [status, setStatus] = useState<ProductStatus>(initial?.status ?? 'active');
-    const [images, setImages] = useState<ProductImageRecord[]>(initial?.images ?? []);
+type ProductDraft = {
+    sku: string;
+    title: string;
+    description: string;
+    price: string;
+    status: ProductStatus;
+    images: ProductImageRecord[];
+};
+
+function draftFrom(initial?: ProductRecord): ProductDraft {
+    return {
+        sku: initial ? initial.sku : '',
+        title: initial ? initial.title : '',
+        description: initial ? initial.description : '',
+        price: initial ? String(initial.price) : '',
+        status: initial ? initial.status : 'active',
+        images: initial ? initial.images : [],
+    };
+}
+
+export const ProductForm = (props: Props) => {
+    const {listingId, initial, onCancel, onSave} = props;
+    const disabled = props.disabled === true;
+    const initialDraft = draftFrom(initial);
+    const [sku, setSku] = useState(initialDraft.sku);
+    const [title, setTitle] = useState(initialDraft.title);
+    const [description, setDescription] = useState(initialDraft.description);
+    const [price, setPrice] = useState(initialDraft.price);
+    const [status, setStatus] = useState<ProductStatus>(initialDraft.status);
+    const [images, setImages] = useState<ProductImageRecord[]>(initialDraft.images);
 
     const skuId = useId();
     const titleId = useId();
@@ -36,25 +53,18 @@ export const ProductForm = ({
     const statusId = useId();
 
     useEffect(() => {
-        setSku(initial?.sku ?? '');
-        setTitle(initial?.title ?? '');
-        setDescription(initial?.description ?? '');
-        setPrice(initial ? String(initial.price) : '');
-        setStatus(initial?.status ?? 'active');
-        setImages(initial?.images ?? []);
+        const draft = draftFrom(initial);
+        setSku(draft.sku);
+        setTitle(draft.title);
+        setDescription(draft.description);
+        setPrice(draft.price);
+        setStatus(draft.status);
+        setImages(draft.images);
     }, [initial]);
 
     const submit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await onSave({
-            listingId,
-            sku,
-            title,
-            description,
-            price: Number(price),
-            status,
-            images,
-        });
+        await onSave({listingId, sku, title, description, price: Number(price), status, images});
     };
 
     return (
