@@ -67,3 +67,28 @@ The widget uses sandboxed iframe previews. Published output will require
 separate security review and sanitisation before it can be served directly
 as SSR markup. Telemetry exporter delivery is not covered by the current
 HTTP lifecycle test.
+
+## AI-assisted generation (opt in)
+
+By default \`CMSBLOCK_GENERATOR=deterministic\` preserves the existing local
+demo behavior. To use the server-side OpenAI Responses API, configure:
+
+\`\`\`dotenv
+CMSBLOCK_GENERATOR=openai
+OPENAI_API_KEY=your-server-only-key
+CMSBLOCK_AI_MODEL=gpt-4.1-mini
+\`\`\`
+
+The key must **never** be placed in the widget or bundled frontend assets.
+
+The generation mode is chosen from the source:
+- Plain text, incomplete HTML, or unstructured snippets are treated as **loose briefs**.
+  AI is allowed to design semantic HTML and CSS.
+- Balanced semantic HTML is treated as a **structural guardrail**. The server
+  retains the submitted HTML verbatim and uses AI only for its scoped styling.
+
+Generated content enters the existing **pending review** state. Nothing is
+published without approval; provider errors leave the published revision intact.
+The server rejects scripting markup and unscoped AI CSS. These are initial
+guardrails rather than a complete HTML/CSS sanitization or an authorization
+layer; keep this unauthenticated development service private.
