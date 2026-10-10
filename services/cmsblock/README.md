@@ -70,24 +70,32 @@ HTTP lifecycle test.
 
 ## AI-assisted generation (opt in)
 
-By default `CMSBLOCK_GENERATOR=deterministic` preserves the existing local
+By default CMSBLOCK_GENERATOR=deterministic preserves the existing local
 demo behavior. To use the server-side OpenAI Responses API, configure:
 
-```dotenv
-CMSBLOCK_GENERATOR=openai
-OPENAI_API_KEY=your-server-only-key
-CMSBLOCK_AI_MODEL=gpt-4.1-mini
-```
+    CMSBLOCK_GENERATOR=openai
+    OPENAI_API_KEY=your-server-only-key
+    CMSBLOCK_AI_MODEL=gpt-4.1-mini
+    CMSBLOCK_PROMPT_VERSION=v1
 
-The key must **never** be placed in the widget or bundled frontend assets.
+Prompt instructions live in versioned JSON assets at
+services/cmsblock/cdn/cmsblock/prompt.v1.json. Select the version with
+CMSBLOCK_PROMPT_VERSION; the service loads that asset once and reuses it.
+To serve the JSON from a CDN, set CMSBLOCK_PROMPT_URL to the exact versioned
+asset URL. CDN JSON must include the matching version field and an
+instructions string array. The service fails generation if the asset
+cannot be loaded or its version does not match, so a different prompt is
+never selected silently.
+
+The key must never be placed in the widget or bundled frontend assets.
 
 The generation mode is chosen from the source:
-- Plain text, incomplete HTML, or unstructured snippets are treated as **loose briefs**.
+- Plain text, incomplete HTML, or unstructured snippets are treated as loose briefs.
   AI is allowed to design semantic HTML and CSS.
-- Balanced semantic HTML is treated as a **structural guardrail**. The server
+- Balanced semantic HTML is treated as a structural guardrail. The server
   retains the submitted HTML verbatim and uses AI only for its scoped styling.
 
-Generated content enters the existing **pending review** state. Nothing is
+Generated content enters the existing pending review state. Nothing is
 published without approval; provider errors leave the published revision intact.
 The server rejects scripting markup and unscoped AI CSS. These are initial
 guardrails rather than a complete HTML/CSS sanitization or an authorization
