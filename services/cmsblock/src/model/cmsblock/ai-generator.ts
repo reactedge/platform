@@ -103,7 +103,24 @@ export function createOpenAiGenerator(options: {
         } catch {
             throw new CmsBlockGenerationError('AI generation request failed or timed out.');
         }
-        if (!response.ok) throw new CmsBlockGenerationError('AI generation failed (HTTP ' + response.status + ').');
+        if (!response.ok) {
+            // Expose only the provider's diagnostic code, never response bodies or credentials.
+            let code: string | undefined;
+            try {
+                const payload: unknown = await response.json();
+                if (payload && typeof payload === 'object' && 'error' in payload &&
+                    payload.error && typeof payload.error === 'object') {
+                    const error = payload.error as {code?: unknown; type?: unknown};
+                    const raw = typeof error.code === 'string' ? error.code :
+                        typeof error.type === 'string' ? error.type : '';
+                    if (/^[a-z][a-z0-9_]{0,99}$/i.test(raw)) code = raw;
+                }
+            } catch { /* An error response may not contain JSON. */ }
+            const detail = code ? ', ' + code : '';
+            throw new CmsBlockGenerationError(
+                'AI generation failed (HTTP ' + response.status + detail + ').'
+            );
+        }
         let parsed: unknown;
         try {
             parsed = JSON.parse(extractOutputText(await response.json()));

@@ -108,3 +108,22 @@ test('AI generation is rejected if a new source replaces the draft before comple
         await rm(dir, {recursive: true, force: true});
     }
 });
+
+
+test('provider 429 surfaces quota code without exposing its message', async () => {
+    const gen = createOpenAiGenerator({
+        apiKey: 'private-key', model: 'test-model',
+        fetcher: (async () => new Response(JSON.stringify({
+            error: {
+                message: 'secret provider detail',
+                code: 'credit_balance_exhausted',
+                type: 'insufficient_quota',
+            },
+        }), {status: 429})) as typeof fetch,
+    });
+    await assert.rejects(gen(draft('An art gallery')), error => {
+        assert.match(String(error), /429, credit_balance_exhausted/);
+        assert.doesNotMatch(String(error), /secret provider detail|private-key/);
+        return true;
+    });
+});
