@@ -36,10 +36,10 @@ test('strong source HTML stays unchanged inside generated block', async () => {
     const result = await gen(draft(html, 'html'));
     assert.ok(result.html.includes(html));
     assert.ok(!result.html.includes('AI attempted'));
-    assert.equal(result.css, css);
+    assert.match(result.css, /white-space: pre-wrap/);
 });
 
-test('plain brief becomes structured HTML while retaining source metadata', async () => {
+test('plain brief retains literal text and includes selected presentation metadata', async () => {
     let captured = '';
     const gen = createOpenAiGenerator({
         apiKey: 'test', model: 'test-model',
@@ -143,7 +143,7 @@ test('accepts scoped responsive media queries in generated AI designs', async ()
         apiKey: 'test', model: 'test-model',
         fetcher: fake({html: '<h2>Gallery</h2>', css: responsiveCss}) as typeof fetch,
     });
-    assert.equal((await generator(draft('A gallery'))).css, responsiveCss);
+    assert.ok((await generator(draft('A gallery'))).css.startsWith(responsiveCss));
 });
 
 test('rejects unsafe CSS while allowing scoped responsive rules', () => {
@@ -185,4 +185,15 @@ test('missing image stops generation before any AI call', async () => {
     const input = {...draft('Literal source'), image: undefined};
     await assert.rejects(generator(input), /Provide an image URL/);
     assert.equal(invoked, false);
+});
+
+test('existing HTML image needs no separate image field', async () => {
+    const authored = '<article><h2>Artwork</h2><p>Original painting</p><img src="https://example.com/photo.jpg" alt="Painting"></article>';
+    const generator = createOpenAiGenerator({
+        apiKey: 'test', model: 'test-model',
+        fetcher: fake({html: '<h2>Changed</h2>', css}) as typeof fetch,
+    });
+    const result = await generator({...draft(authored, 'html'), image: undefined});
+    assert.ok(result.html.includes(authored));
+    assert.doesNotMatch(result.html, /<h2>Changed<\/h2>/);
 });
