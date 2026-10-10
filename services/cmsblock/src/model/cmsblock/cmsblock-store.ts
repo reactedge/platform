@@ -4,12 +4,13 @@ import {randomUUID} from 'node:crypto';
 import {generateBlock, validateDraft} from './generator';
 import {CmsBlockWorkflowError} from './errors';
 import type {CmsBlockRecord, CmsBlockDraft} from './types';
+import type {BlockGenerator} from './ai-generator';
 
 export class CmsBlockStore {
     private readonly file: string;
     private queue: Promise<unknown> = Promise.resolve();
 
-    constructor(private readonly directory: string) {
+    constructor(private readonly directory: string, private readonly generator: BlockGenerator = async draft => generateBlock(draft)) {
         this.file = join(directory, 'demo.json');
     }
 
@@ -57,17 +58,26 @@ export class CmsBlockStore {
         }));
     }
 
-    generate(): Promise<CmsBlockRecord> {
-        return this.mutate(current => {
-            if (!current) throw new CmsBlockWorkflowError('Save the source content before generating.');
-            const revision = current.revision + 1;
+    async generate(): Promise<CmsBlockRecord> {
+        // Do not hold the persistence queue while calling a remote provider.
+        const current = await this.get();
+        if (!current) throw new CmsBlockWorkflowError('Save the source content before generating.');
+        const draft = validateDraft(current);
+        const expected = JSON.stringify({source: current.source, templateId: current.templateId, layoutId: draft.layoutId});
+        const generated = await this.generator(draft);
+        return this.mutate(latest => {
+            if (!latest || JSON.stringify({
+                source: latest.source, templateId: latest.templateId,
+                layoutId: validateDraft(latest).layoutId,
+            }) !== expected) {
+                throw new CmsBlockWorkflowError('Source changed while generating. Save and generate again.');
+            }
+            const revision = latest.revision + 1;
             return {
-                ...current,
-                revision,
+                ...latest, revision,
                 pending: {
-                    ...generateBlock(validateDraft(current)),
-                    templateId: current.templateId,
-                    layoutId: validateDraft(current).layoutId,
+                    ...generated,
+                    templateId: draft.templateId, layoutId: draft.layoutId,
                     revision, status: 'inreview',
                 },
             };
