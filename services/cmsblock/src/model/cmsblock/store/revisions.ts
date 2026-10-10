@@ -26,11 +26,11 @@ function validatePendingRevision(input: unknown): PendingRevisionInput {
         if (node.type === 'rule') {
             rules++;
             if (node.selectors.some(selector =>
-                !selector.trim().startsWith('[data-cmsblock="demo"]') || /[+~\\\\]/.test(selector))) {
+                !selector.trim().startsWith('[data-cmsblock="demo"]') || /[+~\\]/.test(selector))) {
                 throw new CmsBlockValidationError('CSS must stay scoped to CMSBlock.');
             }
         }
-        if (node.type === 'decl' && (node.important || /url\\s*\\(|expression\\s*\\(|[<>]/i.test(node.value))) {
+        if (node.type === 'decl' && (node.important || /url\s*\(|expression\s*\(|[<>]/i.test(node.value))) {
             throw new CmsBlockValidationError('Unsafe CSS declaration.');
         }
     });
