@@ -11,6 +11,8 @@ export const config = {
         provider: process.env.CMSBLOCK_GENERATOR ?? 'deterministic',
         apiKey: process.env.OPENAI_API_KEY ?? '',
         model: process.env.CMSBLOCK_AI_MODEL ?? 'gpt-4.1-mini',
+        promptVersion: process.env.CMSBLOCK_PROMPT_VERSION ?? 'v1',
+        promptUrl: process.env.CMSBLOCK_PROMPT_URL,
     },
     dataDirectory: resolve(process.env.CMSBLOCK_DATA_DIR ??
         fileURLToPath(new URL('../data/', import.meta.url))),
