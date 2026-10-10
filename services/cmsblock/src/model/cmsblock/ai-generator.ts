@@ -10,7 +10,6 @@ export type BlockGenerator = (draft: CmsBlockDraft) => Promise<GeneratedMarkup>;
 type Fetcher = typeof fetch;
 export {CmsBlockGenerationError};
 
-const promptBuilder = new CmsBlockPromptBuilder();
 const markupRenderer = new CmsBlockMarkupRenderer();
 const layoutCss = new CmsBlockLayoutCss();
 const responseParser = new OpenAiResponseParser();
@@ -18,9 +17,17 @@ const responseParser = new OpenAiResponseParser();
 export function createOpenAiGenerator(options: {
     apiKey: string;
     model: string;
+    promptVersion?: string;
+    promptUrl?: string;
+    promptFetcher?: Fetcher;
     fetcher?: Fetcher;
 }): BlockGenerator {
     const fetcher = options.fetcher ?? fetch;
+    const promptBuilder = new CmsBlockPromptBuilder({
+        version: options.promptVersion ?? 'v1',
+        url: options.promptUrl,
+        fetcher: options.promptFetcher,
+    });
     return async draft => {
         if (!options.apiKey) throw new CmsBlockGenerationError('OPENAI_API_KEY is required for AI generation.');
         const strategy = chooseSourceStrategy(draft.source);
@@ -29,7 +36,7 @@ export function createOpenAiGenerator(options: {
             model: options.model,
             store: false,
             input: [
-                {role: 'developer', content: promptBuilder.buildInstructions(strategy)},
+                {role: 'developer', content: await promptBuilder.buildInstructions(strategy)},
                 {role: 'user', content: JSON.stringify({
                     authoredHtml: html, editorialStyle: draft.templateId,
                     imageLayout: draft.layoutId, strategy,
