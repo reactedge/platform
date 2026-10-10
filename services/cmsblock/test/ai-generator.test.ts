@@ -161,3 +161,15 @@ test('rejects unsafe CSS while allowing scoped responsive rules', () => {
         '@media screen and (max-width: 45rem) { [data-cmsblock="demo"] { gap: 1rem; } }',
     ).includes('@media'), true);
 });
+
+test('AI cannot rewrite user copy even when it returns extra HTML', async () => {
+    const gen = createOpenAiGenerator({
+        apiKey: 'test', model: 'test-model',
+        fetcher: fake({html: '<h2>Invented headline</h2><img src="https://example.com/new.jpg">', css}) as typeof fetch,
+    });
+    const text = 'Exactly these words & symbols.\nSecond line exactly.';
+    const result = await gen(draft(text));
+    assert.match(result.html, /Exactly these words &amp; symbols\./);
+    assert.match(result.html, /Second line exactly\./);
+    assert.doesNotMatch(result.html, /Invented headline|new\.jpg/);
+});
