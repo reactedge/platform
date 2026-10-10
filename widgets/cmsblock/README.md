@@ -20,6 +20,4 @@ The launcher analyzes whichever of `src` and `api` exist under the widget:
 Lizard also reports function NLOC and tokens. Investigate unusually long
 functions even if their cyclomatic complexity is acceptable.
 
-The `cmsblock-complexity.yml` GitHub Actions workflow runs the same command
-on CMSBlock-related changes. The CMSBlock service and AI generator are not
-included.
+The command is run manually; it does not analyze the CMSBlock service or AI generator.

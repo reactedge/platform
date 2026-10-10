@@ -53,7 +53,8 @@ npm --prefix services/cmsblock test
 mise run complexity -- cmsblock
 ```
 
-CI also exercises Express startup and the status endpoint.
+Run these checks locally when changing the service. To verify startup, call
+`curl --fail http://127.0.0.1:4190/cmsblock/status` after starting it.
 
 ## Limitations
 
