@@ -16,7 +16,12 @@ export async function initialiseApp(app: Application): Promise<void> {
         throw new Error('OPENAI_API_KEY is required when CMSBLOCK_GENERATOR=openai.');
     }
     const ai = provider === 'openai'
-        ? createOpenAiGenerator({apiKey: config.generation.apiKey, model: config.generation.model})
+        ? createOpenAiGenerator({
+            apiKey: config.generation.apiKey,
+            model: config.generation.model,
+            promptVersion: config.generation.promptVersion,
+            promptUrl: config.generation.promptUrl,
+        })
         : undefined;
     app.locals.cmsblocks = new CmsBlockStore(config.dataDirectory, ai);
     setupTelemetry(app);
