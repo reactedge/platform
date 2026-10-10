@@ -8,13 +8,8 @@ type Props = {
     onCancel: () => void;
 };
 
-export const ListingDeleteConfirmation = ({
-    listing,
-    productCount,
-    busy,
-    onConfirm,
-    onCancel,
-}: Props) => {
+export const ListingDeleteConfirmation = (props: Props) => {
+    const {listing, productCount, busy, onConfirm, onCancel} = props;
     const blocked = productCount > 0;
 
     return (

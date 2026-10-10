@@ -2,21 +2,17 @@ import type {AiInterpretationRequest, AiInterpretationResponse} from ".././types
 import type {IntentApiClient} from "../integration/intent/intentApiClient.ts";
 import type {WidgetActivity} from "@reactedge/framework/activity";
 
-export async function sendRequestToAi({
-        payload,
-        intentApiClient,
-        onSuccess,
-        onError,
-        setLoading,
-        activity
-    }: {
+type SendRequestOptions = {
     payload: AiInterpretationRequest
     intentApiClient: IntentApiClient
     onSuccess: (json: AiInterpretationResponse) => void
     onError?: (err: unknown) => void
     setLoading: (loading: boolean) => void,
     activity: WidgetActivity
-}) {
+};
+
+export async function sendRequestToAi(options: SendRequestOptions) {
+    const {payload, intentApiClient, onSuccess, onError, setLoading, activity} = options;
     try {
         setLoading(true)
 

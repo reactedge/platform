@@ -122,9 +122,7 @@ export function retainAdvancedSsrSettings(root: string, input: unknown): unknown
     return { ...submitted, ssrPort: stored.ssrPort, ssrBaseUrl: stored.ssrBaseUrl };
 }
 
-export function validateConfiguration(input: unknown): Configuration {
-    if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Expected a configuration object.');
-    const source = input as Record<string, unknown>;
+function validatePropertyValues(source: Record<string, unknown>): void {
     for (const key of Object.keys(defaults)) {
         const value = source[key];
         if (typeof value !== typeof defaults[key as keyof Configuration]) throw new Error(`Invalid ${key}.`);
@@ -132,23 +130,35 @@ export function validateConfiguration(input: unknown): Configuration {
             throw new Error(`${key} cannot contain a newline or apostrophe (environment files are shell sourced).`);
         }
     }
-    const config = source as Configuration;
+}
+
+function validateStoreSettings(config: Configuration): void {
     if (!/^[a-zA-Z0-9_-]+$/.test(config.storeCode)) throw new Error('Store code may contain letters, numbers, underscores and hyphens only.');
     if (config.hasCatalog && (!config.sku || !config.category)) throw new Error('Demo SKU and category are required when the site has a catalog.');
     if (!isAbsolute(config.targetRoot)) throw new Error('Platform root must be an absolute path.');
     if (!['development', 'production'].includes(config.environment)) throw new Error('Environment must be development or production.');
-    for (const host of config.additionalHosts.split(',').map(value => value.trim()).filter(Boolean)) {
+}
+
+function validateAdditionalHosts(value: string): void {
+    for (const host of value.split(',').map(item => item.trim()).filter(Boolean)) {
         if (!/^[a-zA-Z0-9.-]+$/.test(host) || host.startsWith('.') || host.endsWith('.') || host.includes('..')) {
             throw new Error(`Additional host "${host}" must be a hostname without a scheme, port or path.`);
         }
     }
-    for (const [name, value] of [['Site URL', config.siteUrl], ['OpenTelemetry URL', config.otelHost]]) {
+}
+
+function validateHttpUrls(config: Configuration): void {
+    const urls = [['Site URL', config.siteUrl], ['OpenTelemetry URL', config.otelHost]];
+    for (const [name, value] of urls) {
         if (name === 'OpenTelemetry URL' && !config.observabilityEnabled) continue;
         try {
             const url = new URL(value);
             if (!['http:', 'https:'].includes(url.protocol) || !url.hostname) throw new Error();
         } catch { throw new Error(`${name} must be an http(s) URL.`); }
     }
+}
+
+function validateIntegrationSettings(config: Configuration): void {
     if (config.sellerListingEnabled && !config.defaultSellerId.trim()) {
         throw new Error('Default Seller ID is required when Seller Listing is enabled.');
     }
@@ -157,6 +167,17 @@ export function validateConfiguration(input: unknown): Configuration {
         throw new Error('Google Maps API key is required for maps or reviews.');
     }
     if (config.googleReviewsEnabled && !config.googlePlaceId) throw new Error('Google Place ID is required when reviews are enabled.');
+}
+
+export function validateConfiguration(input: unknown): Configuration {
+    if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Expected a configuration object.');
+    const source = input as Record<string, unknown>;
+    validatePropertyValues(source);
+    const config = source as Configuration;
+    validateStoreSettings(config);
+    validateAdditionalHosts(config.additionalHosts);
+    validateHttpUrls(config);
+    validateIntegrationSettings(config);
     return config;
 }
 
@@ -164,83 +185,117 @@ function envFile(values: Record<string, string>): string {
     return Object.entries(values).map(([key, value]) => `${key}='${value}'`).join('\n') + '\n';
 }
 
-export function planConfiguration(root: string, input: unknown) {
-    const c = validateConfiguration(input);
-    const workspaceRoot = join(root, 'workspace');
-    const storePath = join(workspaceRoot, c.storeCode);
-    const samplePath = join(root, 'workspace.sample');
+function validateWorkspace(workspaceRoot: string, storePath: string, samplePath: string): void {
     if (!existsSync(join(samplePath, 'default')) && !existsSync(storePath)) throw new Error('Missing workspace.sample/default.');
     if (!existsSync(join(samplePath, 'registry.json')) && !existsSync(join(workspaceRoot, 'registry.json'))) {
         throw new Error('Missing workspace.sample/registry.json.');
     }
-    const siteUrl = c.siteUrl.replace(/\/+$/, '');
-    const allowedHosts = allowedHostDetails(c).map(entry => entry.host).join(',');
-    const integrations: Record<string, object> = { magentoGraphql: { api: `${siteUrl}/graphql` } };
-    if (c.intentDiscoveryEnabled) integrations.intentApi = { baseUrl: 'http://localhost:3001' };
-    if (c.googleMapsEnabled || c.googleReviewsEnabled) {
+}
+
+function buildIntegrations(config: Configuration, siteUrl: string): Record<string, object> {
+    const integrations: Record<string, object> = {magentoGraphql: {api: `${siteUrl}/graphql`}};
+    if (config.intentDiscoveryEnabled) integrations.intentApi = {baseUrl: 'http://localhost:3001'};
+    if (config.googleMapsEnabled || config.googleReviewsEnabled) {
         integrations.googleMaps = {
-            apiKey: c.googleMapsApiKey,
-            ...(c.googleReviewsEnabled ? { placeId: c.googlePlaceId } : {}),
+            apiKey: config.googleMapsApiKey,
+            ...(config.googleReviewsEnabled ? {placeId: config.googlePlaceId} : {}),
         };
     }
-    if (c.turnstileEnabled) integrations.cloudflare = { siteKey: c.turnstileSiteKey };
-    const baseContext = { storeCode: c.storeCode, ...(c.hasCatalog ? { sku: c.sku, category: c.category } : {}) };
-    const runtimeFor = (widgetName: string) => JSON.stringify({
-        integrations,
-        context: {
-            ...baseContext,
-            ...(c.sellerListingEnabled && widgetName === 'createlisting'
-                ? { sellerId: c.defaultSellerId }
-                : {}),
-        },
-    }, null, 2) + '\n';
+    if (config.turnstileEnabled) integrations.cloudflare = {siteKey: config.turnstileSiteKey};
+    return integrations;
+}
+
+function runtimeJson(config: Configuration, integrations: Record<string, object>, widgetName: string): string {
+    const baseContext = {storeCode: config.storeCode, ...(config.hasCatalog ? {sku: config.sku, category: config.category} : {})};
+    const seller = config.sellerListingEnabled && widgetName === 'createlisting'
+        ? {sellerId: config.defaultSellerId}
+        : {};
+    return JSON.stringify({integrations, context: {...baseContext, ...seller}}, null, 2) + '\n';
+}
+
+function storeEnvironment(config: Configuration, siteUrl: string, allowedHosts: string): Record<string, string> {
     const bool = (value: boolean) => value ? '1' : '0';
+    return {
+        STORE_CODE: config.storeCode, SITEURL: siteUrl, PHP_ENV: bool(config.phpEnv), TARGET_ROOT: config.targetRoot,
+        CATALOG_ENABLED: bool(config.hasCatalog),
+        SSR_ENABLED: bool(config.ssrEnabled), SSR_PORT: config.ssrPort, SSR_BASE_URL: config.ssrBaseUrl,
+        ...(config.hasCatalog ? {SKU: config.sku, CATEGORY: config.category} : {}),
+        OBSERVABILITY_ENABLED: bool(config.observabilityEnabled),
+        INTENT_DISCOVERY_ENABLED: bool(config.intentDiscoveryEnabled),
+        SELLER_LISTING_ENABLED: bool(config.sellerListingEnabled),
+        DEFAULT_SELLER_ID: config.sellerListingEnabled ? config.defaultSellerId : '',
+        CLOUDFLARE_TURNSTILE_ENABLED: bool(config.turnstileEnabled),
+        CLOUDFLARE_TURNSTILE_SITE_KEY: config.turnstileEnabled ? config.turnstileSiteKey : '',
+        GOOGLE_MAPS_ENABLED: bool(config.googleMapsEnabled), GOOGLE_REVIEWS_ENABLED: bool(config.googleReviewsEnabled),
+        GOOGLE_MAPS_API_KEY: config.googleMapsEnabled || config.googleReviewsEnabled ? config.googleMapsApiKey : '',
+        GOOGLE_PLACE_ID: config.googleReviewsEnabled ? config.googlePlaceId : '',
+        REACTEDGE_ENV: config.environment, OTEL_HOST: config.observabilityEnabled ? config.otelHost : '', ALLOWED_HOSTS: allowedHosts,
+    };
+}
+
+function serviceEnvironment(config: Configuration): Record<string, string> {
+    return {
+        SSR_PORT: config.ssrPort,
+        ALLOW_SELF_SIGNED_SSL: config.environment === 'development' ? 'true' : 'false',
+        OTEL_HOST: config.observabilityEnabled ? config.otelHost : '',
+    };
+}
+
+function orchestratorEnvironment(config: Configuration, siteUrl: string, allowedHosts: string): Record<string, string> {
+    const bool = (value: boolean) => value ? '1' : '0';
+    return {
+        STORE_CODE: config.storeCode, SITEURL: siteUrl, TARGET_ROOT: config.targetRoot,
+        SSR_ENABLED: bool(config.ssrEnabled), PHP_ENV: bool(config.phpEnv), ALLOWED_HOSTS: allowedHosts,
+    };
+}
+
+function mcpEnvironment(config: Configuration, siteUrl: string, allowedHosts: string): Record<string, string> {
+    return {
+        STORE_CODE: config.storeCode, SITEURL: siteUrl, PHP_ENV: config.phpEnv ? '1' : '0', ALLOWED_HOSTS: allowedHosts,
+        CLOUDFLARE_TURNSTILE_SITE_KEY: config.turnstileEnabled ? config.turnstileSiteKey : '',
+        GOOGLE_MAPS_API_KEY: config.googleMapsEnabled || config.googleReviewsEnabled ? config.googleMapsApiKey : '',
+        GOOGLE_PLACE_ID: config.googleReviewsEnabled ? config.googlePlaceId : '',
+    };
+}
+
+function configurationFiles(root: string, config: Configuration, siteUrl: string, allowedHosts: string): Map<string, string> {
     const files = new Map<string, string>();
-    files.set(join(root, `.env.${c.storeCode}`), envFile({
-        STORE_CODE: c.storeCode, SITEURL: siteUrl, PHP_ENV: bool(c.phpEnv), TARGET_ROOT: c.targetRoot,
-        CATALOG_ENABLED: bool(c.hasCatalog),
-        SSR_ENABLED: bool(c.ssrEnabled), SSR_PORT: c.ssrPort, SSR_BASE_URL: c.ssrBaseUrl,
-        ...(c.hasCatalog ? { SKU: c.sku, CATEGORY: c.category } : {}),
-        OBSERVABILITY_ENABLED: bool(c.observabilityEnabled),
-        INTENT_DISCOVERY_ENABLED: bool(c.intentDiscoveryEnabled),
-        SELLER_LISTING_ENABLED: bool(c.sellerListingEnabled),
-        DEFAULT_SELLER_ID: c.sellerListingEnabled ? c.defaultSellerId : '',
-        CLOUDFLARE_TURNSTILE_ENABLED: bool(c.turnstileEnabled),
-        CLOUDFLARE_TURNSTILE_SITE_KEY: c.turnstileEnabled ? c.turnstileSiteKey : '',
-        GOOGLE_MAPS_ENABLED: bool(c.googleMapsEnabled), GOOGLE_REVIEWS_ENABLED: bool(c.googleReviewsEnabled),
-        GOOGLE_MAPS_API_KEY: c.googleMapsEnabled || c.googleReviewsEnabled ? c.googleMapsApiKey : '',
-        GOOGLE_PLACE_ID: c.googleReviewsEnabled ? c.googlePlaceId : '',
-        REACTEDGE_ENV: c.environment, OTEL_HOST: c.observabilityEnabled ? c.otelHost : '', ALLOWED_HOSTS: allowedHosts,
-    }));
-    files.set(join(root, 'services/ssr/.env'), envFile({
-        SSR_PORT: c.ssrPort, ALLOW_SELF_SIGNED_SSL: c.environment === 'development' ? 'true' : 'false',
-        OTEL_HOST: c.observabilityEnabled ? c.otelHost : '',
-    }));
-    files.set(join(root, `services/orchestrator/.env.${c.storeCode}`), envFile({
-        STORE_CODE: c.storeCode, SITEURL: siteUrl, TARGET_ROOT: c.targetRoot, SSR_ENABLED: bool(c.ssrEnabled),
-        PHP_ENV: bool(c.phpEnv), ALLOWED_HOSTS: allowedHosts,
-    }));
-    files.set(join(root, `mcp/.env.${c.storeCode}`), envFile({
-        STORE_CODE: c.storeCode,
-        SITEURL: siteUrl,
-        PHP_ENV: bool(c.phpEnv),
-        ALLOWED_HOSTS: allowedHosts,
-        CLOUDFLARE_TURNSTILE_SITE_KEY: c.turnstileEnabled ? c.turnstileSiteKey : '',
-        GOOGLE_MAPS_API_KEY: c.googleMapsEnabled || c.googleReviewsEnabled ? c.googleMapsApiKey : '',
-        GOOGLE_PLACE_ID: c.googleReviewsEnabled ? c.googlePlaceId : '',
-    }));
-    files.set(join(root, `browser-mcp/.env.${c.storeCode}`), envFile({ SITEURL: siteUrl }));
+    files.set(join(root, `.env.${config.storeCode}`), envFile(storeEnvironment(config, siteUrl, allowedHosts)));
+    files.set(join(root, 'services/ssr/.env'), envFile(serviceEnvironment(config)));
+    files.set(join(root, `services/orchestrator/.env.${config.storeCode}`), envFile(orchestratorEnvironment(config, siteUrl, allowedHosts)));
+    files.set(join(root, `mcp/.env.${config.storeCode}`), envFile(mcpEnvironment(config, siteUrl, allowedHosts)));
+    files.set(join(root, `browser-mcp/.env.${config.storeCode}`), envFile({SITEURL: siteUrl}));
+    return files;
+}
+
+function addRuntimeFiles(root: string, files: Map<string, string>, config: Configuration, integrations: Record<string, object>): void {
     for (const parent of ['widgets', 'packages/widget-template']) {
         const dir = join(root, parent);
         if (!existsSync(dir)) continue;
-        for (const entry of readdirSync(dir, { withFileTypes: true }).filter(entry => entry.isDirectory())) {
+        const entries = readdirSync(dir, {withFileTypes: true}).filter(entry => entry.isDirectory());
+        for (const entry of entries) {
             const publicPath = join(dir, entry.name, 'public');
             if (existsSync(publicPath)) {
-                files.set(join(publicPath, 'reactedge-runtime.json'), runtimeFor(entry.name));
+                files.set(join(publicPath, 'reactedge-runtime.json'), runtimeJson(config, integrations, entry.name));
             }
         }
     }
-    return { config: c, files, workspaceRoot, storePath, samplePath, targetWorkspace: join(dirname(c.targetRoot), 'reactedge') };
+}
+
+export function planConfiguration(root: string, input: unknown) {
+    const config = validateConfiguration(input);
+    const workspaceRoot = join(root, 'workspace');
+    const storePath = join(workspaceRoot, config.storeCode);
+    const samplePath = join(root, 'workspace.sample');
+    validateWorkspace(workspaceRoot, storePath, samplePath);
+
+    const siteUrl = config.siteUrl.replace(/\/+$/, '');
+    const allowedHosts = allowedHostDetails(config).map(entry => entry.host).join(',');
+    const integrations = buildIntegrations(config, siteUrl);
+    const files = configurationFiles(root, config, siteUrl, allowedHosts);
+    addRuntimeFiles(root, files, config, integrations);
+
+    return {config, files, workspaceRoot, storePath, samplePath, targetWorkspace: join(dirname(config.targetRoot), 'reactedge')};
 }
 
 export function previewConfiguration(root: string, input: unknown) {

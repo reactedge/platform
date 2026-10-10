@@ -70,70 +70,51 @@ export class IntentEngine {
     }
 
     handle(signal: IntentSignal) {
+        this.applySignal(signal);
+        this.notify();
+    }
+
+    private applySignal(signal: IntentSignal): void {
+        switch (signal.type) {
+            case "filter_toggle": {
+                const {attribute, value} = signal;
+                const selected = this.state.attributeScore?.[attribute]?.[value];
+                this.handle({type: selected ? "filter_deselect" : "filter_select", attribute, value});
+                return;
+            }
+            case "filter_select":
+                this.state.attributeScore[signal.attribute] = {};
+                this.bump(this.state.attributeScore[signal.attribute] as Record<string, number>, signal.value);
+                return;
+            case "filter_deselect": {
+                const values = this.state.attributeScore[signal.attribute] ??= {};
+                this.lower(values, signal.value);
+                return;
+            }
+            default:
+                this.applyNonFilterSignal(signal);
+        }
+    }
+
+    private applyNonFilterSignal(signal: Exclude<IntentSignal, {type: "filter_toggle" | "filter_select" | "filter_deselect"}>): void {
         switch (signal.type) {
             case "status_updated":
                 this.state.status = signal.status;
                 break;
-
             case "text_updated":
                 this.state.intentText = signal.text;
                 break;
-
             case "category_view":
-                this.bump(this.state.categoryScore, signal.id)
+                this.bump(this.state.categoryScore, signal.id);
                 break;
-
-            case "filter_toggle": {
-                const { attribute, value } = signal;
-
-                const isSelected =
-                    this.state.attributeScore?.[attribute]?.[value];
-
-                if (isSelected) {
-                    this.handle({
-                        type: "filter_deselect",
-                        attribute,
-                        value
-                    });
-                } else {
-                    this.handle({
-                        type: "filter_select",
-                        attribute,
-                        value
-                    });
-                }
-
-                break;
-            }
-
-            case "filter_select":
-                this.state.attributeScore[signal.attribute] = {};
-                this.bump(
-                    this.state.attributeScore[signal.attribute] as Record<string, number>,
-                    signal.value
-                );
-                break;
-
-            case "filter_deselect":
-                if (!this.state.attributeScore[signal.attribute]) {
-                    this.state.attributeScore[signal.attribute] = {};
-                }
-                this.lower(
-                    this.state.attributeScore[signal.attribute] as Record<string, number>,
-                    signal.value
-                );
-                break;
-
             case "product_view":
                 this.bump(this.state.productScore, signal.sku);
                 break;
-
             case "add_to_cart":
                 this.bump(this.state.productScore, signal.sku);
                 this.updatePriceAffinity(signal.price);
                 break;
         }
-        this.notify();
     }
 
     hydrateFromFilters(filters: Record<string, Record<string, number>>) {

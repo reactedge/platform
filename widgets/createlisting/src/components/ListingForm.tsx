@@ -9,13 +9,8 @@ type Props = {
     onSave: (input: ListingUpdateInput) => void | Promise<void>;
 };
 
-export const ListingForm = ({
-    onSave,
-    initialName = '',
-    initialStatus = 'active',
-    editing = false,
-    onCancel,
-}: Props) => {
+export const ListingForm = (props: Props) => {
+    const {onSave, initialName = '', initialStatus = 'active', editing = false, onCancel} = props;
     const [name, setName] = useState(initialName);
     const [status, setStatus] = useState<ListingStatus>(initialStatus);
     const [saving, setSaving] = useState(false);
