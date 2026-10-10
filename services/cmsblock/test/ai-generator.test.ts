@@ -55,12 +55,13 @@ test('plain brief becomes structured HTML while retaining source metadata', asyn
     assert.doesNotMatch(captured, /test-model.*Bearer/);
 });
 
-test('unsafe generated HTML and unscoped CSS are rejected', async () => {
+test('AI HTML is ignored and unscoped CSS is rejected', async () => {
     const markup = createOpenAiGenerator({
         apiKey: 'test', model: 'model',
         fetcher: fake({html: '<img src="x" onerror="alert(1)">', css}) as typeof fetch,
     });
-    await assert.rejects(markup(draft('Art gallery')), /unsafe/i);
+    const safe = await markup(draft('Art gallery'));
+    assert.doesNotMatch(safe.html, /onerror|src="x"/i);
     const styles = createOpenAiGenerator({
         apiKey: 'test', model: 'model',
         fetcher: fake({html: '<p>Art gallery</p>', css: 'body {color:red}'}) as typeof fetch,

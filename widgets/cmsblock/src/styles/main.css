@@ -248,3 +248,6 @@
 @media (max-width: 700px) {
     .cmsblock-editor__style-list { grid-template-columns: 1fr; }
 }
+
+.cmsblock-editor__fields input { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid #94a3b8; border-radius: 8px; background: #fff; color: inherit; font: inherit; }
+.cmsblock-editor :is(input):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }

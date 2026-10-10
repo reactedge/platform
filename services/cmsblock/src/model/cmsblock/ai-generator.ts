@@ -56,7 +56,7 @@ function renderAuthoredHtml(draft: CmsBlockDraft, strategy: 'brief' | 'html-guar
         ? '<div class="cmsblock-copy">' + draft.source.content + '</div>'
         : '<div class="cmsblock-copy" style="white-space:pre-wrap">' +
           escapeHtml(draft.source.content) + '</div>';
-    const hasImage = strategy === 'html-guardrail' && /<img\\b[^>]*\\bsrc\\s*=\\s*["']https:\/\//i.test(draft.source.content);
+    const hasImage = strategy === 'html-guardrail' && /<img\b[^>]*\bsrc\s*=\s*["']https:\/\//i.test(draft.source.content);
     if (!hasImage && (!draft.image?.src || !draft.image.alt.trim())) {
         throw new CmsBlockGenerationError('Provide an image URL and alt text before generating. AI does not create images.');
     }
