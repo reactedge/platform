@@ -12,6 +12,7 @@ const html = '<article><h2>Original title</h2><p>Actual description</p></article
 const draft = (content: string, format: 'text' | 'html' = 'text') => ({
     source: {content, format}, templateId: 'editorial' as const,
     layoutId: 'image-left' as const,
+    image: {src: 'https://example.com/supplied.jpg', alt: 'Supplied image'},
 });
 
 const fake = (result: {html: string; css: string}) => async () =>
@@ -48,7 +49,7 @@ test('plain brief becomes structured HTML while retaining source metadata', asyn
         }) as typeof fetch,
     });
     const result = await gen(draft('Art gallery. Explore new work.'));
-    assert.match(result.html, /<h2>Art gallery/);
+    assert.match(result.html, /Art gallery\. Explore new work\./);
     assert.match(captured, /"strategy":"brief"/);
     assert.match(captured, /"imageLayout":"image-left"/);
     assert.doesNotMatch(captured, /test-model.*Bearer/);
@@ -172,4 +173,15 @@ test('AI cannot rewrite user copy even when it returns extra HTML', async () => 
     assert.match(result.html, /Exactly these words &amp; symbols\./);
     assert.match(result.html, /Second line exactly\./);
     assert.doesNotMatch(result.html, /Invented headline|new\.jpg/);
+});
+
+test('missing image stops generation before any AI call', async () => {
+    let invoked = false;
+    const generator = createOpenAiGenerator({
+        apiKey: 'test', model: 'test-model',
+        fetcher: (async () => { invoked = true; throw new Error('should not call AI'); }) as typeof fetch,
+    });
+    const input = {...draft('Literal source'), image: undefined};
+    await assert.rejects(generator(input), /Provide an image URL/);
+    assert.equal(invoked, false);
 });

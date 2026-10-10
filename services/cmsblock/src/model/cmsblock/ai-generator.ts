@@ -46,6 +46,28 @@ const instructions = [
     'The selected editorial style and image layout are independent.',
 ].join('\n');
 
+function escapeHtml(value: string): string {
+    return value.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+function renderAuthoredHtml(draft: CmsBlockDraft, strategy: 'brief' | 'html-guardrail'): string {
+    const text = strategy === 'html-guardrail'
+        ? '<div class="cmsblock-copy">' + draft.source.content + '</div>'
+        : '<div class="cmsblock-copy" style="white-space:pre-wrap">' +
+          escapeHtml(draft.source.content) + '</div>';
+    const hasImage = strategy === 'html-guardrail' && /<img\\b[^>]*\\bsrc\\s*=\\s*["']https:\/\//i.test(draft.source.content);
+    if (!hasImage && (!draft.image?.src || !draft.image.alt.trim())) {
+        throw new CmsBlockGenerationError('Provide an image URL and alt text before generating. AI does not create images.');
+    }
+    const media = hasImage ? '' : '<figure class="cmsblock-media"><img src="' +
+        escapeHtml(draft.image!.src) + '" alt="' + escapeHtml(draft.image!.alt) + '" loading="lazy"></figure>';
+    const content = '<section data-cmsblock="demo" class="cmsblock-content cmsblock--' +
+        draft.templateId + ' cmsblock-layout--' + draft.layoutId + '">' + text + media + '</section>';
+    assertSafeMarkup(content);
+    return content;
+}
+
 export function createOpenAiGenerator(options: {
     apiKey: string;
     model: string;
@@ -55,6 +77,7 @@ export function createOpenAiGenerator(options: {
     return async draft => {
         if (!options.apiKey) throw new CmsBlockGenerationError('OPENAI_API_KEY is required for AI generation.');
         const strategy = chooseSourceStrategy(draft.source);
+        const html = renderAuthoredHtml(draft, strategy);
         const mode = strategy === 'html-guardrail'
             ? 'The author provided HTML. It is immutable; supply only CSS to style it.'
             : 'The author provided literal text. The server will render that exact text; supply only CSS.';
@@ -64,7 +87,7 @@ export function createOpenAiGenerator(options: {
             input: [
                 {role: 'developer', content: instructions + '\n' + mode},
                 {role: 'user', content: JSON.stringify({
-                    source: draft.source, editorialStyle: draft.templateId,
+                    authoredHtml: html, editorialStyle: draft.templateId,
                     imageLayout: draft.layoutId, strategy,
                 })},
             ],
@@ -111,29 +134,7 @@ export function createOpenAiGenerator(options: {
             !('css' in parsed) || typeof parsed.css !== 'string') {
             throw new CmsBlockGenerationError('AI returned an incomplete design.');
         }
-        // Markup is built solely from the author's input, never from the AI response.
-        const escapeHtml = (value: string): string => value
-            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-        const content = strategy === 'html-guardrail'
-            ? draft.source.content
-            : '<div class="cmsblock-copy">' +
-                draft.source.content.split(/\\r?\\n/).map(line =>
-                    '<p>' + escapeHtml(line) + '</p>').join('') + '</div>';
-        try {
-            assertSafeMarkup(content);
-        } catch {
-            throw new CmsBlockGenerationError('HTML contains unsafe markup.');
-        }
-        if (!content.trim() || content.length > 100_000) {
-            throw new CmsBlockGenerationError('Empty or oversized HTML.');
-        }
         const css = validateGeneratedCss(parsed.css);
-        return {
-            html: '<section data-cmsblock="demo" class="cmsblock-content cmsblock--' +
-                draft.templateId + ' cmsblock-layout--' + draft.layoutId + '">' + content + '</section>',
-            css,
-        };
+        return {html, css};
     };
 }

@@ -23,8 +23,10 @@ export function legacyLayoutForTemplate(id: CmsBlockTemplateId): CmsBlockLayoutI
     return id === 'feature' ? 'image-left' : id === 'promotion' ? 'image-right' : 'image-above';
 }
 
+export type CmsBlockImage = {src: string; alt: string};
 export type CmsBlockDraft = {
     source: CmsBlockSource;
     templateId: CmsBlockTemplateId;
     layoutId: CmsBlockLayoutId;
+    image?: CmsBlockImage;
 };

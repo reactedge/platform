@@ -18,6 +18,12 @@ const templates: Record<CmsBlockTemplateId, {background: string; foreground: str
     promotion: {background: '#1D2C39', foreground: '#FFFFFF', accent: '#F2B65C'},
 };
 
+const validImage = (value: unknown): value is {src: string; alt: string} => {
+    if (!isRecord(value) || typeof value.src !== 'string' || typeof value.alt !== 'string' ||
+        value.src.length > 2000 || value.alt.length > 500) return false;
+    try { const uri = new URL(value.src); return uri.protocol === 'https:' && Boolean(uri.hostname); }
+    catch { return false; }
+};
 const legacyLayouts: Record<CmsBlockTemplateId, CmsBlockLayoutId> = {editorial: 'image-above', feature: 'image-left', promotion: 'image-right'};
 
 export function validateDraft(value: unknown): CmsBlockDraft {
@@ -27,7 +33,8 @@ export function validateDraft(value: unknown): CmsBlockDraft {
         typeof source.content !== 'string' ||
         !source.content.trim() || source.content.length > 100_000 ||
         !isTemplateId(input.templateId) ||
-        (input.layoutId !== undefined && !isLayoutId(input.layoutId))) {
+        (input.layoutId !== undefined && !isLayoutId(input.layoutId)) ||
+        (input.image !== undefined && !validImage(input.image))) {
         throw new CmsBlockValidationError(
             'Provide content (up to 100,000 characters) and a valid template.'
         );
@@ -36,6 +43,7 @@ export function validateDraft(value: unknown): CmsBlockDraft {
         source: {format: source.format, content: source.content},
         templateId: input.templateId,
         layoutId: input.layoutId ?? legacyLayouts[input.templateId],
+        ...(input.image === undefined ? {} : {image: input.image}),
     };
 }
 
