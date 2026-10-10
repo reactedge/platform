@@ -1,11 +1,10 @@
 import {useEffect, useState} from 'react';
 import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
-import {CmsBlockApi} from '../Model/CmsBlockApi.ts';
-import type {CmsBlockRevision} from '../Model/CmsBlock.ts';
+import {CmsBlockApi, type CmsBlockRecord} from '../Model/CmsBlockApi.ts';
 
 type Props = {
     controller: CmsBlockController;
-    pending: CmsBlockRevision | null | undefined;
+    pending: CmsBlockRecord['pending'] | undefined;
     onDirtyChange: (dirty: boolean) => void;
 };
 
