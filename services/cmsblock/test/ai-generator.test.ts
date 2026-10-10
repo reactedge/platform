@@ -6,6 +6,7 @@ import {join} from 'node:path';
 import {CmsBlockStore} from '../src/model/cmsblock/cmsblock-store';
 import {chooseSourceStrategy} from '../src/model/cmsblock/source-policy';
 import {createOpenAiGenerator} from '../src/model/cmsblock/ai-generator';
+import {validateGeneratedCss} from '../src/model/cmsblock/css-policy';
 
 const html = '<article><h2>Original title</h2><p>Actual description</p></article>';
 const draft = (content: string, format: 'text' | 'html' = 'text') => ({
@@ -126,4 +127,37 @@ test('provider 429 surfaces quota code without exposing its message', async () =
         assert.doesNotMatch(String(error), /secret provider detail|private-key/);
         return true;
     });
+});
+
+test('accepts scoped responsive media queries in generated AI designs', async () => {
+    const responsiveCss = [
+        '[data-cmsblock="demo"] { display: grid; grid-template-columns: 1fr 1fr; }',
+        '@media (max-width: 768px) {',
+        '  [data-cmsblock="demo"] { grid-template-columns: 1fr; }',
+        '  [data-cmsblock="demo"] h2 { font-size: clamp(1.25rem, 4vw, 2rem); }',
+        '}',
+    ].join('\n');
+    const generator = createOpenAiGenerator({
+        apiKey: 'test', model: 'test-model',
+        fetcher: fake({html: '<h2>Gallery</h2>', css: responsiveCss}) as typeof fetch,
+    });
+    assert.equal((await generator(draft('A gallery'))).css, responsiveCss);
+});
+
+test('rejects unsafe CSS while allowing scoped responsive rules', () => {
+    const dangerous = [
+        '@import url("https://example.com/tracker.css");',
+        '@media (max-width: 768px) { body {color:red} }',
+        '@font-face { font-family: custom; src: url("https://example.com/font"); }',
+        '[data-cmsblock="demo"] ~ body { display:none; }',
+        '[data-cmsblock="demo"] { background-image: url("https://example.com/x"); }',
+        '@media print { [data-cmsblock="demo"] { display:none; } }',
+        '[data-cmsblock="demo"] { color:red; ',
+    ];
+    for (const css of dangerous) {
+        assert.throws(() => validateGeneratedCss(css), /AI CSS|AI returned/);
+    }
+    assert.equal(validateGeneratedCss(
+        '@media screen and (max-width: 45rem) { [data-cmsblock="demo"] { gap: 1rem; } }',
+    ).includes('@media'), true);
 });
