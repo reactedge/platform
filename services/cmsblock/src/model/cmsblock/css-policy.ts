@@ -3,6 +3,7 @@ import type {AtRule, Declaration, Rule} from 'postcss';
 
 const SCOPE = '[data-cmsblock="demo"]';
 const MAX_CSS_LENGTH = 25_000;
+const DISALLOWED_PROPS = /^(?:display|position|float|clear|order|grid(?:-.*)?|flex(?:-.*)?|align(?:-.*)?|justify(?:-.*)?|place(?:-.*)?|width|min-width|max-width|height|min-height|max-height|aspect-ratio|object-fit|object-position|overflow(?:-.*)?|transform|translate|scale|rotate|text-transform|content|columns?|column-.*|top|left|right|bottom|inset(?:-.*)?)$/i;
 const MEDIA_CONDITION = /^(?:(?:only\s+)?(?:screen|all)\s+and\s+)?\(\s*(?:(?:min|max)-width\s*:\s*\d+(?:\.\d+)?(?:px|em|rem)|prefers-reduced-motion\s*:\s*(?:reduce|no-preference))\s*\)$/i;
 
 export class CmsBlockCssError extends Error {
@@ -24,6 +25,7 @@ function validateSelector(selector: string): void {
 
 function validateDeclaration(declaration: Declaration): void {
     const name = declaration.prop.toLowerCase();
+    if (DISALLOWED_PROPS.test(name)) return declaration.remove();
     const value = declaration.value;
     // Disallow active URLs, obfuscated escapes, and priority escalation.
     if (declaration.important || !name || !value ||
@@ -98,5 +100,5 @@ export function validateGeneratedCss(css: string): string {
         }
     });
     if (!count) throw new CmsBlockCssError('AI returned empty CSS.');
-    return css;
+    return root.toString();
 }

@@ -176,15 +176,15 @@ test('AI cannot rewrite user copy even when it returns extra HTML', async () => 
     assert.doesNotMatch(result.html, /Invented headline|new\.jpg/);
 });
 
-test('missing image stops generation before any AI call', async () => {
-    let invoked = false;
+test('missing image is allowed and AI cannot invent one', async () => {
     const generator = createOpenAiGenerator({
         apiKey: 'test', model: 'test-model',
-        fetcher: (async () => { invoked = true; throw new Error('should not call AI'); }) as typeof fetch,
+        fetcher: fake({html: '<img src="https://example.com/invented.jpg">', css}) as typeof fetch,
     });
     const input = {...draft('Literal source'), image: undefined};
-    await assert.rejects(generator(input), /Provide an image URL/);
-    assert.equal(invoked, false);
+    const result = await generator(input);
+    assert.match(result.html, /Literal source/);
+    assert.doesNotMatch(result.html, /<img|invented\.jpg/);
 });
 
 test('existing HTML image needs no separate image field', async () => {
@@ -196,4 +196,17 @@ test('existing HTML image needs no separate image field', async () => {
     const result = await generator({...draft(authored, 'html'), image: undefined});
     assert.ok(result.html.includes(authored));
     assert.doesNotMatch(result.html, /<h2>Changed<\/h2>/);
+});
+
+test('AI cannot override image proportions or position', async () => {
+    const dangerous = '[data-cmsblock="demo"] { display: flex; grid-template-columns: 4fr 1fr; }' +
+        '[data-cmsblock="demo"] img { width: 100%; height: 160px; object-fit: cover; }';
+    const gen = createOpenAiGenerator({
+        apiKey: 'test', model: 'test-model',
+        fetcher: fake({html: '', css: dangerous}) as typeof fetch,
+    });
+    const result = await gen(draft('My exact copy'));
+    assert.doesNotMatch(result.css, /height: 160px|object-fit: cover|4fr 1fr/);
+    assert.match(result.css, /object-fit: contain/);
+    assert.match(result.css, /grid-column: 1/);
 });

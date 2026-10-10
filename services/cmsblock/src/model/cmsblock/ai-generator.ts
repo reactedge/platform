@@ -1,4 +1,4 @@
-import type {CmsBlockDraft} from './types';
+import type {CmsBlockDraft, CmsBlockLayoutId} from './types';
 import {assertSafeMarkup, chooseSourceStrategy} from './source-policy';
 import {validateGeneratedCss} from './css-policy';
 
@@ -43,7 +43,9 @@ const instructions = [
     'Use the supplied HTML structure and CSS selectors only. Do not invent images or any external assets.',
     'All CSS selectors MUST start with [data-cmsblock="demo"]. Never use @import, @font-face, keyframes, URL functions or external assets.',
     'Use clamp(), grid, flexbox, percentages and @media (max-width: 768px) when needed for responsive layouts. Only @media min/max-width or prefers-reduced-motion rules are allowed.',
-    'The selected editorial style and image layout are independent.',
+    'Editorial styling is your only responsibility. Never set grid, flex, position, order, width, height, aspect-ratio, object-fit or image sizing.',
+    'Do not use pseudo-elements, pseudo-classes, text-transform, first-letter/drop caps, font-size below 1rem, or oversized decorative text.',
+    'The selected image layout is implemented by the server. Do not override it.',
 ].join('\n');
 
 function escapeHtml(value: string): string {
@@ -57,15 +59,36 @@ function renderAuthoredHtml(draft: CmsBlockDraft, strategy: 'brief' | 'html-guar
         : '<div class="cmsblock-copy cmsblock-literal-text">' +
           escapeHtml(draft.source.content) + '</div>';
     const hasImage = strategy === 'html-guardrail' && /<img\b[^>]*\bsrc\s*=\s*["']https:\/\//i.test(draft.source.content);
-    if (!hasImage && (!draft.image?.src || !draft.image.alt.trim())) {
-        throw new CmsBlockGenerationError('Provide an image URL and alt text before generating. AI does not create images.');
-    }
-    const media = hasImage ? '' : '<figure class="cmsblock-media"><img src="' +
+    // Images are optional. Neither the generator nor the model may invent them.
+    const media = hasImage || !draft.image?.src ? '' : '<figure class="cmsblock-media"><img src="' +
         escapeHtml(draft.image!.src) + '" alt="' + escapeHtml(draft.image!.alt) + '" loading="lazy"></figure>';
     const content = '<section data-cmsblock="demo" class="cmsblock-content cmsblock--' +
         draft.templateId + ' cmsblock-layout--' + draft.layoutId + '">' + text + media + '</section>';
     assertSafeMarkup(content);
     return content;
+}
+
+/** Fixed presentation structure: AI is not allowed to reposition or distort media. */
+function layoutCss(layout: CmsBlockLayoutId, strategy: string): string {
+    const root = '[data-cmsblock="demo"]';
+    const cols = layout === 'image-left' || layout === 'image-right';
+    const imageFirst = layout === 'image-left' || layout === 'image-above';
+    const placement = cols ? `@media (min-width: 800px) {
+${root}:has(> .cmsblock-media) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+}` : '';
+    return `
+${root} { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+${root} > .cmsblock-copy { min-width: 0; grid-row: ${imageFirst ? 2 : 1}; }
+${root} > .cmsblock-media { min-width: 0; margin: 0; grid-row: ${imageFirst ? 1 : 2}; }
+${root} .cmsblock-media img, ${root} .cmsblock-copy img { display: block; max-width: 100%; width: auto; height: auto; object-fit: contain; }
+${root} .cmsblock-copy { font-size: max(1rem, 16px); line-height: 1.5; overflow-wrap: break-word; }
+${strategy === 'brief' ? `${root} .cmsblock-literal-text { white-space: pre-wrap; }` : ''}
+${placement}
+${cols ? `@media (min-width: 800px) {
+${root} > .cmsblock-media { grid-row: 1; grid-column: ${imageFirst ? 1 : 2}; }
+${root} > .cmsblock-copy { grid-row: 1; grid-column: ${imageFirst ? 2 : 1}; }
+}` : ''}
+`;
 }
 
 export function createOpenAiGenerator(options: {
@@ -134,8 +157,7 @@ export function createOpenAiGenerator(options: {
             !('css' in parsed) || typeof parsed.css !== 'string') {
             throw new CmsBlockGenerationError('AI returned an incomplete design.');
         }
-        const css = validateGeneratedCss(parsed.css) +
-            (strategy === 'brief' ? '\n[data-cmsblock="demo"] .cmsblock-literal-text { white-space: pre-wrap; }' : '');
+        const css = validateGeneratedCss(parsed.css) + layoutCss(draft.layoutId, strategy);
         return {html, css};
     };
 }
