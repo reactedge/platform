@@ -54,7 +54,7 @@ function escapeHtml(value: string): string {
 function renderAuthoredHtml(draft: CmsBlockDraft, strategy: 'brief' | 'html-guardrail'): string {
     const text = strategy === 'html-guardrail'
         ? '<div class="cmsblock-copy">' + draft.source.content + '</div>'
-        : '<div class="cmsblock-copy" style="white-space:pre-wrap">' +
+        : '<div class="cmsblock-copy cmsblock-literal-text">' +
           escapeHtml(draft.source.content) + '</div>';
     const hasImage = strategy === 'html-guardrail' && /<img\b[^>]*\bsrc\s*=\s*["']https:\/\//i.test(draft.source.content);
     if (!hasImage && (!draft.image?.src || !draft.image.alt.trim())) {
@@ -134,7 +134,8 @@ export function createOpenAiGenerator(options: {
             !('css' in parsed) || typeof parsed.css !== 'string') {
             throw new CmsBlockGenerationError('AI returned an incomplete design.');
         }
-        const css = validateGeneratedCss(parsed.css);
+        const css = validateGeneratedCss(parsed.css) +
+            (strategy === 'brief' ? '\n[data-cmsblock="demo"] .cmsblock-literal-text { white-space: pre-wrap; }' : '');
         return {html, css};
     };
 }
