@@ -14,12 +14,21 @@ export function useCmsBlockController(
     initialRecord?: CmsBlockRecord | null
 ) {
     const { cmsBlockApi } = useSystemState();
-    const initialDraft = (): CmsBlockDraft => ({
-        source: { ...config.data.source },
-        templateId: config.data.templateId,
-        layoutId: config.data.layoutId ?? legacyLayoutForTemplate(config.data.templateId),
-        ...(config.data.image ? { image: config.data.image } : {}),
+    const draftFromRecord = (found: CmsBlockRecord): CmsBlockDraft => ({
+        source: found.source,
+        templateId: found.templateId,
+        layoutId: found.layoutId ?? legacyLayoutForTemplate(found.templateId),
+        ...(found.image ? { image: found.image } : {}),
     });
+
+    const initialDraft = (): CmsBlockDraft => initialRecord
+        ? draftFromRecord(initialRecord)
+        : {
+            source: { ...config.data.source },
+            templateId: config.data.templateId,
+            layoutId: config.data.layoutId ?? legacyLayoutForTemplate(config.data.templateId),
+            ...(config.data.image ? { image: config.data.image } : {}),
+        };
 
     const [draft, setDraft] = useState<CmsBlockDraft>(initialDraft);
     const [savedDraft, setSavedDraft] = useState<CmsBlockDraft>(initialDraft);
@@ -43,12 +52,7 @@ export function useCmsBlockController(
             .then((found) => {
                 if (!active || !found) return;
                 setRecord(found);
-                const saved = {
-                    source: found.source,
-                    templateId: found.templateId,
-                    layoutId: found.layoutId ?? legacyLayoutForTemplate(found.templateId),
-                    ...(found.image ? { image: found.image } : {}),
-                };
+                const saved = draftFromRecord(found);
                 setSavedDraft(saved);
                 setDraft(saved);
                 if (found.pending) setMode("review");
