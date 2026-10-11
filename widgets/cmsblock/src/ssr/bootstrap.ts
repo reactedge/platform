@@ -1,3 +1,5 @@
+import {parseRuntimeConfig} from '../ConfigSchemaRuntime.ts';
+
 export interface CmsBlockBootstrap {
     html: string;
     css: string;
@@ -16,17 +18,10 @@ function isPublishedRevision(value: unknown): value is CmsBlockBootstrap {
         && Number.isInteger(value.revision);
 }
 
-/**
- * Loads the currently published CMSBlock revision for server rendering.
- * The CMSBlock service remains private; configure its server-side URL with
- * CMSBLOCK_SERVICE_URL when it is not available on localhost:4190.
- */
-export async function buildBootstrap(
-    _runtimeConfig?: unknown
-): Promise<CmsBlockBootstrap | null> {
-    const serviceUrl = (
-        process.env.CMSBLOCK_SERVICE_URL ?? 'http://127.0.0.1:4190'
-    ).replace(/\/+$/, '');
+/** Loads the currently published revision from the CMSBlock API integration. */
+export async function buildBootstrap(runtimeConfig: unknown): Promise<CmsBlockBootstrap | null> {
+    const {integrations} = parseRuntimeConfig(runtimeConfig);
+    const serviceUrl = integrations.cmsblockApi.baseUrl.replace(/\\/+$/, '');
 
     const response = await fetch(
         `${serviceUrl}/cmsblock/blocks/demo`,
