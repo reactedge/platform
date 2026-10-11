@@ -15,7 +15,7 @@ export interface CmsBlockRecord extends CmsBlockDraft {
     published: CmsBlockRevision | null;
 }
 
-const base = `${(import.meta.env.VITE_CMSBLOCK_URL || 'http://127.0.0.1:4190').replace(/\/+$/, '')}/cmsblock/blocks/demo`;
+const base = `${(import.meta.env.VITE_CMSBLOCK_URL || 'http://127.0.0.1:4191').replace(/\/+$/, '')}/cmsblock/blocks/demo`;
 
 async function request<T>(path: string, method: 'GET' | 'PUT' | 'POST', body?: CmsBlockDraft | {html: string; css: string; revision: number}): Promise<T | null> {
     let response: Response;
@@ -27,7 +27,7 @@ async function request<T>(path: string, method: 'GET' | 'PUT' | 'POST', body?: C
             cache: 'no-store',
         });
     } catch {
-        throw new Error('Cannot reach the CMSBlock service. Start services/cmsblock on port 4190.');
+        throw new Error('Cannot reach the CMSBlock service. Start services/cmsblock on port 4191.');
     }
     if (response.status === 404 && method === 'GET') return null;
     const data: unknown = await response.json();

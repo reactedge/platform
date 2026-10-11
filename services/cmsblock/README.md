@@ -15,7 +15,7 @@ npm --prefix services/cmsblock ci
 npm --prefix services/cmsblock start
 ```
 
-Default HTTP address: `http://127.0.0.1:4190`.
+Default HTTP address: `http://127.0.0.1:4191`.
 
 For local development, start the CMSBlock widget separately:
 
@@ -23,7 +23,7 @@ For local development, start the CMSBlock widget separately:
 npm --prefix widgets/cmsblock dev
 ```
 
-The widget uses `http://127.0.0.1:4190/cmsblock/blocks/demo` by default.
+The widget uses `http://127.0.0.1:4191/cmsblock/blocks/demo` by default.
 Set `VITE_CMSBLOCK_URL` to override the service origin.
 
 ## API
@@ -54,7 +54,7 @@ mise run complexity -- cmsblock
 ```
 
 Run these checks locally when changing the service. To verify startup, call
-`curl --fail http://127.0.0.1:4190/cmsblock/status` after starting it.
+`curl --fail http://127.0.0.1:4191/cmsblock/status` after starting it.
 
 ## Limitations
 
