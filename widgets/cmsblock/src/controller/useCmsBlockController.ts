@@ -1,10 +1,14 @@
-import {useEffect, useState} from 'react';
-import type {WidgetConfig} from '../Config.ts';
-import {legacyLayoutForTemplate, type CmsBlockDraft, type CmsBlockTemplateId} from '../Model/CmsBlock.ts';
-import type {CmsBlockLayoutId} from '../Model/CmsBlockLayout.ts';
-import {CmsBlockApi, type CmsBlockRecord, type CmsBlockRevision} from '../Model/CmsBlockApi.ts';
+import {useEffect, useMemo, useState} from "react";
+import type {WidgetConfig} from "../Config.ts";
+import {legacyLayoutForTemplate, type CmsBlockDraft, type CmsBlockTemplateId} from "../Model/CmsBlock.ts";
+import type {CmsBlockLayoutId} from "../Model/CmsBlockLayout.ts";
+import {createCmsBlockApi, type CmsBlockRecord, type CmsBlockRevision} from "../Model/CmsBlockApi.ts";
 
 export function useCmsBlockController(config: WidgetConfig, options: {viewOnly?: boolean} = {}) {
+    const api = useMemo(
+        () => createCmsBlockApi(config.integrations.cmsblockApi.api),
+        [config.integrations.cmsblockApi.api]
+    );
     const initialDraft = (): CmsBlockDraft => ({
         source: {...config.data.source},
         templateId: config.data.templateId,
@@ -18,20 +22,20 @@ export function useCmsBlockController(config: WidgetConfig, options: {viewOnly?:
     const [published, setPublished] = useState<CmsBlockRevision | null>(null);
     const [busy, setBusy] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [message, setMessage] = useState('');
-    const [mode, setMode] = useState<'edit' | 'review' | 'view'>('edit');
+    const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
+    const [mode, setMode] = useState<"edit" | "review" | "view">("edit");
     const [showSourcePreview, setShowSourcePreview] = useState(false);
 
     useEffect(() => {
         let active = true;
-        const load = options.viewOnly ? CmsBlockApi.getPublished() : CmsBlockApi.get();
+        const load = options.viewOnly ? api.getPublished() : api.get();
         void load
             .then(found => {
                 if (!active) return;
                 if (options.viewOnly) {
                     setPublished(found as CmsBlockRevision | null);
-                    setMode('view');
+                    setMode("view");
                     return;
                 }
                 if (!found) return;
@@ -46,31 +50,31 @@ export function useCmsBlockController(config: WidgetConfig, options: {viewOnly?:
                 };
                 setSavedDraft(saved);
                 setDraft(saved);
-                if (savedRecord.pending) setMode('review');
-                else if (savedRecord.published) setMode('view');
+                if (savedRecord.pending) setMode("review");
+                else if (savedRecord.published) setMode("view");
             })
             .catch(reason => {
                 if (!active) return;
-                setError(reason instanceof Error ? reason.message : 'Could not load CMSBlock.');
-                if (options.viewOnly) setMode('view');
+                setError(reason instanceof Error ? reason.message : "Could not load CMSBlock.");
+                if (options.viewOnly) setMode("view");
             })
             .finally(() => { if (active) setLoading(false); });
         return () => { active = false; };
-    }, [options.viewOnly]);
+    }, [api, options.viewOnly]);
 
     const changed = JSON.stringify(draft) !== JSON.stringify(savedDraft);
 
     const updateContent = (content: string) => setDraft(current => ({
         ...current, source: {...current.source, content},
     }));
-    const updateFormat = (format: CmsBlockDraft['source']['format']) => setDraft(current => ({
+    const updateFormat = (format: CmsBlockDraft["source"]["format"]) => setDraft(current => ({
         ...current, source: {...current.source, format},
     }));
     const updateTemplate = (templateId: CmsBlockTemplateId) => setDraft(current => ({
         ...current, templateId,
     }));
-    const updateImage = (field: 'src' | 'alt', value: string) => setDraft(current => ({
-        ...current, image: {...(current.image ?? {src: '', alt: ''}), [field]: value},
+    const updateImage = (field: "src" | "alt", value: string) => setDraft(current => ({
+        ...current, image: {...(current.image ?? {src: "", alt: ""}), [field]: value},
     }));
     const updateLayout = (layoutId: CmsBlockLayoutId) => setDraft(current => ({
         ...current, layoutId,
@@ -79,16 +83,16 @@ export function useCmsBlockController(config: WidgetConfig, options: {viewOnly?:
 
     const execute = async (operation: () => Promise<CmsBlockRecord | null>, success: string) => {
         setBusy(true);
-        setError('');
-        setMessage('');
+        setError("");
+        setMessage("");
         try {
             const next = await operation();
-            if (!next) throw new Error('The CMSBlock service returned an empty record.');
+            if (!next) throw new Error("The CMSBlock service returned an empty record.");
             setRecord(next);
             setMessage(success);
             return next;
         } catch (reason) {
-            setError(reason instanceof Error ? reason.message : 'CMSBlock request failed.');
+            setError(reason instanceof Error ? reason.message : "CMSBlock request failed.");
             return null;
         } finally {
             setBusy(false);
@@ -97,10 +101,10 @@ export function useCmsBlockController(config: WidgetConfig, options: {viewOnly?:
 
     const save = async () => {
         if (!draft.source.content.trim()) {
-            setError('Enter content before saving.');
+            setError("Enter content before saving.");
             return;
         }
-        const next = await execute(() => CmsBlockApi.save(draft), 'Source and template saved.');
+        const next = await execute(() => api.save(draft), "Source and template saved.");
         if (next) {
             setSavedDraft({
                 source: next.source,
@@ -108,23 +112,23 @@ export function useCmsBlockController(config: WidgetConfig, options: {viewOnly?:
                 layoutId: next.layoutId ?? legacyLayoutForTemplate(next.templateId),
                 ...(next.image ? {image: next.image} : {}),
             });
-            setMode('edit');
+            setMode("edit");
         }
     };
 
     const generate = async () => {
-        if (changed) { setError('Save your changes before generating.'); return; }
-        const next = await execute(CmsBlockApi.generate, 'Generated draft ready for review.');
-        if (next?.pending) setMode('review');
+        if (changed) { setError("Save your changes before generating."); return; }
+        const next = await execute(api.generate, "Generated draft ready for review.");
+        if (next?.pending) setMode("review");
     };
 
     const approve = async () => {
-        const next = await execute(CmsBlockApi.approve, 'Block approved and published.');
-        if (next) setMode('view');
+        const next = await execute(api.approve, "Block approved and published.");
+        if (next) setMode("view");
     };
     const reject = async () => {
-        const next = await execute(CmsBlockApi.reject, 'Draft rejected; previously published block remains unchanged.');
-        if (next) setMode('edit');
+        const next = await execute(api.reject, "Draft rejected; previously published block remains unchanged.");
+        if (next) setMode("edit");
     };
 
     return {
