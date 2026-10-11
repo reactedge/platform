@@ -1,6 +1,6 @@
 import {WIDGET_ID} from "../Config.ts";
 import {ActivityContextProvider} from "../activity/Context/ActivityContextProvider.tsx";
-import {WidgetWrapper} from "./WidgetWrapper.tsx";
+import WidgetWrapper from "./WidgetWrapper.tsx";
 
 interface WidgetRootProps {
     contract: unknown;
@@ -10,21 +10,17 @@ interface WidgetRootProps {
 }
 
 export function WidgetRoot({
-    contract,
-    bootstrap,
-    runtime,
-    hostElement,
+   contract,
+   bootstrap,
+   runtime,
+   hostElement,
 }: WidgetRootProps) {
     return (
         <div className={`reactedge-${WIDGET_ID}`}>
             <ActivityContextProvider
-                {...(hostElement ? {hostElement} : {})}
+                {...(hostElement ? { hostElement } : {})}
             >
-                <WidgetWrapper
-                    contract={contract}
-                    bootstrap={bootstrap}
-                    runtime={runtime}
-                />
+                <WidgetWrapper contract={contract} bootstrap={bootstrap} runtime={runtime} />
             </ActivityContextProvider>
         </div>
     );
