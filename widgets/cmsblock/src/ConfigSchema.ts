@@ -18,9 +18,14 @@ const WidgetSettingsSchema = z.object({
     colour: z.string(),
 }).strict();
 
+const IntegrationSchema = z.object({
+    requires: z.array(z.literal('cmsblockApi')).min(1),
+}).strict();
+
 export const WidgetConfigSchema = z.object({
     data: WidgetDataSchema,
     settings: WidgetSettingsSchema,
+    integration: IntegrationSchema.optional(),
 }).strict();
 
 export type WidgetConfig = z.infer<typeof WidgetConfigSchema>;
