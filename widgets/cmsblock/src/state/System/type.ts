@@ -1,5 +1,5 @@
-import type {GraphqlClient} from "@reactedge/framework/graphql/graphqlClient.ts";
+import type { CmsBlockApiClient } from "../../services/cmsblock/CmsBlockApi.ts";
 
 export interface SystemState {
-    graphqlClient: GraphqlClient;
+    cmsBlockApi: CmsBlockApiClient;
 }

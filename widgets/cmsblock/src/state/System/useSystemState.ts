@@ -1,6 +1,6 @@
-import {useContext} from "react";
-import type {SystemState} from "./type.ts";
-import {LocalSystemStateContext} from "./SystemState.tsx";
+import { useContext } from "react";
+import type { SystemState } from "./type.ts";
+import { LocalSystemStateContext } from "./SystemState.tsx";
 
 export function useSystemState(): SystemState {
     const context = useContext(LocalSystemStateContext);

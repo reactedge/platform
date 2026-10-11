@@ -1,48 +1,36 @@
-import type { WidgetConfig } from "../Config";
-import { useProductData } from "../hooks/domain/useProductData";
-import type {BootstrapData} from "../entrypoints/ssr";
+import type { WidgetConfig } from "../Config.ts";
+import type { CmsBlockRecord } from "../services/cmsblock/CmsBlockApi.ts";
+import { useCmsBlockController } from "../hooks/domain/useCmsBlockController.ts";
+import {
+    CmsBlockModeNavigation,
+    CmsBlockFeedback,
+    CmsBlockEditMode,
+    CmsBlockReviewMode,
+    CmsBlockViewMode,
+} from "./CmsBlockModes.tsx";
 
 type Props = {
     config: WidgetConfig;
-    bootstrap?: BootstrapData;
+    bootstrap?: { record: CmsBlockRecord | null };
 };
 
-export const WidgetCmsblock = ({
-     config,
-     bootstrap
- }: Props) => {
-    const {
-        productData,
-        productError,
-        productLoading,
-    } = useProductData(config.runtime.sku, bootstrap);
-
-    if (productLoading) {
-        return <p>Loading product...</p>;
-    }
-
-    if (productError) {
-        return <p>Unable to load product.</p>;
-    }
+export const WidgetCmsblock = ({ config, bootstrap }: Props) => {
+    const controller = useCmsBlockController(config, bootstrap?.record);
+    const { loading, mode } = controller;
 
     return (
-        <>
-            <h1
-                data-cmsblock-title
-                style={{ color: config.settings.colour }}
-            >
-                {config.data.title}
-            </h1>
-
-            {productData && (
-                <dl data-cmsblock-product>
-                    <dt>SKU</dt>
-                    <dd>{productData.sku}</dd>
-
-                    <dt>Name</dt>
-                    <dd>{productData.name}</dd>
-                </dl>
-            )}
-        </>
+        <section className="cmsblock-editor" aria-label="CMS block editor">
+            <header className="cmsblock-editor__header">
+                <h1 data-cmsblock-title style={{ color: config.settings.colour }}>
+                    {config.data.title}
+                </h1>
+                <p>Author, generate, review and publish a responsive content block.</p>
+            </header>
+            <CmsBlockModeNavigation controller={controller} />
+            <CmsBlockFeedback controller={controller} />
+            {!loading && mode === "edit" && <CmsBlockEditMode controller={controller} />}
+            {!loading && mode === "review" && <CmsBlockReviewMode controller={controller} />}
+            {!loading && mode === "view" && <CmsBlockViewMode controller={controller} />}
+        </section>
     );
 };

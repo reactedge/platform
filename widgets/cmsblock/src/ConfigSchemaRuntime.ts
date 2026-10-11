@@ -1,20 +1,17 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const SchemaRuntimeConfig = z.object({
     integrations: z.object({
-        magentoGraphql: z.object({
+        cmsblockApi: z.object({
             api: z.string().url(),
-        }),
-        googleMaps: z.object({
-            apiKey: z.string(),
-            placeId: z.string()
-        }).optional()
-    }),
+        }).strict(),
+    }).passthrough(),
     context: z.object({
         storeCode: z.string(),
-        sku: z.string()
-    })
-});
+        sku: z.string(),
+        category: z.string().optional(),
+    }).passthrough(),
+}).passthrough();
 
 export type SchemaRuntimeConfig =
     z.infer<typeof SchemaRuntimeConfig>;

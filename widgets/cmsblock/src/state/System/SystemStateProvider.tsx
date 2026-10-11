@@ -1,15 +1,17 @@
-import React from "react";
-import {type ReactNode, useMemo} from "react";
-import {LocalSystemStateContext} from "./SystemState.tsx";
-import type {WidgetActivity} from "@reactedge/framework/activity";
-import type {ResolvedConfigIntegrations, RuntimeConfig} from "../../Config.ts";
-import {createGraphqlService} from "@reactedge/framework/graphql/graphql.service.ts";
+import React, { useMemo, type ReactNode } from "react";
+import { LocalSystemStateContext } from "./SystemState.tsx";
+import type { WidgetActivity } from "@reactedge/framework/activity";
+import type {
+    CmsBlockApiIntegration,
+    RuntimeConfig,
+} from "../../Config.ts";
+import { createCmsBlockApiClient } from "../../services/cmsblock/CmsBlockApi.ts";
 
 interface SystemStateProviderProps {
     children: ReactNode;
-    config: ResolvedConfigIntegrations;
+    config: { readonly cmsblockApi: CmsBlockApiIntegration };
     runtime: RuntimeConfig;
-    activity?: WidgetActivity
+    activity?: WidgetActivity;
 }
 
 const LocalStateProvider = LocalSystemStateContext.Provider;
@@ -17,24 +19,17 @@ const LocalStateProvider = LocalSystemStateContext.Provider;
 export const SystemStateProvider: React.FC<SystemStateProviderProps> = ({
     children,
     config,
-    runtime,
-    activity
 }) => {
-    if (!config?.magentoGraphql?.api) {
-        throw new Error('GraphQL client cannot be created without API endpoint');
-    }
-
-    const graphqlClient = useMemo(
-        () => createGraphqlService(config.magentoGraphql.api, runtime.storeCode, activity),
-        [config.magentoGraphql?.api, runtime.storeCode, activity]
-    );
+    const cmsBlockApi = useMemo(() => {
+        const api = config?.cmsblockApi?.api;
+        if (!api) {
+            throw new Error("CMSBlock API client cannot be created without an API endpoint.");
+        }
+        return createCmsBlockApiClient(api);
+    }, [config?.cmsblockApi?.api]);
 
     return (
-        <LocalStateProvider
-            value={{
-                graphqlClient
-            }}
-        >
+        <LocalStateProvider value={{ cmsBlockApi }}>
             {children}
         </LocalStateProvider>
     );

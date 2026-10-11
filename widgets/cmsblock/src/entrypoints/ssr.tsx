@@ -1,20 +1,18 @@
-import { renderToString } from 'react-dom/server';
-import {WIDGET_ID} from "../Config.ts";
-import type { ReactEdgeRuntimeConfig, ProductData } from "../Config.ts";
+import { renderToString } from "react-dom/server";
+import type { ReactEdgeRuntimeConfig } from "../Config.ts";
+import type { CmsBlockBootstrap } from "../services/cmsblock/CmsBlockApi.ts";
+import { WIDGET_ID } from "../Config.ts";
 import { WidgetView } from "../WidgetView.tsx";
 
-export interface BootstrapData {
-    productData: ProductData | undefined;
-}
+/** Signature required by the platform SSR worker: renderHtml(contract, bootstrap, runtime). */
+export const renderHtml = (
+    contract: unknown,
+    bootstrap: CmsBlockBootstrap,
+    runtime: ReactEdgeRuntimeConfig
+): string => renderToString(
+    <div className={`reactedge-${WIDGET_ID}`}>
+        <WidgetView contract={contract} runtime={runtime} bootstrapData={bootstrap} />
+    </div>
+);
 
-export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig, bootstrap: BootstrapData): string => {
-    return renderToString(
-        <div className={`reactedge-${WIDGET_ID}`}>
-            <WidgetView contract={config} runtime={runtime} bootstrapData={bootstrap} />
-        </div>
-    );
-};
-
-export { buildBootstrap } from '../ssr/bootstrap';
-
-export { loadRuntime } from '../ssr/bootstrap';
+export { buildBootstrap, loadRuntime } from "../ssr/bootstrap.ts";

@@ -1,68 +1,33 @@
-import {parseConfig, type SchemaWidgetConfig} from "./ConfigSchema.ts";
-import type {WidgetActivity} from "@reactedge/framework/activity";
-import {parseRuntimeConfig, type SchemaRuntimeConfig} from "./ConfigSchemaRuntime.ts";
-
-export interface WidgetConfig {
-    readonly data: {
-        title: string;
-    }
-
-    readonly settings: {
-        colour: string;
-    };
-
-    readonly runtime: RuntimeConfig
-    readonly integrations: ResolvedConfigIntegrations
-}
-
-export interface ProductData {
-    sku: string
-    name: string
-}
+import { parseConfig, type SchemaWidgetConfig } from "./ConfigSchema.ts";
+import type { WidgetActivity } from "@reactedge/framework/activity";
+import {
+    parseRuntimeConfig,
+    type SchemaRuntimeConfig,
+} from "./ConfigSchemaRuntime.ts";
 
 export interface RuntimeConfig {
-    storeCode: string;
-    sku: string;
+    readonly storeCode: string;
+    readonly sku: string;
+    readonly category?: string;
 }
 
-export interface ReactEdgeRuntimeConfig {
-    readonly integrations: ReactEdgeRuntimeIntegrations;
-    readonly context: RuntimeConfig
+export interface CmsBlockApiIntegration {
+    readonly api: string;
 }
 
-export interface ReactEdgeRuntimeIntegrations {
-    readonly magentoGraphql: {
-        readonly api: string
+export type ReactEdgeRuntimeConfig = SchemaRuntimeConfig;
+
+export interface WidgetConfig {
+    readonly data: SchemaWidgetConfig["data"];
+    readonly settings: SchemaWidgetConfig["settings"];
+    readonly runtime: RuntimeConfig;
+    readonly integrations: {
+        readonly cmsblockApi: CmsBlockApiIntegration;
     };
 }
 
-export interface ResolvedConfigIntegrations {
-    readonly magentoGraphql: {
-        readonly api: string
-    };
-}
+export const WIDGET_ID = "cmsblock";
 
-export const WIDGET_ID = 'cmsblock';
-
-/**
- * Validates and resolves the Contact Us widget configuration.
- *
- * Both the widget contract and the runtime configuration are treated
- * as untrusted input. Once validated, the configuration is normalized,
- * resolved and frozen before being exposed to the React application.
- *
- * This function represents the trust boundary between the ReactEdge
- * runtime and the widget implementation.
- *
- * The resolved configuration includes the Cloudflare integration
- * required to render the captcha.
- *
- * @param contract - Widget contract supplied by the host platform.
- * @param runtime - Runtime services supplied by the orchestrator.
- * @param activity - Activity logger for bootstrap events.
- * @returns An immutable Contact Us configuration.
- * @throws When either configuration is invalid.
- */
 export function readWidgetConfig(
     contract: unknown,
     runtime: unknown,
@@ -70,26 +35,18 @@ export function readWidgetConfig(
 ): WidgetConfig {
     try {
         const parsedContract = parseConfig(contract);
-        const parsedRuntime = parseRuntimeConfig(runtime)
+        const parsedRuntime = parseRuntimeConfig(runtime);
         const resolved = resolveConfig(parsedContract, parsedRuntime);
-
-        activity?.log(
-            'bootstrap',
-            'Config resolved',
-            resolved
-        );
-
+        activity?.log("bootstrap", "Config resolved", resolved);
         return Object.freeze(resolved);
-
-    } catch (e) {
+    } catch (error) {
         activity?.log(
-            'bootstrap',
-            'Invalid widget contract',
-            e instanceof Error? e.message: e,
-            'error'
+            "bootstrap",
+            "Invalid widget contract or runtime configuration",
+            error instanceof Error ? error.message : error,
+            "error"
         );
-
-        throw e;
+        throw error;
     }
 }
 
@@ -100,12 +57,7 @@ export function resolveConfig(
     return {
         data: widget.data,
         settings: widget.settings,
-        runtime: {
-            storeCode: runtime.context.storeCode,
-            sku: runtime.context.sku
-        },
-        integrations: {
-            magentoGraphql: runtime.integrations?.magentoGraphql
-        }
+        runtime: runtime.context,
+        integrations: runtime.integrations,
     };
 }
