@@ -1,3 +1,5 @@
+import fs from 'node:fs/promises';
+import {WIDGET_ID} from '../Config.ts';
 import {parseRuntimeConfig} from '../ConfigSchemaRuntime.ts';
 
 export interface CmsBlockBootstrap {
@@ -57,5 +59,22 @@ export async function buildBootstrap(runtimeConfig: unknown): Promise<CmsBlockBo
         html: record.published.html,
         css: record.published.css,
         revision: record.published.revision,
+    };
+}
+
+/**
+ * The SSR worker invokes loadRuntime() before renderHtml(). Load the
+ * published revision here so the CMSBlock SSR entrypoint stays self-contained.
+ */
+export async function loadRuntime(): Promise<{
+    cmsblockBootstrap: CmsBlockBootstrap | null;
+}> {
+    const runtimePath = `./widgets/${WIDGET_ID}/public/reactedge-runtime.json`;
+    const runtimeConfig: unknown = JSON.parse(
+        await fs.readFile(runtimePath, 'utf8')
+    );
+
+    return {
+        cmsblockBootstrap: await buildBootstrap(runtimeConfig),
     };
 }
