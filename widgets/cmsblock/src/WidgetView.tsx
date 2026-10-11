@@ -1,20 +1,24 @@
 import type { CmsBlockRecord } from "./services/cmsblock/CmsBlockApi.ts";
-import { readWidgetConfig } from "./Config.ts";
-import { SystemStateProvider } from "./state/System/SystemStateProvider.tsx";
-import { WidgetCmsblock } from "./components/WidgetCmsblock.tsx";
+import { CmsBlockPublishedContent } from "./components/CmsBlockPublishedContent.tsx";
 
 type Props = {
-    contract: unknown;
-    runtime: unknown;
+    contract?: unknown;
+    runtime?: unknown;
     bootstrapData?: { record: CmsBlockRecord | null };
 };
 
-export const WidgetView = ({ contract, runtime, bootstrapData }: Props) => {
-    const config = readWidgetConfig(contract, runtime);
+/** Server rendered view: no editor state, API client, or editor controls. */
+export const WidgetView = ({ bootstrapData }: Props) => {
+    const record = bootstrapData?.record;
+    const published = record?.published;
+
+    if (!record || !published) return null;
 
     return (
-        <SystemStateProvider config={config.integrations} runtime={config.runtime}>
-            <WidgetCmsblock config={config} bootstrap={bootstrapData} />
-        </SystemStateProvider>
+        <CmsBlockPublishedContent
+            revision={published}
+            templateId={record.templateId}
+            layoutId={published.layoutId ?? record.layoutId ?? "image-above"}
+        />
     );
 };
