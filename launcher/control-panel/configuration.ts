@@ -13,6 +13,7 @@ const defaults = {
     observabilityEnabled: false,
     otelHost: 'https://otel.reactedge.net/v1/traces',
     intentDiscoveryEnabled: false,
+    cmsblockApiBaseUrl: 'http://127.0.0.1:4190',
     sellerListingEnabled: false,
     defaultSellerId: 'default-seller',
     turnstileEnabled: false,
@@ -82,6 +83,7 @@ export function readConfiguration(root: string, storeCode: string, includeStoreE
         observabilityEnabled: enabled('OBSERVABILITY_ENABLED', Boolean(env.OTEL_HOST)),
         otelHost: env.OTEL_HOST || defaults.otelHost,
         intentDiscoveryEnabled: enabled('INTENT_DISCOVERY_ENABLED', false),
+        cmsblockApiBaseUrl: env.CMSBLOCK_API_BASE_URL || defaults.cmsblockApiBaseUrl,
         sellerListingEnabled: enabled('SELLER_LISTING_ENABLED', false),
         defaultSellerId: env.DEFAULT_SELLER_ID || defaults.defaultSellerId,
         turnstileEnabled: enabled('CLOUDFLARE_TURNSTILE_ENABLED', false),
@@ -148,7 +150,7 @@ function validateAdditionalHosts(value: string): void {
 }
 
 function validateHttpUrls(config: Configuration): void {
-    const urls = [['Site URL', config.siteUrl], ['OpenTelemetry URL', config.otelHost]];
+    const urls = [['Site URL', config.siteUrl], ['CMSBlock API URL', config.cmsblockApiBaseUrl], ['OpenTelemetry URL', config.otelHost]];
     for (const [name, value] of urls) {
         if (name === 'OpenTelemetry URL' && !config.observabilityEnabled) continue;
         try {
@@ -206,11 +208,14 @@ function buildIntegrations(config: Configuration, siteUrl: string): Record<strin
 }
 
 function runtimeJson(config: Configuration, integrations: Record<string, object>, widgetName: string): string {
+    const widgetIntegrations = widgetName === 'cmsblock'
+        ? {...integrations, cmsblockApi: {baseUrl: config.cmsblockApiBaseUrl.replace(/\\/+$/, '')}}
+        : integrations;
     const baseContext = {storeCode: config.storeCode, ...(config.hasCatalog ? {sku: config.sku, category: config.category} : {})};
     const seller = config.sellerListingEnabled && widgetName === 'createlisting'
         ? {sellerId: config.defaultSellerId}
         : {};
-    return JSON.stringify({integrations, context: {...baseContext, ...seller}}, null, 2) + '\n';
+    return JSON.stringify({integrations: widgetIntegrations, context: {...baseContext, ...seller}}, null, 2) + '\n';
 }
 
 function storeEnvironment(config: Configuration, siteUrl: string, allowedHosts: string): Record<string, string> {
@@ -221,7 +226,7 @@ function storeEnvironment(config: Configuration, siteUrl: string, allowedHosts: 
         SSR_ENABLED: bool(config.ssrEnabled), SSR_PORT: config.ssrPort, SSR_BASE_URL: config.ssrBaseUrl,
         ...(config.hasCatalog ? {SKU: config.sku, CATEGORY: config.category} : {}),
         OBSERVABILITY_ENABLED: bool(config.observabilityEnabled),
-        INTENT_DISCOVERY_ENABLED: bool(config.intentDiscoveryEnabled),
+        INTENT_DISCOVERY_ENABLED: bool(config.intentDiscoveryEnabled), CMSBLOCK_API_BASE_URL: config.cmsblockApiBaseUrl,
         SELLER_LISTING_ENABLED: bool(config.sellerListingEnabled),
         DEFAULT_SELLER_ID: config.sellerListingEnabled ? config.defaultSellerId : '',
         CLOUDFLARE_TURNSTILE_ENABLED: bool(config.turnstileEnabled),
