@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import {CmsBlockEditor} from './CmsBlockEditor.tsx';
 import {CmsBlockSourcePreview} from './CmsBlockSourcePreview.tsx';
-import {CmsBlockRenderedPreview} from './CmsBlockRenderedPreview.tsx';
 import {CmsBlockPublishedContent} from './CmsBlockPublishedContent.tsx';
 import {CmsBlockRevisionEditor} from './CmsBlockRevisionEditor.tsx';
 import type {CmsBlockController} from '../hooks/domain/useCmsBlockController.ts';
