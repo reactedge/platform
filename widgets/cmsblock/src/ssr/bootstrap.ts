@@ -21,7 +21,7 @@ function isPublishedRevision(value: unknown): value is CmsBlockBootstrap {
 /** Loads the currently published revision from the CMSBlock API integration. */
 export async function buildBootstrap(runtimeConfig: unknown): Promise<CmsBlockBootstrap | null> {
     const {integrations} = parseRuntimeConfig(runtimeConfig);
-    const serviceUrl = integrations.cmsblockApi.baseUrl.replace(/\\/+$/, '');
+    const serviceUrl = integrations.cmsblockApi.api.replace(/\/+$/, '');
 
     const response = await fetch(
         `${serviceUrl}/cmsblock/blocks/demo`,

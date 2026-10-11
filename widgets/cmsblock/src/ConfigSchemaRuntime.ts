@@ -3,7 +3,7 @@ import {z} from 'zod';
 export const CmsBlockRuntimeConfigSchema = z.object({
     integrations: z.object({
         cmsblockApi: z.object({
-            baseUrl: z.string().url(),
+            api: z.string().url(),
         }).strict(),
     }).passthrough(),
 }).passthrough();
