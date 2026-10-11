@@ -25,7 +25,7 @@ const IntegrationSchema = z.object({
 export const WidgetConfigSchema = z.object({
     data: WidgetDataSchema,
     settings: WidgetSettingsSchema,
-    integration: IntegrationSchema.optional(),
+    integration: IntegrationSchema,
 }).strict();
 
 export type WidgetConfig = z.infer<typeof WidgetConfigSchema>;
