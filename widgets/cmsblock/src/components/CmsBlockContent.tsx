@@ -1,6 +1,8 @@
 import type {CmsBlockRevision} from '../Model/CmsBlockApi.ts';
 
-type Props = {revision: CmsBlockRevision};
+type Props = {
+    revision: Pick<CmsBlockRevision, 'html' | 'css' | 'revision'>;
+};
 
 /** Renders an approved revision inline with its CMSBlock-scoped stylesheet. */
 export const CmsBlockContent = ({revision}: Props) => (
