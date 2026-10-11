@@ -6,6 +6,6 @@
     "colour": "red"
   },
   "integration": {
-    "requires": ["magentoGraphql"]
+    "requires": ["cmsblockApi"]
   }
 }
