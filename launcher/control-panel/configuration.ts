@@ -209,7 +209,7 @@ function buildIntegrations(config: Configuration, siteUrl: string): Record<strin
 
 function runtimeJson(config: Configuration, integrations: Record<string, object>, widgetName: string): string {
     const widgetIntegrations = widgetName === 'cmsblock'
-        ? {...integrations, cmsblockApi: {baseUrl: config.cmsblockApiBaseUrl.replace(/\\/+$/, '')}}
+        ? {...integrations, cmsblockApi: {baseUrl: config.cmsblockApiBaseUrl.replace(/\/+$/, '')}}
         : integrations;
     const baseContext = {storeCode: config.storeCode, ...(config.hasCatalog ? {sku: config.sku, category: config.category} : {})};
     const seller = config.sellerListingEnabled && widgetName === 'createlisting'
