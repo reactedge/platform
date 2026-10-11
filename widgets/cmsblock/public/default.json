@@ -1,16 +1,11 @@
 {
   "data": {
-    "title": "CMS Block",
-    "source": {
-      "format": "text",
-      "content": "Add your content here. Select a template to prepare it for AI-assisted styling."
-    },
-    "templateId": "editorial"
+    "title": "I am runtime cmsblock ready to work"
   },
   "settings": {
-    "colour": "#1f2937"
+    "colour": "red"
   },
   "integration": {
-    "requires": ["cmsblockApi"]
+    "requires": ["magentoGraphql"]
   }
 }

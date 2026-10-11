@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<script type="module">
+    import { mount } from './api/runtime-widget.tsx';
+    import { ResourceLoader } from "@reactedge/framework/contract";
+
+    const loader = new ResourceLoader();
+    const contract = await loader.loadContract("default.json");
+
+    const element = document.querySelector('cmsblock-widget');
+
+    await requestAnimationFrame(() => {
+        mount(element, contract)
+        //mount(element, contract, {viewOnly:true});
+    })
+</script>
+
+<cmsblock-widget></cmsblock-widget>
+
+</body>
+</html>

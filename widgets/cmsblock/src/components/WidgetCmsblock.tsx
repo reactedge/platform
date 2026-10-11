@@ -1,41 +1,48 @@
-import type {WidgetConfig} from '../Config.ts';
-import {useCmsBlockController} from '../controller/useCmsBlockController.ts';
-import {
-    CmsBlockModeNavigation,
-    CmsBlockFeedback,
-    CmsBlockEditMode,
-    CmsBlockReviewMode,
-    CmsBlockViewMode,
-} from './CmsBlockModes.tsx';
+import type { WidgetConfig } from "../Config";
+import { useProductData } from "../hooks/domain/useProductData";
+import type {BootstrapData} from "../entrypoints/ssr";
 
-type Props = {config: WidgetConfig; viewOnly?: boolean};
+type Props = {
+    config: WidgetConfig;
+    bootstrap?: BootstrapData;
+};
 
-export const WidgetCmsblock = ({config, viewOnly = false}: Props) => {
-    const controller = useCmsBlockController(config, {viewOnly});
-    const {loading, mode} = controller;
+export const WidgetCmsblock = ({
+     config,
+     bootstrap
+ }: Props) => {
+    const {
+        productData,
+        productError,
+        productLoading,
+    } = useProductData(config.runtime.sku, bootstrap);
 
-    if (viewOnly) {
-        return (
-            <section className="cmsblock-editor" aria-label="Published CMS block">
-                {loading && <p role="status">Loading published CMS block…</p>}
-                {!loading && mode === 'view' && <CmsBlockViewMode controller={controller} />}
-            </section>
-        );
+    if (productLoading) {
+        return <p>Loading product...</p>;
+    }
+
+    if (productError) {
+        return <p>Unable to load product.</p>;
     }
 
     return (
-        <section className="cmsblock-editor" aria-label="CMS block editor">
-            <header className="cmsblock-editor__header">
-                <h1 data-cmsblock-title style={{color: config.settings.colour}}>
-                    {config.data.title}
-                </h1>
-                <p>Author, generate, review and publish a responsive content block.</p>
-            </header>
-            <CmsBlockModeNavigation controller={controller} />
-            <CmsBlockFeedback controller={controller} />
-            {!loading && mode === 'edit' && <CmsBlockEditMode controller={controller} />}
-            {!loading && mode === 'review' && <CmsBlockReviewMode controller={controller} />}
-            {!loading && mode === 'view' && <CmsBlockViewMode controller={controller} />}
-        </section>
+        <>
+            <h1
+                data-cmsblock-title
+                style={{ color: config.settings.colour }}
+            >
+                {config.data.title}
+            </h1>
+
+            {productData && (
+                <dl data-cmsblock-product>
+                    <dt>SKU</dt>
+                    <dd>{productData.sku}</dd>
+
+                    <dt>Name</dt>
+                    <dd>{productData.name}</dd>
+                </dl>
+            )}
+        </>
     );
 };

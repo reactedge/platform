@@ -1,15 +1,26 @@
-import {z} from 'zod';
+import { z } from 'zod';
 
-export const CmsBlockRuntimeConfigSchema = z.object({
+export const SchemaRuntimeConfig = z.object({
     integrations: z.object({
-        cmsblockApi: z.object({
+        magentoGraphql: z.object({
             api: z.string().url(),
-        }).strict(),
-    }).passthrough(),
-}).passthrough();
+        }),
+        googleMaps: z.object({
+            apiKey: z.string(),
+            placeId: z.string()
+        }).optional()
+    }),
+    context: z.object({
+        storeCode: z.string(),
+        sku: z.string()
+    })
+});
 
-export type CmsBlockRuntimeConfig = z.infer<typeof CmsBlockRuntimeConfigSchema>;
+export type SchemaRuntimeConfig =
+    z.infer<typeof SchemaRuntimeConfig>;
 
-export function parseRuntimeConfig(input: unknown): CmsBlockRuntimeConfig {
-    return CmsBlockRuntimeConfigSchema.parse(input);
+export function parseRuntimeConfig(
+    input: unknown
+): SchemaRuntimeConfig {
+    return SchemaRuntimeConfig.parse(input);
 }

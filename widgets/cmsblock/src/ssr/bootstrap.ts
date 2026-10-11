@@ -1,80 +1,48 @@
+import type { ReactEdgeRuntimeConfig } from "../Config.ts";
+import { WIDGET_ID } from "../Config.ts";
 import fs from 'node:fs/promises';
-import {WIDGET_ID} from '../Config.ts';
-import {parseRuntimeConfig} from '../ConfigSchemaRuntime.ts';
+import {createGraphqlService} from "@reactedge/framework/graphql/graphql.service.ts"
+import {fetchMagentoProductData} from "../services/magento/fetchMagentoProductData";
 
-export interface CmsBlockBootstrap {
-    html: string;
-    css: string;
-    revision: number;
+export async function loadRuntime(): Promise<ReactEdgeRuntimeConfig> {
+    const path =
+        `./widgets/${WIDGET_ID}/public/reactedge-runtime.json`;
+
+    return JSON.parse(
+        await fs.readFile(path, 'utf8')
+    );
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-    return typeof value === 'object' && value !== null;
-}
+export async function buildBootstrap(runtime: ReactEdgeRuntimeConfig) {
+    const graphqlApi = getGraphqQlAPI(runtime);
 
-function isPublishedRevision(value: unknown): value is CmsBlockBootstrap {
-    return isRecord(value)
-        && typeof value.html === 'string'
-        && typeof value.css === 'string'
-        && typeof value.revision === 'number'
-        && Number.isInteger(value.revision);
-}
-
-/** Loads the currently published revision from the CMSBlock API integration. */
-export async function buildBootstrap(runtimeConfig: unknown): Promise<CmsBlockBootstrap | null> {
-    const {integrations} = parseRuntimeConfig(runtimeConfig);
-    const serviceUrl = integrations.cmsblockApi.api.replace(/\/+$/, '');
-
-    const response = await fetch(
-        `${serviceUrl}/cmsblock/blocks/demo`,
-        {cache: 'no-store'}
+    const graphqlClient = createGraphqlService(
+        graphqlApi as string,
+        runtime.context.storeCode
     );
 
-    if (response.status === 404) {
-        return null;
-    }
-
-    if (!response.ok) {
-        throw new Error(
-            `CMSBlock service request failed with status ${response.status}.`
+    const productData =
+        await fetchMagentoProductData(
+            graphqlClient,
+            runtime.context.sku
         );
-    }
-
-    const record: unknown = await response.json();
-    if (!isRecord(record) || !('published' in record)) {
-        throw new Error('CMSBlock service returned an invalid record.');
-    }
-
-    if (record.published === null) {
-        return null;
-    }
-
-    if (!isPublishedRevision(record.published)) {
-        throw new Error(
-            'CMSBlock service returned an invalid published revision.'
-        );
-    }
 
     return {
-        html: record.published.html,
-        css: record.published.css,
-        revision: record.published.revision,
+        productData
     };
 }
 
-/**
- * The SSR worker invokes loadRuntime() before renderHtml(). Load the
- * published revision here so the CMSBlock SSR entrypoint stays self-contained.
- */
-export async function loadRuntime(): Promise<{
-    cmsblockBootstrap: CmsBlockBootstrap | null;
-}> {
-    const runtimePath = `./widgets/${WIDGET_ID}/public/reactedge-runtime.json`;
-    const runtimeConfig: unknown = JSON.parse(
-        await fs.readFile(runtimePath, 'utf8')
-    );
+function getGraphqQlAPI(runtime: ReactEdgeRuntimeConfig) {
+    const magentoGraphql =
+        runtime.integrations.magentoGraphql;
 
-    return {
-        cmsblockBootstrap: await buildBootstrap(runtimeConfig),
-    };
+    const graphqlApi = magentoGraphql.api
+
+    if (!graphqlApi) {
+        throw new Error(
+            'No Magento GraphQL endpoint configured'
+        );
+    }
+
+    return graphqlApi
 }

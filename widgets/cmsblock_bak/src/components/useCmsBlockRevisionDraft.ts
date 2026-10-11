@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
-import {CmsBlockApi, type CmsBlockRecord} from '../Model/CmsBlockApi.ts';
+import {type CmsBlockRecord} from '../Model/CmsBlockApi.ts';
 
 type Props = {
     controller: CmsBlockController;
