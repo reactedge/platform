@@ -20,9 +20,11 @@ test.describe('CMSBlock E2E workflow', () => {
         await expect(widget.frameLocator('iframe[title="Generated CMSBlock draft"]').locator('h2')).toHaveText('Welcome to CMSBlock');
         await widget.getByRole('button', {name: 'Approve and publish'}).click();
         await expect(widget.getByRole('heading', {name: /Published revision/})).toBeVisible();
-        await expect(widget.frameLocator('iframe[title="Published CMSBlock"]').locator('h2')).toHaveText('Welcome to CMSBlock');
+        await expect(widget.locator('.cmsblock-published h2')).toHaveText('Welcome to CMSBlock');
+        await expect(widget.locator('.cmsblock-published iframe')).toHaveCount(0);
         await page.reload();
         await expect(widget.getByRole('heading', {name: /Published revision/})).toBeVisible();
+        await expect(widget.locator('.cmsblock-published h2')).toHaveText('Welcome to CMSBlock');
     });
 
     test('keeps editorial style separate from the image layout', async ({page}) => {

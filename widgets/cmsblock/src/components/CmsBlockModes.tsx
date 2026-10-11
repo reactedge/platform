@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {CmsBlockEditor} from './CmsBlockEditor.tsx';
 import {CmsBlockSourcePreview} from './CmsBlockSourcePreview.tsx';
 import {CmsBlockRenderedPreview} from './CmsBlockRenderedPreview.tsx';
+import {CmsBlockContent} from './CmsBlockContent.tsx';
 import {CmsBlockRevisionEditor} from './CmsBlockRevisionEditor.tsx';
 import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
 
@@ -87,7 +88,5 @@ export const CmsBlockReviewMode = ({controller}: Props) => {
 export const CmsBlockViewMode = ({controller}: Props) => {
     const published = controller.published ?? controller.record?.published;
     if (!published) return <p role="status">The published CMS block is temporarily unavailable.</p>;
-    return (
-        <CmsBlockRenderedPreview title="Published CMSBlock" revision={published} />
-    );
+    return <CmsBlockContent revision={published} />;
 };

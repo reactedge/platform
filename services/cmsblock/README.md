@@ -63,10 +63,11 @@ authorization or rate limiting. It listens on loopback by default; CORS is
 not an authentication mechanism. The deterministic generator converts
 supplied HTML to escaped text and retains up to three HTTPS image URLs;
 it does not preserve arbitrary HTML or interpret style reference images.
-The widget uses sandboxed iframe previews. Published output will require
-separate security review and sanitisation before it can be served directly
-as SSR markup. Telemetry exporter delivery is not covered by the current
-HTTP lifecycle test.
+Draft and review previews remain sandboxed in an iframe. Approved content is
+rendered inline in view mode and SSR. Current HTML/CSS validation is an
+initial guard, not a complete sanitizer, so keep this unauthenticated API
+private. Telemetry exporter delivery is not covered by the current HTTP
+lifecycle test.
 
 ## AI-assisted generation (opt in)
 
