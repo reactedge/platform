@@ -37,6 +37,8 @@
       <label class="inline"><input type="checkbox" name="observabilityEnabled">Observability</label>
       <div class="dependent" data-for="observabilityEnabled"><label><span>OpenTelemetry collector URL</span><input name="otelHost" type="url"></label></div>
       <label class="inline"><input type="checkbox" name="intentDiscoveryEnabled">Intent Discovery</label>
+      <label><span>CMSBlock API base URL</span><input name="cmsblockApiBaseUrl" type="url" required></label>
+      <small>Used by the CMSBlock widget runtime to fetch its published revision.</small>
       <label class="inline"><input type="checkbox" name="sellerListingEnabled">Seller Listing</label>
       <div class="dependent" data-for="sellerListingEnabled">
         <label><span>Default Seller ID</span><input name="defaultSellerId"></label>
