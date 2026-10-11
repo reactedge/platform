@@ -35,7 +35,7 @@ export interface CmsBlockApiClient {
 }
 
 export function createCmsBlockApiClient(apiUrl: string): CmsBlockApiClient {
-    const base = apiUrl.replace(/\/+$/, "") + "/cmsblock/blocks/demo";
+    const base = apiUrl.replace(/\\/+$/, "") + "/cmsblock/blocks/demo";
 
     async function request(
         path: string,
@@ -50,8 +50,14 @@ export function createCmsBlockApiClient(apiUrl: string): CmsBlockApiClient {
                 ...(body ? { body: JSON.stringify(body) } : {}),
                 cache: "no-store",
             });
-        } catch {
-            throw new Error("Cannot reach the CMSBlock service. Check the cmsblockApi runtime endpoint.");
+        } catch (error) {
+            const cause = error instanceof Error
+                ? `${error.name}: ${error.message}`
+                : String(error);
+            throw new Error(
+                `Cannot reach the CMSBlock service at '${base + path}': ${cause}`,
+                { cause: error }
+            );
         }
 
         if (response.status === 404 && method === "GET") return null;
