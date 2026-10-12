@@ -38,6 +38,13 @@
       "strategy": "disabled"
     }
   },
+  "cmsblock": {
+    "active": true,
+    "contract": "default.json",
+    "ssr": {
+      "strategy": "disabled"
+    }
+  },
   "banner": {
     "active": true,
     "contract": "default.json",

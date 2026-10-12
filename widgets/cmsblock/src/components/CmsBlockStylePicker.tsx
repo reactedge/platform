@@ -1,5 +1,5 @@
 import {CMS_BLOCK_STYLES} from '../Model/CmsBlock.ts';
-import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
+import type {CmsBlockController} from '../hooks/domain/useCmsBlockController.ts';
 
 type Props = {controller: CmsBlockController};
 

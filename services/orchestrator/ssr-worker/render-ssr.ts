@@ -29,7 +29,7 @@ const run = async () => {
     const config = data.contract;
     const bootstrap = data.bootstrap;
 
-    let runtime = {
+    let runtime: unknown = {
         rendering: {
             userAgent: process.argv[3] ?? ''
         }
@@ -45,11 +45,17 @@ const run = async () => {
         return;
     }
 
-    const { renderHtml, loadRuntime } = await import(entry);
+    const { renderHtml, loadRuntime, buildBootstrap } = await import(entry);
 
-    if (loadRuntime) runtime = await loadRuntime()
+    if (loadRuntime) runtime = await loadRuntime();
 
-    const finalHtml = renderHtml(config, bootstrap, runtime)
+    // Widgets that own their SSR data source can build a fresh bootstrap from
+    // the resolved runtime. Other widgets continue to use queue-provided data.
+    const resolvedBootstrap = buildBootstrap
+        ? await buildBootstrap(runtime)
+        : bootstrap;
+
+    const finalHtml = renderHtml(config, resolvedBootstrap, runtime);
 
     process.stdout.write(finalHtml);
 };

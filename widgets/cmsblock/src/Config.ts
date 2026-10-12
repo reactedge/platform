@@ -1,26 +1,63 @@
-import {parseConfig, type WidgetConfig as ParsedWidgetConfig} from './ConfigSchema.ts';
-import type {WidgetActivity} from '@reactedge/framework/activity';
+import { parseConfig, type SchemaWidgetConfig } from "./ConfigSchema.ts";
+import type { WidgetActivity } from "@reactedge/framework/activity";
+import {
+    parseRuntimeConfig,
+    type SchemaRuntimeConfig,
+} from "./ConfigSchemaRuntime.ts";
 
-export type WidgetConfig = ParsedWidgetConfig;
+export interface RuntimeConfig {
+    readonly storeCode: string;
+    readonly sku: string;
+    readonly category?: string;
+}
 
-export const WIDGET_ID = 'cmsblock';
+export interface CmsBlockApiIntegration {
+    readonly api: string;
+}
 
-/** CMSBlock is a static widget; editing will use a separate backend service. */
+export type ReactEdgeRuntimeConfig = SchemaRuntimeConfig;
+
+export interface WidgetConfig {
+    readonly data: SchemaWidgetConfig["data"];
+    readonly settings: SchemaWidgetConfig["settings"];
+    readonly runtime: RuntimeConfig;
+    readonly integrations: {
+        readonly cmsblockApi: CmsBlockApiIntegration;
+    };
+}
+
+export const WIDGET_ID = "cmsblock";
+
 export function readWidgetConfig(
-    rawContract: unknown,
+    contract: unknown,
+    runtime: unknown,
     activity?: WidgetActivity
 ): WidgetConfig {
     try {
-        const config = parseConfig(rawContract);
-        activity?.log('bootstrap', 'Config resolved', config);
-        return Object.freeze(config);
+        const parsedContract = parseConfig(contract);
+        const parsedRuntime = parseRuntimeConfig(runtime);
+        const resolved = resolveConfig(parsedContract, parsedRuntime);
+        activity?.log("bootstrap", "Config resolved", resolved);
+        return Object.freeze(resolved);
     } catch (error) {
         activity?.log(
-            'bootstrap',
-            'Invalid widget contract',
+            "bootstrap",
+            "Invalid widget contract or runtime configuration",
             error instanceof Error ? error.message : error,
-            'error'
+            "error"
         );
         throw error;
     }
+}
+
+export function resolveConfig(
+    widget: SchemaWidgetConfig,
+    runtime: SchemaRuntimeConfig
+): WidgetConfig {
+    return {
+        data: widget.data,
+        settings: widget.settings,
+        runtime: runtime.context,
+        integrations: runtime.integrations,
+    };
 }

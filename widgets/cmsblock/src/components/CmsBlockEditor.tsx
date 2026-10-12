@@ -2,7 +2,7 @@ import {useId} from 'react';
 import type {CmsBlockDraft} from '../Model/CmsBlock.ts';
 import {CmsBlockStylePicker} from './CmsBlockStylePicker.tsx';
 import {CmsBlockLayoutPicker} from './CmsBlockLayoutPicker.tsx';
-import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
+import type {CmsBlockController} from '../hooks/domain/useCmsBlockController.ts';
 
 type Props = {controller: CmsBlockController};
 

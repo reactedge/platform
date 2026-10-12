@@ -46,4 +46,7 @@ export class CmsBlockHandler {
 
     reject = (_req: Request, res: Response): Promise<void> =>
         this.handle(res, () => this.store(res).reject());
+
+    published = (_req: Request, res: Response): Promise<void> =>
+        this.handle(res, () => this.store(res).published());
 }

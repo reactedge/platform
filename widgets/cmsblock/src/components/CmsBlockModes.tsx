@@ -1,9 +1,9 @@
 import {useState} from 'react';
 import {CmsBlockEditor} from './CmsBlockEditor.tsx';
 import {CmsBlockSourcePreview} from './CmsBlockSourcePreview.tsx';
-import {CmsBlockRenderedPreview} from './CmsBlockRenderedPreview.tsx';
+import {CmsBlockPublishedContent} from './CmsBlockPublishedContent.tsx';
 import {CmsBlockRevisionEditor} from './CmsBlockRevisionEditor.tsx';
-import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
+import type {CmsBlockController} from '../hooks/domain/useCmsBlockController.ts';
 
 type Props = {controller: CmsBlockController};
 
@@ -90,7 +90,11 @@ export const CmsBlockViewMode = ({controller}: Props) => {
     return (
         <>
             <h2>Published revision {published.revision}</h2>
-            <CmsBlockRenderedPreview title="Published CMSBlock" revision={published} />
+            <CmsBlockPublishedContent
+                revision={published}
+                templateId={controller.record?.templateId ?? "editorial"}
+                layoutId={published.layoutId ?? controller.record?.layoutId ?? "image-above"}
+            />
         </>
     );
 };
