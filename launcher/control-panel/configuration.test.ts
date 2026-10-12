@@ -3,7 +3,7 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
-import { allowedHostDetails, applyConfiguration, listEnvironments, previewConfiguration, readConfiguration, readConfigurationTemplate, retainAdvancedSsrSettings } from './configuration.ts';
+import { allowedHostDetails, applyConfiguration, listEnvironments, previewConfiguration, readConfiguration, readConfigurationTemplate, repositoryRoot, retainAdvancedSsrSettings } from './configuration.ts';
 
 function writeWorkspaceSample(root: string) {
     mkdirSync(join(root, 'workspace.sample/default/contracts'), { recursive: true });
@@ -205,7 +205,7 @@ test('fresh clones have no environments and create a store from the sample layou
     }
 });
 
-test('seller listing settings write only the createlisting seller runtime context', () => {
+test('seller listing settings write only the createlisting seller runtime identity and context', () => {
     const root = mkdtempSync(join(tmpdir(), 'reactedge-config-'));
     const targetParent = mkdtempSync(join(tmpdir(), 'reactedge-target-'));
     try {
@@ -231,7 +231,9 @@ test('seller listing settings write only the createlisting seller runtime contex
         );
 
         assert.equal(listingRuntime.context.sellerId, 'seller-123');
+        assert.deepEqual(listingRuntime.identity, { userId: 'seller-123', access: ['seller'] });
         assert.equal(uspRuntime.context.sellerId, undefined);
+        assert.equal(uspRuntime.identity, undefined);
 
         const env = readFileSync(join(root, '.env.seller'), 'utf8');
         assert.match(env, /SELLER_LISTING_ENABLED='1'/);
@@ -244,6 +246,86 @@ test('seller listing settings write only the createlisting seller runtime contex
         assert.throws(
             () => previewConfiguration(root, { ...config, defaultSellerId: '' }),
             /Default Seller ID/
+        );
+
+        applyConfiguration(root, { ...config, storeCode: 'seller-production', environment: 'production' });
+        const productionRuntime = JSON.parse(
+            readFileSync(join(root, 'widgets/createlisting/public/reactedge-runtime.json'), 'utf8')
+        );
+        assert.equal(productionRuntime.identity, undefined);
+    } finally {
+        rmSync(root, { recursive: true, force: true });
+        rmSync(targetParent, { recursive: true, force: true });
+    }
+});
+
+
+test('configure UI makes the CMSBlock API URL conditional on the capability', () => {
+    const html = readFileSync(join(repositoryRoot, 'launcher/control-panel/index.html'), 'utf8');
+    assert.ok(html.includes('<input type="checkbox" name="cmsblockEnabled">CMSBlock</label>'));
+    assert.ok(html.includes('<div class="dependent" data-for="cmsblockEnabled">'));
+    assert.ok(html.includes('<input name="cmsblockApiBaseUrl" type="url">'));
+});
+
+test('disabled CMSBlock does not validate or emit its API integration', () => {
+    const root = mkdtempSync(join(tmpdir(), 'reactedge-config-'));
+    const targetParent = mkdtempSync(join(tmpdir(), 'reactedge-target-'));
+    try {
+        writeWorkspaceSample(root);
+        mkdirSync(join(root, 'widgets/cmsblock/public'), { recursive: true });
+        const config = {
+            ...readConfiguration(root, 'cmsblock-off'),
+            targetRoot: join(targetParent, 'site'),
+            cmsblockEnabled: false,
+            cmsblockApiBaseUrl: '',
+        };
+        applyConfiguration(root, config);
+        const runtime = JSON.parse(readFileSync(join(root, 'widgets/cmsblock/public/reactedge-runtime.json'), 'utf8'));
+        assert.equal(runtime.integrations.cmsblockApi, undefined);
+        const env = readFileSync(join(root, '.env.cmsblock-off'), 'utf8');
+        assert.match(env, /CMSBLOCK_ENABLED='0'/);
+        assert.match(env, /CMSBLOCK_API_BASE_URL=''/);
+        assert.equal(readConfiguration(root, 'cmsblock-off').cmsblockEnabled, false);
+        assert.throws(() => previewConfiguration(root, { ...config, cmsblockEnabled: true }), /CMSBlock API URL is required/);
+    } finally {
+        rmSync(root, { recursive: true, force: true });
+        rmSync(targetParent, { recursive: true, force: true });
+    }
+});
+
+test('CMSBlock API URL is saved and emitted with the runtime api key', () => {
+    const root = mkdtempSync(join(tmpdir(), 'reactedge-config-'));
+    const targetParent = mkdtempSync(join(tmpdir(), 'reactedge-target-'));
+    try {
+        writeWorkspaceSample(root);
+        mkdirSync(join(root, 'widgets/cmsblock/public'), { recursive: true });
+        const cmsblockApiBaseUrl = 'http://127.0.0.1:4190///';
+        const config = {
+            ...readConfiguration(root, 'cmsblock'),
+            targetRoot: join(targetParent, 'site'),
+            cmsblockEnabled: true,
+            cmsblockApiBaseUrl,
+        };
+
+        const preview = previewConfiguration(root, config);
+        assert.ok(preview.changed.includes('widgets/cmsblock/public/reactedge-runtime.json'));
+        applyConfiguration(root, config);
+
+        const runtime = JSON.parse(
+            readFileSync(join(root, 'widgets/cmsblock/public/reactedge-runtime.json'), 'utf8')
+        );
+        assert.deepEqual(runtime.integrations.cmsblockApi, {
+            api: 'http://127.0.0.1:4190',
+        });
+
+        const env = readFileSync(join(root, '.env.cmsblock'), 'utf8');
+        assert.ok(env.includes("CMSBLOCK_ENABLED='1'"));
+        assert.ok(env.includes("CMSBLOCK_API_BASE_URL='http://127.0.0.1:4190///'"));
+        assert.equal(readConfiguration(root, 'cmsblock').cmsblockEnabled, true);
+        assert.equal(readConfiguration(root, 'cmsblock').cmsblockApiBaseUrl, cmsblockApiBaseUrl);
+        assert.throws(
+            () => previewConfiguration(root, { ...config, cmsblockApiBaseUrl: 'not-a-url' }),
+            error => error instanceof Error && error.message.includes('CMSBlock API URL')
         );
     } finally {
         rmSync(root, { recursive: true, force: true });

@@ -123,6 +123,20 @@ echo
 echo "External Services"
 echo "-----------------"
 echo "Only configure the services required by the widgets you intend to use."
+prompt \
+    "Enable CMSBlock (0 or 1)" \
+    CMSBLOCK_ENABLED \
+    "0"
+
+if [[ "$CMSBLOCK_ENABLED" == "1" ]]; then
+    prompt \
+        "CMSBlock API base URL" \
+        CMSBLOCK_API_BASE_URL \
+        "http://127.0.0.1:4191"
+else
+    CMSBLOCK_API_BASE_URL=""
+fi
+
 
 REACTEDGE_ROOT="$(dirname "$TARGET_ROOT")/reactedge"
 
@@ -295,18 +309,36 @@ for dir in "$ROOT"/widgets/*; do
             SELLER_CONTEXT_CONFIG=',\n    "sellerId": "'"$DEFAULT_SELLER_ID"'"'
         fi
 
+        SELLER_IDENTITY_CONFIG=""
+        if [[ "$SELLER_LISTING_ENABLED" == "1" && "$REACTEDGE_ENV" == "development" && "$WIDGET_NAME" == "createlisting" ]]; then
+            SELLER_IDENTITY_CONFIG="
+  ,
+  \"identity\": {
+    \"userId\": \"$DEFAULT_SELLER_ID\",
+    \"access\": [\"seller\"]
+  }"
+        fi
+
+        CMSBLOCK_API_CONFIG=""
+        if [[ "$CMSBLOCK_ENABLED" == "1" && "$WIDGET_NAME" == "cmsblock" ]]; then
+            CMSBLOCK_API_CONFIG="
+    ,\"cmsblockApi\": {
+      \"api\": \"${CMSBLOCK_API_BASE_URL%/}\"
+    }"
+        fi
+
         cat > "$dir/public/reactedge-runtime.json" <<EOF
 {
   "integrations": {
     "magentoGraphql": {
       "api": "$SITEURL/graphql"
-    }$INTENT_API_CONFIG$GOOGLE_API_CONFIG$CLOUDFLARE_TURNSTILE_CONFIG
+    }$CMSBLOCK_API_CONFIG$INTENT_API_CONFIG$GOOGLE_API_CONFIG$CLOUDFLARE_TURNSTILE_CONFIG
   },
   "context": {
     "storeCode": "$STORE_CODE",
     "sku": "$SKU",
     "category": "$CATEGORY"$SELLER_CONTEXT_CONFIG
-  }
+  }$SELLER_IDENTITY_CONFIG
 }
 EOF
     fi
@@ -352,6 +384,8 @@ SSR_BASE_URL="${SSR_BASE_URL:-}"
 SKU=$SKU
 CATEGORY=$CATEGORY
 INTENT_DISCOVERY_ENABLED=$INTENT_DISCOVERY_ENABLED
+CMSBLOCK_ENABLED=$CMSBLOCK_ENABLED
+CMSBLOCK_API_BASE_URL="$CMSBLOCK_API_BASE_URL"
 SELLER_LISTING_ENABLED=$SELLER_LISTING_ENABLED
 DEFAULT_SELLER_ID="${DEFAULT_SELLER_ID:-}"
 CLOUDFLARE_TURNSTILE_ENABLED=$CLOUDFLARE_TURNSTILE_ENABLED
