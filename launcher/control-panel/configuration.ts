@@ -13,6 +13,7 @@ const defaults = {
     observabilityEnabled: false,
     otelHost: 'https://otel.reactedge.net/v1/traces',
     intentDiscoveryEnabled: false,
+    cmsblockEnabled: false,
     cmsblockApiBaseUrl: 'http://127.0.0.1:4191',
     sellerListingEnabled: false,
     defaultSellerId: 'default-seller',
@@ -83,6 +84,7 @@ export function readConfiguration(root: string, storeCode: string, includeStoreE
         observabilityEnabled: enabled('OBSERVABILITY_ENABLED', Boolean(env.OTEL_HOST)),
         otelHost: env.OTEL_HOST || defaults.otelHost,
         intentDiscoveryEnabled: enabled('INTENT_DISCOVERY_ENABLED', false),
+        cmsblockEnabled: enabled('CMSBLOCK_ENABLED', false),
         cmsblockApiBaseUrl: env.CMSBLOCK_API_BASE_URL || defaults.cmsblockApiBaseUrl,
         sellerListingEnabled: enabled('SELLER_LISTING_ENABLED', false),
         defaultSellerId: env.DEFAULT_SELLER_ID || defaults.defaultSellerId,
@@ -144,7 +146,11 @@ export function validateConfiguration(input: unknown): Configuration {
             throw new Error(`Additional host "${host}" must be a hostname without a scheme, port or path.`);
         }
     }
+    if (config.cmsblockEnabled && !config.cmsblockApiBaseUrl.trim()) {
+        throw new Error('CMSBlock API URL is required when CMSBlock is enabled.');
+    }
     for (const [name, value] of [['Site URL', config.siteUrl], ['CMSBlock API URL', config.cmsblockApiBaseUrl], ['OpenTelemetry URL', config.otelHost]]) {
+        if (name === 'CMSBlock API URL' && !config.cmsblockEnabled) continue;
         if (name === 'OpenTelemetry URL' && !config.observabilityEnabled) continue;
         try {
             const url = new URL(value);
@@ -188,7 +194,7 @@ export function planConfiguration(root: string, input: unknown) {
     if (c.turnstileEnabled) integrations.cloudflare = { siteKey: c.turnstileSiteKey };
     const baseContext = { storeCode: c.storeCode, ...(c.hasCatalog ? { sku: c.sku, category: c.category } : {}) };
     const runtimeFor = (widgetName: string) => JSON.stringify({
-        integrations: widgetName === 'cmsblock'
+        integrations: c.cmsblockEnabled && widgetName === 'cmsblock'
             ? { ...integrations, cmsblockApi: { api: c.cmsblockApiBaseUrl.replace(/\/+$/, '') } }
             : integrations,
         context: {
@@ -207,7 +213,8 @@ export function planConfiguration(root: string, input: unknown) {
         ...(c.hasCatalog ? { SKU: c.sku, CATEGORY: c.category } : {}),
         OBSERVABILITY_ENABLED: bool(c.observabilityEnabled),
         INTENT_DISCOVERY_ENABLED: bool(c.intentDiscoveryEnabled),
-        CMSBLOCK_API_BASE_URL: c.cmsblockApiBaseUrl,
+        CMSBLOCK_ENABLED: bool(c.cmsblockEnabled),
+        CMSBLOCK_API_BASE_URL: c.cmsblockEnabled ? c.cmsblockApiBaseUrl : '',
         SELLER_LISTING_ENABLED: bool(c.sellerListingEnabled),
         DEFAULT_SELLER_ID: c.sellerListingEnabled ? c.defaultSellerId : '',
         CLOUDFLARE_TURNSTILE_ENABLED: bool(c.turnstileEnabled),

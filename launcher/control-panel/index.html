@@ -37,8 +37,11 @@
       <label class="inline"><input type="checkbox" name="observabilityEnabled">Observability</label>
       <div class="dependent" data-for="observabilityEnabled"><label><span>OpenTelemetry collector URL</span><input name="otelHost" type="url"></label></div>
       <label class="inline"><input type="checkbox" name="intentDiscoveryEnabled">Intent Discovery</label>
-      <label><span>CMSBlock API base URL</span><input name="cmsblockApiBaseUrl" type="url" required></label>
-      <small>Base URL for the CMSBlock authoring service (default port 4191).</small>
+      <label class="inline"><input type="checkbox" name="cmsblockEnabled">CMSBlock</label>
+      <div class="dependent" data-for="cmsblockEnabled">
+        <label><span>CMSBlock API base URL</span><input name="cmsblockApiBaseUrl" type="url"></label>
+        <small>Base URL for the CMSBlock authoring service (default port 4191).</small>
+      </div>
       <label class="inline"><input type="checkbox" name="sellerListingEnabled">Seller Listing</label>
       <div class="dependent" data-for="sellerListingEnabled">
         <label><span>Default Seller ID</span><input name="defaultSellerId"></label>

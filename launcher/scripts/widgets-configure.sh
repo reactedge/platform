@@ -124,9 +124,18 @@ echo "External Services"
 echo "-----------------"
 echo "Only configure the services required by the widgets you intend to use."
 prompt \
-    "CMSBlock API base URL" \
-    CMSBLOCK_API_BASE_URL \
-    "http://127.0.0.1:4191"
+    "Enable CMSBlock (0 or 1)" \
+    CMSBLOCK_ENABLED \
+    "0"
+
+if [[ "$CMSBLOCK_ENABLED" == "1" ]]; then
+    prompt \
+        "CMSBlock API base URL" \
+        CMSBLOCK_API_BASE_URL \
+        "http://127.0.0.1:4191"
+else
+    CMSBLOCK_API_BASE_URL=""
+fi
 
 
 REACTEDGE_ROOT="$(dirname "$TARGET_ROOT")/reactedge"
@@ -301,7 +310,7 @@ for dir in "$ROOT"/widgets/*; do
         fi
 
         CMSBLOCK_API_CONFIG=""
-        if [[ "$WIDGET_NAME" == "cmsblock" ]]; then
+        if [[ "$CMSBLOCK_ENABLED" == "1" && "$WIDGET_NAME" == "cmsblock" ]]; then
             CMSBLOCK_API_CONFIG="
     ,\"cmsblockApi\": {
       \"api\": \"${CMSBLOCK_API_BASE_URL%/}\"
@@ -365,6 +374,7 @@ SSR_BASE_URL="${SSR_BASE_URL:-}"
 SKU=$SKU
 CATEGORY=$CATEGORY
 INTENT_DISCOVERY_ENABLED=$INTENT_DISCOVERY_ENABLED
+CMSBLOCK_ENABLED=$CMSBLOCK_ENABLED
 CMSBLOCK_API_BASE_URL="$CMSBLOCK_API_BASE_URL"
 SELLER_LISTING_ENABLED=$SELLER_LISTING_ENABLED
 DEFAULT_SELLER_ID="${DEFAULT_SELLER_ID:-}"
