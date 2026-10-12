@@ -123,6 +123,11 @@ echo
 echo "External Services"
 echo "-----------------"
 echo "Only configure the services required by the widgets you intend to use."
+prompt \
+    "CMSBlock API base URL" \
+    CMSBLOCK_API_BASE_URL \
+    "http://127.0.0.1:4191"
+
 
 REACTEDGE_ROOT="$(dirname "$TARGET_ROOT")/reactedge"
 
@@ -295,12 +300,20 @@ for dir in "$ROOT"/widgets/*; do
             SELLER_CONTEXT_CONFIG=',\n    "sellerId": "'"$DEFAULT_SELLER_ID"'"'
         fi
 
+        CMSBLOCK_API_CONFIG=""
+        if [[ "$WIDGET_NAME" == "cmsblock" ]]; then
+            CMSBLOCK_API_CONFIG="
+    ,\"cmsblockApi\": {
+      \"api\": \"${CMSBLOCK_API_BASE_URL%/}\"
+    }"
+        fi
+
         cat > "$dir/public/reactedge-runtime.json" <<EOF
 {
   "integrations": {
     "magentoGraphql": {
       "api": "$SITEURL/graphql"
-    }$INTENT_API_CONFIG$GOOGLE_API_CONFIG$CLOUDFLARE_TURNSTILE_CONFIG
+    }$CMSBLOCK_API_CONFIG$INTENT_API_CONFIG$GOOGLE_API_CONFIG$CLOUDFLARE_TURNSTILE_CONFIG
   },
   "context": {
     "storeCode": "$STORE_CODE",
@@ -352,6 +365,7 @@ SSR_BASE_URL="${SSR_BASE_URL:-}"
 SKU=$SKU
 CATEGORY=$CATEGORY
 INTENT_DISCOVERY_ENABLED=$INTENT_DISCOVERY_ENABLED
+CMSBLOCK_API_BASE_URL="$CMSBLOCK_API_BASE_URL"
 SELLER_LISTING_ENABLED=$SELLER_LISTING_ENABLED
 DEFAULT_SELLER_ID="${DEFAULT_SELLER_ID:-}"
 CLOUDFLARE_TURNSTILE_ENABLED=$CLOUDFLARE_TURNSTILE_ENABLED
