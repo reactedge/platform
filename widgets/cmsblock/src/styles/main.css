@@ -256,3 +256,135 @@
 .cmsblock-editor__revision-code label { display:flex; flex-direction:column; gap:8px; font-weight:600; }
 .cmsblock-editor__revision-code textarea { box-sizing:border-box; width:100%; min-width:0; padding:12px; border:1px solid #94a3b8; border-radius:8px; font-family:ui-monospace,monospace; }
 @media(max-width:700px){.cmsblock-editor__revision-code{grid-template-columns:1fr;}}
+
+
+/* Published content uses widget-owned themes; the service supplies markup only. */
+.cmsblock-published {
+    box-sizing: border-box;
+    width: 100%;
+    padding: clamp(1rem, 4vw, 2.5rem);
+    overflow: hidden;
+}
+.cmsblock-published :where(img, video) {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Keep published HTML readable when the host page resets semantic elements. */
+.cmsblock-published :where(h1, h2, h3) {
+    margin-block: 0 0.75em;
+    font-weight: 700;
+}
+.cmsblock-published :where(h1) { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+.cmsblock-published :where(h2) { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
+.cmsblock-published :where(h3) { font-size: 1.2rem; }
+.cmsblock-published :where(p) { margin-block: 0 1rem; }
+.cmsblock-published :where(ul, ol) {
+    margin-block: 0 1rem;
+    padding-inline-start: 1.5rem;
+}
+.cmsblock-published :where(ul) { list-style: disc; }
+.cmsblock-published :where(ol) { list-style: decimal; }
+.cmsblock-published :where(li + li) { margin-block-start: 0.35rem; }
+
+.cmsblock-theme--editorial {
+    color: #2d4440;
+    background: #f7f4ef;
+    font-family: Georgia, "Times New Roman", serif;
+}
+.cmsblock-theme--editorial :where(h1, h2, h3) { font-weight: 500; line-height: 1.12; }
+.cmsblock-theme--editorial p { line-height: 1.7; }
+.cmsblock-theme--feature {
+    color: #214953;
+    background: #f0f8f8;
+    font-family: system-ui, sans-serif;
+}
+.cmsblock-theme--feature :where(h1, h2, h3) { line-height: 1.15; letter-spacing: -0.02em; }
+.cmsblock-theme--feature p { line-height: 1.6; }
+.cmsblock-theme--promotion {
+    color: #fff;
+    background: #1d2c39;
+    font-family: system-ui, sans-serif;
+}
+.cmsblock-theme--promotion :where(h1, h2, h3) {
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    line-height: 1.1;
+}
+.cmsblock-theme--promotion :where(a, button) {
+    display: inline-block;
+    padding: 0.65rem 1rem;
+    color: #1d2c39;
+    background: #f2b65c;
+    border-radius: 0.3rem;
+    text-decoration: none;
+}
+.cmsblock-content,
+.cmsblock-content.cmsblock-layout--image-above,
+.cmsblock-layout--image-above .cmsblock-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: center;
+}
+.cmsblock-published :where(.cmsblock-content > .cmsblock-copy) { min-width: 0; }
+.cmsblock-published :where(.cmsblock-content > .cmsblock-media) {
+    min-width: 0;
+    margin: 0;
+}
+.cmsblock-published :where(.cmsblock-media img, .cmsblock-copy img) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+.cmsblock-layout--image-above .cmsblock-content > .cmsblock-media,
+.cmsblock-content.cmsblock-layout--image-above > .cmsblock-media {
+    grid-row: 1;
+}
+.cmsblock-layout--image-above .cmsblock-content > .cmsblock-copy,
+.cmsblock-content.cmsblock-layout--image-above > .cmsblock-copy {
+    grid-row: 2;
+}
+.cmsblock-layout--image-left .cmsblock-content,
+.cmsblock-content.cmsblock-layout--image-left,
+.cmsblock-layout--image-right .cmsblock-content,
+.cmsblock-content.cmsblock-layout--image-right {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+}
+.cmsblock-layout--image-left .cmsblock-content > .cmsblock-media,
+.cmsblock-content.cmsblock-layout--image-left > .cmsblock-media {
+    grid-column: 1;
+    grid-row: 1;
+}
+.cmsblock-layout--image-left .cmsblock-content > .cmsblock-copy,
+.cmsblock-content.cmsblock-layout--image-left > .cmsblock-copy {
+    grid-column: 2;
+    grid-row: 1;
+}
+.cmsblock-layout--image-right .cmsblock-content > .cmsblock-copy,
+.cmsblock-content.cmsblock-layout--image-right > .cmsblock-copy {
+    grid-column: 1;
+    grid-row: 1;
+}
+.cmsblock-layout--image-right .cmsblock-content > .cmsblock-media,
+.cmsblock-content.cmsblock-layout--image-right > .cmsblock-media {
+    grid-column: 2;
+    grid-row: 1;
+}
+@media (max-width: 700px) {
+    .cmsblock-layout--image-left .cmsblock-content,
+    .cmsblock-content.cmsblock-layout--image-left,
+    .cmsblock-layout--image-right .cmsblock-content,
+    .cmsblock-content.cmsblock-layout--image-right {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .cmsblock-layout--image-left .cmsblock-content > :where(.cmsblock-copy, .cmsblock-media),
+    .cmsblock-content.cmsblock-layout--image-left > :where(.cmsblock-copy, .cmsblock-media),
+    .cmsblock-layout--image-right .cmsblock-content > :where(.cmsblock-copy, .cmsblock-media),
+    .cmsblock-content.cmsblock-layout--image-right > :where(.cmsblock-copy, .cmsblock-media) {
+        grid-column: 1;
+        grid-row: auto;
+    }
+}

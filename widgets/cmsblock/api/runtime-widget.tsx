@@ -1,15 +1,18 @@
 import "../src/styles/widget.css";
-import {WIDGET_ID} from "../src/Config.ts";
+import { WIDGET_ID } from "../src/Config.ts";
+
+import type { WidgetApi } from "@reactedge/public-api/widget";
+import type {ReactEdgeRuntimeConfig} from "@reactedge/public-api/runtime.ts";
+
 import {ElementHostProvider} from "@reactedge/framework/host.ts";
-import type {WidgetApi} from "@reactedge/public-api/widget.ts";
 import {createRoot} from "react-dom/client";
 import {WidgetRoot} from "../src/bootstrap/widget-root.tsx";
-
 
 const mount = (
     el: HTMLElement,
     contract: unknown,
-    bootstrap: unknown
+    bootstrap: unknown,
+    runtime: ReactEdgeRuntimeConfig
 ) => {
     const hostProvider = new ElementHostProvider(WIDGET_ID)
 
@@ -18,6 +21,7 @@ const mount = (
             hostElement={el}
             contract={contract}
             bootstrap={bootstrap}
+            runtime={runtime}
         />
     )
 };

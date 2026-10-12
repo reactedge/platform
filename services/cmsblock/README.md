@@ -15,7 +15,7 @@ npm --prefix services/cmsblock ci
 npm --prefix services/cmsblock start
 ```
 
-Default HTTP address: `http://127.0.0.1:4190`.
+Default HTTP address: `http://127.0.0.1:4191`.
 
 For local development, start the CMSBlock widget separately:
 
@@ -23,7 +23,7 @@ For local development, start the CMSBlock widget separately:
 npm --prefix widgets/cmsblock dev
 ```
 
-The widget uses `http://127.0.0.1:4190/cmsblock/blocks/demo` by default.
+The widget uses `http://127.0.0.1:4191/cmsblock/blocks/demo` by default.
 Set `VITE_CMSBLOCK_URL` to override the service origin.
 
 ## API
@@ -54,7 +54,7 @@ mise run complexity -- cmsblock
 ```
 
 Run these checks locally when changing the service. To verify startup, call
-`curl --fail http://127.0.0.1:4190/cmsblock/status` after starting it.
+`curl --fail http://127.0.0.1:4191/cmsblock/status` after starting it.
 
 ## Limitations
 
@@ -63,10 +63,11 @@ authorization or rate limiting. It listens on loopback by default; CORS is
 not an authentication mechanism. The deterministic generator converts
 supplied HTML to escaped text and retains up to three HTTPS image URLs;
 it does not preserve arbitrary HTML or interpret style reference images.
-The widget uses sandboxed iframe previews. Published output will require
-separate security review and sanitisation before it can be served directly
-as SSR markup. Telemetry exporter delivery is not covered by the current
-HTTP lifecycle test.
+Draft and review previews remain sandboxed in an iframe. Approved content is
+rendered inline in view mode and SSR. Current HTML/CSS validation is an
+initial guard, not a complete sanitizer, so keep this unauthenticated API
+private. Telemetry exporter delivery is not covered by the current HTTP
+lifecycle test.
 
 ## AI-assisted generation (opt in)
 

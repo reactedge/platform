@@ -1,6 +1,6 @@
 import {CMS_BLOCK_LAYOUTS} from '../Model/CmsBlockLayout.ts';
 import {CMS_BLOCK_LAYOUT_IMAGES} from '../Model/CmsBlockLayoutImages.ts';
-import type {CmsBlockController} from '../controller/useCmsBlockController.ts';
+import type {CmsBlockController} from '../hooks/domain/useCmsBlockController.ts';
 
 type Props = {controller: CmsBlockController};
 

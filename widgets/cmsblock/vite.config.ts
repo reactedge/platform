@@ -38,7 +38,7 @@ export default defineConfig({
   build: createWidgetBuildDefaults({
     widgetName,
     version: pkg.version,
-    entry: resolve(widgetDir, "api/widget.tsx"),
+    entry: resolve(widgetDir, "api/runtime-widget.tsx"),
     outDir: resolve(
         widgetDir,
         `../../workspace/release/source/${widgetName}`

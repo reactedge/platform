@@ -9,5 +9,10 @@
   },
   "settings": {
     "colour": "#1f2937"
+  },
+  "integration": {
+    "requires": [
+      "cmsblockApi"
+    ]
   }
 }

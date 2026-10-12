@@ -58,6 +58,13 @@ export class CmsBlockStore {
         return this.revisions.approve();
     }
 
+    async published(): Promise<CmsBlockRevision | null> {
+        const record = await this.persistence.get();
+        const revision = record?.published ?? null;
+
+        return revision?.status === 'approved' ? revision : null;
+    }
+
     reject(): Promise<CmsBlockRecord> {
         return this.revisions.reject();
     }
