@@ -203,6 +203,9 @@ export function planConfiguration(root: string, input: unknown) {
                 ? { sellerId: c.defaultSellerId }
                 : {}),
         },
+        ...(c.sellerListingEnabled && c.environment === 'development' && widgetName === 'createlisting'
+            ? { identity: { userId: c.defaultSellerId, access: ['seller'] } }
+            : {}),
     }, null, 2) + '\n';
     const bool = (value: boolean) => value ? '1' : '0';
     const files = new Map<string, string>();

@@ -205,7 +205,7 @@ test('fresh clones have no environments and create a store from the sample layou
     }
 });
 
-test('seller listing settings write only the createlisting seller runtime context', () => {
+test('seller listing settings write only the createlisting seller runtime identity and context', () => {
     const root = mkdtempSync(join(tmpdir(), 'reactedge-config-'));
     const targetParent = mkdtempSync(join(tmpdir(), 'reactedge-target-'));
     try {
@@ -231,7 +231,9 @@ test('seller listing settings write only the createlisting seller runtime contex
         );
 
         assert.equal(listingRuntime.context.sellerId, 'seller-123');
+        assert.deepEqual(listingRuntime.identity, { userId: 'seller-123', access: ['seller'] });
         assert.equal(uspRuntime.context.sellerId, undefined);
+        assert.equal(uspRuntime.identity, undefined);
 
         const env = readFileSync(join(root, '.env.seller'), 'utf8');
         assert.match(env, /SELLER_LISTING_ENABLED='1'/);
@@ -245,6 +247,12 @@ test('seller listing settings write only the createlisting seller runtime contex
             () => previewConfiguration(root, { ...config, defaultSellerId: '' }),
             /Default Seller ID/
         );
+
+        applyConfiguration(root, { ...config, storeCode: 'seller-production', environment: 'production' });
+        const productionRuntime = JSON.parse(
+            readFileSync(join(root, 'widgets/createlisting/public/reactedge-runtime.json'), 'utf8')
+        );
+        assert.equal(productionRuntime.identity, undefined);
     } finally {
         rmSync(root, { recursive: true, force: true });
         rmSync(targetParent, { recursive: true, force: true });

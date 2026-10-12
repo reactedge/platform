@@ -309,6 +309,16 @@ for dir in "$ROOT"/widgets/*; do
             SELLER_CONTEXT_CONFIG=',\n    "sellerId": "'"$DEFAULT_SELLER_ID"'"'
         fi
 
+        SELLER_IDENTITY_CONFIG=""
+        if [[ "$SELLER_LISTING_ENABLED" == "1" && "$REACTEDGE_ENV" == "development" && "$WIDGET_NAME" == "createlisting" ]]; then
+            SELLER_IDENTITY_CONFIG="
+  ,
+  \"identity\": {
+    \"userId\": \"$DEFAULT_SELLER_ID\",
+    \"access\": [\"seller\"]
+  }"
+        fi
+
         CMSBLOCK_API_CONFIG=""
         if [[ "$CMSBLOCK_ENABLED" == "1" && "$WIDGET_NAME" == "cmsblock" ]]; then
             CMSBLOCK_API_CONFIG="
@@ -328,7 +338,7 @@ for dir in "$ROOT"/widgets/*; do
     "storeCode": "$STORE_CODE",
     "sku": "$SKU",
     "category": "$CATEGORY"$SELLER_CONTEXT_CONFIG
-  }
+  }$SELLER_IDENTITY_CONFIG
 }
 EOF
     fi
