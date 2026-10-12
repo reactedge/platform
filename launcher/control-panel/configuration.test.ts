@@ -3,7 +3,7 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
-import { allowedHostDetails, applyConfiguration, listEnvironments, previewConfiguration, readConfiguration, readConfigurationTemplate, retainAdvancedSsrSettings } from './configuration.ts';
+import { allowedHostDetails, applyConfiguration, listEnvironments, previewConfiguration, readConfiguration, readConfigurationTemplate, repositoryRoot, retainAdvancedSsrSettings } from './configuration.ts';
 
 function writeWorkspaceSample(root: string) {
     mkdirSync(join(root, 'workspace.sample/default/contracts'), { recursive: true });
@@ -244,6 +244,49 @@ test('seller listing settings write only the createlisting seller runtime contex
         assert.throws(
             () => previewConfiguration(root, { ...config, defaultSellerId: '' }),
             /Default Seller ID/
+        );
+    } finally {
+        rmSync(root, { recursive: true, force: true });
+        rmSync(targetParent, { recursive: true, force: true });
+    }
+});
+
+
+test('configure UI exposes a required CMSBlock API URL input', () => {
+    const html = readFileSync(join(repositoryRoot, 'launcher/control-panel/index.html'), 'utf8');
+    assert.ok(html.includes('<input name="cmsblockApiBaseUrl" type="url" required>'));
+});
+
+test('CMSBlock API URL is saved and emitted with the runtime api key', () => {
+    const root = mkdtempSync(join(tmpdir(), 'reactedge-config-'));
+    const targetParent = mkdtempSync(join(tmpdir(), 'reactedge-target-'));
+    try {
+        writeWorkspaceSample(root);
+        mkdirSync(join(root, 'widgets/cmsblock/public'), { recursive: true });
+        const cmsblockApiBaseUrl = 'http://127.0.0.1:4190///';
+        const config = {
+            ...readConfiguration(root, 'cmsblock'),
+            targetRoot: join(targetParent, 'site'),
+            cmsblockApiBaseUrl,
+        };
+
+        const preview = previewConfiguration(root, config);
+        assert.ok(preview.changed.includes('widgets/cmsblock/public/reactedge-runtime.json'));
+        applyConfiguration(root, config);
+
+        const runtime = JSON.parse(
+            readFileSync(join(root, 'widgets/cmsblock/public/reactedge-runtime.json'), 'utf8')
+        );
+        assert.deepEqual(runtime.integrations.cmsblockApi, {
+            api: 'http://127.0.0.1:4190',
+        });
+
+        const env = readFileSync(join(root, '.env.cmsblock'), 'utf8');
+        assert.ok(env.includes("CMSBLOCK_API_BASE_URL='http://127.0.0.1:4190///'"));
+        assert.equal(readConfiguration(root, 'cmsblock').cmsblockApiBaseUrl, cmsblockApiBaseUrl);
+        assert.throws(
+            () => previewConfiguration(root, { ...config, cmsblockApiBaseUrl: 'not-a-url' }),
+            error => error instanceof Error && error.message.includes('CMSBlock API URL')
         );
     } finally {
         rmSync(root, { recursive: true, force: true });
