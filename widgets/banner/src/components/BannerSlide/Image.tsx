@@ -7,8 +7,14 @@ type Props = {
     className?: string;
 };
 
-export const Image = (props: Props) => {
-    const {src, srcSet, sizes, alt, objectPosition, className} = props;
+export const Image = ({
+      src,
+      srcSet,
+      sizes,
+      alt,
+      objectPosition,
+      className
+  }: Props) => {
     return (
         <div
             className="re-zoom-container"

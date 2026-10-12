@@ -1,35 +1,69 @@
 import type {IntentEngineState, IntentEvent} from "../../integration/intent/types.ts";
 
-function reduceInterpretationEvent(state: IntentEngineState, event: IntentEvent): IntentEngineState | undefined {
+export function intentReducer(
+    state: IntentEngineState,
+    event: IntentEvent
+): IntentEngineState {
     switch (event.type) {
         case "INTERPRETATION_STARTED":
-            return {...state, intentInterpretationReady: false, status: "idle"};
+            return {
+                ...state,
+                intentInterpretationReady: false,
+                status: "idle"
+            };
+
         case "INTERPRETATION_READY":
-            return {...state, intentInterpretationReady: true, status: "canBeInterpreted"};
+            return {
+                ...state,
+                intentInterpretationReady: true,
+                status: "canBeInterpreted"
+            };
+
         case "INTERPRETATION_PROCESSING":
-            return {...state, intentInterpreted: true, status: "suggestionProcessing"};
+            return {
+                ...state,
+                intentInterpreted: true,
+                status: "suggestionProcessing"
+            };
+
         case "INTERPRETATION_DONE":
-            return {...state, intentInterpreted: true, status: "readyToRecommend"};
+            return {
+                ...state,
+                intentInterpreted: true,
+                status: "readyToRecommend"
+            };
+
         case "FILTER_CHANGED":
-            return {...state, status: "filterChanged"};
+            return {
+                ...state,
+                status: "filterChanged"
+            };
+
         case "FILTER_RESET":
-            return {...state, status: "filterReset"};
-        default:
-            return undefined;
-    }
-}
+            return {
+                ...state,
+                status: "filterReset"
+            };
 
-export function intentReducer(state: IntentEngineState, event: IntentEvent): IntentEngineState {
-    const interpretation = reduceInterpretationEvent(state, event);
-    if (interpretation) return interpretation;
-
-    switch (event.type) {
         case "SUGGEST_CLICKED":
-            return state.resultCount === 0 ? state : {...state, status: "suggestionProcessing"};
+            if (state.resultCount === 0) return state;
+            return {
+                ...state,
+                status: "suggestionProcessing"
+            };
+
         case "SUGGESTION_SUCCESS":
-            return {...state, recommendations: event.recommendations, status: "suggestionSent"};
+            return {
+                ...state,
+                recommendations: event.recommendations,
+                status: "suggestionSent"
+            };
+
         case "SUGGESTION_PROPAGATE":
-            return {...state};
+            return {
+                ...state
+            };
+
         case "BOOTSTRAP_FROM_PERSISTED_INTENT":
             return {
                 ...state,
@@ -38,12 +72,23 @@ export function intentReducer(state: IntentEngineState, event: IntentEvent): Int
                 intentInterpreted: true,
                 intentInterpretationReady: true,
                 searchReady: true,
-                status: "readyToApplyFilters",
+                status: "readyToApplyFilters"
             };
+
         case "SEARCH_PROCESSING":
-            return {...state, status: "suggestionProcessing", recommendations: []};
+            return {
+                ...state,
+                status: "suggestionProcessing",
+                recommendations: []
+            };
+
         case "SUGGESTION_EMPTY":
-            return {...state, status: "noSuggestionFound", recommendations: []};
+            return {
+                ...state,
+                status: "noSuggestionFound",
+                recommendations: []
+            };
+
         default:
             return state;
     }
