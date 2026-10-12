@@ -189,7 +189,7 @@ export function planConfiguration(root: string, input: unknown) {
     const baseContext = { storeCode: c.storeCode, ...(c.hasCatalog ? { sku: c.sku, category: c.category } : {}) };
     const runtimeFor = (widgetName: string) => JSON.stringify({
         integrations: widgetName === 'cmsblock'
-            ? { ...integrations, cmsblockApi: { baseUrl: c.cmsblockApiBaseUrl.replace(/\/+$/, '') } }
+            ? { ...integrations, cmsblockApi: { api: c.cmsblockApiBaseUrl.replace(/\/+$/, '') } }
             : integrations,
         context: {
             ...baseContext,
