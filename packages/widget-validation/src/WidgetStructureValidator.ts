@@ -82,8 +82,8 @@ const sharedFiles = [
  *
  * A widget must contain exactly one API entrypoint matching its template.
  *
- * Runtime schemas are capability-owned contracts. Their presence is
- * validated, but their structure is intentionally allowed to differ
+ * Runtime schemas and runtime-shadow manifests are capability-owned
+ * contracts. Their presence is validated, but their contents may differ
  * between widgets according to their runtime dependencies.
  */
 const variantFiles = {
@@ -164,6 +164,9 @@ export class WidgetStructureValidator {
             widgetRoot,
             canonicalRoot,
             canonicalFiles,
+            variant === "runtime-shadow"
+                ? ["public/reactedge-runtime.json"]
+                : [],
         );
 
         return {
@@ -197,6 +200,7 @@ export class WidgetStructureValidator {
         widgetRoot: string,
         canonicalRoot: string,
         files: readonly string[],
+        skipContentComparison: readonly string[] = [],
     ) {
         const missing: string[] = [];
         const canonicalMissing: string[] = [];
@@ -213,6 +217,10 @@ export class WidgetStructureValidator {
 
             if (!existsSync(canonical)) {
                 canonicalMissing.push(file);
+                continue;
+            }
+
+            if (skipContentComparison.includes(file)) {
                 continue;
             }
 
