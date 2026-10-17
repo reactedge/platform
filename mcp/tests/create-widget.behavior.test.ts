@@ -192,6 +192,11 @@ for (const variant of ["standard", "runtime", "runtime-shadow"] as const) {
 
                 assert.equal(packageJson.name, `widget-${name}`);
                 if (variant === "runtime-shadow") {
+                    await assert.rejects(
+                        readFile(resolve(widgetRoot, "postcss.config.cjs")),
+                        { code: "ENOENT" },
+                    );
+
                     const runtimeManifest = JSON.parse(
                         await readFile(
                             resolve(widgetRoot, "public/reactedge-runtime.json"),
