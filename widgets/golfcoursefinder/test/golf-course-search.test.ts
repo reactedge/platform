@@ -39,3 +39,21 @@ test("search surfaces API errors and rejects malformed success payloads", async 
         /invalid response/i,
     );
 });
+
+test("search distinguishes timeouts from connection failures", async () => {
+    const timedOut = new GolfCourseSearchService("https://api.example.test", async () => {
+        throw new DOMException("The operation timed out", "TimeoutError");
+    });
+    await assert.rejects(
+        timedOut.search("GU25 4LH", 10),
+        /search timed out/i,
+    );
+
+    const unreachable = new GolfCourseSearchService("https://api.example.test", async () => {
+        throw new TypeError("Failed to fetch");
+    });
+    await assert.rejects(
+        unreachable.search("GU25 4LH", 10),
+        /service could not be reached/i,
+    );
+});

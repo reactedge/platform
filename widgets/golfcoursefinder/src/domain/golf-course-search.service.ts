@@ -2,6 +2,8 @@ import { z } from "zod";
 import { BASE_RADIUS_MI } from "./golf-course.types.ts";
 import type { GolfCourse } from "./golf-course.types.ts";
 
+const REQUEST_TIMEOUT_MS = 25_000;
+
 const SearchResponseSchema = z.object({
     postcode: z.string(),
     radius_miles: z.number(),
@@ -41,9 +43,12 @@ export class GolfCourseSearchService {
         try {
             response = await this.fetcher(endpoint, {
                 headers: { Accept: "application/json" },
-                signal: AbortSignal.timeout(10_000),
+                signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
             });
-        } catch {
+        } catch (error) {
+            if (error instanceof DOMException && error.name === "TimeoutError") {
+                throw new GolfCourseApiError("The golf course search timed out. Please try again.");
+            }
             throw new GolfCourseApiError("The golf course search service could not be reached.");
         }
 
