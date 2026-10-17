@@ -1,0 +1,36 @@
+.golfCourseSearchForm {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: var(--widget-space-sm);
+    margin-bottom: var(--widget-space-lg);
+}
+
+.golfCourseSearchForm__label {
+    display: grid;
+    gap: var(--widget-space-xs);
+    color: var(--widget-color-muted);
+    font-size: 13px;
+}
+
+.golfCourseSearchForm__input {
+    padding: var(--widget-space-sm);
+    font-size: 14px;
+    width: 140px;
+}
+
+.golfCourseSearchForm__select {
+    padding: var(--widget-space-sm);
+    font-size: 14px;
+}
+
+.golfCourseSearchForm__button {
+    padding: 8px 14px; /* acceptable literal: mixed x/y padding */
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.golfCourseFinder__error {
+    color: #b42318;
+    margin: var(--widget-space-md) 0;
+}

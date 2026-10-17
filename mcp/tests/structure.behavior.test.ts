@@ -205,6 +205,26 @@ test("validate_structure flags a missing runtime-shadow runtime manifest", async
     });
 });
 
+test("validate_structure accepts a runtime-shadow manifest with widget-specific integrations", async () => {
+    await withTemporaryReactEdgeRoot(async root => {
+        const widget = "fixture-shadow-custom-runtime-manifest";
+        const widgetRoot = await createWidgetFixture(root, "runtime-shadow", widget);
+
+        await writeFile(
+            resolve(widgetRoot, "public/reactedge-runtime.json"),
+            JSON.stringify({ integrations: { golfcoursesApi: { api: "http://localhost:4181" } } }),
+            "utf8",
+        );
+
+        const result = await validate(widget);
+
+        assert.equal(result.valid, true);
+        assert.deepEqual(result.missing, []);
+        assert.deepEqual(result.canonicalMissing, []);
+        assert.deepEqual(result.modified, []);
+    });
+});
+
 test("validate_structure currently rejects a widget when its API entrypoint no longer identifies a variant", async () => {
     await withTemporaryReactEdgeRoot(async root => {
         const widget = "fixture-shadow-missing-entrypoint";

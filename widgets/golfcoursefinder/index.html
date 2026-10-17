@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<golfcoursefinder-widget></golfcoursefinder-widget>
+
+<script type="module">
+    import { mount } from "./api/runtime-shadow-widget.tsx";
+    import { ResourceLoader } from "@reactedge/framework/contract";
+
+    const loader = new ResourceLoader();
+
+    const contract = await loader.loadContract("default.json");
+    const runtime = await loader.loadRuntime();
+    const bootstrap = undefined
+
+    const element = document.querySelector("golfcoursefinder-widget");
+
+    if (!element) {
+        throw new Error(
+            "golfcoursefinder-widget element not found"
+        );
+    }
+
+    requestAnimationFrame(() => {
+        mount(element, contract, bootstrap, runtime);
+    });
+</script>
+
+</body>
+</html>

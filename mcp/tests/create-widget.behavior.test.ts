@@ -191,6 +191,21 @@ for (const variant of ["standard", "runtime", "runtime-shadow"] as const) {
                 ) as { name?: string };
 
                 assert.equal(packageJson.name, `widget-${name}`);
+                if (variant === "runtime-shadow") {
+                    await assert.rejects(
+                        readFile(resolve(widgetRoot, "postcss.config.cjs")),
+                        { code: "ENOENT" },
+                    );
+
+                    const runtimeManifest = JSON.parse(
+                        await readFile(
+                            resolve(widgetRoot, "public/reactedge-runtime.json"),
+                            "utf8",
+                        ),
+                    ) as { integrations?: unknown };
+
+                    assert.ok(runtimeManifest.integrations);
+                }
                 await assertNoTemplateTokens(widgetRoot);
 
                 const validation = await validateGeneratedWidget(name);
