@@ -5,6 +5,7 @@ import type { GolfCourse, GolfCourseFinderConfig, LatLng } from "../domain/golf-
 import { useTranslationState } from "../state/Translation/useTranslationState.ts";
 import { GolfCourseMap } from "./GolfCourseListing/Map.tsx";
 import { GolfCourseResultsCards } from "./GolfCourseListing/GolfCourseResultsCards.tsx";
+import { GolfCourseResultsTable } from "./GolfCourseListing/GolfCourseResultsTable.tsx";
 import { GolfCourseSearchForm } from "./GolfCourseListing/GolfCourseSearch.tsx";
 import { ErrorState } from "./global/ErrorState.tsx";
 import { SpinnerOverlay } from "./global/SpinnerOverlay.tsx";
@@ -59,6 +60,7 @@ export function WidgetGolfcoursefinder({ config }: Props) {
                 config={config}
             />
             <GolfCourseResultsCards courses={courses} />
+            <GolfCourseResultsTable courses={courses} />
         </section>
     );
 }
