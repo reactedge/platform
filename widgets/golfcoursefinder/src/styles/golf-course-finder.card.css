@@ -1,0 +1,50 @@
+.golfCourseResults {
+    margin-top: var(--widget-space-lg);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--widget-space-lg);
+}
+
+.golfCourseCard {
+    border: 1px solid var(--widget-color-border);
+    border-radius: 6px;
+    padding: var(--widget-space-md);
+    background: var(--widget-color-bg);
+    box-shadow: var(--widget-shadow-md);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.golfCourseCard__header {
+    margin-bottom: var(--widget-space-sm);
+}
+
+.golfCourseCard__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--widget-color-text);
+}
+
+.golfCourseCard__body {
+    margin-bottom: var(--widget-space-md);
+}
+
+.golfCourseCard__line {
+    margin: 4px 0;
+    font-size: 14px;
+    color: var(--widget-color-muted);
+}
+
+.golfCourseCard__distance {
+    margin: 4px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--widget-color-accent);
+}
+
+.golfCourseResults__empty {
+    margin-top: var(--widget-space-lg);
+}

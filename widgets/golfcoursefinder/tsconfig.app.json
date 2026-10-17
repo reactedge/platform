@@ -1,0 +1,7 @@
+{
+  "extends": "../../packages/widget-build/shared-resources/tsconfig.app.widget.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
+  },
+  "include": ["src", "api"]
+}
