@@ -28,7 +28,7 @@ export class GolfCourseSearchService {
 
     constructor(
         apiBaseUrl: string,
-        fetcher: typeof fetch = fetch,
+        fetcher: typeof fetch = (...args) => globalThis.fetch(...args),
     ) {
         this.apiBaseUrl = apiBaseUrl;
         this.fetcher = fetcher;
@@ -41,7 +41,7 @@ export class GolfCourseSearchService {
 
         let response: Response;
         try {
-            response = await this.fetcher(endpoint, {
+            response = await this.fetcher(endpoint.toString(), {
                 headers: { Accept: "application/json" },
                 signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
             });
@@ -74,6 +74,21 @@ export class GolfCourseSearchService {
         }
 
         return result.data;
+    }
+
+    async checkAvailability(): Promise<boolean> {
+        try {
+            const endpoint = new URL("/golfcourses/status", this.apiBaseUrl);
+            const response = await this.fetcher(endpoint.toString(), {
+                headers: { Accept: "application/json" },
+                signal: AbortSignal.timeout(5_000),
+            });
+            if (!response.ok) return false;
+            const payload: unknown = await response.json();
+            return z.object({ status: z.literal("ok") }).safeParse(payload).success;
+        } catch {
+            return false;
+        }
     }
 }
 

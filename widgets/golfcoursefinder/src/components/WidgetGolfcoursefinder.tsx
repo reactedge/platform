@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { MapSearch } from "../Model/MapSearch.ts";
-import { GolfCourseSearchService } from "../domain/golf-course-search.service.ts";
+import { useSystemState } from "../state/System/useSystemState.ts";
 import type { GolfCourse, GolfCourseFinderConfig, LatLng } from "../domain/golf-course.types.ts";
 import { useTranslationState } from "../state/Translation/useTranslationState.ts";
 import { GolfCourseMap } from "./GolfCourseListing/Map.tsx";
@@ -14,10 +14,7 @@ type Props = { config: GolfCourseFinderConfig };
 
 export function WidgetGolfcoursefinder({ config }: Props) {
     const mapSearch = useMemo(() => new MapSearch(), []);
-    const searchService = useMemo(
-        () => new GolfCourseSearchService(config.integrations.golfcoursesApi.api),
-        [config.integrations.golfcoursesApi.api],
-    );
+    const { golfCourseSearch, apiReachable } = useSystemState();
     const [courses, setCourses] = useState<GolfCourse[]>([]);
     const [center, setCenter] = useState<LatLng>(config.data.defaultCenter);
     const [error, setError] = useState<string | null>(null);
@@ -28,7 +25,7 @@ export function WidgetGolfcoursefinder({ config }: Props) {
         setError(null);
         setLoading(true);
         try {
-            const result = await searchService.search(postcode, radiusMiles);
+            const result = await golfCourseSearch.search(postcode, radiusMiles);
             setCourses(result.courses);
             if (config.integrations.googleMaps?.apiKey) {
                 try {
@@ -54,6 +51,7 @@ export function WidgetGolfcoursefinder({ config }: Props) {
             <GolfCourseSearchForm onSearch={handleSearch} />
             {loading && <SpinnerOverlay />}
             {error && <ErrorState message={error} />}
+            {!error && apiReachable === false && <ErrorState message={t("The golf course search service could not be reached.")} />}
             <GolfCourseMap
                 courses={courses}
                 currentCenter={center}

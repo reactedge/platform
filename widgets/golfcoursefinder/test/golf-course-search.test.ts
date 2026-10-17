@@ -57,3 +57,14 @@ test("search distinguishes timeouts from connection failures", async () => {
         /service could not be reached/i,
     );
 });
+
+test("availability check probes the service status endpoint", async () => {
+    let requestedUrl: string | undefined;
+    const service = new GolfCourseSearchService("https://api.example.test", async input => {
+        requestedUrl = String(input);
+        return Response.json({ status: "ok" });
+    });
+
+    assert.equal(await service.checkAvailability(), true);
+    assert.equal(new URL(requestedUrl!).pathname, "/golfcourses/status");
+});
