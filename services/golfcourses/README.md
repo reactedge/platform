@@ -5,6 +5,12 @@ postcode with [postcodes.io](https://postcodes.io/), then queries the UK Golf
 API's nearby clubs endpoint. Search radius is supplied in miles; the upstream
 API receives kilometres and results include `distance_miles` for display.
 
+The service follows the ReactEdge observable Express server template. It keeps
+the API integration in `src/model/golf-course`, request handling in
+`src/controller`, route and CORS setup in `src/routes`, and shared startup,
+configuration, and OpenTelemetry hooks in the same layers used by the other
+ReactEdge services.
+
 ## Configure and run
 
 Set `RAPIDAPI_KEY` in this service's `.env` file. The key is issued by the UK
@@ -19,8 +25,9 @@ npm start --prefix services/golfcourses
 The service listens on port **4181** by default. `PORT` changes the port and
 `FRONTEND_URL` is a comma-separated list of browser origins allowed by CORS.
 `GOLF_API_URL` and `POSTCODE_API_URL` can override the provider URLs for local
-testing or an approved replacement provider. The RapidAPI key stays on the
-server and is never included in browser responses.
+testing or an approved replacement provider. `OTEL_HOST` and
+`OTEL_SERVICE_NAME` configure the OpenTelemetry exporter. The RapidAPI key
+stays on the server and is never included in browser responses.
 
 The provider's free tier is documented as 200 requests per month with a
 5-request-per-minute limit. Applications should avoid firing repeated searches

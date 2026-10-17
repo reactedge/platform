@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {findNearbyGolfCourses, SearchError} from '../src/golf-course-search';
+import {findNearbyGolfCourses, SearchError} from '../src/model/golf-course/golf-course-search';
 
 const postcodeResponse = () => new Response(JSON.stringify({
     result: {postcode: 'SW1A 1AA', latitude: 51.501, longitude: -0.142},

@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {config} from './config';
+import {config} from '../../config';
 
 const postcodeResultSchema = z.object({
     result: z.object({
@@ -46,14 +46,14 @@ export async function findNearbyGolfCourses(
     const postcode = postcodeInput.trim().replace(/\s+/g, ' ').toUpperCase();
     if (!postcode) throw new SearchError('A UK postcode is required.', 400);
 
-    const rapidApiKey = options.rapidApiKey ?? config.rapidApiKey;
+    const rapidApiKey = options.rapidApiKey ?? config.golfApi.rapidApiKey;
     if (!rapidApiKey) {
         throw new SearchError('Golf course search is not configured: RAPIDAPI_KEY is missing.', 503);
     }
 
     const fetcher = options.fetcher ?? fetch;
-    const postcodeApiUrl = options.postcodeApiUrl ?? config.postcodeApiUrl;
-    const golfApiUrl = options.golfApiUrl ?? config.golfApiUrl;
+    const postcodeApiUrl = options.postcodeApiUrl ?? config.postcodeApi.baseUrl;
+    const golfApiUrl = options.golfApiUrl ?? config.golfApi.baseUrl;
     let postcodeResponse: Response;
     try {
         postcodeResponse = await fetcher(
