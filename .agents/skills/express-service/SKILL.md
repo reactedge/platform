@@ -23,7 +23,8 @@ Use this skill when asked to create a new Express service in the ReactEdge platf
 5. Inspect the scaffolded routes, application/server separation, middleware, error handling, configuration, and dependencies. Implement the requested service behavior while retaining the generated architectural boundaries.
 6. Reuse established platform service patterns for configuration, logging, OpenTelemetry/trace propagation, health checks, shutdown, and dependency injection where relevant. Do not add new infrastructure or dependencies when existing platform facilities meet the need.
 7. Add or adjust typed request/response contracts, input validation, failure handling, and tests. Avoid embedding secrets, hardcoded environment-specific endpoints, or unsafe defaults.
-8. Re-run MCP validation if supported. Run applicable lint, strict TypeScript, unit/integration tests, build checks, and service health/startup verification. Confirm routes and actual behavior separately from scaffold validity.
+8. Re-run MCP validation if supported. Run applicable lint, strict TypeScript, unit/integration tests, build checks, and service health/startup verification. Run Lizard on authored/modified source; refactor every function with CCN above 10. Confirm routes and actual behavior separately from scaffold validity.
+9. After deployment completes, run the platform MCP workspace-structure validation operation and report its result. Discover the actual MCP schema; do not assume the operation name.
 
 ## Constraints
 
@@ -33,7 +34,8 @@ Use this skill when asked to create a new Express service in the ReactEdge platf
 - Use only the established service patterns in `reactedge/platform/services/` when adapting the generated scaffold; do not apply conventions from unrelated platform areas.
 - Do not claim that the MCP supports a validator, or that tests and runtime health passed, without verifying them.
 - Avoid changing unrelated services or repository-wide configuration unless required and justified.
+- Enforce Lizard CCN <= 10 per function in authored or modified source.
 
 ## Completion report
 
-Report the service path, MCP scaffold operation and result, any structural validation operation and result, implemented routes and contracts, dependency/configuration changes, lint, strict TypeScript, tests, build, startup/health checks, and outstanding limitations. Mark unexecuted checks as **not run**.
+Report the service path, MCP scaffold operation and result, any structural validation operation and result, implemented routes and contracts, dependency/configuration changes, lint, strict TypeScript, tests, build, maximum Lizard CCN, startup/health checks, post-deployment MCP workspace validation (if deployed), and outstanding limitations. Mark unexecuted checks as **not run**.
