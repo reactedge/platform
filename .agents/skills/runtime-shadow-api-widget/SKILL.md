@@ -9,7 +9,7 @@ Use this skill when asked to create or convert a `runtime-shadow` widget to cons
 
 ## Mandatory repository context
 
-1. Inspect `packages/widget-template` as the authoritative widget scaffold and structure. Do not use `packages/docs/widget-spec.md` or `packages/widget-build/shared-resources` as the source of truth for creation.
+1. Inspect `packages/widget-template` as the authoritative widget scaffold and structure. Use the MCP widget creation operation rather than legacy manual scaffolding.
 2. Use the ReactEdge MCP `create widget` operation to generate widgets from `packages/widget-template`; do not manually copy the template or create an alternative scaffold.
 3. Locate and inspect the current runtime contract and its API dependency; do not guess interface names or import paths.
 4. Locate and inspect the Google Review widget (including its repository if external) to establish the existing system state provider pattern. If unavailable, report the missing reference and do not invent its behavior.
