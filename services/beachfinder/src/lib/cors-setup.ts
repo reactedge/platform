@@ -10,7 +10,8 @@ export const corsOptions = () => {
     const options = {
         allowedHeaders: [
             'Origin',
-            'Accept'
+            'Accept',
+            'Content-Type'
         ],
         credentials: true,
         methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',

@@ -19,7 +19,7 @@ export type Config = {
 
 export const config: Config = {
     port: Number(process.env.PORT ?? '4185'),
-    frontendUrl: process.env.FRONTEND_URL ?? 'http://localhost:3000',
+    frontendUrl: process.env.FRONTEND_URL ?? 'http://localhost:5173,http://127.0.0.1:5173',
     route: {
         servicePrefix: '/beachfinder'
     },
