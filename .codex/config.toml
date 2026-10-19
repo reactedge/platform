@@ -1,0 +1,16 @@
+# ReactEdge Codex sub-agent launcher configuration.
+# Codex uses these registered roles when the main agent delegates work.
+
+[features]
+multi_agent = true
+
+[agents]
+enabled = true
+
+[agents.widget-agent]
+description = "Create and maintain ReactEdge widgets; follow the widget skill and engineering standards."
+config_file = "agents/widget-agent.toml"
+
+[agents.service-agent]
+description = "Create and maintain Express services under services/; follow the service skill and engineering standards."
+config_file = "agents/service-agent.toml"
