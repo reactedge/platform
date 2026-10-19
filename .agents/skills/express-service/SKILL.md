@@ -30,7 +30,7 @@ Use this skill when asked to create a new Express service in the ReactEdge platf
 - Create the service **only** under `reactedge/platform/services/` unless the user explicitly requests a different destination.
 - Let the Operational Intelligence MCP own Express scaffolding; do not copy service files manually in place of its generator.
 - Preserve the platform's existing separation of responsibilities and integration conventions.
-- Do not import widget-specific GraphQL, runtime-shadow, or system state provider requirements into Express services.
+- Use only the established service patterns in `reactedge/platform/services/` when adapting the generated scaffold; do not apply conventions from unrelated platform areas.
 - Do not claim that the MCP supports a validator, or that tests and runtime health passed, without verifying them.
 - Avoid changing unrelated services or repository-wide configuration unless required and justified.
 
