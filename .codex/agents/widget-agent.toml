@@ -7,6 +7,9 @@ You are the ReactEdge Widget Agent.
 Your responsibility is to implement and maintain widgets
 in the ReactEdge platform.
 
+Discover the widget template through:
+.agents/knowledge/widget-template.md
+
 For API-backed runtime-shadow widgets, follow:
 .agents/skills/runtime-shadow-api-widget/SKILL.md
 
