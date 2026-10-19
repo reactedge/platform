@@ -1,42 +1,25 @@
 ---
 name: runtime-shadow-api-widget
-description: Scaffold and validate a ReactEdge runtime-shadow widget that consumes an API through the runtime contract instead of the default GraphQL integration.
+description: Scaffold a runtime-shadow widget using ReactEdge MCP and replace its default GraphQL integration with the runtime-contract API dependency.
 ---
 
 # Runtime-shadow API widget
 
-Use this skill when asked to create or convert a `runtime-shadow` widget to consume an API rather than GraphQL.
+Use when creating or converting a `runtime-shadow` widget to consume an API instead of GraphQL.
 
-## Mandatory repository context
-
-1. Inspect `packages/widget-template` as the authoritative widget scaffold and structure. Use the MCP widget creation operation rather than legacy manual scaffolding.
-2. Use the ReactEdge MCP `create widget` operation to generate widgets from `packages/widget-template`; do not manually copy the template or create an alternative scaffold.
-3. Locate and inspect the current runtime contract and its API dependency; do not guess interface names or import paths.
-4. Locate and inspect the Google Review widget (including its repository if external) to establish the existing system state provider pattern. If unavailable, report the missing reference and do not invent its behavior.
-5. Inspect existing widget lifecycle, mount, observability, and test conventions.
+Follow the mandatory root `AGENTS.md` and `packages/widget-template/ENGINEERING_STANDARDS.md` standards. This skill describes the task procedure, not the quality gates.
 
 ## Procedure
 
-1. Collect the widget name, API endpoint or API contract, expected response shape, and rendering requirements. Ask only for missing details that cannot be inferred from the repository.
-2. Discover the ReactEdge MCP `create widget` operation and inspect its actual schema. Invoke it with widget type `runtime-shadow` and the required widget parameters. The MCP operation owns scaffolding from `packages/widget-template`; do not manually reproduce that process or invent MCP argument names.
-3. Invoke the MCP `validate widget` operation on the untouched scaffold. Fix structural failures before modifying the integration. If MCP is unavailable, report this explicitly; do not claim MCP validation occurred.
-4. Inspect the generated GraphQL dependencies, data access, and runtime wiring. Identify the corresponding API dependency anchored in the runtime contract, including request context, authentication, response typing, and error handling.
-5. Replace GraphQL-specific imports, queries, and data access with the runtime-provided API dependency. Remove unused GraphQL dependencies only when safe; avoid introducing an independent HTTP client when the runtime already provides one.
-6. Integrate the system state provider using the same access, subscription, state-update, and cleanup conventions as the Google Review widget. Adapt only widget-specific behavior. Avoid introducing parallel state infrastructure.
-7. Implement typed API data flow with loading, success, empty, and failure states. Handle cancellation or stale responses and cleanup across unmount/remount. Preserve existing widget registration, mount lifecycle, and observability.
-8. Confirm `public/default.json` and `public/reactedge-runtime.json` exist in the generated widget and validate their JSON and alignment with the runtime/schema contracts. Run the widget build and tests; both must pass before completion. Run MCP `validate widget` again, plus relevant strict TypeScript, lint, integration, and widget e2e checks. Run Lizard on authored/modified source and ensure every function has CCN <= 10. Where supported, validate deployed runtime behavior separately from scaffold structure.
-9. After deployment completes, run the platform MCP workspace-structure validation operation. Discover its real schema and report the result; a successful build or widget validation does not substitute for workspace validation.
-
-## Architectural constraints
-
-- Preserve separation of responsibilities between widget code, runtime orchestration, mounting, and observability.
-- Follow the actual runtime contract; do not change it without a clearly justified and separately reviewed need.
-- Never embed credentials or leak sensitive system state.
-- Treat `packages/widget-template` and the MCP scaffold operation as the source of truth for widget creation; preserve repository naming, layout, contract schema, and test conventions.
-- Do not claim structural validation proves API requests or widget mounting work.
-- Do not accept a Lizard CCN above 10 in authored or modified source; refactor complex functions rather than averaging complexity across files.
-- Do not fabricate MCP operations, runtime interfaces, Google Review behavior, or test outcomes.
+1. Collect the widget name, API endpoint or contract, expected response shape, and rendering requirements.
+2. Inspect `packages/widget-template` and discover the actual ReactEdge MCP `create widget` operation/schema. Scaffold with type `runtime-shadow`; let MCP own generation.
+3. Run the MCP `validate widget` operation on the scaffold; resolve structural failures before adapting it.
+4. Inspect the runtime contract and identify its API dependency, request context, authentication, typing, and error behavior. Do not invent interfaces.
+5. Inspect the Google Review widget to understand its system state provider access, updates, and cleanup. If the reference cannot be located, report this rather than guessing.
+6. Replace generated GraphQL imports, queries, and data access with the runtime-provided API dependency. Preserve widget registration, mount/unmount lifecycle, and observability.
+7. Implement typed API data flow and loading, empty, success, and error behavior. Handle stale requests and cleanup; reuse the system state provider pattern.
+8. Run MCP widget validation again, then satisfy the widget standards and global engineering gates. If deployed, satisfy the post-deployment workspace validation gate.
 
 ## Completion report
 
-Report widget path, runtime API dependency used, GraphQL integration removed, system state provider pattern followed, initial/final MCP validation, lint, strict TypeScript, Lizard maximum CCN, widget build, tests, presence and validity of both public contracts, runtime verification, post-deployment MCP workspace validation (when deployment occurred), and any unverified behavior. Mark checks not executed as **not run**, not passed.
+Report widget path, API dependency used, GraphQL integration removed, state provider pattern, MCP validation outcomes, and the verification results required by the referenced standards. Distinguish not-run checks from passes.
