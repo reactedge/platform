@@ -1,0 +1,15 @@
+{
+  "id": "beachfinder",
+  "widget": "beachfinder",
+  "description": "Search for nearby beaches by UK postcode and radius.",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
