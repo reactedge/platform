@@ -1,19 +1,10 @@
-# AI Instructions
+# ReactEdge engineering standards
 
-Before creating a widget:
+These mandatory rules apply to all platform changes, regardless of agent, skill, or workflow.
 
-- Treat `packages/widget-template` as the source of truth for widget scaffolding.
-- Use the ReactEdge MCP `create widget` operation to scaffold from the template; do not manually copy or recreate the scaffold.
-- Use the MCP `validate widget` operation to validate the generated structure.
+- **Complexity:** Run Lizard on authored or modified platform source code. Every checked function must have cyclomatic complexity (CCN) **at most 10**; refactor any function above 10. A project average is not sufficient. Exclude generated, vendored, and dependency files.
+- **Quality:** Run applicable lint, strict TypeScript, build, and test checks for changed components; report actual results and do not treat unexecuted checks as passing.
+- **Widgets:** Follow `packages/widget-template/ENGINEERING_STANDARDS.md` for widget contracts, scaffolding, builds, tests, and validation.
+- **Deployment:** After every completed deployment, run the platform MCP workspace-structure validation operation and report its result. Discover the actual tool/schema rather than inventing an operation. A successful build is not a substitute for post-deployment workspace validation.
 
-Before creating an Express service:
-
-- Create services under `services/<service-name>`.
-- Use the Operational Intelligence MCP Express scaffold operation, following `.agents/skills/express-service/SKILL.md`.
-- Validate the generated service structure with MCP if a validator exists, then run the applicable platform checks.
-
-Platform-wide quality gates:
-
-- Enforce a maximum Lizard cyclomatic complexity (CCN) of **10 per function** in authored or modified platform source code. Run Lizard on the relevant code; refactor any function above 10. Do not treat a project-wide average as sufficient. Exclude generated, vendored, and dependency files from this source-code gate.
-- For every new widget, verify that the widget build and tests pass and that both `public/default.json` and `public/reactedge-runtime.json` exist as contracts. Check that the contracts are valid and consistent with the widget's runtime schema.
-- After every completed deployment, run the platform MCP workspace-structure validation operation and report its result. Discover the actual operation/schema; never invent a command or report an unexecuted check as passed.
+Task procedures are documented separately in `.agents/skills/runtime-shadow-api-widget/SKILL.md` and `.agents/skills/express-service/SKILL.md`.
