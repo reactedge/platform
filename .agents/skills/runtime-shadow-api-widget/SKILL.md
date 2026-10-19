@@ -24,7 +24,8 @@ Use this skill when asked to create or convert a `runtime-shadow` widget to cons
 5. Replace GraphQL-specific imports, queries, and data access with the runtime-provided API dependency. Remove unused GraphQL dependencies only when safe; avoid introducing an independent HTTP client when the runtime already provides one.
 6. Integrate the system state provider using the same access, subscription, state-update, and cleanup conventions as the Google Review widget. Adapt only widget-specific behavior. Avoid introducing parallel state infrastructure.
 7. Implement typed API data flow with loading, success, empty, and failure states. Handle cancellation or stale responses and cleanup across unmount/remount. Preserve existing widget registration, mount lifecycle, and observability.
-8. Run MCP `validate widget` again. Run relevant strict TypeScript, lint, unit, integration, and widget e2e checks as available. Where supported, validate deployed runtime behavior separately from scaffold structure.
+8. Confirm `public/default.json` and `public/reactedge-runtime.json` exist in the generated widget and validate their JSON and alignment with the runtime/schema contracts. Run the widget build and tests; both must pass before completion. Run MCP `validate widget` again, plus relevant strict TypeScript, lint, integration, and widget e2e checks. Run Lizard on authored/modified source and ensure every function has CCN <= 10. Where supported, validate deployed runtime behavior separately from scaffold structure.
+9. After deployment completes, run the platform MCP workspace-structure validation operation. Discover its real schema and report the result; a successful build or widget validation does not substitute for workspace validation.
 
 ## Architectural constraints
 
@@ -33,8 +34,9 @@ Use this skill when asked to create or convert a `runtime-shadow` widget to cons
 - Never embed credentials or leak sensitive system state.
 - Treat `packages/widget-template` and the MCP scaffold operation as the source of truth for widget creation; preserve repository naming, layout, contract schema, and test conventions.
 - Do not claim structural validation proves API requests or widget mounting work.
+- Do not accept a Lizard CCN above 10 in authored or modified source; refactor complex functions rather than averaging complexity across files.
 - Do not fabricate MCP operations, runtime interfaces, Google Review behavior, or test outcomes.
 
 ## Completion report
 
-Report widget path, runtime API dependency used, GraphQL integration removed, system state provider pattern followed, initial/final MCP validation, lint, strict TypeScript, tests, runtime verification, and any unverified behavior. Mark checks not executed as **not run**, not passed.
+Report widget path, runtime API dependency used, GraphQL integration removed, system state provider pattern followed, initial/final MCP validation, lint, strict TypeScript, Lizard maximum CCN, widget build, tests, presence and validity of both public contracts, runtime verification, post-deployment MCP workspace validation (when deployment occurred), and any unverified behavior. Mark checks not executed as **not run**, not passed.
