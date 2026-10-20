@@ -39,9 +39,13 @@ export class GolfCourseSearchService {
         endpoint.searchParams.set("postcode", postcode.trim());
         endpoint.searchParams.set("radius_miles", String(radiusMiles));
 
-        let response: Response;
+        const response = await this.readResponse(endpoint);
+        return this.parseResponse(response);
+    }
+
+    private async readResponse(endpoint: URL): Promise<Response> {
         try {
-            response = await this.fetcher(endpoint.toString(), {
+            return await this.fetcher(endpoint.toString(), {
                 headers: { Accept: "application/json" },
                 signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
             });
@@ -51,7 +55,9 @@ export class GolfCourseSearchService {
             }
             throw new GolfCourseApiError("The golf course search service could not be reached.");
         }
+    }
 
+    private async parseResponse(response: Response): Promise<GolfCourseSearchResult> {
         let payload: unknown;
         try {
             payload = await response.json();

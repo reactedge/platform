@@ -54,6 +54,19 @@ export async function findNearbyGolfCourses(
     const fetcher = options.fetcher ?? fetch;
     const postcodeApiUrl = options.postcodeApiUrl ?? config.postcodeApi.baseUrl;
     const golfApiUrl = options.golfApiUrl ?? config.golfApi.baseUrl;
+    const location = await lookupPostcode(postcode, postcodeApiUrl, fetcher);
+    const golfPayload = await searchGolfProvider(location, radiusMiles, golfApiUrl, rapidApiKey, fetcher);
+    return buildSearchResult(location.postcode, radiusMiles, golfPayload);
+}
+
+type PostcodeLocation = NonNullable<z.infer<typeof postcodeResultSchema>['result']>;
+type GolfPayload = z.infer<typeof golfResponseSchema>;
+
+async function lookupPostcode(
+    postcode: string,
+    postcodeApiUrl: string,
+    fetcher: typeof fetch,
+): Promise<PostcodeLocation> {
     let postcodeResponse: Response;
     try {
         postcodeResponse = await fetcher(
@@ -76,7 +89,16 @@ export async function findNearbyGolfCourses(
     }
     const location = postcodePayload.result;
     if (!location) throw new SearchError('The postcode was not recognised.', 400);
+    return location;
+}
 
+async function searchGolfProvider(
+    location: PostcodeLocation,
+    radiusMiles: number,
+    golfApiUrl: string,
+    rapidApiKey: string,
+    fetcher: typeof fetch,
+): Promise<GolfPayload> {
     let golfResponse: Response;
     try {
         const query = new URLSearchParams({
@@ -109,13 +131,20 @@ export async function findNearbyGolfCourses(
     } catch {
         throw new SearchError('The golf course API returned an invalid response.', 502);
     }
+    return golfPayload;
+}
 
+function buildSearchResult(
+    postcode: string,
+    radiusMiles: number,
+    golfPayload: GolfPayload,
+): GolfCourseSearchResult {
     const courses = golfPayload.data.map((course) => ({
         ...course,
         distance_miles: Math.round((course.distance_km / MILES_TO_KM) * 10) / 10,
     }));
     return {
-        postcode: location.postcode,
+        postcode,
         radius_miles: radiusMiles,
         total: Number(golfPayload.meta?.total ?? courses.length),
         courses,
