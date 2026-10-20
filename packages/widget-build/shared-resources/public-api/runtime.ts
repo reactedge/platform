@@ -47,6 +47,10 @@ export interface ReactEdgeRuntimeIntegrations {
         readonly placeId?: string;
     };
 
+    readonly golfcoursesApi?: {
+        readonly api: string;
+    };
+
     readonly magentoGraphql?: {
         readonly api: string;
     };

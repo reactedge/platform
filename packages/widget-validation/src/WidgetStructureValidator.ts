@@ -82,9 +82,8 @@ const sharedFiles = [
  *
  * A widget must contain exactly one API entrypoint matching its template.
  *
- * Runtime schemas are capability-owned contracts. Their presence is
- * validated, but their structure is intentionally allowed to differ
- * between widgets according to their runtime dependencies.
+ * Generated runtime configuration is excluded: configuration creates it
+ * locally, and it is not part of the canonical source structure.
  */
 const variantFiles = {
     standard: [
@@ -92,11 +91,9 @@ const variantFiles = {
     ],
     runtime: [
         "api/runtime-widget.tsx",
-        "public/reactedge-runtime.json",
     ],
     "runtime-shadow": [
         "api/runtime-shadow-widget.tsx",
-        "public/reactedge-runtime.json",
     ]
 } as const;
 

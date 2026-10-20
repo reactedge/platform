@@ -1,0 +1,15 @@
+dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.25rem 0.75rem;
+}
+
+dt {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+dd {
+    margin: 0;
+    font-size: 1.2rem;
+}

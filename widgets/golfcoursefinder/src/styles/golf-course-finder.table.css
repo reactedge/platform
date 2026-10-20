@@ -1,0 +1,38 @@
+.golfCourseTable {
+    margin-top: var(--widget-space-lg);
+}
+
+.golfCourseTable__summary {
+    color: var(--widget-color-text);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.golfCourseTable__scroll {
+    margin-top: var(--widget-space-sm);
+    overflow-x: auto;
+}
+
+.golfCourseTable__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.golfCourseTable__headRow {
+    background: var(--widget-color-muted);
+    color: var(--widget-color-bg);
+}
+
+.golfCourseTable__th {
+    padding: var(--widget-space-sm);
+    text-align: left;
+    border-bottom: 2px solid var(--widget-color-border);
+}
+
+.golfCourseTable__row {
+    border-bottom: 1px solid var(--widget-color-border);
+}
+
+.golfCourseTable__td {
+    padding: var(--widget-space-sm);
+}

@@ -1,0 +1,27 @@
+{
+  "id": "golfcoursefinder",
+  "widget": "golfcoursefinder",
+  "description": "Searches for UK golf courses by postcode and radius, with a map and distance-ranked results.",
+  "exampleContract": {
+    "data": {
+      "title": "Find golf courses near you",
+      "defaultCenter": { "lat": 52.3555, "lng": -1.1743 },
+      "zoom": 7,
+      "country": "gb"
+    },
+    "integration": {
+      "requires": ["googleMaps", "golfcoursesApi"]
+    }
+  },
+  "contractFile": "default.json",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
