@@ -189,41 +189,42 @@ test("validate_structure flags a missing runtime-specific schema", async () => {
     });
 });
 
-test("validate_structure flags a missing runtime-shadow runtime manifest", async () => {
-    await withTemporaryReactEdgeRoot(async root => {
-        const widget = "fixture-shadow-missing-runtime-manifest";
-        const widgetRoot = await createWidgetFixture(root, "runtime-shadow", widget);
+for (const variant of ["runtime", "runtime-shadow"] as const) {
+    test(`validate_structure accepts ${variant} before runtime configuration is generated`, async () => {
+        await withTemporaryReactEdgeRoot(async root => {
+            const widget = `fixture-${variant}-without-runtime`;
+            const widgetRoot = await createWidgetFixture(root, variant, widget);
 
-        await unlink(resolve(widgetRoot, "public/reactedge-runtime.json"));
+            await rm(resolve(widgetRoot, "public/reactedge-runtime.json"), { force: true });
 
-        const result = await validate(widget);
-
-        assert.equal(result.valid, false);
-        assert.equal(result.variant, "runtime-shadow");
-        assert.ok(Array.isArray(result.missing));
-        assert.ok((result.missing as string[]).includes("public/reactedge-runtime.json"));
+            const result = await validate(widget);
+            assert.equal(result.valid, true);
+            assert.deepEqual(result.missing, []);
+            assert.deepEqual(result.canonicalMissing, []);
+            assert.deepEqual(result.modified, []);
+        });
     });
-});
 
-test("validate_structure accepts a runtime-shadow manifest with widget-specific integrations", async () => {
-    await withTemporaryReactEdgeRoot(async root => {
-        const widget = "fixture-shadow-custom-runtime-manifest";
-        const widgetRoot = await createWidgetFixture(root, "runtime-shadow", widget);
+    test(`validate_structure accepts ${variant} with locally generated runtime configuration`, async () => {
+        await withTemporaryReactEdgeRoot(async root => {
+            const widget = `fixture-${variant}-custom-runtime`;
+            const widgetRoot = await createWidgetFixture(root, variant, widget);
 
-        await writeFile(
-            resolve(widgetRoot, "public/reactedge-runtime.json"),
-            JSON.stringify({ integrations: { golfcoursesApi: { api: "http://localhost:4181" } } }),
-            "utf8",
-        );
+            await mkdir(resolve(widgetRoot, "public"), { recursive: true });
+            await writeFile(
+                resolve(widgetRoot, "public/reactedge-runtime.json"),
+                JSON.stringify({ integrations: { golfcoursesApi: { api: "http://localhost:4181" } } }),
+                "utf8",
+            );
 
-        const result = await validate(widget);
-
-        assert.equal(result.valid, true);
-        assert.deepEqual(result.missing, []);
-        assert.deepEqual(result.canonicalMissing, []);
-        assert.deepEqual(result.modified, []);
+            const result = await validate(widget);
+            assert.equal(result.valid, true);
+            assert.deepEqual(result.missing, []);
+            assert.deepEqual(result.canonicalMissing, []);
+            assert.deepEqual(result.modified, []);
+        });
     });
-});
+}
 
 test("validate_structure currently rejects a widget when its API entrypoint no longer identifies a variant", async () => {
     await withTemporaryReactEdgeRoot(async root => {

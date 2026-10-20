@@ -196,15 +196,6 @@ for (const variant of ["standard", "runtime", "runtime-shadow"] as const) {
                         readFile(resolve(widgetRoot, "postcss.config.cjs")),
                         { code: "ENOENT" },
                     );
-
-                    const runtimeManifest = JSON.parse(
-                        await readFile(
-                            resolve(widgetRoot, "public/reactedge-runtime.json"),
-                            "utf8",
-                        ),
-                    ) as { integrations?: unknown };
-
-                    assert.ok(runtimeManifest.integrations);
                 }
                 await assertNoTemplateTokens(widgetRoot);
 

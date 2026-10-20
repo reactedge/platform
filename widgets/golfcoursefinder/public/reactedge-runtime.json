@@ -1,7 +1,0 @@
-{
-  "integrations": {
-    "golfcoursesApi": {
-      "api": "http://localhost:4181"
-    }
-  }
-}
