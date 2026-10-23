@@ -4,6 +4,7 @@ These mandatory rules apply to all platform changes, regardless of agent, skill,
 
 - **Complexity:** Run Lizard on authored or modified platform source code. Every checked function must have cyclomatic complexity (CCN) **at most 10**; refactor any function above 10. A project average is not sufficient. Exclude generated, vendored, and dependency files.
 - **Function length:** ESLint must warn when a function or method exceeds 250 lines.
+- **Git workflow:** Make implementation changes on a task-specific branch. When the task is complete, commit the task changes and push that branch to its matching remote branch without waiting for a separate push request. Keep unrelated working-tree changes out of the task commit and preserve them.
 - **Quality:** Run applicable lint, strict TypeScript, build, and test checks for changed components; report actual results and do not treat unexecuted checks as passing.
 - **Widgets:** Use `packages/widget-template/` as the canonical widget template; follow `packages/widget-template/ENGINEERING_STANDARDS.md` for widget contracts, scaffolding, builds, tests, and validation.
 - **Widget CSS:** Give each distinct structural UI element its own intent-named CSS file and import it through the widget's style entry point. Shadow widgets use `src/styles/entry.ts`; other widgets use `src/styles/widget.css`.
