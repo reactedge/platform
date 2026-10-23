@@ -1,0 +1,11 @@
+{
+  "data": {
+    "title": "Subscribe and save"
+  },
+  "settings": {
+    "colour": "red"
+  },
+  "integration": {
+    "requires": ["magentoGraphql"]
+  }
+}

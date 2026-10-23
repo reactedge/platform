@@ -1,0 +1,26 @@
+{
+  "id": "subscription",
+  "widget": "subscription",
+  "description": "Displays a subscription call to action using Magento GraphQL runtime integration.",
+  "exampleContract": {
+    "data": {
+      "title": "Subscribe and save"
+    },
+    "settings": {
+      "colour": "#b42318"
+    },
+    "integration": {
+      "requires": ["magentoGraphql"]
+    }
+  },
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
