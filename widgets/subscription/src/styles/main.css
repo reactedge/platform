@@ -1,1 +1,5 @@
-@import "./subscription-card.css";
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}

@@ -1,0 +1,17 @@
+.purchase-choice,
+.plan-choice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.subscription-card input {
+    margin: 0;
+    accent-color: #1877f2;
+}
+
+.subscription-card input:focus-visible {
+    outline: 2px solid #1877f2;
+    outline-offset: 2px;
+}
