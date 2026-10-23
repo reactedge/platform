@@ -2,22 +2,14 @@
 
 Applies to every newly created or modified widget in `reactedge/platform`, regardless of which agent or skill performs the work.
 
+Cross-cutting engineering policies are defined in the root `AGENTS.md`. This document contains widget-specific standards and points to the root policy where relevant.
+
 ## Scaffold and contracts
 
 - `packages/widget-template` is the authoritative scaffold. Create widgets through the ReactEdge MCP widget creation operation.
 - Each widget must contain `public/default.json` and `public/reactedge-runtime.json`.
 - Both files must parse as valid JSON and conform to the applicable widget/runtime contract schemas. Confirm consistency with the widget implementation; existence alone is insufficient.
 - Validate the widget structure using the MCP widget validator.
-
-## Styles
-
-- Give each distinct structural UI element its own CSS file named for its intent, such as `product-card.css` or `subscription-plans.css`.
-- Import all component styles through the widget's main style entry point. For `runtime-shadow` widgets, list each inline stylesheet in `src/styles/entry.ts`. For other widget types, import component styles from `src/styles/widget.css`.
-- Keep shared base rules in `main.css`; do not accumulate unrelated component styles there.
-
-## Function length
-
-- ESLint must warn when a function or method exceeds 250 lines. Split long functions into focused helpers instead of suppressing the warning.
 
 ## Required verification
 
