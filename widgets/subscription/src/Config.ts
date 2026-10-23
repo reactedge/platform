@@ -5,6 +5,16 @@ import {parseRuntimeConfig, type SchemaRuntimeConfig} from "./ConfigSchemaRuntim
 export interface WidgetConfig {
     readonly data: {
         title: string;
+        oneTimePurchaseLabel: string;
+        subscriptionLabel: string;
+        plansTitle: string;
+        subscribeButtonLabel: string;
+        plans: {
+            id: string;
+            frequency: string;
+            discount: string;
+            termsUrl: string;
+        }[];
     }
 
     readonly settings: {

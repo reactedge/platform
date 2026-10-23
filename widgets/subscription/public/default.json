@@ -1,9 +1,27 @@
 {
   "data": {
-    "title": "Subscribe and save"
+    "title": "Subscribe & Save",
+    "oneTimePurchaseLabel": "One-time purchase",
+    "subscriptionLabel": "Subscribe & Save up to 10% Off",
+    "plansTitle": "Subscription Options",
+    "subscribeButtonLabel": "Subscribe",
+    "plans": [
+      {
+        "id": "weekly",
+        "frequency": "Weekly",
+        "discount": "10% Off",
+        "termsUrl": "#weekly-terms"
+      },
+      {
+        "id": "monthly",
+        "frequency": "Monthly",
+        "discount": "5% Off",
+        "termsUrl": "#monthly-terms"
+      }
+    ]
   },
   "settings": {
-    "colour": "red"
+    "colour": "#25a846"
   },
   "integration": {
     "requires": ["magentoGraphql"]

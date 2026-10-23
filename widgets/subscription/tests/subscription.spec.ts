@@ -16,19 +16,26 @@ test.describe('Subscription Widget', () => {
         );
 
         await expect(title).toBeVisible();
-        await expect(title).toHaveText('Subscribe and save');
+        await expect(title).toHaveText('Subscribe & Save');
     });
 
-    test('Subscription widget renders the title colour', async () => {
-        const title = subscription.locator(
-            'h1[data-subscription-title]'
+    test('Subscription widget renders the configured button colour', async () => {
+        const button = subscription.getByRole('button', { name: 'Subscribe' });
+
+        const backgroundColour = await button.evaluate(
+            element => getComputedStyle(element).backgroundColor
         );
 
-        const colour = await title.evaluate(
-            element => getComputedStyle(element).color
-        );
+        expect(backgroundColour).toBe('rgb(37, 168, 70)');
+    });
 
-        expect(colour).not.toBe('rgb(0, 0, 0)');
+    test('Subscription widget renders contract-provided plans', async () => {
+        await expect(subscription.getByText('One-time purchase')).toBeVisible();
+        await expect(subscription.getByText('Subscribe & Save up to 10% Off')).toBeVisible();
+        await expect(subscription.getByText('Subscription Options')).toBeVisible();
+        await expect(subscription.getByText('Weekly - 10% Off')).toBeVisible();
+        await expect(subscription.getByText('Monthly - 5% Off')).toBeVisible();
+        await expect(subscription.getByRole('button', { name: 'Subscribe' })).toBeVisible();
     });
 
 });

@@ -4,10 +4,28 @@
   "description": "Displays a subscription call to action using Magento GraphQL runtime integration.",
   "exampleContract": {
     "data": {
-      "title": "Subscribe and save"
+      "title": "Subscribe & Save",
+      "oneTimePurchaseLabel": "One-time purchase",
+      "subscriptionLabel": "Subscribe & Save up to 10% Off",
+      "plansTitle": "Subscription Options",
+      "subscribeButtonLabel": "Subscribe",
+      "plans": [
+        {
+          "id": "weekly",
+          "frequency": "Weekly",
+          "discount": "10% Off",
+          "termsUrl": "#weekly-terms"
+        },
+        {
+          "id": "monthly",
+          "frequency": "Monthly",
+          "discount": "5% Off",
+          "termsUrl": "#monthly-terms"
+        }
+      ]
     },
     "settings": {
-      "colour": "#b42318"
+      "colour": "#25a846"
     },
     "integration": {
       "requires": ["magentoGraphql"]

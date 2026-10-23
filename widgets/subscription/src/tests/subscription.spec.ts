@@ -16,19 +16,17 @@ test.describe('Subscription Widget', () => {
         );
 
         await expect(title).toBeVisible();
-        await expect(title).toHaveText('Subscribe and save');
+        await expect(title).toHaveText('Subscribe & Save');
     });
 
-    test('Subscription widget renders the title colour', async () => {
-        const title = subscription.locator(
-            'h1[data-subscription-title]'
-        );
+    test('Subscription widget renders the configured button colour', async () => {
+        const button = subscription.getByRole('button', { name: 'Subscribe' });
 
-        const colour = await title.evaluate(
+        const backgroundColour = await button.evaluate(
             (element: HTMLElement) =>
-                getComputedStyle(element).color
+                getComputedStyle(element).backgroundColor
         );
 
-        expect(colour).not.toBe('rgb(0, 0, 0)');
+        expect(backgroundColour).toBe('rgb(37, 168, 70)');
     });
 });
