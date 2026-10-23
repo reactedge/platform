@@ -9,6 +9,16 @@ Applies to every newly created or modified widget in `reactedge/platform`, regar
 - Both files must parse as valid JSON and conform to the applicable widget/runtime contract schemas. Confirm consistency with the widget implementation; existence alone is insufficient.
 - Validate the widget structure using the MCP widget validator.
 
+## Styles
+
+- Give each distinct structural UI element its own CSS file named for its intent, such as `product-card.css` or `subscription-plans.css`.
+- Import all component styles through the widget's main style entry point. For `runtime-shadow` widgets, list each inline stylesheet in `src/styles/entry.ts`. For other widget types, import component styles from `src/styles/widget.css`.
+- Keep shared base rules in `main.css`; do not accumulate unrelated component styles there.
+
+## Function length
+
+- ESLint must warn when a function or method exceeds 250 lines. Split long functions into focused helpers instead of suppressing the warning.
+
 ## Required verification
 
 - Run the widget's applicable build and test commands. Both must pass; a scaffold validation alone is not enough.
