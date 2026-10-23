@@ -14,3 +14,9 @@
     outline: 2px solid #1877f2;
     outline-offset: 2px;
 }
+
+.subscription-submit-error {
+    margin: 0;
+    color: #b42318;
+    font-size: 0.875rem;
+}
