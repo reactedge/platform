@@ -21,6 +21,18 @@ export default [
     ...tseslint.configs.recommended,
 
     {
+        files: ["**/*.{js,jsx,ts,tsx}"],
+        rules: {
+            "max-lines-per-function": ["warn", {
+                max: 250,
+                skipBlankLines: false,
+                skipComments: false,
+                IIFEs: true
+            }]
+        }
+    },
+
+    {
         files: ["**/*.{ts,tsx}"],
 
         languageOptions: {

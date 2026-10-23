@@ -2,6 +2,8 @@
 
 Applies to every newly created or modified widget in `reactedge/platform`, regardless of which agent or skill performs the work.
 
+Cross-cutting engineering policies are defined in the root `AGENTS.md`. This document contains widget-specific standards and points to the root policy where relevant.
+
 ## Scaffold and contracts
 
 - `packages/widget-template` is the authoritative scaffold. Create widgets through the ReactEdge MCP widget creation operation.
