@@ -37,6 +37,7 @@ const requiredFiles = {
         "src/Config.ts",
         "src/ConfigSchema.ts",
         "src/ConfigSchemaRuntime.ts",
+        "public/reactedge-runtime.json",
         "src/WidgetView.tsx",
         "src/bootstrap/WidgetWrapper.tsx",
         "src/entrypoints/ssr.tsx",
@@ -46,6 +47,7 @@ const requiredFiles = {
         "src/Config.ts",
         "src/ConfigSchema.ts",
         "src/ConfigSchemaRuntime.ts",
+        "public/reactedge-runtime.json",
         "src/bootstrap/WidgetWrapper.tsx",
     ],
 } as const;
