@@ -14,3 +14,7 @@ config_file = "agents/widget-agent.toml"
 [agents.service-agent]
 description = "Create and maintain Express services under services/; follow the service skill and engineering standards."
 config_file = "agents/service-agent.toml"
+
+[agents.registry-agent]
+description = "Maintain ReactEdge workspace registries and sample widget contracts."
+config_file = "agents/registry-agent.toml"

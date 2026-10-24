@@ -17,6 +17,7 @@ Task procedures are documented separately in `.agents/skills/runtime-shadow-api-
 
 When the user requests delegated implementation work, the main Codex agent acts as the launcher using the roles registered in `.codex/config.toml`:
 
+- Delegate workspace registry and sample workspace definition maintenance to `registry-agent`.
 - Delegate widget creation or maintenance to `widget-agent`.
 - Delegate Express service creation or maintenance under `services/` to `service-agent`.
 - For mixed tasks, delegate separable widget and service work to their respective agents, coordinate shared interfaces, and integrate their results. Avoid simultaneous edits to the same files.

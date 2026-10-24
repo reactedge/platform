@@ -80,5 +80,26 @@
     "ssr": {
       "strategy": "static"
     }
+  },
+  "sizeguide": {
+    "active": true,
+    "contract": "default.json",
+    "ssr": {
+      "strategy": "static"
+    }
+  },
+  "categoryfaq": {
+    "active": true,
+    "contract": "default.json",
+    "ssr": {
+      "strategy": "static"
+    }
+  },
+  "categoryfeatured": {
+    "active": true,
+    "contract": "default.json",
+    "ssr": {
+      "strategy": "static"
+    }
   }
 }
