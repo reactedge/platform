@@ -1,0 +1,49 @@
+.sizeguide {
+    --sizeguide-ink: #20365c;
+    --sizeguide-line: #9fb5c7;
+    color: #334155;
+    font: inherit;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: clamp(1rem, 3vw, 2rem);
+}
+
+.sizeguide__header {
+    align-items: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 2rem;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.sizeguide__product-type {
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.35rem;
+    text-transform: uppercase;
+}
+
+.sizeguide__title {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    line-height: 1.15;
+    margin: 0;
+}
+
+.sizeguide__description {
+    margin: 0.5rem 0 0;
+    max-width: 52rem;
+}
+
+@media (max-width: 700px) {
+    .sizeguide {
+        padding: 1rem;
+    }
+
+    .sizeguide__header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

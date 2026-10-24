@@ -1,0 +1,67 @@
+.sizeguide__table-scroll {
+    border: 1px solid var(--sizeguide-line);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+
+.sizeguide__table {
+    border-collapse: collapse;
+    min-width: 640px;
+    text-align: center;
+    width: 100%;
+}
+
+.sizeguide__table th,
+.sizeguide__table td {
+    border-right: 1px solid var(--sizeguide-line);
+    padding: 0.65rem 0.75rem;
+}
+
+.sizeguide__table tr> :last-child {
+    border-right: 0;
+}
+
+.sizeguide__table thead {
+    background: var(--sizeguide-ink);
+    color: white;
+}
+
+.sizeguide__table thead th {
+    font-size: 0.85rem;
+}
+
+.sizeguide__table tbody th {
+    color: var(--sizeguide-ink);
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.sizeguide__table tbody th span {
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.sizeguide__table tbody tr {
+    background: #fff;
+    border-top: 1px solid var(--sizeguide-line);
+}
+
+.sizeguide__table tbody tr.sizeguide__country-sizes {
+    color: var(--sizeguide-ink);
+    font-weight: 700;
+}
+
+.sizeguide__table tbody tr.is-shaded {
+    background: #e2f1f8;
+}
+
+.sizeguide__visually-hidden {
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
