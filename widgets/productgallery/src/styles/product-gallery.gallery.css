@@ -31,8 +31,8 @@
     cursor: pointer;
     opacity: 0.7;
     transition:
-            opacity 0.2s ease,
-            transform 0.2s ease;
+        opacity 0.2s ease,
+        transform 0.2s ease;
 }
 
 .product-gallery__slider-thumbnail img {
@@ -75,6 +75,20 @@
 
 .product-gallery__slider-main {
     position: relative;
+}
+
+.product-gallery__zoom-trigger {
+    background: transparent;
+    border: 0;
+    cursor: zoom-in;
+    display: block;
+    padding: 0;
+    width: 100%;
+}
+
+.product-gallery__zoom-trigger:focus-visible {
+    outline: 3px solid #176b5b;
+    outline-offset: 3px;
 }
 
 

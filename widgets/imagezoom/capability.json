@@ -1,0 +1,15 @@
+{
+  "id": "imagezoom",
+  "widget": "imagezoom",
+  "description": "",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
