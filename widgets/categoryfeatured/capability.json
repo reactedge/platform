@@ -1,0 +1,15 @@
+{
+  "id": "categoryfeatured",
+  "widget": "categoryfeatured",
+  "description": "Displays featured category links with images in a responsive, browsable layout.",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
