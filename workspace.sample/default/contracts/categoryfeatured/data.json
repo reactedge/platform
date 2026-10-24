@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "key": "jackets-women",
+      "dataFile": "categories/jackets-women.json"
+    },
+    {
+      "key": "hoodies-and-sweatshirts-women",
+      "dataFile": "categories/hoodies-and-sweatshirts-women.json"
+    }
+  ]
+}

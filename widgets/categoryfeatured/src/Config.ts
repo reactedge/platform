@@ -36,10 +36,23 @@ export const WIDGET_ID = 'categoryfeatured';
  */
 export function readWidgetConfig(
     rawContract: unknown,
+    bootstrap?: unknown,
     activity?: WidgetActivity
 ): WidgetConfig {
     try {
-        const contract = parseConfig(rawContract);
+        const contractInput = rawContract as {
+            data?: Record<string, unknown>;
+        };
+        const effectiveContract = Array.isArray(bootstrap)
+            ? {
+                ...(rawContract as object),
+                data: {
+                    ...contractInput.data,
+                    categories: bootstrap,
+                },
+            }
+            : rawContract;
+        const contract = parseConfig(effectiveContract);
 
         activity?.log(
             'bootstrap',

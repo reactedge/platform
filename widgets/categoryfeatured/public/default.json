@@ -1,32 +1,7 @@
 {
   "data": {
     "title": "Featured categories",
-    "categories": [
-      {
-        "title": "Bags",
-        "image": "/media/catalog/category/bag.jpg",
-        "imageAlt": "",
-        "url": "/bags.html"
-      },
-      {
-        "title": "Clothing",
-        "image": "/media/catalog/category/clothing.jpg",
-        "imageAlt": "",
-        "url": "/clothing.html"
-      },
-      {
-        "title": "Accessories",
-        "image": "/media/catalog/category/accessories.jpg",
-        "imageAlt": "",
-        "url": "/accessories.html"
-      },
-      {
-        "title": "New arrivals",
-        "image": "/media/catalog/category/new-arrivals.jpg",
-        "imageAlt": "",
-        "url": "/new-arrivals.html"
-      }
-    ]
+    "categories": []
   },
   "settings": {
     "colour": "#1f2937"

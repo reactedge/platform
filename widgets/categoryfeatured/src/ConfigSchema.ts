@@ -10,7 +10,7 @@ const FeaturedCategorySchema = z.object({
 export const WidgetConfigSchema = z.object({
     data: z.object({
         title: z.string().min(1),
-        categories: z.array(FeaturedCategorySchema).min(1),
+        categories: z.array(FeaturedCategorySchema),
     }).strict(),
     settings: z.object({
         colour: z.string(),
