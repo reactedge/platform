@@ -1,0 +1,48 @@
+.sizeguide__how-to {
+    align-items: center;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
+    margin-top: 1.5rem;
+}
+
+.sizeguide__instruction-list h2 {
+    color: var(--sizeguide-ink);
+    font-size: 1.2rem;
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+}
+
+.sizeguide__instruction+.sizeguide__instruction {
+    margin-top: 0.85rem;
+}
+
+.sizeguide__instruction h3 {
+    color: var(--sizeguide-ink);
+    font-size: 0.95rem;
+    margin: 0 0 0.2rem;
+}
+
+.sizeguide__instruction p {
+    line-height: 1.5;
+    margin: 0;
+}
+
+.sizeguide__diagram {
+    display: block;
+    height: auto;
+    justify-self: center;
+    max-height: 26rem;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+@media (max-width: 700px) {
+    .sizeguide__how-to {
+        grid-template-columns: 1fr;
+    }
+
+    .sizeguide__diagram {
+        max-height: 20rem;
+    }
+}
