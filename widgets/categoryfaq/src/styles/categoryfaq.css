@@ -1,0 +1,22 @@
+.categoryfaq {
+    margin-block: 2rem;
+}
+
+.categoryfaq__list {
+    border-top: 1px solid #d1d5db;
+}
+
+.categoryfaq__item {
+    border-bottom: 1px solid #d1d5db;
+}
+
+.categoryfaq__item summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 1rem 0;
+}
+
+.categoryfaq__answer {
+    padding: 0 0 1rem;
+    line-height: 1.6;
+}

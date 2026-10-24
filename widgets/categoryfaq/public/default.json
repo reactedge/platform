@@ -1,0 +1,18 @@
+{
+  "data": {
+    "title": "Frequently asked questions",
+    "faqs": [
+      {
+        "question": "How should I choose the right size?",
+        "answer": "Use the size guide on the product page to compare measurements and find your best fit."
+      },
+      {
+        "question": "How do I care for my clothing?",
+        "answer": "Check the care label inside each garment for washing and drying instructions."
+      }
+    ]
+  },
+  "settings": {
+    "colour": "#1f2937"
+  }
+}

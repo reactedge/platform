@@ -1,0 +1,15 @@
+{
+  "id": "categoryfaq",
+  "widget": "categoryfaq",
+  "description": "Displays expandable FAQ entries configured for the contextual category.",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
