@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 import type { Locator } from "@playwright/test";
-import {WIDGET_ID} from "../src/Config";
+import { WIDGET_ID } from "../src/Config";
 
 test.describe('Product Gallery Widget', () => {
     let widget: Locator;
 
-    test.beforeEach(async ({page}) => {
+    test.beforeEach(async ({ page }) => {
         await page.goto('/?reactedge_debug=eager');
         widget = page.locator(`${WIDGET_ID}-widget`);
         await expect(widget).toBeVisible();
@@ -44,6 +44,7 @@ test.describe('Product Gallery Widget', () => {
         await expect(mainImage).toBeVisible();
         await expect(nextButton).toBeVisible();
         await expect(prevButton).toBeVisible();
+        await expect(zoomView.locator('[data-imagezoom-zoom-in]')).toBeVisible();
 
         const initialSrc = await mainImage.getAttribute('src');
 
@@ -51,11 +52,13 @@ test.describe('Product Gallery Widget', () => {
             throw new Error("Expected zoom image to have a src attribute");
         }
 
-        // Next image
+        await zoomView.locator('[data-imagezoom-zoom-in]').click();
+        await expect(zoomView.locator('[data-imagezoom-scale]')).toHaveText('150%');
+
         await nextButton.click();
         await expect(mainImage).not.toHaveAttribute('src', initialSrc);
+        await expect(zoomView.locator('[data-imagezoom-scale]')).toHaveText('100%');
 
-        // Previous image
         await prevButton.click();
         await expect(mainImage).toHaveAttribute('src', initialSrc);
     });

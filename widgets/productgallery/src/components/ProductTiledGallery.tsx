@@ -1,16 +1,18 @@
-import type {GalleryTile} from "./Types.ts";
-import {ZoomView} from "./ProductTiledGallery/ZoomView.tsx";
-import {useGallery} from "../hooks/useGallery.tsx";
-import {TileGrid} from "./ProductTiledGallery/TileGrid.tsx";
-import {useGalleryAvailability} from "../hooks/domain/useGalleryAvailability.tsx";
+import type { GalleryTile } from "./Types.ts";
+import { useState } from "react";
+import { ImageZoomDialog } from "reactedge-image-zoom";
+import { useGallery } from "../hooks/useGallery.tsx";
+import { TileGrid } from "./ProductTiledGallery/TileGrid.tsx";
+import { useGalleryAvailability } from "../hooks/domain/useGalleryAvailability.tsx";
 
 interface ProductTiledGalleryProps {
     tiles: GalleryTile[];
     maxColumns: number;
 }
 
-export const ProductTiledGallery = ({tiles, maxColumns}: ProductTiledGalleryProps) => {
+export const ProductTiledGallery = ({ tiles, maxColumns }: ProductTiledGalleryProps) => {
     const gallery = useGallery(tiles);
+    const [zoomOpen, setZoomOpen] = useState(false);
 
     const currentImage = useGalleryAvailability(
         tiles,
@@ -21,27 +23,27 @@ export const ProductTiledGallery = ({tiles, maxColumns}: ProductTiledGalleryProp
         return null;
     }
 
-    if (gallery.zoomed) {
-        return (
-            <ZoomView
+    return (
+        <>
+            {!zoomOpen && (
+                <TileGrid
+                    tiles={tiles}
+                    maxColumns={maxColumns}
+                    onSelect={index => {
+                        gallery.select(index);
+                        setZoomOpen(true);
+                    }}
+                />
+            )}
+            <ImageZoomDialog
                 image={currentImage}
-                activeIndex={gallery.activeIndex}
-                onClose={() => gallery.setZoomed(false)}
+                title={currentImage.alt || "Product image"}
+                open={zoomOpen}
+                onClose={() => setZoomOpen(false)}
                 onPrevious={gallery.previous}
                 onNext={gallery.next}
             />
-        );
-    }
-
-    return (
-        <TileGrid
-            tiles={tiles}
-            maxColumns={maxColumns}
-            onSelect={(index) => {
-                gallery.setActiveIndex(index);
-                gallery.setZoomed(true);
-            }}
-        />
+        </>
     );
 }
 

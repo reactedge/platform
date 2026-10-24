@@ -3,7 +3,6 @@ import type { GalleryTile } from "../components/Types.ts";
 
 export function useGallery(images: GalleryTile[]) {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [zoomed, setZoomed] = useState(false);
 
     useEffect(() => {
         if (images.length === 0) return;
@@ -30,8 +29,6 @@ export function useGallery(images: GalleryTile[]) {
     return {
         activeIndex,
         setActiveIndex,
-        zoomed,
-        setZoomed,
         previous,
         next,
         select,

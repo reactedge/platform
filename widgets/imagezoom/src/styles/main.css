@@ -1,0 +1,52 @@
+.imagezoom {
+    --imagezoom-accent: #176b5b;
+    color: #202b28;
+    font: inherit;
+}
+
+.imagezoom__preview {
+    background: #f1f4f1;
+    border: 1px solid #c9d2cd;
+    color: #24332e;
+    cursor: zoom-in;
+    display: grid;
+    gap: 0.6rem;
+    justify-items: start;
+    max-width: 18rem;
+    padding: 0.75rem;
+    text-align: left;
+    width: 100%;
+}
+
+.imagezoom__preview img {
+    background: #f1f4f1;
+    display: block;
+    object-fit: contain;
+    width: 100%;
+}
+
+.imagezoom__preview-action {
+    align-items: center;
+    color: var(--imagezoom-accent);
+    display: flex;
+    font-size: 0.9rem;
+    font-weight: 700;
+    gap: 0.45rem;
+}
+
+.imagezoom__magnifier {
+    align-items: center;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    display: inline-flex;
+    font-size: 1rem;
+    height: 1.4rem;
+    justify-content: center;
+    line-height: 1;
+    width: 1.4rem;
+}
+
+.imagezoom__preview:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--imagezoom-accent) 55%, white);
+    outline-offset: 2px;
+}

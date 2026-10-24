@@ -1,8 +1,10 @@
-import type {GalleryTile} from "./Types.ts";
-import {useGallery} from "../hooks/useGallery.tsx";
-import {SpinnerOverlay} from "./global/SpinnerOverlay.tsx";
-import {useSelectionState} from "../state/Selection/useSelectionState.tsx";
-import {useGalleryAvailability} from "../hooks/domain/useGalleryAvailability.tsx";
+import { useState } from "react";
+import type { GalleryTile } from "./Types.ts";
+import { ImageZoomDialog } from "reactedge-image-zoom";
+import { useGallery } from "../hooks/useGallery.tsx";
+import { SpinnerOverlay } from "./global/SpinnerOverlay.tsx";
+import { useSelectionState } from "../state/Selection/useSelectionState.tsx";
+import { useGalleryAvailability } from "../hooks/domain/useGalleryAvailability.tsx";
 
 interface ProductGalleryProps {
     tiles: GalleryTile[]
@@ -10,7 +12,8 @@ interface ProductGalleryProps {
 
 export const ProductGallery = ({ tiles }: ProductGalleryProps) => {
     const gallery = useGallery(tiles);
-    const {selectionLoading, selectionImage} = useSelectionState()
+    const [zoomOpen, setZoomOpen] = useState(false);
+    const { selectionLoading, selectionImage } = useSelectionState()
 
     const currentImage = useGalleryAvailability(
         tiles,
@@ -47,12 +50,20 @@ export const ProductGallery = ({ tiles }: ProductGalleryProps) => {
             </button>
 
             <div className="product-gallery__slider-main">
-                <img
-                    src={currentImage.src}
-                    alt={currentImage.alt}
-                    className="product-gallery__slider-main-image"
-                    data-gallery-main
-                />
+                <button
+                    type="button"
+                    className="product-gallery__zoom-trigger"
+                    onClick={() => setZoomOpen(true)}
+                    aria-label={`Zoom image: ${currentImage.alt ?? "Product image"}`}
+                    data-gallery-zoom-trigger
+                >
+                    <img
+                        src={currentImage.src}
+                        alt={currentImage.alt}
+                        className="product-gallery__slider-main-image"
+                        data-gallery-main
+                    />
+                </button>
 
                 {selectionLoading && (
                     <SpinnerOverlay />
@@ -91,6 +102,15 @@ export const ProductGallery = ({ tiles }: ProductGalleryProps) => {
                     </button>
                 ))}
             </div>
+
+            <ImageZoomDialog
+                image={currentImage}
+                title={currentImage.alt || "Product image"}
+                open={zoomOpen}
+                onClose={() => setZoomOpen(false)}
+                onPrevious={gallery.previous}
+                onNext={gallery.next}
+            />
         </div>
     );
 };
