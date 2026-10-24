@@ -1,0 +1,15 @@
+{
+  "id": "sizeguide",
+  "widget": "sizeguide",
+  "description": "Displays product-specific size measurements with country size labels and unit conversion.",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}

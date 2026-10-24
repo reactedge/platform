@@ -1,0 +1,82 @@
+{
+  "data": {
+    "title": "Women's size guide",
+    "productType": "Women's clothing",
+    "description": "Compare the size labels used in different countries and check garment measurements.",
+    "countries": [
+      { "code": "GB", "name": "United Kingdom", "flag": "🇬🇧" },
+      { "code": "US", "name": "United States", "flag": "🇺🇸" },
+      { "code": "FR", "name": "France", "flag": "🇫🇷" },
+      { "code": "EU", "name": "European Union", "flag": "🇪🇺" }
+    ],
+    "defaultCountry": "FR",
+    "sizes": [
+      { "id": "xxs", "label": "XXS", "labels": { "GB": "4", "US": "0", "FR": "34", "EU": "32" } },
+      { "id": "xs", "label": "XS", "labels": { "GB": "6", "US": "2", "FR": "36", "EU": "34" } },
+      { "id": "s", "label": "S", "labels": { "GB": "8", "US": "4", "FR": "38", "EU": "36" } },
+      { "id": "m", "label": "M", "labels": { "GB": "10", "US": "6", "FR": "40", "EU": "38" } },
+      { "id": "l", "label": "L", "labels": { "GB": "12", "US": "8", "FR": "42", "EU": "40" } },
+      { "id": "xl", "label": "XL", "labels": { "GB": "14", "US": "10", "FR": "44", "EU": "42" } },
+      { "id": "xxl", "label": "XXL", "labels": { "GB": "16", "US": "12", "FR": "46", "EU": "44" } }
+    ],
+    "measurements": [
+      {
+        "id": "bust",
+        "label": "Bust",
+        "values": { "xxs": 78, "xs": 81, "s": 86, "m": 91.5, "l": 96.5, "xl": 101.5, "xxl": 106.5 },
+        "unit": "cm"
+      },
+      {
+        "id": "waist",
+        "label": "Waist",
+        "values": { "xxs": 66, "xs": 68.5, "s": 71, "m": 76, "l": 81, "xl": 86, "xxl": 91.5 },
+        "unit": "cm"
+      },
+      {
+        "id": "hips",
+        "label": "Hips",
+        "values": { "xxs": 86.5, "xs": 91.5, "s": 96.5, "m": 101.5, "l": 106.5, "xl": 111.5, "xxl": 117 },
+        "unit": "cm"
+      },
+      {
+        "id": "inside-leg",
+        "label": "Inside leg",
+        "values": { "xxs": 72.5, "xs": 74, "s": 76, "m": 77, "l": 77.5, "xl": 79, "xxl": 79.5 },
+        "unit": "cm"
+      },
+      {
+        "id": "sleeve-shoulder",
+        "label": "Sleeve/shoulder",
+        "values": { "xxs": 73, "xs": 74.5, "s": 76, "m": 77.5, "l": 79, "xl": 80, "xxl": 81 },
+        "unit": "cm"
+      }
+    ],
+    "instructions": [
+      {
+        "title": "Sleeve/shoulder",
+        "text": "Measure from the side of your neck, across the shoulder, to just past your wrist bone."
+      },
+      {
+        "title": "Chest/bust",
+        "text": "Measure around the fullest part of your chest, keeping the tape level under your arms."
+      },
+      {
+        "title": "Waist",
+        "text": "Measure around your natural waist, usually the narrowest part of your torso."
+      },
+      {
+        "title": "Hips",
+        "text": "Stand with your feet together and measure around the fullest part of your hips."
+      },
+      {
+        "title": "Inside leg",
+        "text": "Measure from the top of your inner thigh down to your ankle."
+      }
+    ]
+  },
+  "settings": {
+    "colour": "#20365c",
+    "accentColour": "#45afd1",
+    "defaultUnit": "cm"
+  }
+}
