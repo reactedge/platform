@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<quote-widget></quote-widget>
+
+<script type="module">
+    import { mount } from "./api/runtime-widget.tsx";
+    import { ResourceLoader } from "@reactedge/framework/contract";
+
+    const loader = new ResourceLoader();
+
+    const contract = await loader.loadContract("default.json");
+    const runtime = await loader.loadRuntime();
+
+    const element = document.querySelector("quote-widget");
+
+    if (!element) {
+        throw new Error(
+            "quote-widget element not found"
+        );
+    }
+
+    requestAnimationFrame(() => {
+        mount(element, contract, undefined, runtime);
+    });
+</script>
+
+</body>
+</html>

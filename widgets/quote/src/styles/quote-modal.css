@@ -1,0 +1,99 @@
+.quote__dialog {
+    background: #f7f8f5;
+    border: 0;
+    color: #26342f;
+    height: min(92vh, 850px);
+    margin: auto;
+    max-height: none;
+    max-width: min(760px, calc(100vw - 1.5rem));
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
+
+.quote__dialog::backdrop {
+    background: rgb(14 20 18 / 72%);
+}
+
+.quote__panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.quote__header {
+    align-items: center;
+    border-bottom: 1px solid #d9dedb;
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+}
+
+.quote__eyebrow {
+    color: #66756e;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin: 0 0 0.2rem;
+    text-transform: uppercase;
+}
+
+.quote__header h2 {
+    font-size: 1.35rem;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.quote__close {
+    align-items: center;
+    background: #fff;
+    border: 1px solid #c8d0cc;
+    color: #26342f;
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-size: 1.5rem;
+    height: 2.5rem;
+    justify-content: center;
+    line-height: 1;
+    width: 2.5rem;
+}
+
+.quote__content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1.25rem;
+}
+
+.quote__header button:focus-visible,
+.quote__content button:focus-visible,
+.quote__content input:focus-visible {
+    outline: 3px solid #7bc2ae;
+    outline-offset: 2px;
+}
+
+.quote__footer {
+    background: #fff;
+    border-top: 1px solid #d9dedb;
+    flex: 0 0 auto;
+    padding: 1rem 1.25rem;
+}
+
+.quote__footer p {
+    color: #66756e;
+    font-size: 0.8rem;
+    margin: 0.45rem 0 0;
+}
+
+@media (max-width: 600px) {
+    .quote__dialog {
+        height: 96vh;
+        max-width: calc(100vw - 0.75rem);
+    }
+
+    .quote__content {
+        padding: 1rem;
+    }
+}

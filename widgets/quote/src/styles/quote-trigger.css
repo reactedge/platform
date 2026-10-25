@@ -1,0 +1,20 @@
+.quote__trigger {
+    background: #176b5b;
+    border: 1px solid #176b5b;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    min-height: 2.75rem;
+    padding: 0.65rem 1.1rem;
+}
+
+.quote__trigger:hover {
+    background: #115347;
+}
+
+.quote__trigger:focus-visible {
+    outline: 3px solid #7bc2ae;
+    outline-offset: 2px;
+}
