@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { ProductData } from "../../Config.ts";
 
 export type QuoteLine = ProductData & {
@@ -12,7 +12,7 @@ function calculateSubtotal(lines: QuoteLine[]): number {
 export function useQuoteLines() {
     const [lines, setLines] = useState<QuoteLine[]>([]);
 
-    const add = (product: ProductData, quantity: number) => {
+    const add = useCallback((product: ProductData, quantity: number) => {
         const amount = Math.max(1, Math.min(99, Math.floor(quantity)));
         setLines(current => {
             const existing = current.find(line => line.sku === product.sku);
@@ -23,24 +23,24 @@ export function useQuoteLines() {
             }
             return [...current, { ...product, quantity: amount }];
         });
-    };
+    }, []);
 
-    const increment = (sku: string) => {
+    const increment = useCallback((sku: string) => {
         setLines(current => current.map(line => line.sku === sku
             ? { ...line, quantity: Math.min(99, line.quantity + 1) }
             : line));
-    };
+    }, []);
 
-    const decrement = (sku: string) => {
+    const decrement = useCallback((sku: string) => {
         setLines(current => current.flatMap(line => {
             if (line.sku !== sku) return [line];
             return line.quantity > 1 ? [{ ...line, quantity: line.quantity - 1 }] : [];
         }));
-    };
+    }, []);
 
-    const remove = (sku: string) => {
+    const remove = useCallback((sku: string) => {
         setLines(current => current.filter(line => line.sku !== sku));
-    };
+    }, []);
 
     return {
         lines,

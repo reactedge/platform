@@ -10,31 +10,49 @@ in the ReactEdge platform.
 For API-backed runtime-shadow widgets, follow:
 .agents/skills/runtime-shadow-api-widget/SKILL.md
 
-When forwarding a callback or event handler through a React component tree, allow
-at most two intermediary components that do not invoke it. Count only those
-pass-through components between the handler owner and the component that invokes
-it. If a third intermediary would be needed, first consider moving the handler
-owner closer to its consumer. Use a widget-scoped context when the action or
-state is genuinely shared by multiple descendants, or when a shared event is
-consumed in several places; do not add context solely to satisfy the forwarding
-limit. Do not introduce a global context or package just to avoid this limit.
+When forwarding a callback or event handler through a React component tree, pass
+it through at most two React components from its owner to the component that
+invokes it. Count each receiving component, including the component that invokes
+the handler; do not count the owner. If the path would exceed two components,
+first consider moving the handler owner closer to its consumer. Use a
+widget-scoped context when state or actions are genuinely shared by multiple
+descendants, not solely to satisfy this limit. Do not introduce a global context
+or package for this purpose.
 
-Use Intent Discovery's local state pattern as the in-repository example:
+Keep React component APIs focused: use no more than six top-level props per
+component. When related values need to travel together, group them into a typed
+object by purpose or owning controller (for example, dialog state, product
+search state, or quote actions). Avoid arbitrary bags that combine unrelated
+concerns, and do not use grouping to hide excessive handler forwarding.
+
+When a widget component mostly coordinates feature state, domain hooks, and
+callbacks to assemble grouped props for a child, consider extracting that
+composition into a feature-scoped controller hook. The controller should own or
+coordinate state and actions for that feature and return a small, typed view
+model or grouped child props; the component should remain focused on rendering.
+Keep the controller near its feature and reuse existing domain hooks. Do not
+create a controller merely to move JSX, duplicate state ownership, or collect
+unrelated widget concerns into one catch-all object. Keep the six-top-level-prop
+limit and handler-forwarding limit in force across controller boundaries.
+At the component call site, destructure the controller result into the actions
+and purpose-based groups it returns, then use those names directly. Avoid keeping
+the whole result under a generic variable such as `controller` and repeatedly
+writing `controller.group` or `controller.action` throughout the render.
+
+Use Intent Discovery's local state pattern as an in-repository example:
 `widgets/intentdiscovery/src/state/Intent/IntentStateProvider.tsx` owns intent
 state and handles the shared `reactedge:intent` event, while
 `widgets/intentdiscovery/src/state/Intent/useIntentState.ts` gives descendants
-access through a widget-local hook. Follow the ownership and local-access
+access through a widget-local hook. Follow its ownership and local-access
 pattern, not necessarily its single-context shape.
 
 Keep context providers as close as practical to the descendants that share the
-value. Consider React context's update behavior: consumers of a context value
-render when that value changes. Avoid putting frequently changing state and
-stable actions into one broad context used throughout a widget. Split contexts,
-keep values stable, or use a suitable selector pattern when that reduces
-unnecessary consumer updates. A shared event listener should normally be
-registered at the provider or feature boundary, not independently in every
-consumer. Choose context only when the shared ownership/access benefit outweighs
-the added subscription and rendering cost.
+value. Consider context update behavior: consumers render when the context value
+changes. Avoid combining frequently changing state and stable actions in one
+broad context when splitting them or keeping values stable would reduce
+unnecessary renders. Register a shared event listener at the provider or feature
+boundary rather than independently in every consumer. Use context only when its
+shared ownership and access benefits outweigh subscription and rendering costs.
 
 Follow the mandatory engineering standards in:
 AGENTS.md

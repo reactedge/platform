@@ -12,6 +12,17 @@ const product = {
     },
 };
 
+const searchedProduct = {
+    sku: "SH23",
+    name: "Trail Shell",
+    small_image: { url: "https://shop.example.test/shell.jpg" },
+    price_range: {
+        minimum_price: {
+            final_price: { value: 40, currency: "USD" },
+        },
+    },
+};
+
 test.describe("Quote Widget", () => {
     let quote: Locator;
     let cartMutationRequests: string[];
@@ -26,7 +37,13 @@ test.describe("Quote Widget", () => {
             await route.fulfill({
                 status: 200,
                 contentType: "application/json",
-                body: JSON.stringify({ data: { products: { items: [product] } } }),
+                body: JSON.stringify({
+                    data: {
+                        products: {
+                            items: requestText.includes("match") ? [searchedProduct] : [product],
+                        },
+                    },
+                }),
             });
         });
 
@@ -69,6 +86,23 @@ test.describe("Quote Widget", () => {
         await line.getByRole("button", { name: "Remove" }).click();
         await expect(line).toHaveCount(0);
         await expect(dialog.locator("[data-quote-subtotal]")).toHaveText("$0.00");
+        expect(cartMutationRequests).toEqual([]);
+    });
+
+    test("searches products and adds a result to the quote", async () => {
+        const dialog = quote.locator("[data-quote-dialog]");
+        await quote.locator("[data-quote-open]").click();
+        await dialog.locator("[data-quote-search]").fill("Trail");
+
+        const result = dialog.getByRole("list", { name: "Search results" })
+            .getByRole("listitem");
+        await expect(result).toContainText("Trail Shell");
+        await result.getByRole("button", { name: "Add Trail Shell to quote" }).click();
+
+        const line = dialog.locator('[data-quote-line="SH23"]');
+        await expect(line).toBeVisible();
+        await expect(line.locator("[data-quote-quantity]")).toHaveText("1");
+        await expect(dialog.locator("[data-quote-subtotal]")).toHaveText("$40.00");
         expect(cartMutationRequests).toEqual([]);
     });
 
