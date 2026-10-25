@@ -5,8 +5,10 @@ type Props = {
     loading: boolean;
     error: Error | null;
     onRetry: () => void;
-    quantity: number;
-    onQuantityChange: (quantity: number) => void;
+    candidate: {
+        quantity: number;
+        onQuantityChange: (quantity: number) => void;
+    };
     onAdd: () => void;
 };
 
@@ -19,8 +21,7 @@ export const QuoteProductPicker = ({
     loading,
     error,
     onRetry,
-    quantity,
-    onQuantityChange,
+    candidate,
     onAdd,
 }: Props) => (
     <section className="quote__product-picker" aria-labelledby="quote-product-title">
@@ -49,8 +50,8 @@ export const QuoteProductPicker = ({
                         type="number"
                         min="1"
                         max="99"
-                        value={quantity}
-                        onChange={event => onQuantityChange(Math.max(1, Math.min(99, Number(event.target.value) || 1)))}
+                        value={candidate.quantity}
+                        onChange={event => candidate.onQuantityChange(Math.max(1, Math.min(99, Number(event.target.value) || 1)))}
                         data-quote-candidate-quantity
                     />
                 </label>

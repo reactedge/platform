@@ -1,5 +1,5 @@
-import type {ProductData} from "../../Config.ts";
-import type {GraphqlClient} from "@reactedge/framework/graphql/graphqlClient.ts";
+import type { ProductData } from "../../Config.ts";
+import type { GraphqlClient } from "@reactedge/framework/graphql/graphqlClient.ts";
 
 export type GraphqlProduct = {
     id?: string | null;
@@ -17,7 +17,7 @@ export type GraphqlProduct = {
 };
 
 export type ProductsResponse = {
-    products: {items: GraphqlProduct[]}
+    products: { items: GraphqlProduct[] }
 }
 
 function firstProduct(response: ProductsResponse): GraphqlProduct | undefined {
@@ -53,7 +53,7 @@ function mapProduct(product: GraphqlProduct): ProductData {
 
 const QUERY = `
   query GetProducts($filter: ProductAttributeFilterInput!) {
-            products(filter: $filter) {
+            products(filter: $filter, pageSize: 8) {
         items {
           id
                     sku
@@ -96,4 +96,22 @@ export async function fetchMagentoProductData(
     }
 
     return mapProduct(product);
+}
+
+export async function searchMagentoProducts(
+    graphqlClient: GraphqlClient,
+    searchTerm: string
+): Promise<ProductData[]> {
+    const data = await graphqlClient<ProductsResponse>(
+        QUERY,
+        {
+            filter: {
+                name: {
+                    match: searchTerm,
+                },
+            },
+        }
+    );
+
+    return data.products.items.map(mapProduct);
 }
