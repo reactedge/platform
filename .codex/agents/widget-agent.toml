@@ -13,9 +13,28 @@ For API-backed runtime-shadow widgets, follow:
 When forwarding a callback or event handler through a React component tree, allow
 at most two intermediary components that do not invoke it. Count only those
 pass-through components between the handler owner and the component that invokes
-it. If a third intermediary would be needed, move the handler owner closer to
-the consumer or use a widget-scoped context. Do not introduce a global context
-or package just to avoid this limit.
+it. If a third intermediary would be needed, first consider moving the handler
+owner closer to its consumer. Use a widget-scoped context when the action or
+state is genuinely shared by multiple descendants, or when a shared event is
+consumed in several places; do not add context solely to satisfy the forwarding
+limit. Do not introduce a global context or package just to avoid this limit.
+
+Use Intent Discovery's local state pattern as the in-repository example:
+`widgets/intentdiscovery/src/state/Intent/IntentStateProvider.tsx` owns intent
+state and handles the shared `reactedge:intent` event, while
+`widgets/intentdiscovery/src/state/Intent/useIntentState.ts` gives descendants
+access through a widget-local hook. Follow the ownership and local-access
+pattern, not necessarily its single-context shape.
+
+Keep context providers as close as practical to the descendants that share the
+value. Consider React context's update behavior: consumers of a context value
+render when that value changes. Avoid putting frequently changing state and
+stable actions into one broad context used throughout a widget. Split contexts,
+keep values stable, or use a suitable selector pattern when that reduces
+unnecessary consumer updates. A shared event listener should normally be
+registered at the provider or feature boundary, not independently in every
+consumer. Choose context only when the shared ownership/access benefit outweighs
+the added subscription and rendering cost.
 
 Follow the mandatory engineering standards in:
 AGENTS.md
