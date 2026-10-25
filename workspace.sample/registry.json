@@ -101,5 +101,12 @@
     "ssr": {
       "strategy": "static"
     }
+  },
+  "quote": {
+    "active": true,
+    "contract": "default.json",
+    "ssr": {
+      "strategy": "static"
+    }
   }
 }

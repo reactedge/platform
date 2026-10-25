@@ -1,0 +1,152 @@
+.quote__items-section {
+    border-bottom: 1px solid #d9dedb;
+    padding-bottom: 1.15rem;
+}
+
+.quote__items-section {
+    border-bottom: 0;
+    padding: 1.15rem 0 0;
+}
+
+.quote__product-picker h3,
+.quote__section-heading h3 {
+    color: #34443d;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.quote__line-sku {
+    color: #66756e;
+    font-size: 0.8rem;
+}
+
+.quote__error,
+.quote__empty {
+    color: #66756e;
+    margin: 0.75rem 0 0;
+}
+
+.quote__error button {
+    background: transparent;
+    border: 0;
+    color: #176b5b;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.quote__section-heading,
+.quote__subtotal {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.quote__section-heading > span {
+    color: #66756e;
+    font-size: 0.8rem;
+}
+
+.quote__lines {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+}
+
+.quote__line {
+    align-items: center;
+    border-top: 1px solid #e7ebe8;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    padding: 0.75rem 0;
+}
+
+.quote__line-image,
+.quote__line-image--empty {
+    aspect-ratio: 1;
+    background: #eef1ef;
+    object-fit: contain;
+    width: 3.5rem;
+}
+
+.quote__line-details {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.quote__line-details strong:first-child {
+    overflow-wrap: anywhere;
+}
+
+.quote__line-actions {
+    align-items: end;
+    display: grid;
+    gap: 0.25rem;
+    justify-items: end;
+}
+
+.quote__stepper {
+    align-items: center;
+    border: 1px solid #c8d0cc;
+    display: flex;
+    min-height: 2rem;
+}
+
+.quote__stepper button {
+    background: #fff;
+    border: 0;
+    color: #26342f;
+    cursor: pointer;
+    font: inherit;
+    height: 2rem;
+    width: 2rem;
+}
+
+.quote__stepper output {
+    min-width: 1.5rem;
+    text-align: center;
+}
+
+.quote__line-total {
+    font-size: 0.9rem;
+}
+
+.quote__remove {
+    background: transparent;
+    border: 0;
+    color: #7b3f39;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.75rem;
+    padding: 0.15rem 0;
+    text-decoration: underline;
+}
+
+.quote__subtotal {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+@media (max-width: 560px) {
+    .quote__line {
+        grid-template-columns: 3rem minmax(0, 1fr);
+    }
+
+    .quote__line-image,
+    .quote__line-image--empty {
+        width: 3rem;
+    }
+
+    .quote__line-actions {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        grid-column: 2;
+        justify-content: space-between;
+        justify-items: initial;
+    }
+}

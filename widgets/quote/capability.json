@@ -1,0 +1,15 @@
+{
+  "id": "quote",
+  "widget": "quote",
+  "description": "Builds a local product quote without adding items to the Magento cart.",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
