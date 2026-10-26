@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef } from "react";
-import type { ProductData } from "../../Config.ts";
 import type { QuoteLine } from "../../hooks/domain/useQuoteLines.ts";
-import { QuoteProductPicker } from "./QuoteProductPicker.tsx";
 import { QuoteItems } from "./QuoteItems.tsx";
 import { QuoteProductSearch } from "./QuoteProductSearch.tsx";
 import { QuoteLineActionsProvider } from "./QuoteLineActionsContext.tsx";
+import { QuoteDeliveryEstimator } from "./QuoteDeliveryEstimator.tsx";
+import type { QuoteProductSearchState, QuoteProductSearchActions } from "./QuoteProductSearch.tsx";
+import type { QuoteDeliveryEstimatorState, QuoteDeliveryEstimatorActions } from "./QuoteDeliveryEstimator.tsx";
 
 type DialogOptions = {
     title: string;
@@ -13,39 +14,27 @@ type DialogOptions = {
     colour: string;
 };
 
-type ProductOptions = {
-    product: ProductData | null;
-    productLoading: boolean;
-    productError: Error | null;
-    onRetry: () => void;
-    candidateQuantity: number;
-    onCandidateQuantityChange: (quantity: number) => void;
-    onAddProduct: () => void;
-};
-
-type SearchOptions = {
-    searchTerm: string;
-    onSearchTermChange: (value: string) => void;
-    searchResults: ProductData[];
-    searchLoading: boolean;
-    searchError: Error | null;
-    onAddSearchProduct: (product: ProductData) => void;
-};
-
 type QuoteOptions = {
     lines: QuoteLine[];
     subtotal: number;
     currency: string;
-    onIncrement: (sku: string) => void;
-    onDecrement: (sku: string) => void;
-    onRemove: (sku: string) => void;
+    onIncrement: (lineId: string) => void;
+    onDecrement: (lineId: string) => void;
+    onRemove: (lineId: string) => void;
+    onSetOption: (lineId: string, attributeCode: string, valueUid: string) => void;
 };
 
 type Props = {
     dialog: DialogOptions;
-    product: ProductOptions;
-    search: SearchOptions;
+    search: {
+        state: QuoteProductSearchState;
+        actions: QuoteProductSearchActions;
+    };
     quote: QuoteOptions;
+    delivery: {
+        state: QuoteDeliveryEstimatorState;
+        actions: QuoteDeliveryEstimatorActions;
+    };
 };
 
 function formatPrice(value: number, currency: string): string {
@@ -55,15 +44,16 @@ function formatPrice(value: number, currency: string): string {
     }).format(value);
 }
 
-export const QuoteDialog = ({ dialog, product, search, quote }: Props) => {
+export const QuoteDialog = ({ dialog, search, quote, delivery }: Props) => {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const lineActions = useMemo(
         () => ({
             increment: quote.onIncrement,
             decrement: quote.onDecrement,
             remove: quote.onRemove,
+            setOption: quote.onSetOption,
         }),
-        [quote.onDecrement, quote.onIncrement, quote.onRemove]
+        [quote.onDecrement, quote.onIncrement, quote.onRemove, quote.onSetOption]
     );
 
     useEffect(() => {
@@ -99,27 +89,13 @@ export const QuoteDialog = ({ dialog, product, search, quote }: Props) => {
 
                 <div className="quote__content">
                     <QuoteProductSearch
-                        searchTerm={search.searchTerm}
-                        onSearchTermChange={search.onSearchTermChange}
-                        products={search.searchResults}
-                        loading={search.searchLoading}
-                        error={search.searchError}
-                        onAddProduct={search.onAddSearchProduct}
-                    />
-                    <QuoteProductPicker
-                        product={product.product}
-                        loading={product.productLoading}
-                        error={product.productError}
-                        onRetry={product.onRetry}
-                        candidate={{
-                            quantity: product.candidateQuantity,
-                            onQuantityChange: product.onCandidateQuantityChange,
-                        }}
-                        onAdd={product.onAddProduct}
+                        state={search.state}
+                        actions={search.actions}
                     />
                     <QuoteLineActionsProvider actions={lineActions}>
                         <QuoteItems lines={quote.lines} formatPrice={formatPrice} />
                     </QuoteLineActionsProvider>
+                    <QuoteDeliveryEstimator state={delivery.state} actions={delivery.actions} />
                 </div>
 
                 <footer className="quote__footer">
@@ -127,7 +103,7 @@ export const QuoteDialog = ({ dialog, product, search, quote }: Props) => {
                         <span>Estimated subtotal</span>
                         <strong data-quote-subtotal>{formatPrice(quote.subtotal, quote.currency)}</strong>
                     </div>
-                    <p>Taxes and shipping are not included. This quote does not modify your cart.</p>
+                    <p>Taxes are not included. Delivery estimates are shown separately. This quote does not modify your cart.</p>
                 </footer>
             </div>
         </dialog>

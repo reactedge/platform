@@ -9,6 +9,7 @@ export interface WidgetConfig {
 
     readonly settings: {
         colour: string;
+        countryCode: string;
     };
 
     readonly runtime: RuntimeConfig
@@ -23,11 +24,21 @@ export interface ProductData {
     currency: string
     matchPercentage?: number
     matchReason?: string | null
+    productType: string;
+    configurableOptions: ConfigurableProductOption[];
+}
+
+export interface ConfigurableProductOption {
+    attributeCode: string;
+    label: string;
+    values: {
+        uid: string;
+        label: string;
+    }[];
 }
 
 export interface RuntimeConfig {
     storeCode: string;
-    sku: string;
 }
 
 export interface ReactEdgeRuntimeConfig {
@@ -112,8 +123,7 @@ export function resolveConfig(
         data: widget.data,
         settings: widget.settings,
         runtime: {
-            storeCode: runtime.context.storeCode,
-            sku: runtime.context.sku
+            storeCode: runtime.context.storeCode
         },
         integrations: {
             magentoGraphql: runtime.integrations?.magentoGraphql,

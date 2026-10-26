@@ -18,7 +18,7 @@ export const QuoteItems = ({ lines, formatPrice }: Props) => (
             <ul className="quote__lines">
                 {lines.map(line => (
                     <QuoteLineItem
-                        key={line.sku}
+                        key={line.lineId}
                         line={line}
                         formatPrice={formatPrice}
                     />

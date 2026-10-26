@@ -1,17 +1,6 @@
 import { expect, test } from "@playwright/test";
 import type { Locator } from "@playwright/test";
 
-const product = {
-    sku: "WJ12",
-    name: "Everyday Jacket",
-    small_image: { url: "https://shop.example.test/jacket.jpg" },
-    price_range: {
-        minimum_price: {
-            final_price: { value: 25, currency: "USD" },
-        },
-    },
-};
-
 const searchedProduct = {
     sku: "SH23",
     name: "Trail Shell",
@@ -44,7 +33,7 @@ test.describe("Quote Widget", () => {
                 body: JSON.stringify({
                     data: {
                         products: {
-                            items: requestBody.variables?.filter?.sku ? [product] : [searchedProduct],
+                            items: [searchedProduct],
                         },
                     },
                 }),
@@ -79,33 +68,7 @@ test.describe("Quote Widget", () => {
         await quote.locator("[data-quote-open]").click();
         await expect(dialog).toBeVisible();
         await expect(dialog.locator("#quote-dialog-title")).toHaveText("Request a quote");
-        await expect(dialog.locator("[data-quote-product-name]")).toHaveText("Everyday Jacket");
-        await expect(dialog.locator("[data-quote-product-price]")).toHaveText("$25.00");
-    });
-
-    test("adds product locally and recalculates the estimated subtotal", async () => {
-        const dialog = quote.locator("[data-quote-dialog]");
-        await quote.locator("[data-quote-open]").click();
-        await dialog.locator("[data-quote-candidate-quantity]").fill("2");
-        await dialog.locator("[data-quote-add]").click();
-
-        const line = dialog.locator('[data-quote-line="WJ12"]');
-        await expect(line).toBeVisible();
-        await expect(line.locator("[data-quote-quantity]")).toHaveText("2");
-        await expect(line.locator(".quote__line-total")).toHaveText("$50.00");
-        await expect(dialog.locator("[data-quote-subtotal]")).toHaveText("$50.00");
-
-        await line.getByRole("button", { name: "Increase Everyday Jacket quantity" }).click();
-        await expect(line.locator("[data-quote-quantity]")).toHaveText("3");
-        await expect(dialog.locator("[data-quote-subtotal]")).toHaveText("$75.00");
-
-        await line.getByRole("button", { name: "Decrease Everyday Jacket quantity" }).click();
-        await expect(dialog.locator("[data-quote-subtotal]")).toHaveText("$50.00");
-
-        await line.getByRole("button", { name: "Remove" }).click();
-        await expect(line).toHaveCount(0);
-        await expect(dialog.locator("[data-quote-subtotal]")).toHaveText("$0.00");
-        expect(cartMutationRequests).toEqual([]);
+        await expect(dialog.getByRole("heading", { name: "Add this product" })).toHaveCount(0);
     });
 
     test("searches products and adds a result to the quote", async () => {
@@ -125,15 +88,17 @@ test.describe("Quote Widget", () => {
         expect(cartMutationRequests).toEqual([]);
     });
 
-    test("closes with Escape and preserves quote state when reopened", async ({ page }) => {
+    test("closes with Escape and preserves searched quote state when reopened", async ({ page }) => {
         const dialog = quote.locator("[data-quote-dialog]");
         await quote.locator("[data-quote-open]").click();
-        await dialog.locator("[data-quote-add]").click();
+        await dialog.locator("[data-quote-search]").fill("Trail");
+        const result = dialog.getByRole("list", { name: "Search results" }).getByRole("listitem");
+        await result.getByRole("button", { name: "Add Trail Shell to quote" }).click();
         await page.keyboard.press("Escape");
         await expect(dialog).not.toBeVisible();
 
         await quote.locator("[data-quote-open]").click();
-        await expect(dialog.locator('[data-quote-line="WJ12"]')).toBeVisible();
+        await expect(dialog.locator('[data-quote-line="SH23"]')).toBeVisible();
         expect(cartMutationRequests).toEqual([]);
     });
 });

@@ -4,15 +4,14 @@ import {useEffect, useState} from "react";
 import {SystemStateProvider} from "../state/System/SystemStateProvider.tsx";
 import {SpinnerOverlay} from "../components/global/SpinnerOverlay.tsx";
 import {WidgetQuote} from "../components/WidgetQuote.tsx";
-import type { BootstrapData } from "../entrypoints/ssr.tsx";
 
 type Props = {
     contract: unknown,
+    bootstrap: unknown;
     runtime: unknown;
-    bootstrap?: unknown
 }
 
-export default function WidgetWrapper({contract, runtime, bootstrap}: Props) {
+export default function WidgetWrapper({contract, runtime}: Props) {
     const activity = useActivityContext()
     const [bootReady, setBootReady] = useState(false);
     const config = readWidgetConfig(contract, runtime, activity);
@@ -33,9 +32,6 @@ export default function WidgetWrapper({contract, runtime, bootstrap}: Props) {
                     ? <SpinnerOverlay/>
                     : <WidgetQuote
                         config={config}
-                        {...(bootstrap !== undefined
-                            ? { bootstrap: bootstrap as BootstrapData }
-                            : {})}
                     />
                 }
     </SystemStateProvider>

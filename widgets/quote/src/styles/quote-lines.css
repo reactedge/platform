@@ -8,7 +8,6 @@
     padding: 1.15rem 0 0;
 }
 
-.quote__product-picker h3,
 .quote__section-heading h3 {
     color: #34443d;
     font-size: 0.95rem;
@@ -20,21 +19,9 @@
     font-size: 0.8rem;
 }
 
-.quote__error,
 .quote__empty {
     color: #66756e;
     margin: 0.75rem 0 0;
-}
-
-.quote__error button {
-    background: transparent;
-    border: 0;
-    color: #176b5b;
-    cursor: pointer;
-    font: inherit;
-    font-weight: 700;
-    padding: 0;
-    text-decoration: underline;
 }
 
 .quote__section-heading,
@@ -76,6 +63,31 @@
     display: grid;
     gap: 0.25rem;
     min-width: 0;
+}
+
+.quote__line-configurable-options {
+    display: grid;
+    gap: 0.45rem;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    margin-top: 0.35rem;
+}
+
+.quote__line-configurable-options label {
+    color: #66756e;
+    display: grid;
+    font-size: 0.75rem;
+    gap: 0.2rem;
+}
+
+.quote__line-configurable-options select {
+    background: #fff;
+    border: 1px solid #aebbb4;
+    border-radius: 2px;
+    color: #26342f;
+    font: inherit;
+    min-height: 2.1rem;
+    padding: 0.35rem 0.45rem;
+    width: 100%;
 }
 
 .quote__line-details strong:first-child {
