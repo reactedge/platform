@@ -106,10 +106,12 @@ export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props)
                         actions={search.actions}
                     />
                     <QuoteProductPicker
-                        product={product.product}
-                        loading={product.productLoading}
-                        error={product.productError}
-                        onRetry={product.onRetry}
+                        product={{
+                            product: product.product,
+                            loading: product.productLoading,
+                            error: product.productError,
+                            onRetry: product.onRetry,
+                        }}
                         candidate={{
                             quantity: product.candidateQuantity,
                             onQuantityChange: product.onCandidateQuantityChange,

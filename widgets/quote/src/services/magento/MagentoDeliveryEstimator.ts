@@ -83,8 +83,11 @@ const ESTIMATE_SHIPPING_METHODS = `
 
 export class MagentoDeliveryEstimator {
     private cartForItems: { signature: string; id: string } | null = null;
+    private readonly graphqlClient: GraphqlClient;
 
-    constructor(private readonly graphqlClient: GraphqlClient) {}
+    constructor(graphqlClient: GraphqlClient) {
+        this.graphqlClient = graphqlClient;
+    }
 
     async estimate(
         items: DeliveryEstimateItem[],
