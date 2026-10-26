@@ -8,7 +8,7 @@ export function useMagentoProductSearch(searchTerm: string) {
     const [products, setProducts] = useState<ProductData[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
-    const { graphqlClient } = useSystemState();
+    const { graphqlClient, intentApiUrl, storeCode } = useSystemState();
 
     useEffect(() => {
         const term = searchTerm.trim();
@@ -24,7 +24,7 @@ export function useMagentoProductSearch(searchTerm: string) {
         const timer = window.setTimeout(() => {
             setLoading(true);
             setError(null);
-            void searchMagentoProducts(graphqlClient, term)
+            void searchMagentoProducts(graphqlClient, intentApiUrl, storeCode, term)
                 .then(results => {
                     if (active) setProducts(results);
                 })
@@ -40,7 +40,7 @@ export function useMagentoProductSearch(searchTerm: string) {
             active = false;
             window.clearTimeout(timer);
         };
-    }, [graphqlClient, searchTerm]);
+    }, [graphqlClient, intentApiUrl, searchTerm, storeCode]);
 
     return { products, loading, error };
 }

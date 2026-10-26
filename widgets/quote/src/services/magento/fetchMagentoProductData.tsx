@@ -5,6 +5,7 @@ export type GraphqlProduct = {
     id?: string | null;
     sku?: string | null;
     name?: string | null;
+    short_description?: { html?: string | null } | null;
     small_image?: { url?: string | null } | null;
     price_range?: {
         minimum_price?: {
@@ -52,12 +53,15 @@ function mapProduct(product: GraphqlProduct): ProductData {
 }
 
 const QUERY = `
-  query GetProducts($filter: ProductAttributeFilterInput!) {
-            products(filter: $filter, pageSize: 8) {
+    query GetProducts($filter: ProductAttributeFilterInput!, $search: String) {
+                        products(filter: $filter, search: $search, pageSize: 40) {
         items {
           id
                     sku
           name
+                    short_description {
+                        html
+                    }
                     small_image {
                         url
                     }
@@ -86,6 +90,7 @@ export async function fetchMagentoProductData(
                     eq: sku,
                 },
             },
+            search: null,
         }
     );
 
@@ -100,18 +105,40 @@ export async function fetchMagentoProductData(
 
 export async function searchMagentoProducts(
     graphqlClient: GraphqlClient,
+    intentApiUrl: string,
+    storeCode: string,
     searchTerm: string
 ): Promise<ProductData[]> {
     const data = await graphqlClient<ProductsResponse>(
         QUERY,
-        {
-            filter: {
-                name: {
-                    match: searchTerm,
-                },
-            },
-        }
+        { filter: {}, search: searchTerm }
     );
 
-    return data.products.items.map(mapProduct);
+    const candidates = data.products.items;
+    const response = await fetch(`${intentApiUrl.replace(/\/+$/, "")}/v1/intent/recommend`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Store: storeCode },
+        body: JSON.stringify({
+            intentText: searchTerm,
+            filters: {},
+            products: candidates.map(product => ({
+                sku: product.sku ?? "",
+                title: product.name ?? "",
+                shortDescription: product.short_description?.html ?? null,
+                attributes: {},
+            })),
+        }),
+    });
+    if (!response.ok) {
+        throw new Error("Intent recommendation request failed");
+    }
+
+    const result = await response.json() as {
+        suggestions?: { sku: string }[] | null;
+    };
+    const productBySku = new Map(candidates.map(product => [product.sku ?? "", product]));
+    return (result.suggestions ?? [])
+        .map(suggestion => productBySku.get(suggestion.sku))
+        .filter((product): product is GraphqlProduct => Boolean(product))
+        .map(mapProduct);
 }

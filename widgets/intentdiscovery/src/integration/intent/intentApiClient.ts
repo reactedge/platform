@@ -42,8 +42,8 @@ export const createIntentApiClient = (
     };
 
     return {
-        suggest: (payload) => call("/intent/suggest", payload),
-        interpret: (payload) => call("/intent/interpret", payload),
-        dummy: (payload) => call("/intent/dummy", payload),
+        suggest: (payload) => call("/v1/intent/suggest", payload),
+        interpret: (payload) => call("/v1/intent/interpret", payload),
+        dummy: (payload) => call("/v1/intent/dummy", payload),
     };
 };

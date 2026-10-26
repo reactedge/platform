@@ -58,7 +58,6 @@ services/widgets-ssr/snapshots/
 # Deployment artifacts
 artifacts/
 
-services/intent-engine/*
 services/**/self-healing/*
 README-DEPLOY-DEMO.md
 

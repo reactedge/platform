@@ -23,6 +23,9 @@ export const SystemStateProvider: React.FC<SystemStateProviderProps> = ({
     if (!config?.magentoGraphql?.api) {
         throw new Error('GraphQL client cannot be created without API endpoint');
     }
+    if (!config?.intentApi?.baseUrl) {
+        throw new Error('Intent API endpoint is required');
+    }
 
     const graphqlClient = useMemo(
         () => createGraphqlService(config.magentoGraphql.api, runtime.storeCode, activity),
@@ -32,7 +35,9 @@ export const SystemStateProvider: React.FC<SystemStateProviderProps> = ({
     return (
         <LocalStateProvider
             value={{
-                graphqlClient
+                graphqlClient,
+                intentApiUrl: config.intentApi.baseUrl,
+                storeCode: runtime.storeCode
             }}
         >
             {children}

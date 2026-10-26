@@ -37,11 +37,17 @@ export interface ReactEdgeRuntimeIntegrations {
     readonly magentoGraphql: {
         readonly api: string
     };
+    readonly intentApi: {
+        readonly baseUrl: string
+    };
 }
 
 export interface ResolvedConfigIntegrations {
     readonly magentoGraphql: {
         readonly api: string
+    };
+    readonly intentApi: {
+        readonly baseUrl: string
     };
 }
 
@@ -108,7 +114,8 @@ export function resolveConfig(
             sku: runtime.context.sku
         },
         integrations: {
-            magentoGraphql: runtime.integrations?.magentoGraphql
+            magentoGraphql: runtime.integrations?.magentoGraphql,
+            intentApi: runtime.integrations?.intentApi
         }
     };
 }
