@@ -6,8 +6,8 @@ import { QuoteItems } from "./QuoteItems.tsx";
 import { QuoteProductSearch } from "./QuoteProductSearch.tsx";
 import { QuoteLineActionsProvider } from "./QuoteLineActionsContext.tsx";
 import { QuoteDeliveryEstimator } from "./QuoteDeliveryEstimator.tsx";
-import type { DeliveryMethodEstimate } from "../../services/magento/MagentoDeliveryEstimator.ts";
-import type { QuoteProductFacet, QuoteProductFilter } from "../../services/magento/fetchMagentoProductData.tsx";
+import type { QuoteProductSearchState, QuoteProductSearchActions } from "./QuoteProductSearch.tsx";
+import type { QuoteDeliveryEstimatorState, QuoteDeliveryEstimatorActions } from "./QuoteDeliveryEstimator.tsx";
 
 type DialogOptions = {
     title: string;
@@ -26,19 +26,6 @@ type ProductOptions = {
     onAddProduct: () => void;
 };
 
-type SearchOptions = {
-    searchTerm: string;
-    onSearchTermChange: (value: string) => void;
-    searchResults: ProductData[];
-    facets: QuoteProductFacet[];
-    filters: QuoteProductFilter;
-    onToggleFilter: (attribute: string, value: string) => void;
-    onClearFilters: () => void;
-    searchLoading: boolean;
-    searchError: Error | null;
-    onAddSearchProduct: (product: ProductData) => void;
-};
-
 type QuoteOptions = {
     lines: QuoteLine[];
     subtotal: number;
@@ -49,24 +36,18 @@ type QuoteOptions = {
     onSetOption: (lineId: string, attributeCode: string, valueUid: string) => void;
 };
 
-type DeliveryOptions = {
-    postcode: string;
-    onPostcodeChange: (value: string) => void;
-    methods: DeliveryMethodEstimate[];
-    loading: boolean;
-    error: Error | null;
-    hasEstimate: boolean;
-    disabled: boolean;
-    hasUnconfiguredItems: boolean;
-    onEstimate: () => Promise<void>;
-};
-
 type Props = {
     dialog: DialogOptions;
     product: ProductOptions;
-    search: SearchOptions;
+    search: {
+        state: QuoteProductSearchState;
+        actions: QuoteProductSearchActions;
+    };
     quote: QuoteOptions;
-    delivery: DeliveryOptions;
+    delivery: {
+        state: QuoteDeliveryEstimatorState;
+        actions: QuoteDeliveryEstimatorActions;
+    };
 };
 
 function formatPrice(value: number, currency: string): string {
@@ -121,16 +102,8 @@ export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props)
 
                 <div className="quote__content">
                     <QuoteProductSearch
-                        searchTerm={search.searchTerm}
-                        onSearchTermChange={search.onSearchTermChange}
-                        products={search.searchResults}
-                        facets={search.facets}
-                        filters={search.filters}
-                        onToggleFilter={search.onToggleFilter}
-                        onClearFilters={search.onClearFilters}
-                        loading={search.searchLoading}
-                        error={search.searchError}
-                        onAddProduct={search.onAddSearchProduct}
+                        state={search.state}
+                        actions={search.actions}
                     />
                     <QuoteProductPicker
                         product={product.product}
@@ -144,19 +117,9 @@ export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props)
                         onAdd={product.onAddProduct}
                     />
                     <QuoteLineActionsProvider actions={lineActions}>
-                        <QuoteItems lines={quote.lines} formatPrice={formatPrice} onSetOption={quote.onSetOption} />
+                        <QuoteItems lines={quote.lines} formatPrice={formatPrice} />
                     </QuoteLineActionsProvider>
-                    <QuoteDeliveryEstimator
-                        postcode={delivery.postcode}
-                        onPostcodeChange={delivery.onPostcodeChange}
-                        methods={delivery.methods}
-                        loading={delivery.loading}
-                        error={delivery.error}
-                        hasEstimate={delivery.hasEstimate}
-                        disabled={delivery.disabled}
-                        hasUnconfiguredItems={delivery.hasUnconfiguredItems}
-                        onEstimate={delivery.onEstimate}
-                    />
+                    <QuoteDeliveryEstimator state={delivery.state} actions={delivery.actions} />
                 </div>
 
                 <footer className="quote__footer">

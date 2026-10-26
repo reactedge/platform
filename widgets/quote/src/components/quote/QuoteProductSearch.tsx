@@ -1,60 +1,57 @@
 import type { ProductData } from "../../Config.ts";
 import type { QuoteProductFacet, QuoteProductFilter } from "../../services/magento/fetchMagentoProductData.tsx";
 
-type Props = {
+export type QuoteProductSearchState = {
     searchTerm: string;
-    onSearchTermChange: (value: string) => void;
     products: ProductData[];
     facets: QuoteProductFacet[];
     filters: QuoteProductFilter;
-    onToggleFilter: (attribute: string, value: string) => void;
-    onClearFilters: () => void;
     loading: boolean;
     error: Error | null;
+};
+
+export type QuoteProductSearchActions = {
+    onSearchTermChange: (value: string) => void;
+    onToggleFilter: (attribute: string, value: string) => void;
+    onClearFilters: () => void;
     onAddProduct: (product: ProductData) => void;
+};
+
+export type QuoteProductSearchProps = {
+    state: QuoteProductSearchState;
+    actions: QuoteProductSearchActions;
 };
 
 function formatPrice(value: number, currency: string): string {
     return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(value);
 }
 
-export const QuoteProductSearch = ({
-    searchTerm,
-    onSearchTermChange,
-    products,
-    facets,
-    filters,
-    onToggleFilter,
-    onClearFilters,
-    loading,
-    error,
-    onAddProduct,
-}: Props) => (
+export const QuoteProductSearch = ({ state, actions }: QuoteProductSearchProps) => (
     <section className="quote__product-search" aria-label="Search products">
         <label htmlFor="quote-product-search">Find a product</label>
         <input
             id="quote-product-search"
             type="search"
-            value={searchTerm}
-            onChange={event => onSearchTermChange(event.target.value)}
+            value={state.searchTerm}
+            onChange={event => actions.onSearchTermChange(event.target.value)}
             placeholder="Search by product name"
             autoComplete="off"
             data-quote-search
         />
-        {searchTerm.trim().length === 1 && <p>Enter at least 2 characters to search.</p>}
-        {searchTerm.trim().length >= 2 && facets.length > 0 && (
+        {state.searchTerm.trim().length === 1 && <p>Enter at least 2 characters to search.</p>}
+        {state.searchTerm.trim().length >= 2 && state.facets.length > 0 && (
             <div className="quote__search-filters" aria-label="Product filters" data-quote-filters>
                 <div className="quote__search-filters-heading">
                     <strong>Filter products</strong>
-                    {Object.keys(filters).length > 0 && (
-                        <button type="button" onClick={onClearFilters} data-quote-clear-filters>
+                    {Object.keys(state.filters).length > 0 && (
+                        <button type="button" onClick={actions.onClearFilters} data-quote-clear-filters>
                             Clear filters
                         </button>
                     )}
                 </div>
                 <div className="quote__search-facet-list">
-                    {facets.map(facet => {
-                        const selectedValues = filters[facet.code] ?? [];
+                    {state.facets.map(facet => {
+                        const selectedValues = state.filters[facet.code] ?? [];
                         const options = [...facet.options];
                         for (const value of selectedValues) {
                             if (!options.some(option => option.value === value)) {
@@ -72,7 +69,7 @@ export const QuoteProductSearch = ({
                                                 type="checkbox"
                                                 checked={selectedValues.includes(option.value)}
                                                 disabled={option.count === 0 && !selectedValues.includes(option.value)}
-                                                onChange={() => onToggleFilter(facet.code, option.value)}
+                                                onChange={() => actions.onToggleFilter(facet.code, option.value)}
                                             />
                                             <span>{option.label}</span>
                                             <small>{option.count}</small>
@@ -85,14 +82,14 @@ export const QuoteProductSearch = ({
                 </div>
             </div>
         )}
-        {loading && <p role="status">Searching products…</p>}
-        {error && <p role="alert">Product search failed. Please try again.</p>}
-        {!loading && !error && searchTerm.trim().length >= 2 && products.length === 0 && (
+        {state.loading && <p role="status">Searching products…</p>}
+        {state.error && <p role="alert">Product search failed. Please try again.</p>}
+        {!state.loading && !state.error && state.searchTerm.trim().length >= 2 && state.products.length === 0 && (
             <p role="status">No matching products found.</p>
         )}
-        {products.length > 0 && (
+        {state.products.length > 0 && (
             <ul className="quote__search-results" aria-label="Search results">
-                {products.map(product => (
+                {state.products.map(product => (
                     <li key={product.sku}>
                         {product.imageUrl
                             ? <img className="quote__search-result-image" src={product.imageUrl} alt={product.name} />
@@ -109,7 +106,7 @@ export const QuoteProductSearch = ({
                         <button
                             type="button"
                             className="quote__add"
-                            onClick={() => onAddProduct(product)}
+                            onClick={() => actions.onAddProduct(product)}
                             aria-label={`Add ${product.name} to quote`}
                         >
                             Add

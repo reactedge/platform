@@ -4,10 +4,9 @@ import { QuoteLineItem } from "./QuoteLineItem.tsx";
 type Props = {
     lines: QuoteLine[];
     formatPrice: (value: number, currency: string) => string;
-    onSetOption: (lineId: string, attributeCode: string, valueUid: string) => void;
 };
 
-export const QuoteItems = ({ lines, formatPrice, onSetOption }: Props) => (
+export const QuoteItems = ({ lines, formatPrice }: Props) => (
     <section className="quote__items-section" aria-labelledby="quote-items-title">
         <div className="quote__section-heading">
             <h3 id="quote-items-title">Your quote</h3>
@@ -22,7 +21,6 @@ export const QuoteItems = ({ lines, formatPrice, onSetOption }: Props) => (
                         key={line.lineId}
                         line={line}
                         formatPrice={formatPrice}
-                        onSetOption={onSetOption}
                     />
                 ))}
             </ul>

@@ -4,11 +4,10 @@ import { useQuoteLineActions } from "./QuoteLineActionsContext.tsx";
 type Props = {
     line: QuoteLine;
     formatPrice: (value: number, currency: string) => string;
-    onSetOption: (lineId: string, attributeCode: string, valueUid: string) => void;
 };
 
-export const QuoteLineItem = ({ line, formatPrice, onSetOption }: Props) => {
-    const { increment, decrement, remove } = useQuoteLineActions();
+export const QuoteLineItem = ({ line, formatPrice }: Props) => {
+    const { increment, decrement, remove, setOption } = useQuoteLineActions();
 
     return (
         <li className="quote__line" data-quote-line={line.sku} data-quote-line-id={line.lineId}>
@@ -29,7 +28,7 @@ export const QuoteLineItem = ({ line, formatPrice, onSetOption }: Props) => {
                                 <select
                                     aria-label={`${option.label} for ${line.name}`}
                                     value={line.selectedOptionUids[option.attributeCode] ?? ""}
-                                    onChange={event => onSetOption(line.lineId, option.attributeCode, event.target.value)}
+                                    onChange={event => setOption(line.lineId, option.attributeCode, event.target.value)}
                                     data-quote-configurable-option={option.attributeCode}
                                 >
                                     <option value="">Choose {option.label}</option>

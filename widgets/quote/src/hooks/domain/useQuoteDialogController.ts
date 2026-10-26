@@ -40,27 +40,31 @@ export function useQuoteDialogController(config: WidgetConfig, bootstrap?: Boots
             },
         },
         search: {
-            searchTerm,
-            onSearchTermChange: setSearchTerm,
-            searchResults: search.products,
-            facets: search.facets,
-            filters,
-            onToggleFilter: (attribute: string, value: string) => {
-                setFilters(current => {
-                    const selected = current[attribute] ?? [];
-                    const next = selected.includes(value)
-                        ? selected.filter(item => item !== value)
-                        : [...selected, value];
-                    const updated = { ...current };
-                    if (next.length) updated[attribute] = next;
-                    else delete updated[attribute];
-                    return updated;
-                });
+            state: {
+                searchTerm,
+                products: search.products,
+                facets: search.facets,
+                filters,
+                loading: search.loading,
+                error: search.error,
             },
-            onClearFilters: () => setFilters({}),
-            searchLoading: search.loading,
-            searchError: search.error,
-            onAddSearchProduct: (item: ProductData) => quote.add(item, 1),
+            actions: {
+                onSearchTermChange: setSearchTerm,
+                onToggleFilter: (attribute: string, value: string) => {
+                    setFilters(current => {
+                        const selected = current[attribute] ?? [];
+                        const next = selected.includes(value)
+                            ? selected.filter(item => item !== value)
+                            : [...selected, value];
+                        const updated = { ...current };
+                        if (next.length) updated[attribute] = next;
+                        else delete updated[attribute];
+                        return updated;
+                    });
+                },
+                onClearFilters: () => setFilters({}),
+                onAddProduct: (item: ProductData) => quote.add(item, 1),
+            },
         },
         quote: {
             lines: quote.lines,
@@ -71,6 +75,20 @@ export function useQuoteDialogController(config: WidgetConfig, bootstrap?: Boots
             onRemove: quote.remove,
             onSetOption: quote.setOption,
         },
-        delivery,
+        delivery: {
+            state: {
+                postcode: delivery.postcode,
+                methods: delivery.methods,
+                loading: delivery.loading,
+                error: delivery.error,
+                hasEstimate: delivery.hasEstimate,
+                disabled: delivery.disabled,
+                hasUnconfiguredItems: delivery.hasUnconfiguredItems,
+            },
+            actions: {
+                onPostcodeChange: delivery.onPostcodeChange,
+                onEstimate: delivery.onEstimate,
+            },
+        },
     };
 }
