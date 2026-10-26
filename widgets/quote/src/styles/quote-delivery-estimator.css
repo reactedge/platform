@@ -1,0 +1,79 @@
+.quote__delivery-estimator {
+    border-bottom: 1px solid #d9dedb;
+    display: grid;
+    gap: 0.65rem;
+    padding: 1rem 0;
+}
+
+.quote__delivery-estimator h3 {
+    color: #34443d;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.quote__delivery-estimator form {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.quote__delivery-estimator label {
+    color: #66756e;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.quote__delivery-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.quote__delivery-controls input {
+    border: 1px solid #aebbb4;
+    font: inherit;
+    min-height: 2.5rem;
+    min-width: 0;
+    padding: 0.45rem 0.65rem;
+    width: 14rem;
+}
+
+.quote__delivery-controls button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.quote__delivery-estimator p {
+    color: #66756e;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.quote__delivery-estimator .quote__delivery-error {
+    color: #a32626;
+}
+
+.quote__delivery-methods {
+    display: grid;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.quote__delivery-methods li {
+    align-items: center;
+    border: 1px solid #e0e5e2;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.55rem 0.65rem;
+}
+
+@media (max-width: 480px) {
+    .quote__delivery-controls {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .quote__delivery-controls input {
+        width: 100%;
+    }
+}

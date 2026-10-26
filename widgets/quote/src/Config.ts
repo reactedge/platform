@@ -9,6 +9,7 @@ export interface WidgetConfig {
 
     readonly settings: {
         colour: string;
+        countryCode: string;
     };
 
     readonly runtime: RuntimeConfig

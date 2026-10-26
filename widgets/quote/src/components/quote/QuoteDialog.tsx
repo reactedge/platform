@@ -5,6 +5,8 @@ import { QuoteProductPicker } from "./QuoteProductPicker.tsx";
 import { QuoteItems } from "./QuoteItems.tsx";
 import { QuoteProductSearch } from "./QuoteProductSearch.tsx";
 import { QuoteLineActionsProvider } from "./QuoteLineActionsContext.tsx";
+import { QuoteDeliveryEstimator } from "./QuoteDeliveryEstimator.tsx";
+import type { DeliveryMethodEstimate } from "../../services/magento/MagentoDeliveryEstimator.ts";
 
 type DialogOptions = {
     title: string;
@@ -41,11 +43,23 @@ type QuoteOptions = {
     onRemove: (sku: string) => void;
 };
 
+type DeliveryOptions = {
+    postcode: string;
+    onPostcodeChange: (value: string) => void;
+    methods: DeliveryMethodEstimate[];
+    loading: boolean;
+    error: Error | null;
+    hasEstimate: boolean;
+    disabled: boolean;
+    onEstimate: () => Promise<void>;
+};
+
 type Props = {
     dialog: DialogOptions;
     product: ProductOptions;
     search: SearchOptions;
     quote: QuoteOptions;
+    delivery: DeliveryOptions;
 };
 
 function formatPrice(value: number, currency: string): string {
@@ -55,7 +69,7 @@ function formatPrice(value: number, currency: string): string {
     }).format(value);
 }
 
-export const QuoteDialog = ({ dialog, product, search, quote }: Props) => {
+export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props) => {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const lineActions = useMemo(
         () => ({
@@ -120,6 +134,16 @@ export const QuoteDialog = ({ dialog, product, search, quote }: Props) => {
                     <QuoteLineActionsProvider actions={lineActions}>
                         <QuoteItems lines={quote.lines} formatPrice={formatPrice} />
                     </QuoteLineActionsProvider>
+                    <QuoteDeliveryEstimator
+                        postcode={delivery.postcode}
+                        onPostcodeChange={delivery.onPostcodeChange}
+                        methods={delivery.methods}
+                        loading={delivery.loading}
+                        error={delivery.error}
+                        hasEstimate={delivery.hasEstimate}
+                        disabled={delivery.disabled}
+                        onEstimate={delivery.onEstimate}
+                    />
                 </div>
 
                 <footer className="quote__footer">
@@ -127,7 +151,7 @@ export const QuoteDialog = ({ dialog, product, search, quote }: Props) => {
                         <span>Estimated subtotal</span>
                         <strong data-quote-subtotal>{formatPrice(quote.subtotal, quote.currency)}</strong>
                     </div>
-                    <p>Taxes and shipping are not included. This quote does not modify your cart.</p>
+                    <p>Taxes are not included. Delivery estimates are shown separately. This quote does not modify your cart.</p>
                 </footer>
             </div>
         </dialog>

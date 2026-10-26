@@ -1,9 +1,15 @@
 import type {WidgetActivity} from "@reactedge/framework/activity";
 import {normalizeGraphqlResponse} from "@reactedge/framework/graphql/graphqlResponseNormalizer";
 
+export type GraphqlRequestOptions = {
+    cache?: boolean;
+    ttl?: number;
+};
+
 export type GraphqlClient = <T>(
     query: string,
-    variables?: Record<string, unknown>
+    variables?: Record<string, unknown>,
+    options?: GraphqlRequestOptions
 ) => Promise<T>;
 
 export function createGraphqlClient(apiEndpoint: string, storeCode: string, activity?: WidgetActivity) {

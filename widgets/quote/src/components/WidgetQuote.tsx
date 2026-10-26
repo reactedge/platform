@@ -13,7 +13,7 @@ export const WidgetQuote = ({
     config,
     bootstrap
 }: Props) => {
-    const { openDialog, dialog, product, search, quote } = useQuoteDialogController(config, bootstrap);
+    const { openDialog, dialog, product, search, quote, delivery } = useQuoteDialogController(config, bootstrap);
 
     return (
         <section className="quote" aria-label={config.data.title}>
@@ -23,6 +23,7 @@ export const WidgetQuote = ({
                 product={product}
                 search={search}
                 quote={quote}
+                delivery={delivery}
             />
         </section>
     );

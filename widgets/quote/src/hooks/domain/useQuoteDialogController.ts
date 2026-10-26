@@ -4,6 +4,7 @@ import type { ProductData, WidgetConfig } from "../../Config.ts";
 import { useProductData } from "./useProductData.tsx";
 import { useQuoteLines } from "./useQuoteLines.ts";
 import { useMagentoProductSearch } from "../infra/useMagentoProductSearch.tsx";
+import { useDeliveryEstimate } from "./useDeliveryEstimate.ts";
 
 export function useQuoteDialogController(config: WidgetConfig, bootstrap?: BootstrapData) {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +13,7 @@ export function useQuoteDialogController(config: WidgetConfig, bootstrap?: Boots
     const search = useMagentoProductSearch(searchTerm);
     const product = useProductData(config.runtime.sku, bootstrap);
     const quote = useQuoteLines();
+    const delivery = useDeliveryEstimate(quote.lines, config.settings.countryCode);
 
     return {
         openDialog: () => setIsOpen(true),
@@ -51,5 +53,6 @@ export function useQuoteDialogController(config: WidgetConfig, bootstrap?: Boots
             onDecrement: quote.decrement,
             onRemove: quote.remove,
         },
+        delivery,
     };
 }
