@@ -1,0 +1,15 @@
+{
+  "id": "subscription",
+  "widget": "subscription",
+  "description": "",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}

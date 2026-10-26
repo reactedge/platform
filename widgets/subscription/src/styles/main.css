@@ -1,0 +1,86 @@
+.subscription-widget {
+    max-width: 42rem;
+    color: #222;
+    font: inherit;
+}
+
+.subscription-purchase-type,
+.subscription-plans fieldset {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid #d5d5d5;
+}
+
+.subscription-purchase-type label,
+.subscription-plan label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.subscription-plan {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.subscription-submit {
+    padding: 0.75rem 1.5rem;
+    border: 0;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+}
+
+.subscription-submit:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.subscription-terms-link {
+    border: 0;
+    background: transparent;
+    color: #1458a5;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.subscription-modal-backdrop {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgb(0 0 0 / 55%);
+}
+
+.subscription-modal {
+    width: min(40rem, 100%);
+    max-height: 85vh;
+    overflow: auto;
+    padding: 1.25rem;
+    background: #fff;
+    color: #222;
+}
+
+.subscription-modal header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.subscription-modal header button {
+    border: 0;
+    background: transparent;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.subscription-terms-content {
+    padding-top: 1rem;
+}
