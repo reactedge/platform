@@ -8,6 +8,7 @@ type Props = {
     error: Error | null;
     hasEstimate: boolean;
     disabled: boolean;
+    hasUnconfiguredItems: boolean;
     onEstimate: () => void;
 };
 
@@ -23,6 +24,7 @@ export const QuoteDeliveryEstimator = ({
     error,
     hasEstimate,
     disabled,
+    hasUnconfiguredItems,
     onEstimate,
 }: Props) => (
     <section className="quote__delivery-estimator" aria-labelledby="quote-delivery-title">
@@ -45,6 +47,9 @@ export const QuoteDeliveryEstimator = ({
                 </button>
             </div>
         </form>
+        {hasUnconfiguredItems && (
+            <p role="status">Choose every required option for configurable products before checking delivery.</p>
+        )}
         {loading && <p role="status">Checking delivery options…</p>}
         {error && <p className="quote__delivery-error" role="alert">{error.message}</p>}
         {hasEstimate && methods.length === 0 && !error && (

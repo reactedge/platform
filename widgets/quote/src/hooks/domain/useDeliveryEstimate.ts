@@ -13,7 +13,17 @@ export function useDeliveryEstimate(lines: QuoteLine[], countryCode: string) {
     const [error, setError] = useState<Error | null>(null);
     const [hasEstimate, setHasEstimate] = useState(false);
     const requestVersion = useRef(0);
-    const itemsSignature = JSON.stringify(lines.map(line => [line.sku, line.quantity]));
+    const itemsSignature = JSON.stringify(lines.map(line => [
+        line.sku,
+        line.quantity,
+        Object.values(line.selectedOptionUids).sort(),
+    ]));
+    const hasUnconfiguredItems = lines.some(line =>
+        line.productType === "ConfigurableProduct" && (
+            line.configurableOptions.length === 0 ||
+            line.configurableOptions.some(option => !line.selectedOptionUids[option.attributeCode])
+        )
+    );
 
     const onPostcodeChange = useCallback((value: string) => {
         requestVersion.current += 1;
@@ -40,7 +50,16 @@ export function useDeliveryEstimate(lines: QuoteLine[], countryCode: string) {
 
         try {
             const result = await estimator.estimate(
-                lines.map(({ sku, quantity }) => ({ sku, quantity })),
+                lines.map(line => ({
+                    sku: line.sku,
+                    quantity: line.quantity,
+                    selectedOptionUids: line.configurableOptions
+                        .map(option => line.selectedOptionUids[option.attributeCode])
+                        .filter((uid): uid is string => Boolean(uid)),
+                    requiredOptionCount: line.productType === "ConfigurableProduct"
+                        ? line.configurableOptions.length
+                        : 0,
+                })),
                 postcode,
                 countryCode
             );
@@ -62,6 +81,7 @@ export function useDeliveryEstimate(lines: QuoteLine[], countryCode: string) {
         error,
         hasEstimate,
         onEstimate: estimate,
-        disabled: lines.length === 0,
+        disabled: lines.length === 0 || hasUnconfiguredItems,
+        hasUnconfiguredItems,
     };
 }

@@ -2,6 +2,7 @@ import type { ProductData } from "../../Config.ts";
 import type { GraphqlClient } from "@reactedge/framework/graphql/graphqlClient.ts";
 
 export type GraphqlProduct = {
+    __typename?: string | null;
     id?: string | null;
     sku?: string | null;
     name?: string | null;
@@ -15,6 +16,11 @@ export type GraphqlProduct = {
             } | null;
         } | null;
     } | null;
+    configurable_options?: {
+        attribute_code: string;
+        label: string;
+        values: { uid: string; label: string }[];
+    }[] | null;
 };
 
 export type ProductsResponse = {
@@ -71,6 +77,12 @@ function mapProduct(product: GraphqlProduct): ProductData {
         imageUrl: productImageUrl(product),
         unitPrice: finalPrice?.value ?? 0,
         currency: finalPrice?.currency ?? "USD",
+        productType: product.__typename ?? "SimpleProduct",
+        configurableOptions: (product.configurable_options ?? []).map(option => ({
+            attributeCode: option.attribute_code,
+            label: option.label,
+            values: option.values.map(value => ({ uid: value.uid, label: value.label })),
+        })),
     };
 }
 
@@ -92,6 +104,7 @@ const QUERY = `
           }
         items {
           id
+          __typename
                     sku
           name
                     short_description {
@@ -107,6 +120,16 @@ const QUERY = `
                                 currency
                             }
                         }
+                    }
+                    ... on ConfigurableProduct {
+                      configurable_options {
+                        attribute_code
+                        label
+                        values {
+                          uid
+                          label
+                        }
+                      }
                     }
         }
       }

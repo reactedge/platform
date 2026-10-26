@@ -78,6 +78,31 @@
     min-width: 0;
 }
 
+.quote__line-configurable-options {
+    display: grid;
+    gap: 0.45rem;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    margin-top: 0.35rem;
+}
+
+.quote__line-configurable-options label {
+    color: #66756e;
+    display: grid;
+    font-size: 0.75rem;
+    gap: 0.2rem;
+}
+
+.quote__line-configurable-options select {
+    background: #fff;
+    border: 1px solid #aebbb4;
+    border-radius: 2px;
+    color: #26342f;
+    font: inherit;
+    min-height: 2.1rem;
+    padding: 0.35rem 0.45rem;
+    width: 100%;
+}
+
 .quote__line-details strong:first-child {
     overflow-wrap: anywhere;
 }

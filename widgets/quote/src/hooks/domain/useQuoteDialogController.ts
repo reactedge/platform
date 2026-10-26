@@ -69,6 +69,7 @@ export function useQuoteDialogController(config: WidgetConfig, bootstrap?: Boots
             onIncrement: quote.increment,
             onDecrement: quote.decrement,
             onRemove: quote.remove,
+            onSetOption: quote.setOption,
         },
         delivery,
     };

@@ -43,9 +43,10 @@ type QuoteOptions = {
     lines: QuoteLine[];
     subtotal: number;
     currency: string;
-    onIncrement: (sku: string) => void;
-    onDecrement: (sku: string) => void;
-    onRemove: (sku: string) => void;
+    onIncrement: (lineId: string) => void;
+    onDecrement: (lineId: string) => void;
+    onRemove: (lineId: string) => void;
+    onSetOption: (lineId: string, attributeCode: string, valueUid: string) => void;
 };
 
 type DeliveryOptions = {
@@ -56,6 +57,7 @@ type DeliveryOptions = {
     error: Error | null;
     hasEstimate: boolean;
     disabled: boolean;
+    hasUnconfiguredItems: boolean;
     onEstimate: () => Promise<void>;
 };
 
@@ -81,8 +83,9 @@ export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props)
             increment: quote.onIncrement,
             decrement: quote.onDecrement,
             remove: quote.onRemove,
+            setOption: quote.onSetOption,
         }),
-        [quote.onDecrement, quote.onIncrement, quote.onRemove]
+        [quote.onDecrement, quote.onIncrement, quote.onRemove, quote.onSetOption]
     );
 
     useEffect(() => {
@@ -141,7 +144,7 @@ export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props)
                         onAdd={product.onAddProduct}
                     />
                     <QuoteLineActionsProvider actions={lineActions}>
-                        <QuoteItems lines={quote.lines} formatPrice={formatPrice} />
+                        <QuoteItems lines={quote.lines} formatPrice={formatPrice} onSetOption={quote.onSetOption} />
                     </QuoteLineActionsProvider>
                     <QuoteDeliveryEstimator
                         postcode={delivery.postcode}
@@ -151,6 +154,7 @@ export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props)
                         error={delivery.error}
                         hasEstimate={delivery.hasEstimate}
                         disabled={delivery.disabled}
+                        hasUnconfiguredItems={delivery.hasUnconfiguredItems}
                         onEstimate={delivery.onEstimate}
                     />
                 </div>

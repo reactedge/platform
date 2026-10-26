@@ -1,8 +1,10 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { ProductData } from "../../Config.ts";
 
 export type QuoteLine = ProductData & {
+    lineId: string;
     quantity: number;
+    selectedOptionUids: Record<string, string>;
 };
 
 function calculateSubtotal(lines: QuoteLine[]): number {
@@ -11,35 +13,51 @@ function calculateSubtotal(lines: QuoteLine[]): number {
 
 export function useQuoteLines() {
     const [lines, setLines] = useState<QuoteLine[]>([]);
+    const nextLineId = useRef(0);
 
     const add = useCallback((product: ProductData, quantity: number) => {
         const amount = Math.max(1, Math.min(99, Math.floor(quantity)));
         setLines(current => {
-            const existing = current.find(line => line.sku === product.sku);
+            const isConfigurable = product.productType === "ConfigurableProduct";
+            const existing = isConfigurable
+                ? undefined
+                : current.find(line => line.sku === product.sku && line.productType !== "ConfigurableProduct");
             if (existing) {
-                return current.map(line => line.sku === product.sku
+                return current.map(line => line.lineId === existing.lineId
                     ? { ...line, quantity: Math.min(99, line.quantity + amount) }
                     : line);
             }
-            return [...current, { ...product, quantity: amount }];
+            nextLineId.current += 1;
+            return [...current, {
+                ...product,
+                lineId: `${product.sku}-${nextLineId.current}`,
+                quantity: amount,
+                selectedOptionUids: {},
+            }];
         });
     }, []);
 
-    const increment = useCallback((sku: string) => {
-        setLines(current => current.map(line => line.sku === sku
+    const increment = useCallback((lineId: string) => {
+        setLines(current => current.map(line => line.lineId === lineId
             ? { ...line, quantity: Math.min(99, line.quantity + 1) }
             : line));
     }, []);
 
-    const decrement = useCallback((sku: string) => {
+    const decrement = useCallback((lineId: string) => {
         setLines(current => current.flatMap(line => {
-            if (line.sku !== sku) return [line];
+            if (line.lineId !== lineId) return [line];
             return line.quantity > 1 ? [{ ...line, quantity: line.quantity - 1 }] : [];
         }));
     }, []);
 
-    const remove = useCallback((sku: string) => {
-        setLines(current => current.filter(line => line.sku !== sku));
+    const remove = useCallback((lineId: string) => {
+        setLines(current => current.filter(line => line.lineId !== lineId));
+    }, []);
+
+    const setOption = useCallback((lineId: string, attributeCode: string, valueUid: string) => {
+        setLines(current => current.map(line => line.lineId === lineId
+            ? { ...line, selectedOptionUids: { ...line.selectedOptionUids, [attributeCode]: valueUid } }
+            : line));
     }, []);
 
     return {
@@ -50,5 +68,6 @@ export function useQuoteLines() {
         increment,
         decrement,
         remove,
+        setOption,
     };
 }

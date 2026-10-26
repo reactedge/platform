@@ -24,6 +24,17 @@ export interface ProductData {
     currency: string
     matchPercentage?: number
     matchReason?: string | null
+    productType: string;
+    configurableOptions: ConfigurableProductOption[];
+}
+
+export interface ConfigurableProductOption {
+    attributeCode: string;
+    label: string;
+    values: {
+        uid: string;
+        label: string;
+    }[];
 }
 
 export interface RuntimeConfig {

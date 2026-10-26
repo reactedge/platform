@@ -1,9 +1,10 @@
 import { createContext, useContext, type ReactNode } from "react";
 
 type QuoteLineActions = {
-    increment: (sku: string) => void;
-    decrement: (sku: string) => void;
-    remove: (sku: string) => void;
+    increment: (lineId: string) => void;
+    decrement: (lineId: string) => void;
+    remove: (lineId: string) => void;
+    setOption: (lineId: string, attributeCode: string, valueUid: string) => void;
 };
 
 const QuoteLineActionsContext = createContext<QuoteLineActions | null>(null);
