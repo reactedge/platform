@@ -7,6 +7,7 @@ import { QuoteProductSearch } from "./QuoteProductSearch.tsx";
 import { QuoteLineActionsProvider } from "./QuoteLineActionsContext.tsx";
 import { QuoteDeliveryEstimator } from "./QuoteDeliveryEstimator.tsx";
 import type { DeliveryMethodEstimate } from "../../services/magento/MagentoDeliveryEstimator.ts";
+import type { QuoteProductFacet, QuoteProductFilter } from "../../services/magento/fetchMagentoProductData.tsx";
 
 type DialogOptions = {
     title: string;
@@ -29,6 +30,10 @@ type SearchOptions = {
     searchTerm: string;
     onSearchTermChange: (value: string) => void;
     searchResults: ProductData[];
+    facets: QuoteProductFacet[];
+    filters: QuoteProductFilter;
+    onToggleFilter: (attribute: string, value: string) => void;
+    onClearFilters: () => void;
     searchLoading: boolean;
     searchError: Error | null;
     onAddSearchProduct: (product: ProductData) => void;
@@ -116,6 +121,10 @@ export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props)
                         searchTerm={search.searchTerm}
                         onSearchTermChange={search.onSearchTermChange}
                         products={search.searchResults}
+                        facets={search.facets}
+                        filters={search.filters}
+                        onToggleFilter={search.onToggleFilter}
+                        onClearFilters={search.onClearFilters}
                         loading={search.searchLoading}
                         error={search.searchError}
                         onAddProduct={search.onAddSearchProduct}

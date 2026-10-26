@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useSystemState } from "../../state/System/useSystemState.ts";
 import { getError } from "../../lib/error.ts";
 import type { ProductData } from "../../Config.ts";
-import { searchMagentoProducts } from "../../services/magento/fetchMagentoProductData.tsx";
+import { searchMagentoProducts, type QuoteProductFacet, type QuoteProductFilter } from "../../services/magento/fetchMagentoProductData.tsx";
 
-export function useMagentoProductSearch(searchTerm: string) {
+export function useMagentoProductSearch(searchTerm: string, filters: QuoteProductFilter) {
     const [products, setProducts] = useState<ProductData[]>([]);
+    const [facets, setFacets] = useState<QuoteProductFacet[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
     const { graphqlClient, intentApiUrl, storeCode } = useSystemState();
@@ -14,6 +15,7 @@ export function useMagentoProductSearch(searchTerm: string) {
         const term = searchTerm.trim();
         if (term.length < 2) {
             setProducts([]);
+            setFacets([]);
             setLoading(false);
             setError(null);
             return;
@@ -24,9 +26,12 @@ export function useMagentoProductSearch(searchTerm: string) {
         const timer = window.setTimeout(() => {
             setLoading(true);
             setError(null);
-            void searchMagentoProducts(graphqlClient, intentApiUrl, storeCode, term)
-                .then(results => {
-                    if (active) setProducts(results);
+            void searchMagentoProducts(graphqlClient, intentApiUrl, storeCode, term, filters)
+                .then(result => {
+                    if (active) {
+                        setProducts(result.products);
+                        setFacets(result.facets);
+                    }
                 })
                 .catch(reason => {
                     if (active) setError(getError(reason));
@@ -40,7 +45,7 @@ export function useMagentoProductSearch(searchTerm: string) {
             active = false;
             window.clearTimeout(timer);
         };
-    }, [graphqlClient, intentApiUrl, searchTerm, storeCode]);
+    }, [filters, graphqlClient, intentApiUrl, searchTerm, storeCode]);
 
-    return { products, loading, error };
+    return { products, facets, loading, error };
 }
