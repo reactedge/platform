@@ -9,11 +9,12 @@
 
     const loader = new ResourceLoader();
     const contract = await loader.loadContract("default.json");
+    const bootstrap = await loader.loadContract("data.json");
 
     const element = document.querySelector('categoryfeatured-widget');
 
     await requestAnimationFrame(() => {
-        mount(element, contract);
+        mount(element, contract, bootstrap);
     })
 </script>
 

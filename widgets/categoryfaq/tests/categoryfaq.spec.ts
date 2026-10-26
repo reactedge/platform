@@ -5,6 +5,12 @@ test.describe("Category FAQ Widget", () => {
     let widget: Locator;
 
     test.beforeEach(async ({ page }) => {
+        await page.route('**/data.json', route => route.fulfill({
+            json: [
+                { question: 'How should I choose the right size?', answer: 'Use the size guide on the product page to compare measurements and find your best fit.' },
+                { question: 'How do I care for my clothing?', answer: 'Check the care label inside each garment for washing and drying instructions.' },
+            ],
+        }));
         await page.goto("/?reactedge_debug=eager");
         widget = page.locator("categoryfaq-widget");
         await expect(widget).toBeVisible();
@@ -20,5 +26,12 @@ test.describe("Category FAQ Widget", () => {
         const answer = widget.locator(".categoryfaq__item").first();
         await answer.locator("summary").click();
         await expect(answer.locator(".categoryfaq__answer")).toBeVisible();
+    });
+
+    test("renders nothing when configured FAQs are empty", async ({ page }) => {
+        await page.route("**/data.json", route => route.fulfill({ json: [] }));
+        await page.reload();
+
+        await expect(widget.locator(".categoryfaq")).toHaveCount(0);
     });
 });
