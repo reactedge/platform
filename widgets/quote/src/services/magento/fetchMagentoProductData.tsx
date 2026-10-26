@@ -134,11 +134,18 @@ export async function searchMagentoProducts(
     }
 
     const result = await response.json() as {
-        suggestions?: { sku: string }[] | null;
+        suggestions?: { sku: string; match: number; reason?: string | null }[] | null;
     };
     const productBySku = new Map(candidates.map(product => [product.sku ?? "", product]));
     return (result.suggestions ?? [])
-        .map(suggestion => productBySku.get(suggestion.sku))
-        .filter((product): product is GraphqlProduct => Boolean(product))
-        .map(mapProduct);
+        .flatMap(suggestion => {
+            const product = productBySku.get(suggestion.sku);
+            if (!product) return [];
+
+            return [{
+                ...mapProduct(product),
+                matchPercentage: suggestion.match,
+                matchReason: suggestion.reason ?? null,
+            }];
+        });
 }

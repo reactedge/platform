@@ -42,10 +42,17 @@ export const QuoteProductSearch = ({
             <ul className="quote__search-results" aria-label="Search results">
                 {products.map(product => (
                     <li key={product.sku}>
+                        {product.imageUrl
+                            ? <img className="quote__search-result-image" src={product.imageUrl} alt={product.name} />
+                            : <span className="quote__search-result-image quote__search-result-image--empty" aria-hidden="true" />}
                         <div className="quote__search-result-info">
                             <strong>{product.name}</strong>
                             <span>SKU: {product.sku}</span>
                             <span>{formatPrice(product.unitPrice, product.currency)}</span>
+                            {product.matchPercentage !== undefined && (
+                                <span data-quote-match>{Math.round(product.matchPercentage)}% match</span>
+                            )}
+                            {product.matchReason && <span data-quote-reason>{product.matchReason}</span>}
                         </div>
                         <button
                             type="button"

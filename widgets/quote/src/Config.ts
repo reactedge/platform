@@ -21,6 +21,8 @@ export interface ProductData {
     imageUrl: string
     unitPrice: number
     currency: string
+    matchPercentage?: number
+    matchReason?: string | null
 }
 
 export interface RuntimeConfig {
