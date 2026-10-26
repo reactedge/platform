@@ -131,7 +131,7 @@ export async function searchMagentoProducts(
     storeCode: string,
     searchTerm: string,
     filters: QuoteProductFilter = {}
-): Promise<{ products: ProductData[]; facets: QuoteProductFacet[] }> {
+): Promise<{ products: ProductData[]; facets: QuoteProductFacet[]; resolvedFilters: QuoteProductFilter }> {
     const selectedFilters = Object.fromEntries(
         Object.entries(filters).filter(([, values]) => values.length > 0)
     );
@@ -153,18 +153,17 @@ export async function searchMagentoProducts(
             label: aggregation.label,
             options: aggregation.options,
         }));
-    const filterLabels = Object.fromEntries(
-        Object.entries(selectedFilters).map(([attribute, values]) => {
-            const options = facets.find(facet => facet.code === attribute)?.options ?? [];
-            return [attribute, values.map(value => options.find(option => option.value === value)?.label ?? value)];
-        })
-    );
     const response = await fetch(`${intentApiUrl.replace(/\/+$/, "")}/v1/intent/recommend`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Store: storeCode },
         body: JSON.stringify({
             intentText: searchTerm,
-            filters: filterLabels,
+            filters: selectedFilters,
+            attributes: facets.map(facet => ({
+                code: facet.code,
+                label: facet.label,
+                options: facet.options.map(option => ({ label: option.label, value: option.value })),
+            })),
             products: candidates.map(product => ({
                 sku: product.sku ?? "",
                 title: product.name ?? "",
@@ -179,6 +178,7 @@ export async function searchMagentoProducts(
 
     const result = await response.json() as {
         suggestions?: { sku: string; match: number; reason?: string | null }[] | null;
+        filters?: QuoteProductFilter;
     };
     const productBySku = new Map(candidates.map(product => [product.sku ?? "", product]));
     const products = (result.suggestions ?? [])
@@ -193,5 +193,5 @@ export async function searchMagentoProducts(
             }];
         });
 
-    return { products, facets };
+    return { products, facets, resolvedFilters: result.filters ?? selectedFilters };
 }

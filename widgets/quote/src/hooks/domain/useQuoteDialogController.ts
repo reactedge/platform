@@ -9,7 +9,7 @@ export function useQuoteDialogController(config: WidgetConfig) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [filters, setFilters] = useState<QuoteProductFilter>({});
-    const search = useMagentoProductSearch(searchTerm, filters);
+    const search = useMagentoProductSearch(searchTerm, filters, setFilters);
     const quote = useQuoteLines();
     const delivery = useDeliveryEstimate(quote.lines, config.settings.countryCode);
 
@@ -31,7 +31,10 @@ export function useQuoteDialogController(config: WidgetConfig) {
                 error: search.error,
             },
             actions: {
-                onSearchTermChange: setSearchTerm,
+                onSearchTermChange: (value: string) => {
+                    setFilters({});
+                    setSearchTerm(value);
+                },
                 onToggleFilter: (attribute: string, value: string) => {
                     setFilters(current => {
                         const selected = current[attribute] ?? [];
