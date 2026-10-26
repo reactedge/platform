@@ -17,6 +17,12 @@ export const WidgetConfigSchema = z.object({
 
 export type WidgetConfig = z.infer<typeof WidgetConfigSchema>;
 
+const FaqBootstrapSchema = z.array(FaqSchema);
+
 export function parseConfig(input: unknown): WidgetConfig {
     return WidgetConfigSchema.parse(input);
+}
+
+export function parseBootstrap(input: unknown): WidgetConfig['data']['faqs'] {
+    return FaqBootstrapSchema.parse(input);
 }

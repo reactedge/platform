@@ -1,0 +1,12 @@
+{
+    "entries": [
+        {
+            "key": "jackets-women",
+            "dataFile": "categories/jackets-women.json"
+        },
+        {
+            "key": "men",
+            "dataFile": "categories/men.json"
+        }
+    ]
+}
