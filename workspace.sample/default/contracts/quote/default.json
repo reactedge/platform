@@ -6,6 +6,6 @@
     "colour": "#176b5b"
   },
   "integration": {
-    "requires": ["magentoGraphql"]
+    "requires": ["magentoGraphql", "intentApi"]
   }
 }

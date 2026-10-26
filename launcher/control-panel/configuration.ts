@@ -13,6 +13,7 @@ const defaults = {
     observabilityEnabled: false,
     otelHost: 'https://otel.reactedge.net/v1/traces',
     intentDiscoveryEnabled: false,
+    intentApiBaseUrl: 'http://localhost:8000',
     cmsblockEnabled: false,
     cmsblockApiBaseUrl: 'http://127.0.0.1:4191',
     sellerListingEnabled: false,
@@ -84,6 +85,7 @@ export function readConfiguration(root: string, storeCode: string, includeStoreE
         observabilityEnabled: enabled('OBSERVABILITY_ENABLED', Boolean(env.OTEL_HOST)),
         otelHost: env.OTEL_HOST || defaults.otelHost,
         intentDiscoveryEnabled: enabled('INTENT_DISCOVERY_ENABLED', false),
+        intentApiBaseUrl: env.INTENT_API_BASE_URL || defaults.intentApiBaseUrl,
         cmsblockEnabled: enabled('CMSBLOCK_ENABLED', false),
         cmsblockApiBaseUrl: env.CMSBLOCK_API_BASE_URL || defaults.cmsblockApiBaseUrl,
         sellerListingEnabled: enabled('SELLER_LISTING_ENABLED', false),
@@ -149,7 +151,7 @@ export function validateConfiguration(input: unknown): Configuration {
     if (config.cmsblockEnabled && !config.cmsblockApiBaseUrl.trim()) {
         throw new Error('CMSBlock API URL is required when CMSBlock is enabled.');
     }
-    for (const [name, value] of [['Site URL', config.siteUrl], ['CMSBlock API URL', config.cmsblockApiBaseUrl], ['OpenTelemetry URL', config.otelHost]]) {
+    for (const [name, value] of [['Site URL', config.siteUrl], ['Intent API URL', config.intentApiBaseUrl], ['CMSBlock API URL', config.cmsblockApiBaseUrl], ['OpenTelemetry URL', config.otelHost]]) {
         if (name === 'CMSBlock API URL' && !config.cmsblockEnabled) continue;
         if (name === 'OpenTelemetry URL' && !config.observabilityEnabled) continue;
         try {
@@ -184,7 +186,7 @@ export function planConfiguration(root: string, input: unknown) {
     const siteUrl = c.siteUrl.replace(/\/+$/, '');
     const allowedHosts = allowedHostDetails(c).map(entry => entry.host).join(',');
     const integrations: Record<string, object> = { magentoGraphql: { api: `${siteUrl}/graphql` } };
-    if (c.intentDiscoveryEnabled) integrations.intentApi = { baseUrl: 'http://localhost:3001' };
+    integrations.intentApi = { baseUrl: c.intentApiBaseUrl.replace(/\/+$/, '') };
     if (c.googleMapsEnabled || c.googleReviewsEnabled) {
         integrations.googleMaps = {
             apiKey: c.googleMapsApiKey,
@@ -216,6 +218,7 @@ export function planConfiguration(root: string, input: unknown) {
         ...(c.hasCatalog ? { SKU: c.sku, CATEGORY: c.category } : {}),
         OBSERVABILITY_ENABLED: bool(c.observabilityEnabled),
         INTENT_DISCOVERY_ENABLED: bool(c.intentDiscoveryEnabled),
+        INTENT_API_BASE_URL: c.intentApiBaseUrl,
         CMSBLOCK_ENABLED: bool(c.cmsblockEnabled),
         CMSBLOCK_API_BASE_URL: c.cmsblockEnabled ? c.cmsblockApiBaseUrl : '',
         SELLER_LISTING_ENABLED: bool(c.sellerListingEnabled),

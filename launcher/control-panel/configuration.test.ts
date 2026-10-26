@@ -23,7 +23,7 @@ test('preview and save cover all configuration outputs without touching a real h
         writeFileSync(join(root, '.env.sample'), 'SITEURL=https://example.org\nALLOWED_HOSTS=localhost\n');
         const config = {
             ...readConfiguration(root, 'fr'), targetRoot: join(targetParent, 'magento'),
-            siteUrl: 'https://example.org/', observabilityEnabled: true, turnstileEnabled: true,
+            siteUrl: 'https://example.org/', intentApiBaseUrl: 'https://intent.example.test', observabilityEnabled: true, turnstileEnabled: true,
             turnstileSiteKey: 'site-key', googleMapsEnabled: true, googleReviewsEnabled: true,
             googleMapsApiKey: 'a"b\\c', googlePlaceId: 'place-123',
         };
@@ -35,6 +35,8 @@ test('preview and save cover all configuration outputs without touching a real h
         applyConfiguration(root, config);
         assert.deepEqual(JSON.parse(readFileSync(join(root, 'widgets/usp/public/reactedge-runtime.json'), 'utf8')).integrations.googleMaps,
             { apiKey: 'a"b\\c', placeId: 'place-123' });
+        assert.deepEqual(JSON.parse(readFileSync(join(root, 'widgets/usp/public/reactedge-runtime.json'), 'utf8')).integrations.intentApi,
+            { baseUrl: 'https://intent.example.test' });
         const mcpEnv = readFileSync(join(root, 'mcp/.env.fr'), 'utf8');
         assert.match(mcpEnv, /CLOUDFLARE_TURNSTILE_SITE_KEY='site-key'/);
         assert.match(mcpEnv, /GOOGLE_MAPS_API_KEY='a"b\\c'/);
@@ -58,6 +60,7 @@ test('rejects unsafe store paths and incomplete optional services before writing
         assert.throws(() => previewConfiguration(root, { ...defaults, googleReviewsEnabled: true }), /Google Maps/);
         assert.throws(() => previewConfiguration(root, { ...defaults, targetRoot: 'relative/path' }), /absolute/);
         assert.throws(() => previewConfiguration(root, { ...defaults, category: "one' two" }), /apostrophe/);
+        assert.throws(() => previewConfiguration(root, { ...defaults, intentApiBaseUrl: 'not-a-url' }), /Intent API URL/);
     } finally { rmSync(root, { recursive: true, force: true }); }
 });
 

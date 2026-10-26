@@ -31,6 +31,10 @@ test.describe("Quote Widget", () => {
         cartMutationRequests = [];
         await page.route("**/graphql", async route => {
             const requestText = route.request().postData() ?? "";
+            const requestBody = route.request().postDataJSON();
+            if (requestBody.variables?.search) {
+                expect(requestBody.variables.search).toBe("Trail");
+            }
             if (/addProductsToCart|removeItemFromCart|createEmptyCart/.test(requestText)) {
                 cartMutationRequests.push(requestText);
             }
@@ -40,9 +44,24 @@ test.describe("Quote Widget", () => {
                 body: JSON.stringify({
                     data: {
                         products: {
-                            items: requestText.includes("match") ? [searchedProduct] : [product],
+                            items: requestBody.variables?.filter?.sku ? [product] : [searchedProduct],
                         },
                     },
+                }),
+            });
+        });
+        await page.route("**/v1/intent/recommend", async route => {
+            const payload = route.request().postDataJSON();
+            expect(payload.intentText).toBe("Trail");
+            expect(payload.filters).toEqual({});
+            expect(payload.products).toEqual([
+                expect.objectContaining({ sku: "SH23", title: "Trail Shell" }),
+            ]);
+            await route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({
+                    suggestions: [{ sku: "SH23", match: 100, reason: "Relevant" }],
                 }),
             });
         });

@@ -5,6 +5,9 @@ export const SchemaRuntimeConfig = z.object({
         magentoGraphql: z.object({
             api: z.string().url(),
         }),
+        intentApi: z.object({
+            baseUrl: z.string().url(),
+        }),
         googleMaps: z.object({
             apiKey: z.string(),
             placeId: z.string()

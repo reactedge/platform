@@ -39,10 +39,21 @@
 .quote__search-results li {
     align-items: center;
     border: 1px solid #e0e5e2;
-    display: flex;
+    display: grid;
     gap: 0.75rem;
-    justify-content: space-between;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
     padding: 0.6rem;
+}
+
+.quote__search-result-image {
+    aspect-ratio: 1;
+    background: #eef1ef;
+    object-fit: contain;
+    width: 3.5rem;
+}
+
+.quote__search-result-image--empty {
+    display: block;
 }
 
 .quote__search-result-info {

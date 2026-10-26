@@ -1,0 +1,12 @@
+services:
+  intent-engine:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      OPENAI_PERFORMANCE: ${OPENAI_PERFORMANCE:-0.2}
