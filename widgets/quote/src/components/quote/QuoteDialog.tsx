@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import type { ProductData } from "../../Config.ts";
 import type { QuoteLine } from "../../hooks/domain/useQuoteLines.ts";
-import { QuoteProductPicker } from "./QuoteProductPicker.tsx";
 import { QuoteItems } from "./QuoteItems.tsx";
 import { QuoteProductSearch } from "./QuoteProductSearch.tsx";
 import { QuoteLineActionsProvider } from "./QuoteLineActionsContext.tsx";
@@ -16,16 +14,6 @@ type DialogOptions = {
     colour: string;
 };
 
-type ProductOptions = {
-    product: ProductData | null;
-    productLoading: boolean;
-    productError: Error | null;
-    onRetry: () => void;
-    candidateQuantity: number;
-    onCandidateQuantityChange: (quantity: number) => void;
-    onAddProduct: () => void;
-};
-
 type QuoteOptions = {
     lines: QuoteLine[];
     subtotal: number;
@@ -38,7 +26,6 @@ type QuoteOptions = {
 
 type Props = {
     dialog: DialogOptions;
-    product: ProductOptions;
     search: {
         state: QuoteProductSearchState;
         actions: QuoteProductSearchActions;
@@ -57,7 +44,7 @@ function formatPrice(value: number, currency: string): string {
     }).format(value);
 }
 
-export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props) => {
+export const QuoteDialog = ({ dialog, search, quote, delivery }: Props) => {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const lineActions = useMemo(
         () => ({
@@ -104,19 +91,6 @@ export const QuoteDialog = ({ dialog, product, search, quote, delivery }: Props)
                     <QuoteProductSearch
                         state={search.state}
                         actions={search.actions}
-                    />
-                    <QuoteProductPicker
-                        product={{
-                            product: product.product,
-                            loading: product.productLoading,
-                            error: product.productError,
-                            onRetry: product.onRetry,
-                        }}
-                        candidate={{
-                            quantity: product.candidateQuantity,
-                            onQuantityChange: product.onCandidateQuantityChange,
-                        }}
-                        onAdd={product.onAddProduct}
                     />
                     <QuoteLineActionsProvider actions={lineActions}>
                         <QuoteItems lines={quote.lines} formatPrice={formatPrice} />

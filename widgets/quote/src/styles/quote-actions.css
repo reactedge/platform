@@ -1,0 +1,11 @@
+.quote__add {
+    background: #176b5b;
+    border: 1px solid #176b5b;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.7rem;
+}

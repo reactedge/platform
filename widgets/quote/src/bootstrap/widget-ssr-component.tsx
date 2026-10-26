@@ -1,26 +1,15 @@
-import {WIDGET_ID} from "../Config.ts";
-import {WidgetView} from "../WidgetView.tsx";
+import { WIDGET_ID } from "../Config.ts";
+import { WidgetView } from "../WidgetView.tsx";
 
-interface WidgetRootProps {
+type Props = {
     contract: unknown;
-    hostElement?: HTMLElement;
-}
+    runtime: unknown;
+};
 
-export function WidgetComponent({
-       contract
-   }: WidgetRootProps) {
-    const runtime = {
-        rendering: {
-            userAgent: 'desktop'
-        }}
-
-    const bootstrapData = {
-        productData: undefined
-    }
-
+export function WidgetComponent({ contract, runtime }: Props) {
     return (
         <div className={`reactedge-${WIDGET_ID}`}>
-            <WidgetView contract={contract} runtime={runtime} bootstrapData={bootstrapData}/>
+            <WidgetView contract={contract} runtime={runtime} />
         </div>
     );
 }

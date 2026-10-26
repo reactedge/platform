@@ -8,7 +8,6 @@
     padding: 1.15rem 0 0;
 }
 
-.quote__product-picker h3,
 .quote__section-heading h3 {
     color: #34443d;
     font-size: 0.95rem;
@@ -20,21 +19,9 @@
     font-size: 0.8rem;
 }
 
-.quote__error,
 .quote__empty {
     color: #66756e;
     margin: 0.75rem 0 0;
-}
-
-.quote__error button {
-    background: transparent;
-    border: 0;
-    color: #176b5b;
-    cursor: pointer;
-    font: inherit;
-    font-weight: 700;
-    padding: 0;
-    text-decoration: underline;
 }
 
 .quote__section-heading,

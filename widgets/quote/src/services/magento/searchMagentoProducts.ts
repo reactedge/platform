@@ -3,7 +3,6 @@ import type { GraphqlClient } from "@reactedge/framework/graphql/graphqlClient.t
 
 export type GraphqlProduct = {
     __typename?: string | null;
-    id?: string | null;
     sku?: string | null;
     name?: string | null;
     short_description?: { html?: string | null } | null;
@@ -37,7 +36,6 @@ export type MagentoProductAggregation = {
         count: number;
         label: string;
         value: string;
-        swatch_data?: { value: string; type: string } | null;
     }[];
 };
 
@@ -48,10 +46,6 @@ export type QuoteProductFacet = {
     label: string;
     options: MagentoProductAggregation["options"];
 };
-
-function firstProduct(response: ProductsResponse): GraphqlProduct | undefined {
-    return response.products.items[0];
-}
 
 function productSku(product: GraphqlProduct): string {
     return product.sku ?? "";
@@ -96,14 +90,9 @@ const QUERY = `
               count
               label
               value
-              swatch_data {
-                value
-                type
-              }
             }
           }
         items {
-          id
           __typename
                     sku
           name
@@ -135,31 +124,6 @@ const QUERY = `
       }
     }
 `;
-
-export async function fetchMagentoProductData(
-    graphqlClient: GraphqlClient,
-    sku: string
-): Promise<ProductData | null> {
-    const data = await graphqlClient<ProductsResponse>(
-        QUERY,
-        {
-            filter: {
-                sku: {
-                    eq: sku,
-                },
-            },
-            search: null,
-        }
-    );
-
-    const product = firstProduct(data);
-
-    if (!product) {
-        return null;
-    }
-
-    return mapProduct(product);
-}
 
 export async function searchMagentoProducts(
     graphqlClient: GraphqlClient,

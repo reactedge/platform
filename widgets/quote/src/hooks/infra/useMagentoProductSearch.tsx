@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSystemState } from "../../state/System/useSystemState.ts";
 import { getError } from "../../lib/error.ts";
 import type { ProductData } from "../../Config.ts";
-import { searchMagentoProducts, type QuoteProductFacet, type QuoteProductFilter } from "../../services/magento/fetchMagentoProductData.tsx";
+import { searchMagentoProducts, type QuoteProductFacet, type QuoteProductFilter } from "../../services/magento/searchMagentoProducts.ts";
 
 export function useMagentoProductSearch(searchTerm: string, filters: QuoteProductFilter) {
     const [products, setProducts] = useState<ProductData[]>([]);

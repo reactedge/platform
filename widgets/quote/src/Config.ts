@@ -39,7 +39,6 @@ export interface ConfigurableProductOption {
 
 export interface RuntimeConfig {
     storeCode: string;
-    sku: string;
 }
 
 export interface ReactEdgeRuntimeConfig {
@@ -124,8 +123,7 @@ export function resolveConfig(
         data: widget.data,
         settings: widget.settings,
         runtime: {
-            storeCode: runtime.context.storeCode,
-            sku: runtime.context.sku
+            storeCode: runtime.context.storeCode
         },
         integrations: {
             magentoGraphql: runtime.integrations?.magentoGraphql,

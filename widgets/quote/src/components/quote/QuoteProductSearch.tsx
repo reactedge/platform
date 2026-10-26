@@ -1,5 +1,5 @@
 import type { ProductData } from "../../Config.ts";
-import type { QuoteProductFacet, QuoteProductFilter } from "../../services/magento/fetchMagentoProductData.tsx";
+import type { QuoteProductFacet, QuoteProductFilter } from "../../services/magento/searchMagentoProducts.ts";
 
 export type QuoteProductSearchState = {
     searchTerm: string;

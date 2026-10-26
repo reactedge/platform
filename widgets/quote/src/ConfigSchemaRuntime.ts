@@ -14,8 +14,7 @@ export const SchemaRuntimeConfig = z.object({
         }).optional()
     }),
     context: z.object({
-        storeCode: z.string(),
-        sku: z.string()
+        storeCode: z.string()
     })
 });
 
