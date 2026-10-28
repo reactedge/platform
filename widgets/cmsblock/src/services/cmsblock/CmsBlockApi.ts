@@ -35,7 +35,7 @@ export interface CmsBlockApiClient {
 }
 
 export function createCmsBlockApiClient(apiUrl: string): CmsBlockApiClient {
-    const base = apiUrl.replace(/\\/+$/, "") + "/cmsblock/blocks/demo";
+    const base = apiUrl.replace(/\/+$/, "") + "/cmsblock/blocks/demo";
 
     async function request(
         path: string,
