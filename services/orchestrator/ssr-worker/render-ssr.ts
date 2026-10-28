@@ -40,7 +40,6 @@ const run = async () => {
     try {
         await fs.access(entry);
     } catch {
-        // eslint-disable-next-line no-console
         console.log(`Widget '${widgetName}' does not implement SSR.`);
         return;
     }
