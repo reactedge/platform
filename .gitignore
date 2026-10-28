@@ -82,3 +82,7 @@ workspace/*
 
 # Generated whitepaper diagram exports
 packages/docs/whitepaper/**/*.png
+
+services/intent-engine/.cache/*
+
+
