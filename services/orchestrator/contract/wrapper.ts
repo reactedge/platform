@@ -25,10 +25,7 @@ export function wrapContract(
     contract: ContractWrapper
 ): ContractWrapper {
 
-    const resolved =
-        resolveContractTags(contract);
-
-    return resolved
+    return resolveContractTags(prepareForDeployment(contract))
 }
 
 /**
