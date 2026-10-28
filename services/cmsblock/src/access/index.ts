@@ -1,5 +1,5 @@
 import {setupJsonBodyParse} from "./jsonParser.js";
-import {Application} from "express";
+import type {Application} from "express";
 
 export default (app: Application) => {
     setupJsonBodyParse(app)

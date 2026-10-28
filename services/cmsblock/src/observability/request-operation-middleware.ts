@@ -1,7 +1,7 @@
 import type {NextFunction, Request, RequestHandler, Response} from "express";
 import {sanitiseUrl} from "../lib/url";
-import {OpenTelemetryObserver} from "./activity";
-import {Operation} from "./operation";
+import type {OpenTelemetryObserver} from "./activity";
+import type {Operation} from "./operation";
 
 export const createRequestOperationMiddleware = (
     operationName: string
