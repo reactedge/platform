@@ -8,7 +8,6 @@ import type {Server} from 'node:http';
 import express from 'express';
 import {CmsBlockStore} from '../src/model/cmsblock/cmsblock-store';
 import {generateBlock, validateDraft} from '../src/model/cmsblock/generator';
-import {setupCmsBlockRoutes} from '../src/routes/cmsblock-router';
 
 test('legacy CMSBlock routes preserve the author -> review -> publish lifecycle', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'reactedge-cmsblock-'));
