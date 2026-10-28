@@ -55,16 +55,16 @@ test.describe('ContactUs Widget', () => {
         await expect(submit).toBeDisabled();
     });
 
-    test('ContactUs submit enables when Turnstile token is present', async () => {
-        const submit = widget.locator('[data-contact-submit]');
+    test('ContactUs fields accept input', async () => {
         const fields = widget.locator('[data-contact-field]');
-
-        // Fill fields
         const count = await fields.count();
+
         for (let i = 0; i < count; i++) {
             const input = fields.nth(i);
             const type = await input.getAttribute('type');
-            await input.fill(type === 'email' ? 'jane@test.com' : 'test');
+            const value = type === 'email' ? 'jane@test.com' : 'test';
+            await input.fill(value);
+            await expect(input).toHaveValue(value);
         }
     });
 });
