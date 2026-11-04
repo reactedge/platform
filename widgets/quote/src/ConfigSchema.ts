@@ -12,6 +12,7 @@ const WidgetDataSchema = z.object({
 const WidgetSettingsSchema = z.object({
     colour: z.string(),
     countryCode: z.string().trim().regex(/^[A-Za-z]{2}$/).transform(value => value.toUpperCase()).default("GB"),
+    minSearchLength: z.number().int().min(1).default(2),
 });
 
 export const WidgetConfigSchema = z.object({

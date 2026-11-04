@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { ProductData, WidgetConfig } from "../../Config.ts";
 import { useQuoteLines } from "./useQuoteLines.ts";
 import { useMagentoProductSearch } from "../infra/useMagentoProductSearch.tsx";
@@ -9,7 +9,25 @@ export function useQuoteDialogController(config: WidgetConfig) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [filters, setFilters] = useState<QuoteProductFilter>({});
-    const search = useMagentoProductSearch(searchTerm, filters, setFilters);
+    const selectInterpretedFilters = useCallback((interpreted: QuoteProductFilter) => {
+        setFilters(current => {
+            let changed = false;
+            const next = { ...current };
+            for (const [attribute, values] of Object.entries(interpreted)) {
+                const selected = next[attribute] ?? [];
+                const merged = [...new Set([...selected, ...values])];
+                if (merged.length !== selected.length) changed = true;
+                next[attribute] = merged;
+            }
+            return changed ? next : current;
+        });
+    }, []);
+    const search = useMagentoProductSearch(
+        searchTerm,
+        filters,
+        config.settings.minSearchLength,
+        selectInterpretedFilters
+    );
     const quote = useQuoteLines();
     const delivery = useDeliveryEstimate(quote.lines, config.settings.countryCode);
 
@@ -24,6 +42,7 @@ export function useQuoteDialogController(config: WidgetConfig) {
         search: {
             state: {
                 searchTerm,
+                minSearchLength: config.settings.minSearchLength,
                 products: search.products,
                 facets: search.facets,
                 filters,

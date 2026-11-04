@@ -4,28 +4,23 @@ import { getError } from "../../lib/error.ts";
 import type { ProductData } from "../../Config.ts";
 import { searchMagentoProducts, type QuoteProductFacet, type QuoteProductFilter } from "../../services/magento/searchMagentoProducts.ts";
 
-function normalizeFilters(filters: QuoteProductFilter): string {
-    const entries: [string, string[]][] = Object.entries(filters)
-        .map(([attribute, values]) => [attribute, [...values].sort()]);
-    entries.sort(([left], [right]) => left.localeCompare(right));
-    return JSON.stringify(Object.fromEntries(entries));
-}
-
 export function useMagentoProductSearch(
     searchTerm: string,
     filters: QuoteProductFilter,
-    onFiltersResolved: (filters: QuoteProductFilter) => void
+    minSearchLength: number,
+    onFiltersInterpreted: (filters: QuoteProductFilter) => void
 ) {
     const [products, setProducts] = useState<ProductData[]>([]);
     const [facets, setFacets] = useState<QuoteProductFacet[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
-    const autoAppliedTerm = useRef("");
+    const interpretedTerm = useRef("");
     const { graphqlClient, intentApiUrl, storeCode } = useSystemState();
 
     useEffect(() => {
         const term = searchTerm.trim();
-        if (term.length < 2) {
+        if (term.length < minSearchLength) {
+            interpretedTerm.current = "";
             setProducts([]);
             setFacets([]);
             setLoading(false);
@@ -38,16 +33,14 @@ export function useMagentoProductSearch(
         const timer = window.setTimeout(() => {
             setLoading(true);
             setError(null);
-            void searchMagentoProducts(graphqlClient, intentApiUrl, storeCode, term, filters)
+            const shouldInterpret = interpretedTerm.current !== term;
+            void searchMagentoProducts(graphqlClient, intentApiUrl, storeCode, term, filters, shouldInterpret)
                 .then(result => {
                     if (active) {
                         setFacets(result.facets);
-                        if (autoAppliedTerm.current !== term) {
-                            autoAppliedTerm.current = term;
-                            if (normalizeFilters(filters) !== normalizeFilters(result.resolvedFilters)) {
-                                onFiltersResolved(result.resolvedFilters);
-                                return;
-                            }
+                        if (shouldInterpret) {
+                            interpretedTerm.current = term;
+                            onFiltersInterpreted(result.interpretedFilters);
                         }
                         setProducts(result.products);
                     }
@@ -64,7 +57,7 @@ export function useMagentoProductSearch(
             active = false;
             window.clearTimeout(timer);
         };
-    }, [filters, graphqlClient, intentApiUrl, onFiltersResolved, searchTerm, storeCode]);
+    }, [filters, graphqlClient, intentApiUrl, minSearchLength, onFiltersInterpreted, searchTerm, storeCode]);
 
     return { products, facets, loading, error };
 }

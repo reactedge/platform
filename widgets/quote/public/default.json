@@ -4,7 +4,8 @@
   },
   "settings": {
     "colour": "#176b5b",
-    "countryCode": "GB"
+    "countryCode": "GB",
+    "minSearchLength": 2
   },
   "integration": {
     "requires": ["magentoGraphql", "intentApi"]

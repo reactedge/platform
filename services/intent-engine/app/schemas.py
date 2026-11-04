@@ -39,7 +39,6 @@ class RecommendationRequest(BaseModel):
 class QuoteRecommendationRequest(BaseModel):
     intentText: str
     filters: Dict[str, Any] = Field(default_factory=dict)
-    attributes: List[Attribute] = Field(default_factory=list)
     products: List[ProductModel]
 
 
@@ -52,10 +51,6 @@ class RecommendationItem(BaseModel):
 class RecommendationResponse(BaseModel):
     suggestions: List[RecommendationItem]
 
-
-class QuoteRecommendationResponse(BaseModel):
-    suggestions: List[RecommendationItem]
-    filters: Dict[str, List[str]] = Field(default_factory=dict)
 
 SuggestionSchema = {
     "name": "suggestions",

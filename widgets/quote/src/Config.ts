@@ -10,6 +10,7 @@ export interface WidgetConfig {
     readonly settings: {
         colour: string;
         countryCode: string;
+        minSearchLength: number;
     };
 
     readonly runtime: RuntimeConfig

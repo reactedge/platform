@@ -4,8 +4,7 @@ from app.model.RecommendationHandler import RecommendationHandler
 from app.config import settings
 from app.schemas import RecommendationRequest
 from app.schemas import RecommendationResponse
-from app.schemas import QuoteRecommendationRequest, QuoteRecommendationResponse, IntentInput, IntentRequest
-from app.services.interpret import interpret_intent
+from app.schemas import QuoteRecommendationRequest
 import re
 
 def suggest_products(payload: RecommendationRequest, store: str):
@@ -68,9 +67,8 @@ def _map_signal_suggestions(suggestions, candidates, max_score):
 
 
 def recommend_quote_products(payload: QuoteRecommendationRequest, store: str):
-    filters = _resolve_quote_filters(payload)
     if not payload.products or not payload.intentText.strip():
-        return QuoteRecommendationResponse(suggestions=[], filters=filters)
+        return RecommendationResponse(suggestions=[])
 
     prompt = load_recommendation_prompt()
     if isinstance(prompt, dict):
@@ -82,51 +80,20 @@ def recommend_quote_products(payload: QuoteRecommendationRequest, store: str):
         )
 
     handler = RecommendationHandler(settings.openai_model, settings.openai_performance)
-    response = handler.get_suggestions(_quote_model_input(payload, filters), prompt, store)
+    response = handler.get_suggestions(_quote_model_input(payload), prompt, store)
     suggestions = _map_quote_suggestions(
         response.get("suggestions", []), payload
     )
     if not suggestions:
         suggestions = _rank_by_text(payload)
 
-    return QuoteRecommendationResponse(suggestions=suggestions[:5], filters=filters)
+    return RecommendationResponse(suggestions=suggestions[:5])
 
 
-def _resolve_quote_filters(payload: QuoteRecommendationRequest):
-    interpretation = interpret_intent(IntentRequest(
-        intent=IntentInput(text=payload.intentText, signals={}),
-        attributes=payload.attributes,
-    ))
-    resolved = {}
-    for item in interpretation.get("filters", []):
-        attribute = item.get("attribute")
-        value = item.get("value")
-        if attribute and value:
-            resolved.setdefault(attribute, set()).add(value)
-
-    for attribute, selected in payload.filters.items():
-        options = next((item.options for item in payload.attributes if item.code == attribute), [])
-        for selected_value in selected if isinstance(selected, list) else [selected]:
-            option = next((option for option in options if option.value == selected_value or option.label == selected_value), None)
-            value = option.value if option else selected_value
-            if value:
-                resolved.setdefault(attribute, set()).add(value)
-
-    return {attribute: sorted(values) for attribute, values in resolved.items()}
-
-
-def _quote_model_input(payload: QuoteRecommendationRequest, filters):
-    option_labels = {
-        (attribute.code, option.value): option.label
-        for attribute in payload.attributes
-        for option in attribute.options
-    }
+def _quote_model_input(payload: QuoteRecommendationRequest):
     return {
         "intentText": payload.intentText,
-        "filters": {
-            attribute: [option_labels.get((attribute, value), value) for value in values]
-            for attribute, values in filters.items()
-        },
+        "filters": payload.filters,
         "products": [
             {
                 "sku": product.sku,
