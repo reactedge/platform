@@ -1,4 +1,4 @@
-import type {BootstrapData} from "./entrypoints/ssr.tsx";
+import type {BootstrapData} from "./bootstrap/ssr/render.tsx";
 import {readWidgetConfig} from "./Config.ts";
 import {SystemStateProvider} from "./state/System/SystemStateProvider.tsx";
 import {Widget__WIDGET_PASCAL_NAME__} from "./components/Widget__WIDGET_PASCAL_NAME__.tsx";

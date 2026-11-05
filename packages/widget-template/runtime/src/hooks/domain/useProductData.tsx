@@ -1,5 +1,5 @@
 import { useMagentoProductData } from "../infra/useMagentoProductData.tsx";
-import type { BootstrapData } from "../../entrypoints/ssr.tsx";
+import type { BootstrapData } from "../../bootstrap/ssr/render.tsx";
 
 export function useProductData(
     sku: string,

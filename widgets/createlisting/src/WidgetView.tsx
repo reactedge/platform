@@ -1,4 +1,4 @@
-import type {BootstrapData} from "./entrypoints/ssr.tsx";
+import type {BootstrapData} from "./bootstrap/ssr/render.tsx";
 import {readWidgetConfig} from "./Config.ts";
 import {WidgetCreatelisting} from "./components/WidgetCreatelisting.tsx";
 

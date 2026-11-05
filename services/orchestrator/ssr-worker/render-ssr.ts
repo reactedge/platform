@@ -2,17 +2,8 @@ import fs from 'fs/promises';
 import 'dotenv/config';
 import { ReactEdgeRoot } from "@reactedge/filesystem/reactedgeRoot.ts";
 
-export async function resolveEntry(widget: string): Promise<string> {
-    const widgetRoot = `${ReactEdgeRoot.get()}/widgets/${widget}/src`;
-    const refactoredEntry = `${widgetRoot}/ssr/render.tsx`;
-    const legacyEntry = `${widgetRoot}/entrypoints/ssr.tsx`;
-
-    try {
-        await fs.access(refactoredEntry);
-        return refactoredEntry;
-    } catch {
-        return legacyEntry;
-    }
+export function resolveEntry(widget: string): string {
+    return `${ReactEdgeRoot.get()}/widgets/${widget}/src/bootstrap/ssr/render.tsx`;
 }
 
 const run = async () => {
@@ -44,12 +35,11 @@ const run = async () => {
         }
     };
 
-    const entry = await resolveEntry(widgetName);
+    const entry = resolveEntry(widgetName);
 
     try {
         await fs.access(entry);
     } catch {
-        // eslint-disable-next-line no-console
         console.log(`Widget '${widgetName}' does not implement SSR.`);
         return;
     }
@@ -64,7 +54,7 @@ const run = async () => {
         ? await buildBootstrap(runtime)
         : bootstrap;
 
-    const finalHtml = renderHtml(config, resolvedBootstrap, runtime);
+    const finalHtml = renderHtml(config, runtime, resolvedBootstrap);
 
     process.stdout.write(finalHtml);
 };

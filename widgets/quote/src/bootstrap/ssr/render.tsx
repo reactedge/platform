@@ -1,7 +1,7 @@
 import { renderToString } from 'react-dom/server';
-import {WIDGET_ID} from "../Config.ts";
-import type { ReactEdgeRuntimeConfig } from "../Config.ts";
-import { WidgetView } from "../WidgetView.tsx";
+import {WIDGET_ID} from "../../Config.ts";
+import type { ReactEdgeRuntimeConfig } from "../../Config.ts";
+import { WidgetView } from "../../WidgetView.tsx";
 
 function isRuntimeConfig(value: unknown): value is ReactEdgeRuntimeConfig {
     return typeof value === "object" && value !== null && "integrations" in value && "context" in value;
@@ -22,4 +22,4 @@ export const renderHtml = (config: unknown, runtimeOrBootstrap: unknown, possibl
     );
 };
 
-export { buildBootstrap, loadRuntime } from '../ssr/bootstrap';
+export { buildBootstrap, loadRuntime } from '../../ssr/bootstrap';

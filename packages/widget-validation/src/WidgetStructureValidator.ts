@@ -30,7 +30,7 @@ const requiredFiles = {
         "src/bootstrap/config/ConfigSchema.ts",
         "src/bootstrap/view/WidgetView.tsx",
         "src/bootstrap/WidgetWrapper.tsx",
-        "src/ssr/render.tsx",
+        "src/bootstrap/ssr/render.tsx",
         "src/bootstrap/widget-ssr-component.tsx",
     ],
     runtime: [
@@ -39,7 +39,7 @@ const requiredFiles = {
         "src/ConfigSchemaRuntime.ts",
         "src/WidgetView.tsx",
         "src/bootstrap/WidgetWrapper.tsx",
-        "src/entrypoints/ssr.tsx",
+        "src/bootstrap/ssr/render.tsx",
         "src/bootstrap/widget-ssr-component.tsx",
     ],
     "runtime-shadow": [
@@ -80,7 +80,7 @@ const legacyStandardRequiredFiles = [
     "src/ConfigSchema.ts",
     "src/WidgetView.tsx",
     "src/bootstrap/WidgetWrapper.tsx",
-    "src/entrypoints/ssr.tsx",
+    "src/bootstrap/ssr/render.tsx",
     "src/bootstrap/widget-ssr-component.tsx",
 ] as const;
 
@@ -104,7 +104,7 @@ const legacyStandardFilesRewrittenForLayout = new Set([
     "api/index.ts",
     "api/widget.tsx",
     "src/entrypoints/npm.tsx",
-    "src/entrypoints/ssr.tsx",
+    "src/bootstrap/ssr/render.tsx",
     "src/Widget.tsx",
     "src/WidgetView.tsx",
     "src/Config.ts",

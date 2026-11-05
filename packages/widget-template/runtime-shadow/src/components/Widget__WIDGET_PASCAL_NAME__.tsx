@@ -1,6 +1,6 @@
 import type { WidgetConfig } from "../Config";
 import { useProductData } from "../hooks/domain/useProductData";
-import type {BootstrapData} from "../entrypoints/ssr";
+import type {BootstrapData} from "../bootstrap/ssr/render.tsx";
 
 type Props = {
     config: WidgetConfig;

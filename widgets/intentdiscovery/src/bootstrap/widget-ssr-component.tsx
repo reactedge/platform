@@ -1,5 +1,5 @@
 import { WIDGET_ID } from "../Config.ts";
-import type { BootstrapData } from "../entrypoints/ssr.tsx";
+import type { BootstrapData } from "./ssr/render.tsx";
 import { WidgetView } from "../WidgetView.tsx";
 
 interface WidgetRootProps {

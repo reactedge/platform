@@ -1,8 +1,8 @@
 import { renderToString } from 'react-dom/server';
-import { WIDGET_ID } from "../Config.ts";
-import { WidgetView } from "../WidgetView.tsx";
-import type { MagentoLayeredNavigation } from "../types/domain/layered-data.types.ts"
-import type { CategoryData } from "../types/infra/magento/category.types.ts";
+import { WIDGET_ID } from "../../Config.ts";
+import { WidgetView } from "../../WidgetView.tsx";
+import type { MagentoLayeredNavigation } from "../../types/domain/layered-data.types.ts"
+import type { CategoryData } from "../../types/infra/magento/category.types.ts";
 
 export interface BootstrapData {
     categoryData: CategoryData | null
@@ -17,6 +17,6 @@ export const renderHtml = (config: unknown, runtime: unknown, bootstrap: Bootstr
     );
 };
 
-export { buildBootstrap } from '../ssr/bootstrap';
+export { buildBootstrap } from '../../ssr/bootstrap';
 
-export { loadRuntime } from '../ssr/bootstrap';
+export { loadRuntime } from '../../ssr/bootstrap';

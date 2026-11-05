@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import { access } from 'node:fs/promises';
 const isProduction = process.env.NODE_ENV === 'production';
 
 if (isProduction && process.env.ALLOW_SELF_SIGNED_SSL === 'true') {
@@ -21,16 +20,8 @@ import {ReactEdgeRoot} from "@reactedge/filesystem/reactedgeRoot.ts";
 const app = express();
 app.use(express.json());
 
-async function resolveEntry(widget: string): Promise<string> {
-    const widgetRoot = `${ReactEdgeRoot.get()}/widgets/${widget}/src`;
-    const renderModule = `${widgetRoot}/ssr/render.tsx`;
-
-    try {
-        await access(renderModule);
-        return renderModule;
-    } catch {
-        return `${widgetRoot}/entrypoints/ssr.tsx`;
-    }
+function resolveEntry(widget: string): string {
+    return `${ReactEdgeRoot.get()}/widgets/${widget}/src/bootstrap/ssr/render.tsx`;
 }
 
 app.post('/render', async (req, res) => {
@@ -54,7 +45,7 @@ app.post('/render', async (req, res) => {
 
         ssrOperation.logPayload(payload);
 
-        const entry = await resolveEntry(payload.widget);
+        const entry = resolveEntry(payload.widget);
 
         const { renderHtml, buildBootstrap } = await import(entry);
 
