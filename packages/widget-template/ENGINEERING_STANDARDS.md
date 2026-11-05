@@ -11,6 +11,19 @@ Cross-cutting engineering policies are defined in the root `AGENTS.md`. This doc
 - Both files must parse as valid JSON and conform to the applicable widget/runtime contract schemas. Confirm consistency with the widget implementation; existence alone is insufficient.
 - Validate the widget structure using the MCP widget validator.
 
+## Source layout
+
+- `api/package.ts` is the package export entry point. Keep exactly one widget
+  variant entry point beside it: `widget.tsx`, `runtime-widget.tsx`, or
+  `runtime-shadow-widget.tsx`.
+- Put configuration and schemas in `src/bootstrap/config/`.
+- Put `Widget.tsx` and `WidgetView.tsx`, when present, in
+  `src/bootstrap/view/`.
+- Put the server renderer in `src/bootstrap/ssr/render.tsx` for templates that
+  support SSR. Runtime-shadow widgets may omit SSR.
+- Do not keep `src/entrypoints/`. Remove unused npm harnesses; keep a maintained
+  one under `src/npm/` and update its consumer.
+
 ## Required verification
 
 - Run the widget's applicable build and test commands. Both must pass; a scaffold validation alone is not enough.

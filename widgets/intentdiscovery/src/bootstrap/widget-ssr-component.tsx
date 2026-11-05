@@ -1,6 +1,6 @@
-import { WIDGET_ID } from "../Config.ts";
+import { WIDGET_ID } from "./config/Config.ts";
 import type { BootstrapData } from "./ssr/render.tsx";
-import { WidgetView } from "../WidgetView.tsx";
+import { WidgetView } from "./view/WidgetView.tsx";
 
 interface WidgetRootProps {
     contract: unknown;

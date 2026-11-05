@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { WidgetConfig } from "../Config";
+import type { WidgetConfig } from "../bootstrap/config/Config.ts";
 
 type Props = {
     config: WidgetConfig;

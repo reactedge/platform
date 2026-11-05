@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import {WIDGET_ID} from "../src/Config";
+import {WIDGET_ID} from "../src/bootstrap/config/Config.ts";
 
 test.describe('ContactUs Widget', () => {
     let widget;
@@ -66,5 +66,7 @@ test.describe('ContactUs Widget', () => {
             const type = await input.getAttribute('type');
             await input.fill(type === 'email' ? 'jane@test.com' : 'test');
         }
+
+        await expect(submit).toBeEnabled();
     });
 });

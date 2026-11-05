@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
 import type { Locator } from "@playwright/test";
-import {WIDGET_ID} from "../src/Config";
+import {WIDGET_ID} from "../src/bootstrap/config/Config.ts";
 
 test.describe('Banner Widget', () => {
     let widget;

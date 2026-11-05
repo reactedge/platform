@@ -1,7 +1,7 @@
 import { renderToString } from 'react-dom/server';
-import {WIDGET_ID} from "../../Config.ts";
-import type { ReactEdgeRuntimeConfig, ProductData } from "../../Config.ts";
-import { WidgetView } from "../../WidgetView.tsx";
+import {WIDGET_ID} from "../config/Config.ts";
+import type { ReactEdgeRuntimeConfig, ProductData } from "../config/Config.ts";
+import { WidgetView } from "../view/WidgetView.tsx";
 
 export interface BootstrapData {
     productData: ProductData | undefined;

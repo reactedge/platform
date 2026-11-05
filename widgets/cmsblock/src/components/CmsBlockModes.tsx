@@ -3,46 +3,49 @@ import {CmsBlockEditor} from './CmsBlockEditor.tsx';
 import {CmsBlockSourcePreview} from './CmsBlockSourcePreview.tsx';
 import {CmsBlockPublishedContent} from './CmsBlockPublishedContent.tsx';
 import {CmsBlockRevisionEditor} from './CmsBlockRevisionEditor.tsx';
-import type {CmsBlockController} from '../hooks/domain/useCmsBlockController.ts';
+import {useCmsBlockControllerContext} from '../state/CmsBlock/CmsBlockControllerContext.tsx';
 
-type Props = {controller: CmsBlockController};
-
-export const CmsBlockModeNavigation = ({controller}: Props) => {
-    const {record, mode} = controller;
+export const CmsBlockModeNavigation = () => {
+    const cmsBlock = useCmsBlockControllerContext();
+    const {record, mode, setMode} = cmsBlock;
     return (
         <nav className="cmsblock-editor__actions" aria-label="CMSBlock modes">
-            <button type="button" onClick={() => controller.setMode('edit')}
+            <button type="button" onClick={() => setMode('edit')}
                 aria-pressed={mode === 'edit'}>Edit</button>
-            <button type="button" onClick={() => controller.setMode('review')}
+            <button type="button" onClick={() => setMode('review')}
                 disabled={!record?.pending} aria-pressed={mode === 'review'}>Review</button>
-            <button type="button" onClick={() => controller.setMode('view')}
+            <button type="button" onClick={() => setMode('view')}
                 disabled={!record?.published} aria-pressed={mode === 'view'}>View</button>
         </nav>
     );
 };
 
-export const CmsBlockFeedback = ({controller}: Props) => (
-    <>
-        {controller.loading && <p role="status">Loading saved CMSBlock…</p>}
-        {controller.error && <p className="cmsblock-editor__error" role="alert">{controller.error}</p>}
-        {controller.message && <p className="cmsblock-editor__message" role="status">{controller.message}</p>}
-    </>
-);
+export const CmsBlockFeedback = () => {
+    const {loading, error, message} = useCmsBlockControllerContext();
+    return (
+        <>
+            {loading && <p role="status">Loading saved CMSBlock…</p>}
+            {error && <p className="cmsblock-editor__error" role="alert">{error}</p>}
+            {message && <p className="cmsblock-editor__message" role="status">{message}</p>}
+        </>
+    );
+};
 
-const CmsBlockEditActions = ({controller}: Props) => {
-    const {record, busy, changed, showSourcePreview} = controller;
+const CmsBlockEditActions = () => {
+    const cmsBlock = useCmsBlockControllerContext();
+    const {record, busy, changed, showSourcePreview, save, generate, reset, setShowSourcePreview} = cmsBlock;
     const saveDisabled = busy || (!changed && Boolean(record));
     const generateDisabled = busy || !record || changed;
     return (
         <div className="cmsblock-editor__actions">
             <button type="button" disabled={saveDisabled}
-                onClick={() => { void controller.save(); }}>Save source</button>
+                onClick={() => { void save(); }}>Save source</button>
             <button type="button" disabled={generateDisabled}
-                onClick={() => { void controller.generate(); }}>Generate draft</button>
+                onClick={() => { void generate(); }}>Generate draft</button>
             <button type="button" disabled={busy || !changed}
-                onClick={controller.reset}>Reset changes</button>
+                onClick={reset}>Reset changes</button>
             <button type="button" disabled={busy} onClick={() =>
-                controller.setShowSourcePreview(!showSourcePreview)}>
+                setShowSourcePreview(!showSourcePreview)}>
                 {showSourcePreview ? 'Hide source preview' : 'Inspect source'}
             </button>
             <span>{changed ? 'Unsaved working copy' : 'Changes saved'}</span>
@@ -50,50 +53,55 @@ const CmsBlockEditActions = ({controller}: Props) => {
     );
 };
 
-const CmsBlockEditPreviews = ({controller}: Props) => (
+const CmsBlockEditPreviews = () => {
+    const {showSourcePreview, draft, record} = useCmsBlockControllerContext();
+    return (
+        <>
+            {showSourcePreview && <CmsBlockSourcePreview draft={draft} />}
+            {record?.published && <p>
+                Published revision {record.published.revision} remains live while editing.
+            </p>}
+        </>
+    );
+};
+
+export const CmsBlockEditMode = () => (
     <>
-        {controller.showSourcePreview && <CmsBlockSourcePreview draft={controller.draft} />}
-        {controller.record?.published && <p>
-            Published revision {controller.record.published.revision} remains live while editing.
-        </p>}
+        <CmsBlockEditor />
+        <CmsBlockEditActions />
+        <CmsBlockEditPreviews />
     </>
 );
 
-export const CmsBlockEditMode = ({controller}: Props) => (
-    <>
-        <CmsBlockEditor controller={controller} />
-        <CmsBlockEditActions controller={controller} />
-        <CmsBlockEditPreviews controller={controller} />
-    </>
-);
-
-export const CmsBlockReviewMode = ({controller}: Props) => {
-    const {record, busy} = controller;
+export const CmsBlockReviewMode = () => {
+    const cmsBlock = useCmsBlockControllerContext();
+    const {record, busy, approve, reject} = cmsBlock;
     const [unsavedEdits, setUnsavedEdits] = useState(false);
     if (!record?.pending) return null;
     return (
         <>
             <h2>Review generated revision {record.pending.revision}</h2>
-            <CmsBlockRevisionEditor controller={controller} onDirtyChange={setUnsavedEdits} />
+            <CmsBlockRevisionEditor onDirtyChange={setUnsavedEdits} />
             <div className="cmsblock-editor__actions">
-                <button type="button" disabled={busy || unsavedEdits} onClick={() => { void controller.approve(); }}>Approve and publish</button>
-                <button type="button" disabled={busy} onClick={() => { void controller.reject(); }}>Reject draft</button>
+                <button type="button" disabled={busy || unsavedEdits} onClick={() => { void approve(); }}>Approve and publish</button>
+                <button type="button" disabled={busy} onClick={() => { void reject(); }}>Reject draft</button>
             </div>
             {record.published && <p>Published revision {record.published.revision} is unchanged until approval.</p>}
         </>
     );
 };
 
-export const CmsBlockViewMode = ({controller}: Props) => {
-    const published = controller.record?.published;
+export const CmsBlockViewMode = () => {
+    const {record} = useCmsBlockControllerContext();
+    const published = record?.published;
     if (!published) return null;
     return (
         <>
             <h2>Published revision {published.revision}</h2>
             <CmsBlockPublishedContent
                 revision={published}
-                templateId={controller.record?.templateId ?? "editorial"}
-                layoutId={published.layoutId ?? controller.record?.layoutId ?? "image-above"}
+                templateId={record?.templateId ?? "editorial"}
+                layoutId={published.layoutId ?? record?.layoutId ?? "image-above"}
             />
         </>
     );

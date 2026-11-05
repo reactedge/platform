@@ -1,7 +1,7 @@
 import { IntentDiscoveryWidget } from "./IntentDiscoveryWidget.tsx";
 import { useLayoutEffect } from "react";
 import { resolveIntentCategory } from "../lib/category.ts";
-import type { WidgetConfig } from "../Config.ts";
+import type { WidgetConfig } from "../bootstrap/config/Config.ts";
 import { useActivityContext } from "../activity/Context/useActivityContext.ts";
 
 export interface Props {

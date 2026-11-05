@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import type { ProductData } from "../../Config.ts";
+import type { ProductData } from "../../bootstrap/config/Config.ts";
 
 export type QuoteLine = ProductData & {
     lineId: string;

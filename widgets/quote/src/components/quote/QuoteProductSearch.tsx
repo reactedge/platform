@@ -1,4 +1,4 @@
-import type { ProductData } from "../../Config.ts";
+import type { ProductData } from "../../bootstrap/config/Config.ts";
 import type { QuoteProductFacet, QuoteProductFilter } from "../../services/magento/searchMagentoProducts.ts";
 
 export type QuoteProductSearchState = {
@@ -98,20 +98,32 @@ type FeedbackProps = {
     state: QuoteProductSearchState;
 };
 
-const QuoteProductSearchFeedback = ({ state }: FeedbackProps) => (
-    <>
-        {state.searchTerm.trim().length > 0 && state.searchTerm.trim().length < state.minSearchLength && (
+function shouldShowNoSearchResults(state: QuoteProductSearchState, searchTerm: string): boolean {
+    if (state.loading || state.error) return false;
+    if (searchTerm.length < state.minSearchLength) return false;
+    return state.products.length === 0;
+}
+
+const QuoteProductSearchFeedback = ({ state }: FeedbackProps) => {
+    const searchTerm = state.searchTerm.trim();
+    const remainingCharacters = state.minSearchLength - searchTerm.length;
+    const searchTermIsTooShort = searchTerm.length > 0 && remainingCharacters > 0;
+
+    return (
+        <>
+        {searchTermIsTooShort && (
             <p role="status">
-                Type {state.minSearchLength - state.searchTerm.trim().length} more {state.minSearchLength - state.searchTerm.trim().length === 1 ? "character" : "characters"} to search.
+                Type {remainingCharacters} more {remainingCharacters === 1 ? "character" : "characters"} to search.
             </p>
         )}
         {state.loading && <p role="status">Searching products…</p>}
         {state.error && <p role="alert">Product search failed. Please try again.</p>}
-        {!state.loading && !state.error && state.searchTerm.trim().length >= state.minSearchLength && state.products.length === 0 && (
+        {shouldShowNoSearchResults(state, searchTerm) && (
             <p role="status">No matching products found.</p>
         )}
-    </>
-);
+        </>
+    );
+};
 
 type ResultProps = {
     product: ProductData;

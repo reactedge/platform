@@ -10,7 +10,7 @@ export async function validateWidget(
     let parseConfig = null
 
     const issues: ValidationIssue[] = [];
-    const schemaPath = `${getWidgetPath(widgetName)}/src/ConfigSchema.ts`;
+    const schemaPath = `${getWidgetPath(widgetName)}/src/bootstrap/config/ConfigSchema.ts`;
 
     try {
         parseConfig = await importParseConfig(schemaPath)

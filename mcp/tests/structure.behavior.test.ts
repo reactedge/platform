@@ -179,13 +179,28 @@ test("validate_structure flags a missing runtime-specific schema", async () => {
         const widget = "fixture-runtime-missing-schema";
         const widgetRoot = await createWidgetFixture(root, "runtime", widget);
 
-        await unlink(resolve(widgetRoot, "src/ConfigSchemaRuntime.ts"));
+        await unlink(resolve(widgetRoot, "src/bootstrap/config/ConfigSchemaRuntime.ts"));
 
         const result = await validate(widget);
 
         assert.equal(result.valid, false);
         assert.ok(Array.isArray(result.missing));
-        assert.ok((result.missing as string[]).includes("src/ConfigSchemaRuntime.ts"));
+        assert.ok((result.missing as string[]).includes("src/bootstrap/config/ConfigSchemaRuntime.ts"));
+    });
+});
+
+test("validate_structure rejects legacy API files and entrypoints folders", async () => {
+    await withTemporaryReactEdgeRoot(async root => {
+        const widget = "fixture-standard-legacy-paths";
+        const widgetRoot = await createWidgetFixture(root, "standard", widget);
+
+        await writeFile(resolve(widgetRoot, "api/index.ts"), "export {};\n");
+        await mkdir(resolve(widgetRoot, "src/entrypoints"), { recursive: true });
+
+        const result = await validate(widget);
+
+        assert.equal(result.valid, false);
+        assert.deepEqual(result.unexpected, ["api/index.ts", "src/entrypoints/"]);
     });
 });
 

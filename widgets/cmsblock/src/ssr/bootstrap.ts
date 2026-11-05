@@ -1,7 +1,7 @@
-import type { ReactEdgeRuntimeConfig } from "../Config.ts";
-import { WIDGET_ID } from "../Config.ts";
+import type { ReactEdgeRuntimeConfig } from "../bootstrap/config/Config.ts";
+import { WIDGET_ID } from "../bootstrap/config/Config.ts";
 import fs from "node:fs/promises";
-import { parseRuntimeConfig } from "../ConfigSchemaRuntime.ts";
+import { parseRuntimeConfig } from "../bootstrap/config/ConfigSchemaRuntime.ts";
 import { createCmsBlockApiClient } from "../services/cmsblock/CmsBlockApi.ts";
 
 export async function loadRuntime(): Promise<ReactEdgeRuntimeConfig> {

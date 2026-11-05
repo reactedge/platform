@@ -1,6 +1,6 @@
-import type { ReactEdgeRuntimeConfig } from "../Config.ts";
+import type { ReactEdgeRuntimeConfig } from "../bootstrap/config/Config.ts";
 import type { IntentDiscoveryDataConfig } from "../types/domain/intent-discovery.types.ts"
-import { WIDGET_ID } from "../Config.ts";
+import { WIDGET_ID } from "../bootstrap/config/Config.ts";
 import fs from 'node:fs/promises';
 import { createGraphqlService } from "@reactedge/framework/graphql/graphql.service.ts"
 import { fetchMagentoCategory } from "../services/magento/fetchMagentoCategory.ts";

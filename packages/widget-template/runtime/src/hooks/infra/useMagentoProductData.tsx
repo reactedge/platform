@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSystemState } from "../../state/System/useSystemState.ts";
 import { getError } from "../../lib/error.ts";
-import type { ProductData } from "../../Config.ts"
+import type { ProductData } from "../../bootstrap/config/Config.ts"
 import { fetchMagentoProductData } from "../../services/magento/fetchMagentoProductData.tsx";
 export function useMagentoProductData(enabled: boolean, sku?: string) {
     const [data, setData] = useState<ProductData | null>();

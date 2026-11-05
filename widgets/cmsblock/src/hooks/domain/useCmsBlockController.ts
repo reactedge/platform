@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { WidgetConfig } from "../../Config.ts";
+import type { WidgetConfig } from "../../bootstrap/config/Config.ts";
 import {
     legacyLayoutForTemplate,
     type CmsBlockDraft,

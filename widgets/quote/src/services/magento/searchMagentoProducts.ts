@@ -1,4 +1,4 @@
-import type { ProductData } from "../../Config.ts";
+import type { ProductData } from "../../bootstrap/config/Config.ts";
 import type { GraphqlClient } from "@reactedge/framework/graphql/graphqlClient.ts";
 
 export type GraphqlProduct = {

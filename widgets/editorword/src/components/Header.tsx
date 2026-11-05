@@ -1,4 +1,4 @@
-import type {WidgetConfig} from "../Config.ts";
+import type {WidgetConfig} from "../bootstrap/config/Config.ts";
 
 type Props = {
     config: WidgetConfig

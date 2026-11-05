@@ -1,8 +1,8 @@
 import { renderToString } from "react-dom/server";
-import type { ReactEdgeRuntimeConfig } from "../../Config.ts";
+import type { ReactEdgeRuntimeConfig } from "../config/Config.ts";
 import type { CmsBlockBootstrap } from "../../services/cmsblock/CmsBlockApi.ts";
-import { WIDGET_ID } from "../../Config.ts";
-import { WidgetView } from "../../WidgetView.tsx";
+import { WIDGET_ID } from "../config/Config.ts";
+import { WidgetView } from "../view/WidgetView.tsx";
 
 /** Signature required by the platform SSR worker: renderHtml(contract, bootstrap, runtime). */
 export const renderHtml = (

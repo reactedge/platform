@@ -35,7 +35,7 @@ export function createWidgetBuildDefaults<TBuild>(
 
 export function createNpmBuildDefaults<TBuild>({
    widgetName,
-   entry = "api/index.ts",
+   entry = "api/package.ts",
 }: {
     widgetName: string;
     entry?: string;

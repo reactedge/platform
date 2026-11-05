@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import type { Locator } from "@playwright/test";
-import {WIDGET_ID} from "../src/Config";
+import {WIDGET_ID} from "../src/bootstrap/config/Config";
 
 test.describe('Megamenu widget (WordPress embed)', () => {
     let widget: Locator;

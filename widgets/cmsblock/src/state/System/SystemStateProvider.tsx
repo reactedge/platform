@@ -4,7 +4,7 @@ import type { WidgetActivity } from "@reactedge/framework/activity";
 import type {
     CmsBlockApiIntegration,
     RuntimeConfig,
-} from "../../Config.ts";
+} from "../../bootstrap/config/Config.ts";
 import { createCmsBlockApiClient } from "../../services/cmsblock/CmsBlockApi.ts";
 
 interface SystemStateProviderProps {

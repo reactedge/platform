@@ -1,5 +1,5 @@
-import type { ReactEdgeRuntimeConfig } from "../Config.ts";
-import { WIDGET_ID } from "../Config.ts";
+import type { ReactEdgeRuntimeConfig } from "../bootstrap/config/Config.ts";
+import { WIDGET_ID } from "../bootstrap/config/Config.ts";
 import fs from 'node:fs/promises';
 
 export async function loadRuntime(): Promise<ReactEdgeRuntimeConfig> {
@@ -11,6 +11,6 @@ export async function loadRuntime(): Promise<ReactEdgeRuntimeConfig> {
     );
 }
 
-export async function buildBootstrap(_runtime: ReactEdgeRuntimeConfig) {
+export async function buildBootstrap() {
     return {};
 }

@@ -1,5 +1,5 @@
 import {WidgetCategoryFeatured} from "../components/WidgetCategoryFeatured.tsx";
-import {readWidgetConfig} from "../Config.ts";
+import {readWidgetConfig} from "./config/Config.ts";
 import {useActivityContext} from "../activity/Context/useActivityContext.ts";
 
 type Props = {

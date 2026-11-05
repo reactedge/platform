@@ -1,4 +1,4 @@
-import {readWidgetConfig} from "../Config.ts";
+import {readWidgetConfig} from "./config/Config.ts";
 import {useActivityContext} from "../activity/Context/useActivityContext.ts";
 import {BannerSlider} from "../components/BannerSlider.tsx";
 import {BannerStatic} from "../components/BannerStatic.tsx";

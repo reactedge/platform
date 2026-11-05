@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSystemState } from "../../state/System/useSystemState.ts";
 import { getError } from "../../lib/error.ts";
-import type { ProductData } from "../../Config.ts";
+import type { ProductData } from "../../bootstrap/config/Config.ts";
 import { searchMagentoProducts, type QuoteProductFacet, type QuoteProductFilter } from "../../services/magento/searchMagentoProducts.ts";
 
 export function useMagentoProductSearch(

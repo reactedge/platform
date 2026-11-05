@@ -1,7 +1,7 @@
 import { useCategory } from "../hooks/domain/useCategory.tsx";
 import { IntentDiscoveryLoader } from "./IntentDiscovery/IntentDiscoveryLoader.tsx";
 import { SpinnerOverlay } from "./global/SpinnerOverlay.tsx";
-import type { WidgetConfig } from "../Config.ts";
+import type { WidgetConfig } from "../bootstrap/config/Config.ts";
 import { useEffect } from "react";
 import { useActivityContext } from "../activity/Context/useActivityContext.ts";
 

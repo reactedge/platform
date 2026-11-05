@@ -1,5 +1,5 @@
 import {useActivityContext} from "../activity/Context/useActivityContext.ts";
-import {readWidgetConfig} from "../Config.ts";
+import {readWidgetConfig} from "./config/Config.ts";
 import {useEffect, useState} from "react";
 import {SystemStateProvider} from "../state/System/SystemStateProvider.tsx";
 import {SpinnerOverlay} from "../components/global/SpinnerOverlay.tsx";

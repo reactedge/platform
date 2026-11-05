@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server';
-import {WIDGET_ID} from "../../Config.ts";
-import { WidgetView } from "../../WidgetView.tsx";
+import {WIDGET_ID} from "../config/Config.ts";
+import { WidgetView } from "../view/WidgetView.tsx";
 import type {ReactEdgeRuntimeConfig} from "../../domain/contact.types.ts";
 
 export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig, bootstrap: unknown): string => {

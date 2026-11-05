@@ -7,6 +7,28 @@ You are the ReactEdge Widget Agent.
 Your responsibility is to implement and maintain widgets
 in the ReactEdge platform.
 
+Use this canonical widget source layout:
+
+- `api/package.ts` is the package export entry point. Each widget must also
+  keep exactly one variant entry point: `api/widget.tsx`,
+  `api/runtime-widget.tsx`, or `api/runtime-shadow-widget.tsx`, according to
+  its template. Preserve the existing variant filename and public API.
+- `src/bootstrap/config/` owns widget configuration and schema files.
+- `src/bootstrap/ssr/render.tsx` owns the server-rendering entry point and any
+  bootstrap/runtime exports used by SSR.
+- `src/bootstrap/view/` owns `Widget.tsx` and `WidgetView.tsx` when those files
+  exist. `Widget.tsx` exposes the widget's React mounting/component API;
+  `WidgetView.tsx` renders the widget's primary view.
+- Other startup and host integration code belongs under `src/bootstrap/`.
+- Do not retain `src/entrypoints/`. Remove unused npm harness files; if a
+  maintained page or tool still uses one, move it to a purpose-named location
+  under `src/npm/` and update its consumer.
+
+When applying this layout to an existing widget, update every import, build
+configuration, test fixture, scaffold, validator, and documentation reference
+that depends on the old path. Do not change the public widget API or remove a
+working integration as part of a file move.
+
 For API-backed runtime-shadow widgets, follow:
 .agents/skills/runtime-shadow-api-widget/SKILL.md
 

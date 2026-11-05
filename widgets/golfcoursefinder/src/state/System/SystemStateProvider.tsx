@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { WidgetConfig } from "../../Config.ts";
+import type { WidgetConfig } from "../../bootstrap/config/Config.ts";
 import { GolfCourseSearchService } from "../../domain/golf-course-search.service.ts";
 import { LocalSystemStateContext } from "./SystemState.tsx";
 

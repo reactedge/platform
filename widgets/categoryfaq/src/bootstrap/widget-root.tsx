@@ -1,4 +1,4 @@
-import {WIDGET_ID} from "../Config.ts";
+import {WIDGET_ID} from "./config/Config.ts";
 import {ActivityContextProvider} from "../activity/Context/ActivityContextProvider.tsx";
 import {WidgetWrapper} from "./WidgetWrapper.tsx";
 interface WidgetRootProps {
