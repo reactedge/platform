@@ -1,4 +1,4 @@
-import {readWidgetConfig} from "./Config.ts";
+import {readWidgetConfig} from "../config/Config.ts";
 import {Widget__WIDGET_PASCAL_NAME__} from "./components/Widget__WIDGET_PASCAL_NAME__.tsx";
 
 type Props = {

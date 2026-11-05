@@ -26,11 +26,11 @@ import { getWidgetType } from "@reactedge/widget-preset/widgetType";
  */
 const requiredFiles = {
     standard: [
-        "src/Config.ts",
-        "src/ConfigSchema.ts",
-        "src/WidgetView.tsx",
+        "src/bootstrap/config/Config.ts",
+        "src/bootstrap/config/ConfigSchema.ts",
+        "src/bootstrap/view/WidgetView.tsx",
         "src/bootstrap/WidgetWrapper.tsx",
-        "src/entrypoints/ssr.tsx",
+        "src/ssr/render.tsx",
         "src/bootstrap/widget-ssr-component.tsx",
     ],
     runtime: [
@@ -64,11 +64,11 @@ const sharedFiles = [
     "tsconfig.json",
     "tsconfig.app.json",
 
-    "api/index.ts",
+    "api/package.ts",
 
-    "src/entrypoints/npm.tsx",
+    "src/npm/main.tsx",
 
-    "src/Widget.tsx",
+    "src/bootstrap/view/Widget.tsx",
 
     "src/bootstrap/widget-root.tsx",
 
@@ -76,6 +76,46 @@ const sharedFiles = [
     "src/activity/Context/ActivityContext.tsx",
     "src/activity/Context/useActivityContext.ts",
 ] as const;
+
+const legacyStandardRequiredFiles = [
+    "src/Config.ts",
+    "src/ConfigSchema.ts",
+    "src/WidgetView.tsx",
+    "src/bootstrap/WidgetWrapper.tsx",
+    "src/entrypoints/ssr.tsx",
+    "src/bootstrap/widget-ssr-component.tsx",
+] as const;
+
+const legacyStandardSharedFiles = [
+    "vite.npm.config.ts",
+    "vite.config.ts",
+    "tsconfig.node.json",
+    "tsconfig.json",
+    "tsconfig.app.json",
+    "api/index.ts",
+    "src/entrypoints/npm.tsx",
+    "src/Widget.tsx",
+    "src/bootstrap/widget-root.tsx",
+    "src/activity/Context/ActivityContextProvider.tsx",
+    "src/activity/Context/ActivityContext.tsx",
+    "src/activity/Context/useActivityContext.ts",
+] as const;
+
+const legacyStandardFilesRewrittenForLayout = new Set([
+    "vite.npm.config.ts",
+    "api/index.ts",
+    "api/widget.tsx",
+    "src/entrypoints/npm.tsx",
+    "src/entrypoints/ssr.tsx",
+    "src/Widget.tsx",
+    "src/WidgetView.tsx",
+    "src/Config.ts",
+    "src/ConfigSchema.ts",
+    "src/bootstrap/WidgetWrapper.tsx",
+    "src/bootstrap/widget-root.tsx",
+    "src/bootstrap/widget-ssr-component.tsx",
+    "src/activity/Context/ActivityContextProvider.tsx",
+]);
 
 /**
  * Files that identify the public execution variant of a widget.
@@ -147,15 +187,28 @@ export class WidgetStructureValidator {
             };
         }
 
-        const missing = this.findMissingFiles(
-            widgetRoot,
-            requiredFiles[variant],
-        );
+        const isLegacyStandard =
+            variant === "standard" &&
+            !existsSync(resolve(widgetRoot, "api/package.ts"));
+        const requiredForWidget = isLegacyStandard
+            ? legacyStandardRequiredFiles
+            : requiredFiles[variant];
+        const sharedForWidget = variant === "standard"
+            ? isLegacyStandard
+                ? legacyStandardSharedFiles
+                : sharedFiles
+            : legacyStandardSharedFiles;
+        const missing = this.findMissingFiles(widgetRoot, [
+            ...requiredForWidget,
+            ...sharedForWidget,
+        ]);
 
-        const canonicalFiles = [
-            ...sharedFiles,
-            ...variantFiles[variant],
-        ];
+        const canonicalFiles = isLegacyStandard
+            ? legacyStandardSharedFiles.filter(file =>
+                !legacyStandardFilesRewrittenForLayout.has(file) &&
+                existsSync(resolve(canonicalRoot, file))
+            )
+            : [...sharedForWidget, ...variantFiles[variant]];
 
         const comparison = this.compareCanonicalFiles(
             widgetRoot,
@@ -172,10 +225,7 @@ export class WidgetStructureValidator {
                 comparison.canonicalMissing.length === 0 &&
                 comparison.modified.length === 0,
 
-            missing: [
-                ...missing,
-                ...comparison.missing,
-            ],
+            missing: [...missing, ...comparison.missing],
             canonicalMissing: comparison.canonicalMissing,
             modified: comparison.modified,
         };

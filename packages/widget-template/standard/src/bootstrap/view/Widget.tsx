@@ -1,4 +1,4 @@
-import {WidgetRoot} from "./bootstrap/widget-root.tsx";
+import {WidgetRoot} from "../widget-root.tsx";
 import {createRoot, hydrateRoot} from "react-dom/client";
 import type {StaticWidgetOptions} from "@reactedge/public-api/WidgetOptions.ts";
 

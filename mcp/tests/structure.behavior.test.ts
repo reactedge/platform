@@ -149,13 +149,13 @@ test("validate_structure flags a missing canonical shared file", async () => {
         const widget = "fixture-standard-missing-shared";
         const widgetRoot = await createWidgetFixture(root, "standard", widget);
 
-        await unlink(resolve(widgetRoot, "src/Widget.tsx"));
+        await unlink(resolve(widgetRoot, "src/bootstrap/view/Widget.tsx"));
 
         const result = await validate(widget);
 
         assert.equal(result.valid, false);
         assert.ok(Array.isArray(result.missing));
-        assert.ok((result.missing as string[]).includes("src/Widget.tsx"));
+        assert.ok((result.missing as string[]).includes("src/bootstrap/view/Widget.tsx"));
     });
 });
 
@@ -164,13 +164,13 @@ test("validate_structure flags a missing standard-specific required file", async
         const widget = "fixture-standard-missing-required";
         const widgetRoot = await createWidgetFixture(root, "standard", widget);
 
-        await unlink(resolve(widgetRoot, "src/entrypoints/ssr.tsx"));
+        await unlink(resolve(widgetRoot, "src/ssr/render.tsx"));
 
         const result = await validate(widget);
 
         assert.equal(result.valid, false);
         assert.ok(Array.isArray(result.missing));
-        assert.ok((result.missing as string[]).includes("src/entrypoints/ssr.tsx"));
+        assert.ok((result.missing as string[]).includes("src/ssr/render.tsx"));
     });
 });
 
