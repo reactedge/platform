@@ -66,8 +66,6 @@ const sharedFiles = [
 
     "api/package.ts",
 
-    "src/npm/main.tsx",
-
     "src/bootstrap/view/Widget.tsx",
 
     "src/bootstrap/widget-root.tsx",
