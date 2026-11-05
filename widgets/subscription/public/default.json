@@ -1,0 +1,27 @@
+{
+  "data": {
+    "title": "Subscribe & Save",
+    "isCustomerLoggedIn": true,
+    "plans": [
+      {
+        "id": "monthly",
+        "label": "Monthly delivery",
+        "frequency": "Every month",
+        "discount": "Save 10%",
+        "termsBlockId": "subscription-monthly-terms"
+      },
+      {
+        "id": "quarterly",
+        "label": "Quarterly delivery",
+        "frequency": "Every 3 months",
+        "discount": "Save 15%"
+      }
+    ]
+  },
+  "settings": {
+    "colour": "#222222"
+  },
+  "integration": {
+    "requires": ["magentoGraphql"]
+  }
+}
