@@ -1,5 +1,5 @@
-import {readWidgetConfig} from "./Config.ts";
-import {UspWidget} from "./components/UspWidget.tsx";
+import {readWidgetConfig} from "../config/Config.ts";
+import {UspWidget} from "../../components/UspWidget.tsx";
 
 type Props = {
     contract?: unknown;

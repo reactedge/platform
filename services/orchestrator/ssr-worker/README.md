@@ -72,7 +72,7 @@ effective contract
 render-ssr.ts
       │
       ▼
-widgets/<widget>/src/entrypoints/ssr.tsx
+widgets/<widget>/src/ssr/render.tsx (or legacy src/entrypoints/ssr.tsx)
       │
       ▼
 HTML

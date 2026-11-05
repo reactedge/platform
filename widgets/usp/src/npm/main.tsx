@@ -1,7 +1,7 @@
-import { Widget } from "../Widget.tsx";
+import { Widget } from "../bootstrap/view/Widget.tsx";
 import { ResourceLoader } from "@reactedge/framework/contract";
 import { WidgetActivity } from "@reactedge/framework/activity";
-import { WIDGET_ID } from "../Config.ts";
+import { WIDGET_ID } from "../bootstrap/config/Config.ts";
 
 async function main() {
     const loader = new ResourceLoader();

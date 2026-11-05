@@ -2,8 +2,17 @@ import fs from 'fs/promises';
 import 'dotenv/config';
 import { ReactEdgeRoot } from "@reactedge/filesystem/reactedgeRoot.ts";
 
-export function resolveEntry(widget: string): string {
-    return `${ReactEdgeRoot.get()}/widgets/${widget}/src/entrypoints/ssr.tsx`;
+export async function resolveEntry(widget: string): Promise<string> {
+    const widgetRoot = `${ReactEdgeRoot.get()}/widgets/${widget}/src`;
+    const refactoredEntry = `${widgetRoot}/ssr/render.tsx`;
+    const legacyEntry = `${widgetRoot}/entrypoints/ssr.tsx`;
+
+    try {
+        await fs.access(refactoredEntry);
+        return refactoredEntry;
+    } catch {
+        return legacyEntry;
+    }
 }
 
 const run = async () => {
@@ -35,7 +44,7 @@ const run = async () => {
         }
     };
 
-    const entry = resolveEntry(widgetName);
+    const entry = await resolveEntry(widgetName);
 
     try {
         await fs.access(entry);

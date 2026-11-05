@@ -1,4 +1,4 @@
-import type {WidgetConfig} from "../Config.ts";
+import type {WidgetConfig} from "../bootstrap/config/Config.ts";
 import type {UspSlideData} from "./Types.ts";
 import {UspSlide} from "./UspSlide.tsx";
 
