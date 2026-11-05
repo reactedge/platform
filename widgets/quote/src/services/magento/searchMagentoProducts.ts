@@ -130,8 +130,13 @@ export async function searchMagentoProducts(
     intentApiUrl: string,
     storeCode: string,
     searchTerm: string,
-    filters: QuoteProductFilter = {}
-): Promise<{ products: ProductData[]; facets: QuoteProductFacet[] }> {
+    filters: QuoteProductFilter = {},
+    interpretIntent = true
+): Promise<{
+    products: ProductData[];
+    facets: QuoteProductFacet[];
+    interpretedFilters: QuoteProductFilter;
+}> {
     const selectedFilters = Object.fromEntries(
         Object.entries(filters).filter(([, values]) => values.length > 0)
     );
@@ -153,18 +158,20 @@ export async function searchMagentoProducts(
             label: aggregation.label,
             options: aggregation.options,
         }));
-    const filterLabels = Object.fromEntries(
-        Object.entries(selectedFilters).map(([attribute, values]) => {
-            const options = facets.find(facet => facet.code === attribute)?.options ?? [];
-            return [attribute, values.map(value => options.find(option => option.value === value)?.label ?? value)];
-        })
-    );
+
+    const interpretedFilters = interpretIntent
+        ? await interpretQuoteIntent(intentApiUrl, storeCode, searchTerm, facets)
+        : {};
+    if (interpretIntent && hasUnselectedFilters(selectedFilters, interpretedFilters)) {
+        return { products: [], facets, interpretedFilters };
+    }
+    const recommendationFilters = mergeFilters(selectedFilters, interpretedFilters);
     const response = await fetch(`${intentApiUrl.replace(/\/+$/, "")}/v1/intent/recommend`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Store: storeCode },
         body: JSON.stringify({
             intentText: searchTerm,
-            filters: filterLabels,
+            filters: toFilterLabels(recommendationFilters, facets),
             products: candidates.map(product => ({
                 sku: product.sku ?? "",
                 title: product.name ?? "",
@@ -193,5 +200,70 @@ export async function searchMagentoProducts(
             }];
         });
 
-    return { products, facets };
+    return { products, facets, interpretedFilters };
+}
+
+async function interpretQuoteIntent(
+    intentApiUrl: string,
+    storeCode: string,
+    searchTerm: string,
+    facets: QuoteProductFacet[]
+): Promise<QuoteProductFilter> {
+    const response = await fetch(`${intentApiUrl.replace(/\/+$/, "")}/v1/intent/interpret`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Store: storeCode },
+        body: JSON.stringify({
+            intent: { text: searchTerm, signals: {} },
+            attributes: facets.map(facet => ({
+                code: facet.code,
+                label: facet.label,
+                options: facet.options.map(option => ({
+                    label: option.label,
+                    value: option.value,
+                    count: option.count,
+                })),
+            })),
+        }),
+    });
+    if (!response.ok) {
+        throw new Error("Intent interpretation request failed");
+    }
+
+    const result = await response.json() as {
+        filters?: { attribute: string; value: string }[] | null;
+    };
+    return (result.filters ?? []).reduce<QuoteProductFilter>((filters, item) => {
+        const values = filters[item.attribute] ?? [];
+        if (!values.includes(item.value)) values.push(item.value);
+        filters[item.attribute] = values;
+        return filters;
+    }, {});
+}
+
+function mergeFilters(
+    selected: QuoteProductFilter,
+    interpreted: QuoteProductFilter
+): QuoteProductFilter {
+    const merged = Object.fromEntries(
+        Object.entries(selected).map(([attribute, values]) => [attribute, [...values]])
+    );
+    for (const [attribute, values] of Object.entries(interpreted)) {
+        merged[attribute] = [...new Set([...(merged[attribute] ?? []), ...values])];
+    }
+    return merged;
+}
+
+function hasUnselectedFilters(selected: QuoteProductFilter, interpreted: QuoteProductFilter): boolean {
+    return Object.entries(interpreted).some(([attribute, values]) =>
+        values.some(value => !selected[attribute]?.includes(value))
+    );
+}
+
+function toFilterLabels(filters: QuoteProductFilter, facets: QuoteProductFacet[]) {
+    return Object.fromEntries(
+        Object.entries(filters).map(([attribute, values]) => {
+            const options = facets.find(facet => facet.code === attribute)?.options ?? [];
+            return [attribute, values.map(value => options.find(option => option.value === value)?.label ?? value)];
+        })
+    );
 }

@@ -51,6 +51,7 @@ class RecommendationItem(BaseModel):
 class RecommendationResponse(BaseModel):
     suggestions: List[RecommendationItem]
 
+
 SuggestionSchema = {
     "name": "suggestions",
     "schema": {

@@ -54,6 +54,15 @@ test.describe("Quote Widget", () => {
                 }),
             });
         });
+        await page.route("**/v1/intent/interpret", async route => {
+            const payload = route.request().postDataJSON();
+            expect(payload.intent).toEqual({ text: "Trail", signals: {} });
+            await route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({ filters: [] }),
+            });
+        });
 
         await page.goto("/?reactedge_debug=eager");
         quote = page.locator("quote-widget");

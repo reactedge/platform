@@ -3,6 +3,7 @@ import type { QuoteProductFacet, QuoteProductFilter } from "../../services/magen
 
 export type QuoteProductSearchState = {
     searchTerm: string;
+    minSearchLength: number;
     products: ProductData[];
     facets: QuoteProductFacet[];
     filters: QuoteProductFilter;
@@ -67,7 +68,7 @@ type FiltersProps = {
 };
 
 const QuoteProductSearchFilters = ({ state, actions }: FiltersProps) => {
-    if (state.searchTerm.trim().length < 2 || state.facets.length === 0) return null;
+    if (state.searchTerm.trim().length < state.minSearchLength || state.facets.length === 0) return null;
 
     return (
         <div className="quote__search-filters" aria-label="Product filters" data-quote-filters>
@@ -99,10 +100,14 @@ type FeedbackProps = {
 
 const QuoteProductSearchFeedback = ({ state }: FeedbackProps) => (
     <>
-        {state.searchTerm.trim().length === 1 && <p>Enter at least 2 characters to search.</p>}
+        {state.searchTerm.trim().length > 0 && state.searchTerm.trim().length < state.minSearchLength && (
+            <p role="status">
+                Type {state.minSearchLength - state.searchTerm.trim().length} more {state.minSearchLength - state.searchTerm.trim().length === 1 ? "character" : "characters"} to search.
+            </p>
+        )}
         {state.loading && <p role="status">Searching products…</p>}
         {state.error && <p role="alert">Product search failed. Please try again.</p>}
-        {!state.loading && !state.error && state.searchTerm.trim().length >= 2 && state.products.length === 0 && (
+        {!state.loading && !state.error && state.searchTerm.trim().length >= state.minSearchLength && state.products.length === 0 && (
             <p role="status">No matching products found.</p>
         )}
     </>
