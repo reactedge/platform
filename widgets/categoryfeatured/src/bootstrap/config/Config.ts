@@ -1,14 +1,15 @@
-import {parseConfig} from "./ConfigSchema.ts";
+import {parseBootstrap, parseConfig} from "./ConfigSchema.ts";
 import type {WidgetActivity} from "@reactedge/framework/activity";
 
 export interface WidgetConfig {
     readonly data: {
         title: string;
-        categories: {
+        cards: {
+            type: 'category' | 'subcategory' | 'product' | 'cms' | 'external';
             title: string;
-            image: string;
-            imageAlt: string;
-            url: string;
+            link: string;
+            thumbnail: string;
+            altText: string;
         }[];
     };
 
@@ -36,18 +37,27 @@ export const WIDGET_ID = 'categoryfeatured';
  */
 export function readWidgetConfig(
     rawContract: unknown,
+    bootstrap: unknown,
     activity?: WidgetActivity
-): WidgetConfig {
+): WidgetConfig | null {
     try {
         const contract = parseConfig(rawContract);
+        if (!Array.isArray(bootstrap) || bootstrap.length === 0) return null;
+
+        const cards = parseBootstrap(bootstrap);
+        if (cards.length === 0) return null;
+        const resolved = {
+            ...contract,
+            data: {...contract.data, cards},
+        };
 
         activity?.log(
             'bootstrap',
             'Config resolved',
-            contract
+            resolved
         );
 
-        return Object.freeze(contract);
+        return Object.freeze(resolved);
 
     } catch (e) {
         activity?.log(

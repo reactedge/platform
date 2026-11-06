@@ -1,0 +1,23 @@
+[
+    {
+        "type": "category",
+        "title": "Men's tops",
+        "link": "https://mageos-docker.magsite.co.uk/men.html?cat=12",
+        "thumbnail": "/assets/categoryfeatured/men-tops.svg",
+        "altText": "Men's tops"
+    },
+    {
+        "type": "product",
+        "title": "Atomic Endurance Running Tee",
+        "link": "https://mageos-docker.magsite.co.uk/atomic-endurance-running-tee-crew-neck.html",
+        "thumbnail": "/assets/categoryfeatured/atomic-endurance-running-tee.svg",
+        "altText": "Red Atomic Endurance running tee"
+    },
+    {
+        "type": "external",
+        "title": "Nike men's running",
+        "link": "https://www.nike.com/gb/w/mens-running-shoes-37v7jznik1zy7ok",
+        "thumbnail": "/assets/categoryfeatured/nike-running.svg",
+        "altText": "Nike men's running collection"
+    }
+]

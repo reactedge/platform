@@ -20,7 +20,7 @@ export function useCmsBlockRevisionDraft({ controller, pending, onDirtyChange }:
         setHtml(pending?.html ?? "");
         setError("");
         setMessage("");
-    }, [pending?.revision]);
+    }, [pending?.html, pending?.revision]);
 
     const dirty = Boolean(pending && html !== pending.html);
     useEffect(() => { onDirtyChange(dirty); }, [dirty, onDirtyChange]);

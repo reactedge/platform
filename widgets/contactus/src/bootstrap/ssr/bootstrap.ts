@@ -11,6 +11,8 @@ export async function loadRuntime(): Promise<ReactEdgeRuntimeConfig> {
     );
 }
 
-export async function buildBootstrap() {
+export async function buildBootstrap(runtime: ReactEdgeRuntimeConfig) {
+    void runtime;
+
     return {};
 }

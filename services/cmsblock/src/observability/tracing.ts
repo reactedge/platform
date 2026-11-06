@@ -1,4 +1,4 @@
-import {Application} from "express";
+import type {Application} from "express";
 import {OpenTelemetryObserver} from "./activity";
 
 export function setupTelemetry(app: Application) {

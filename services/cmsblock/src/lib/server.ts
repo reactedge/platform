@@ -1,7 +1,8 @@
-import express, {Application} from 'express'
+import express from 'express'
+import type {Application} from 'express'
 import {config} from "../config";
 import {initialiseApp} from "./initilisers";
-import {OpenTelemetryObserver} from "../observability/activity";
+import type {OpenTelemetryObserver} from "../observability/activity";
 
 export const startServer = async () => {
     const app: Application = express()

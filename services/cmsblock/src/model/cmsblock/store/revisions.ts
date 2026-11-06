@@ -2,7 +2,7 @@ import {parse} from 'postcss';
 import {CmsBlockWorkflowError, CmsBlockValidationError} from '../errors';
 import {assertSafeMarkup} from '../source-policy';
 import type {CmsBlockRecord} from '../types';
-import {CmsBlockPersistence} from './persistence';
+import type {CmsBlockPersistence} from './persistence';
 
 type PendingRevisionInput = {html: string; css: string; revision: number};
 

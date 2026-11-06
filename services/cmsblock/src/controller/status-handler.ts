@@ -1,5 +1,5 @@
-import {Request, Response} from "express";
-import {Operation} from "../observability/operation";
+import type {Request, Response} from "express";
+import type {Operation} from "../observability/operation";
 
 export class StatusHandler {
     status = async (_req: Request, res: Response): Promise<void> => {

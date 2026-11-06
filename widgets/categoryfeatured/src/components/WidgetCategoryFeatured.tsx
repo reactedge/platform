@@ -19,6 +19,8 @@ export const WidgetCategoryFeatured = ({ config }: Props) => {
         return () => mediaQuery.removeEventListener("change", updateScreenSize);
     }, []);
 
+    if (config.data.cards.length === 0) return null;
+
     const browse = (direction: -1 | 1) => {
         const track = trackRef.current;
         if (!track) return;
@@ -39,7 +41,7 @@ export const WidgetCategoryFeatured = ({ config }: Props) => {
                 {config.data.title}
             </h1>
 
-            {isSmallScreen && config.data.categories.length > 1 && (
+            {isSmallScreen && config.data.cards.length > 1 && (
                 <div className="categoryfeatured__browse">
                     <button
                         className="categoryfeatured__arrow"
@@ -65,16 +67,23 @@ export const WidgetCategoryFeatured = ({ config }: Props) => {
             )}
 
             <ul className="categoryfeatured__track" id="categoryfeatured-list" ref={trackRef}>
-                {config.data.categories.map((category, index) => (
-                    <li className="categoryfeatured__item" key={`${category.url}-${index}`}>
-                        <a className="categoryfeatured__card" href={category.url}>
+                {config.data.cards.map((card, index) => (
+                    <li className="categoryfeatured__item" key={`${card.link}-${index}`}>
+                        <a
+                            className="categoryfeatured__card"
+                            href={card.link}
+                            data-categoryfeatured-card-type={card.type}
+                            {...(card.type === 'external'
+                                ? { target: '_blank', rel: 'noreferrer' }
+                                : {})}
+                        >
                             <img
                                 className="categoryfeatured__image"
-                                src={category.image}
-                                alt={category.imageAlt}
+                                src={card.thumbnail}
+                                alt={card.altText}
                                 loading="lazy"
                             />
-                            <span className="categoryfeatured__label">{category.title}</span>
+                            <span className="categoryfeatured__label">{card.title}</span>
                         </a>
                     </li>
                 ))}

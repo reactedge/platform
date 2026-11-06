@@ -37,6 +37,7 @@ function message(error: unknown): string {
 }
 
 async function call(name: string, args: Record<string, unknown>) {
+    // eslint-disable-next-line no-console -- Agent experimentation POC; keep diagnostics in the terminal.
     console.error(`Calling ${name} ${JSON.stringify(args)}`);
     const response = await client.callTool(
         { name, arguments: args },
@@ -79,12 +80,15 @@ try {
         outcome: report.error ? 'ERROR' : report.results.length === 0 ? 'NO_ACTIVE_WIDGETS' :
             report.results.every(row => row.status === 'PASS') ? 'PASS' : 'FAIL',
     };
+    // eslint-disable-next-line no-console -- Agent experimentation POC; print the report to the terminal.
     console.log(JSON.stringify(completedReport, null, 2));
     process.exitCode = report.error || report.results.some(row => row.status !== 'PASS') ? 1 : 0;
     try {
         const directory = await exportReport(completedReport, resolve(root, 'artifacts', 'agent'));
+        // eslint-disable-next-line no-console -- Agent experimentation POC; report the local export path.
         console.error(`Reports saved: ${directory}/report.json and ${directory}/report.html`);
     } catch (error) {
+        // eslint-disable-next-line no-console -- Agent experimentation POC; surface export failures in the terminal.
         console.error(`Report export failed: ${message(error)}`);
         process.exitCode = 1;
     }

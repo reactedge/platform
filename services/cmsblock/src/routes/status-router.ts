@@ -1,4 +1,5 @@
-import express, {Application} from 'express'
+import type {Application} from 'express'
+import express from 'express'
 import {config} from "../config";
 import {StatusHandler} from "../controller/status-handler"
 import {corsOptions} from '../lib/cors-setup'

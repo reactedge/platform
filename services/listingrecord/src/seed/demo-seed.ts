@@ -1,4 +1,4 @@
-import {ListingSchema, ListingsSchema, type Listing} from '../model/listing/types.ts';
+import {ListingSchema, ListingsSchema} from '../model/listing/types.ts';
 import {ProductSchema, ProductsSchema, type Product} from '../model/product/types.ts';
 
 type SeedProduct = Omit<Product, 'id' | 'listingId'>;

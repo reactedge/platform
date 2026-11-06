@@ -22,7 +22,9 @@ export function assertSafeMarkup(markup: string): void {
     }
     for (const match of markup.matchAll(/\b(?:src|href)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi)) {
         const value = (match[1] ?? match[2] ?? match[3] ?? '').trim();
-        if (!value || /[\u0000-\u001f]/.test(value) ||
+        // eslint-disable-next-line no-control-regex -- Reject control characters in resource URLs.
+        const containsControlCharacters = /[\u0000-\u001f]/.test(value);
+        if (!value || containsControlCharacters ||
             (match[0].toLowerCase().trimStart().startsWith('src') && !value.startsWith('https://')) ||
             (match[0].toLowerCase().trimStart().startsWith('href') &&
                 !/^(https:\/\/|mailto:|#|\/(?!\/))/i.test(value))) {

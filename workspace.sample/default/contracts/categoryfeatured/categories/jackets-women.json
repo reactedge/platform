@@ -1,0 +1,23 @@
+[
+  {
+    "type": "subcategory",
+    "title": "Jackets",
+    "link": "/women/tops-women/jackets-women.html",
+    "thumbnail": "/assets/categoryfeatured/women-jackets.svg",
+    "altText": "Women's jackets"
+  },
+  {
+    "type": "subcategory",
+    "title": "Coats",
+    "link": "/women/tops-women/jackets-women/coats.html",
+    "thumbnail": "/assets/categoryfeatured/women-coats.svg",
+    "altText": "Women's coats"
+  },
+  {
+    "type": "subcategory",
+    "title": "Lightweight layers",
+    "link": "/women/tops-women/jackets-women/lightweight.html",
+    "thumbnail": "/assets/categoryfeatured/women-layers.svg",
+    "altText": "Women's lightweight layers"
+  }
+]

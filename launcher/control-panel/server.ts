@@ -124,4 +124,5 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
 }
 
 const server = createServer(handleRequest);
+// eslint-disable-next-line no-console -- Local POC control panel startup URL is shown in the terminal.
 server.listen(port, host, () => console.log(`ReactEdge configuration: http://${host}:${port}`));

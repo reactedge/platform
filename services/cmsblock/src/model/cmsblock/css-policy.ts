@@ -37,11 +37,13 @@ function validateDeclaration(declaration: Declaration): void {
         return;
     }
     const value = declaration.value;
+    // eslint-disable-next-line no-control-regex -- Reject control characters in untrusted CSS values.
+    const containsControlCharacters = /[\\<>\u0000-\u0008\u000e-\u001f]/.test(value);
     // Disallow active URLs, obfuscated escapes, and priority escalation.
     if (declaration.important || !name || !value ||
         /^(?:behavior|-moz-binding)$/i.test(name) ||
         /(?:url|image-set|expression)\s*\(/i.test(value) ||
-        /[\\<>\u0000-\u0008\u000e-\u001f]/.test(value)) {
+        containsControlCharacters) {
         throw new CmsBlockCssError('AI CSS contains unsupported declarations.');
     }
 }

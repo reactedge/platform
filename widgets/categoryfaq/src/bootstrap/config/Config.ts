@@ -1,4 +1,4 @@
-import {parseConfig} from "./ConfigSchema.ts";
+import {parseBootstrap, parseConfig} from "./ConfigSchema.ts";
 import type {WidgetActivity} from "@reactedge/framework/activity";
 
 export interface WidgetConfig {
@@ -34,18 +34,27 @@ export const WIDGET_ID = 'categoryfaq';
  */
 export function readWidgetConfig(
     rawContract: unknown,
+    bootstrap: unknown,
     activity?: WidgetActivity
-): WidgetConfig {
+): WidgetConfig | null {
     try {
         const contract = parseConfig(rawContract);
+        if (!Array.isArray(bootstrap) || bootstrap.length === 0) return null;
+
+        const faqs = parseBootstrap(bootstrap);
+        if (faqs.length === 0) return null;
+        const resolved = {
+            ...contract,
+            data: {...contract.data, faqs},
+        };
 
         activity?.log(
             'bootstrap',
             'Config resolved',
-            contract
+            resolved
         );
 
-        return Object.freeze(contract);
+        return Object.freeze(resolved);
 
     } catch (e) {
         activity?.log(

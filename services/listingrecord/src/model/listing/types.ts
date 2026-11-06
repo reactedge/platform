@@ -17,7 +17,11 @@ export const ListingUpdateSchema = z.object({
     name: z.string().trim().min(1).max(50),
     status: ListingStatusSchema.default('active'),
     sellerId: SellerIdSchema.optional(),
-}).strict().transform(({sellerId: _sellerId, ...details}) => details);
+}).strict().transform(({sellerId, ...details}) => {
+    // sellerId is validated for updates but omitted from the returned update payload.
+    void sellerId;
+    return details;
+});
 
 export const ListingSchema = ListingCreateSchema.extend({id: z.uuid()});
 export const ListingsSchema = z.array(ListingSchema);
