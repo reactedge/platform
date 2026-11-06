@@ -1,7 +1,7 @@
 import { renderToString } from 'react-dom/server';
-import {WIDGET_ID} from "../config/Config.ts";
+import { WIDGET_ID } from "../config/Config.ts";
 import { WidgetView } from "../view/WidgetView.tsx";
-import type {ReactEdgeRuntimeConfig} from "../../domain/contact.types.ts";
+import type { ReactEdgeRuntimeConfig } from "../../domain/contact.types.ts";
 
 export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig, bootstrap: unknown): string => {
     return renderToString(
@@ -11,6 +11,6 @@ export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig, boo
     );
 };
 
-export { buildBootstrap } from '../../ssr/bootstrap';
+export { buildBootstrap } from './bootstrap';
 
-export { loadRuntime } from '../../ssr/bootstrap';
+export { loadRuntime } from './bootstrap';

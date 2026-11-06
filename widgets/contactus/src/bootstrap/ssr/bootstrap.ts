@@ -1,6 +1,6 @@
-import type { ReactEdgeRuntimeConfig } from "../bootstrap/config/Config.ts";
-import { WIDGET_ID } from "../bootstrap/config/Config.ts";
+import { WIDGET_ID } from "../config/Config.ts";
 import fs from 'node:fs/promises';
+import type { ReactEdgeRuntimeConfig } from "../../domain/contact.types.ts";
 
 export async function loadRuntime(): Promise<ReactEdgeRuntimeConfig> {
     const path =

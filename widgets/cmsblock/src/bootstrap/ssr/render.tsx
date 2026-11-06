@@ -15,4 +15,4 @@ export const renderHtml = (
     </div>
 );
 
-export { buildBootstrap, loadRuntime } from "../../ssr/bootstrap.ts";
+export { buildBootstrap, loadRuntime } from "./bootstrap.ts";

@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server';
-import {WIDGET_ID} from "../config/Config.ts";
+import { WIDGET_ID } from "../config/Config.ts";
 import type { ReactEdgeRuntimeConfig } from "../config/Config.ts";
 import { WidgetView } from "../view/WidgetView.tsx";
 
@@ -13,6 +13,6 @@ export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig, boo
     );
 };
 
-export { buildBootstrap } from '../../ssr/bootstrap';
+export { buildBootstrap } from './bootstrap';
 
-export { loadRuntime } from '../../ssr/bootstrap';
+export { loadRuntime } from './bootstrap';

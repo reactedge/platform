@@ -1,8 +1,8 @@
-import type { ReactEdgeRuntimeConfig } from "../components/Types.ts";
-import { fetchMagentoGalleryData } from "../services/magento/fetchMagentoGalleryData.tsx";
-import { WIDGET_ID } from "../bootstrap/config/Config.ts";
+import type { ReactEdgeRuntimeConfig } from "../../components/Types.ts";
+import { fetchMagentoGalleryData } from "../../services/magento/fetchMagentoGalleryData.tsx";
+import { WIDGET_ID } from "../config/Config.ts";
 import fs from 'node:fs/promises';
-import {createGraphqlService} from "@reactedge/framework/graphql/graphql.service.ts"
+import { createGraphqlService } from "@reactedge/framework/graphql/graphql.service.ts"
 
 export async function loadRuntime(): Promise<ReactEdgeRuntimeConfig> {
     const path =

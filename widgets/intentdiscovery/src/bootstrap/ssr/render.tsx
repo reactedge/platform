@@ -17,6 +17,6 @@ export const renderHtml = (config: unknown, runtime: unknown, bootstrap: Bootstr
     );
 };
 
-export { buildBootstrap } from '../../ssr/bootstrap';
+export { buildBootstrap } from './bootstrap';
 
-export { loadRuntime } from '../../ssr/bootstrap';
+export { loadRuntime } from './bootstrap';
