@@ -22,11 +22,6 @@ Use this canonical widget source layout:
   `WidgetView.tsx` renders the widget's primary view.
 - Other startup and host integration code belongs under `src/bootstrap/`.
 
-When applying this layout to an existing widget, update every import, build
-configuration, test fixture, scaffold, validator, and documentation reference
-that depends on the old path. Do not change the public widget API or remove a
-working integration as part of a file move.
-
 For API-backed runtime-shadow widgets, follow:
 .agents/skills/runtime-shadow-api-widget/SKILL.md
 
