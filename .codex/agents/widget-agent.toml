@@ -21,9 +21,6 @@ Use this canonical widget source layout:
   exist. `Widget.tsx` exposes the widget's React mounting/component API;
   `WidgetView.tsx` renders the widget's primary view.
 - Other startup and host integration code belongs under `src/bootstrap/`.
-- Do not retain `src/entrypoints/`. Remove unused npm harness files; if a
-  maintained page or tool still uses one, move it to a purpose-named location
-  under `src/npm/` and update its consumer.
 
 When applying this layout to an existing widget, update every import, build
 configuration, test fixture, scaffold, validator, and documentation reference
