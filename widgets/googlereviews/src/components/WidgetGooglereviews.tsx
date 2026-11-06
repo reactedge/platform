@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { LoadScript } from "@react-google-maps/api";
 import {useSystemState} from "../state/System/useSystemState.ts";
-import type {WidgetConfig} from "../Config.ts";
+import type {WidgetConfig} from "../bootstrap/config/Config.ts";
 
 type Review = {
     author: string;

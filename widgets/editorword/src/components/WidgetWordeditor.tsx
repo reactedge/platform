@@ -1,4 +1,4 @@
-import type { WidgetConfig } from "../Config";
+import type { WidgetConfig } from "../bootstrap/config/Config";
 import {Toolbar} from "./WidgetWordeditor/Toolbar.tsx";
 import {Document} from "./WidgetWordeditor/Document.tsx";
 import {SaveOrExport} from "./WidgetWordeditor/SaveOrExport.tsx";

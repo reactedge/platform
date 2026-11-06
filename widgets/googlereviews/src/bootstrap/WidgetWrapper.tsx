@@ -1,5 +1,5 @@
 import {useActivityContext} from "../activity/Context/useActivityContext.ts";
-import {readWidgetConfig} from "../Config.ts";
+import {readWidgetConfig} from "./config/Config.ts";
 import {SystemStateProvider} from "../state/System/SystemStateProvider.tsx";
 import {TranslationStateProvider} from "../state/Translation/TranslationStateProvider.tsx";
 import {WidgetGooglereviews} from "../components/WidgetGooglereviews.tsx";

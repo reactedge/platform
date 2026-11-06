@@ -1,6 +1,7 @@
-import type { WidgetConfig } from "../Config.ts";
+import type { WidgetConfig } from "../bootstrap/config/Config.ts";
 import type { CmsBlockRecord } from "../services/cmsblock/CmsBlockApi.ts";
 import { useCmsBlockController } from "../hooks/domain/useCmsBlockController.ts";
+import { CmsBlockControllerProvider } from "../state/CmsBlock/CmsBlockControllerContext.tsx";
 import {
     CmsBlockModeNavigation,
     CmsBlockFeedback,
@@ -15,24 +16,26 @@ type Props = {
 };
 
 export const WidgetCmsblock = ({ config, bootstrap }: Props) => {
-    const controller = useCmsBlockController(config, bootstrap?.record);
-    const { loading, mode } = controller;
+    const cmsBlock = useCmsBlockController(config, bootstrap?.record);
+    const { loading, mode } = cmsBlock;
 
     return (
-        <section className="cmsblock-editor" aria-label="CMS block editor">
-            {mode !== "view" && (
-                <header className="cmsblock-editor__header">
-                    <h1 data-cmsblock-title style={{ color: config.settings.colour }}>
-                        {config.data.title}
-                    </h1>
-                    <p>Author, generate, review and publish a responsive content block.</p>
-                </header>
-            )}
-            <CmsBlockModeNavigation controller={controller} />
-            <CmsBlockFeedback controller={controller} />
-            {!loading && mode === "edit" && <CmsBlockEditMode controller={controller} />}
-            {!loading && mode === "review" && <CmsBlockReviewMode controller={controller} />}
-            {!loading && mode === "view" && <CmsBlockViewMode controller={controller} />}
-        </section>
+        <CmsBlockControllerProvider value={cmsBlock}>
+            <section className="cmsblock-editor" aria-label="CMS block editor">
+                {mode !== "view" && (
+                    <header className="cmsblock-editor__header">
+                        <h1 data-cmsblock-title style={{ color: config.settings.colour }}>
+                            {config.data.title}
+                        </h1>
+                        <p>Author, generate, review and publish a responsive content block.</p>
+                    </header>
+                )}
+                <CmsBlockModeNavigation />
+                <CmsBlockFeedback />
+                {!loading && mode === "edit" && <CmsBlockEditMode />}
+                {!loading && mode === "review" && <CmsBlockReviewMode />}
+                {!loading && mode === "view" && <CmsBlockViewMode />}
+            </section>
+        </CmsBlockControllerProvider>
     );
 };

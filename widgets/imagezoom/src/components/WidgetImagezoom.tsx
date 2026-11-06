@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { WidgetConfig } from "../Config";
+import type { WidgetConfig } from "../bootstrap/config/Config";
 import { ImageZoomDialog } from "reactedge-image-zoom";
 
 type Props = {

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { ProductData, WidgetConfig } from "../../Config.ts";
+import type { ProductData, WidgetConfig } from "../../bootstrap/config/Config.ts";
 import { useQuoteLines } from "./useQuoteLines.ts";
 import { useMagentoProductSearch } from "../infra/useMagentoProductSearch.tsx";
 import { useDeliveryEstimate } from "./useDeliveryEstimate.ts";

@@ -1,16 +1,15 @@
 import {CMS_BLOCK_STYLES} from '../Model/CmsBlock.ts';
-import type {CmsBlockController} from '../hooks/domain/useCmsBlockController.ts';
-
-type Props = {controller: CmsBlockController};
+import {useCmsBlockControllerContext} from '../state/CmsBlock/CmsBlockControllerContext.tsx';
 
 /** Editorial tone is independent of the image placement preview. */
-export const CmsBlockStylePicker = ({controller}: Props) => (
-    <fieldset className="cmsblock-editor__styles">
+export const CmsBlockStylePicker = () => {
+    const {draft, updateTemplate} = useCmsBlockControllerContext();
+    return <fieldset className="cmsblock-editor__styles">
         <legend>Editorial style</legend>
         <p>Choose the visual tone of the block. This choice is saved as its template.</p>
         <div className="cmsblock-editor__style-list">
             {CMS_BLOCK_STYLES.map(style => {
-                const selected = controller.draft.templateId === style.id;
+                const selected = draft.templateId === style.id;
                 return (
                     <button
                         key={style.id}
@@ -19,7 +18,7 @@ export const CmsBlockStylePicker = ({controller}: Props) => (
                         data-style-id={style.id}
                         aria-label={`Use ${style.label} style`}
                         aria-pressed={selected}
-                        onClick={() => controller.updateTemplate(style.id)}
+                        onClick={() => updateTemplate(style.id)}
                     >
                         <span className="cmsblock-editor__style-sample" aria-hidden="true">
                             <span className="cmsblock-editor__style-heading">A heading</span>
@@ -33,5 +32,5 @@ export const CmsBlockStylePicker = ({controller}: Props) => (
                 );
             })}
         </div>
-    </fieldset>
-);
+    </fieldset>;
+};

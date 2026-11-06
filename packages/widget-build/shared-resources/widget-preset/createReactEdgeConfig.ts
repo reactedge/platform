@@ -35,14 +35,16 @@ export function createWidgetBuildDefaults<TBuild>(
 
 export function createNpmBuildDefaults<TBuild>({
    widgetName,
+   entry = "api/package.ts",
 }: {
     widgetName: string;
+    entry?: string;
 }): TBuild {
     return {
         outDir: `../../workspace/release/source/${widgetName}/`,
         emptyOutDir: false,
         lib: {
-            entry: "api/index.ts",
+            entry,
             formats: ["es"],
             fileName: () => "index.js",
         },

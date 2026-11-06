@@ -1,5 +1,5 @@
 import {Widget__WIDGET_PASCAL_NAME__} from "../components/Widget__WIDGET_PASCAL_NAME__.tsx";
-import {readWidgetConfig} from "../Config.ts";
+import {readWidgetConfig} from "./config/Config.ts";
 import {useActivityContext} from "../activity/Context/useActivityContext.ts";
 
 type Props = {

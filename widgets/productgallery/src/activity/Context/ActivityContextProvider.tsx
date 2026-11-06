@@ -1,5 +1,5 @@
 import {type ReactNode} from "react";
-import {WIDGET_ID} from "../../Config.ts";
+import {WIDGET_ID} from "../../bootstrap/config/Config.ts";
 import {LocalInstanceStateContext} from "./ActivityContext.tsx";
 import {WidgetActivity} from "@reactedge/framework/activity";
 

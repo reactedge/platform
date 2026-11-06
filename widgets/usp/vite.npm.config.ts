@@ -26,6 +26,7 @@ export default defineConfig({
     ),
   },
   build: createNpmBuildDefaults<BuildOptions>({
-    widgetName
+    widgetName,
+    entry: "api/package.ts",
   }),
 });

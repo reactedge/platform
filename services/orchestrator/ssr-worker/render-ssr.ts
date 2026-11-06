@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { ReactEdgeRoot } from "@reactedge/filesystem/reactedgeRoot.ts";
 
 export function resolveEntry(widget: string): string {
-    return `${ReactEdgeRoot.get()}/widgets/${widget}/src/entrypoints/ssr.tsx`;
+    return `${ReactEdgeRoot.get()}/widgets/${widget}/src/bootstrap/ssr/render.tsx`;
 }
 
 const run = async () => {
@@ -54,7 +54,7 @@ const run = async () => {
         ? await buildBootstrap(runtime)
         : bootstrap;
 
-    const finalHtml = renderHtml(config, resolvedBootstrap, runtime);
+    const finalHtml = renderHtml(config, runtime, resolvedBootstrap);
 
     process.stdout.write(finalHtml);
 };

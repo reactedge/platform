@@ -1,0 +1,18 @@
+import { renderToString } from 'react-dom/server';
+import { WIDGET_ID } from "../config/Config.ts";
+import type { ReactEdgeRuntimeConfig } from "../config/Config.ts";
+import { WidgetView } from "../view/WidgetView.tsx";
+
+export type BootstrapData = Record<string, never>;
+
+export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig, bootstrap: BootstrapData): string => {
+    return renderToString(
+        <div className={`reactedge-${WIDGET_ID}`}>
+            <WidgetView contract={config} runtime={runtime} bootstrapData={bootstrap} />
+        </div>
+    );
+};
+
+export { buildBootstrap } from './bootstrap';
+
+export { loadRuntime } from './bootstrap';

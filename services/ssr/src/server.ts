@@ -21,7 +21,7 @@ const app = express();
 app.use(express.json());
 
 function resolveEntry(widget: string): string {
-    return `${ReactEdgeRoot.get()}/widgets/${widget}/src/entrypoints/ssr.tsx`;
+    return `${ReactEdgeRoot.get()}/widgets/${widget}/src/bootstrap/ssr/render.tsx`;
 }
 
 app.post('/render', async (req, res) => {

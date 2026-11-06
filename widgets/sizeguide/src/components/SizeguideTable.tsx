@@ -1,4 +1,4 @@
-import type { WidgetConfig } from "../Config";
+import type { WidgetConfig } from "../bootstrap/config/Config.ts";
 
 type Country = WidgetConfig["data"]["countries"][number];
 type MeasurementUnit = WidgetConfig["settings"]["defaultUnit"];

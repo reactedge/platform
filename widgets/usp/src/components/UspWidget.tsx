@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {UspStatic} from "./UspStatic.tsx";
 import {UspSlider} from "./UspSlider.tsx";
 import {Spinner} from "./Spinner.tsx";
-import type {WidgetConfig} from "../Config.ts";
+import type {WidgetConfig} from "../bootstrap/config/Config.ts";
 import {resolveMode} from "../lib/media-queries.ts";
 
 type Props = {

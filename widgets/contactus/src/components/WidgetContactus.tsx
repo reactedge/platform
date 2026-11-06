@@ -47,17 +47,16 @@ export function WidgetContactus({ config }: Props) {
             {/* 1. The form */}
             <ContactForm
                 config={config}
-                values={values}
-                category={category}
-                onChange={update}
-                onCategoryChange={setCategory}
-                onSubmit={() => submit({
-                    category,
-                    turnstileToken: token,
-                    origin: window.location.hostname
-                })}
-                disabled={!canSubmit}
-                status={status}
+                state={{values, category, disabled: !canSubmit, status}}
+                actions={{
+                    onChange: update,
+                    onCategoryChange: setCategory,
+                    onSubmit: () => submit({
+                        category,
+                        turnstileToken: token,
+                        origin: window.location.hostname
+                    }),
+                }}
             />
 
             {/* 2. The security gate */}

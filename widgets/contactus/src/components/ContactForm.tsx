@@ -1,29 +1,31 @@
 import type {WidgetConfig} from "../domain/contact.types.ts";
 
-type ContactFormProps = {
-    config: WidgetConfig;
-
+type ContactFormState = {
     values: Record<string, string>;
     category?: string;
-
-    onChange: (name: string, value: string) => void;
-    onCategoryChange?: (value: string) => void;
-
-    onSubmit: () => void;
     disabled?: boolean;
     status?: "idle" | "loading" | "success" | "error";
 };
 
+type ContactFormActions = {
+    onChange: (name: string, value: string) => void;
+    onCategoryChange?: (value: string) => void;
+    onSubmit: () => void;
+};
+
+type ContactFormProps = {
+    config: WidgetConfig;
+    state: ContactFormState;
+    actions: ContactFormActions;
+};
+
 export function ContactForm({
         config,
-        values,
-        category,
-        onChange,
-        onCategoryChange,
-        onSubmit,
-        disabled,
-        status,
+        state,
+        actions,
     }: ContactFormProps) {
+    const {values, category, disabled, status} = state;
+    const {onChange, onCategoryChange, onSubmit} = actions;
     return (
         <form
             className="contact"

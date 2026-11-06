@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import type { CSSProperties } from "react";
-import type { WidgetConfig } from "../Config";
+import type { WidgetConfig } from "../bootstrap/config/Config.ts";
 import { SizeguideContent } from "./SizeguideContent.tsx";
 
 type Props = {

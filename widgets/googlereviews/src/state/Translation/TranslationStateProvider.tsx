@@ -1,7 +1,7 @@
 import {type ReactNode, useMemo} from "react";
 import {LocalTranslationStateContext} from "./TranslationState.tsx";
 import {createTranslator} from "../../lib/translate.ts";
-import type {TranslationsConfig} from "../../Config.ts";
+import type {TranslationsConfig} from "../../bootstrap/config/Config.ts";
 
 interface TranslationStateProviderProps {
     children: ReactNode;

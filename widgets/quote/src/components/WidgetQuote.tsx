@@ -1,4 +1,4 @@
-import type { WidgetConfig } from "../Config";
+import type { WidgetConfig } from "../bootstrap/config/Config";
 import { QuoteDialog } from "./quote/QuoteDialog.tsx";
 import { QuoteTrigger } from "./quote/QuoteTrigger.tsx";
 import { useQuoteDialogController } from "../hooks/domain/useQuoteDialogController.ts";

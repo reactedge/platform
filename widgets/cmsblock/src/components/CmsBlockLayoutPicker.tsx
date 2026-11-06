@@ -1,11 +1,10 @@
 import {CMS_BLOCK_LAYOUTS} from '../Model/CmsBlockLayout.ts';
 import {CMS_BLOCK_LAYOUT_IMAGES} from '../Model/CmsBlockLayoutImages.ts';
-import type {CmsBlockController} from '../hooks/domain/useCmsBlockController.ts';
+import {useCmsBlockControllerContext} from '../state/CmsBlock/CmsBlockControllerContext.tsx';
 
-type Props = {controller: CmsBlockController};
-
-export const CmsBlockLayoutPicker = ({controller}: Props) => {
-    const selectedLayout = CMS_BLOCK_LAYOUTS.find(layout => layout.id === controller.draft.layoutId)
+export const CmsBlockLayoutPicker = () => {
+    const {draft, updateLayout} = useCmsBlockControllerContext();
+    const selectedLayout = CMS_BLOCK_LAYOUTS.find(layout => layout.id === draft.layoutId)
         ?? CMS_BLOCK_LAYOUTS[0];
 
     return (
@@ -14,7 +13,7 @@ export const CmsBlockLayoutPicker = ({controller}: Props) => {
             <p>Select where the content image should appear.</p>
             <div className="cmsblock-editor__reference-list">
                 {CMS_BLOCK_LAYOUTS.map(layout => {
-                    const selected = controller.draft.layoutId === layout.id;
+                    const selected = draft.layoutId === layout.id;
                     return (
                         <button
                             type="button"
@@ -23,7 +22,7 @@ export const CmsBlockLayoutPicker = ({controller}: Props) => {
                             data-layout-id={layout.id}
                             aria-label={`Use ${layout.label} layout`}
                             aria-pressed={selected}
-                            onClick={() => controller.updateLayout(layout.id)}
+                            onClick={() => updateLayout(layout.id)}
                         >
                             <span className="cmsblock-editor__reference-image">
                                 <img src={CMS_BLOCK_LAYOUT_IMAGES[layout.id]}

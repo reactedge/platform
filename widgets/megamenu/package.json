@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:npm": "vite src/npm -c vite.npm.config.ts",
     "build": "tsc -b && vite build",
     "build:ssr": "vite build -c vite.npm.config.ts",
     "analyze": "ANALYZE=true vite build",

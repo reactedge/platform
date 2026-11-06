@@ -1,4 +1,4 @@
-import type { WidgetConfig } from '../Config';
+import type { WidgetConfig } from '../bootstrap/config/Config';
 import { useListingController } from '../controller/useListingController.ts';
 import { useProductController } from '../controller/useProductController.ts';
 import { ListingCapabilities } from './ListingCapabilities.tsx';

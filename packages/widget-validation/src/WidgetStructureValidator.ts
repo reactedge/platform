@@ -1,5 +1,6 @@
 import {
     existsSync,
+    readdirSync,
     readFileSync,
 } from "node:fs";
 import { resolve } from "node:path";
@@ -26,26 +27,26 @@ import { getWidgetType } from "@reactedge/widget-preset/widgetType";
  */
 const requiredFiles = {
     standard: [
-        "src/Config.ts",
-        "src/ConfigSchema.ts",
-        "src/WidgetView.tsx",
+        "src/bootstrap/config/Config.ts",
+        "src/bootstrap/config/ConfigSchema.ts",
+        "src/bootstrap/view/WidgetView.tsx",
         "src/bootstrap/WidgetWrapper.tsx",
-        "src/entrypoints/ssr.tsx",
+        "src/bootstrap/ssr/render.tsx",
         "src/bootstrap/widget-ssr-component.tsx",
     ],
     runtime: [
-        "src/Config.ts",
-        "src/ConfigSchema.ts",
-        "src/ConfigSchemaRuntime.ts",
-        "src/WidgetView.tsx",
+        "src/bootstrap/config/Config.ts",
+        "src/bootstrap/config/ConfigSchema.ts",
+        "src/bootstrap/config/ConfigSchemaRuntime.ts",
+        "src/bootstrap/view/WidgetView.tsx",
         "src/bootstrap/WidgetWrapper.tsx",
-        "src/entrypoints/ssr.tsx",
+        "src/bootstrap/ssr/render.tsx",
         "src/bootstrap/widget-ssr-component.tsx",
     ],
     "runtime-shadow": [
-        "src/Config.ts",
-        "src/ConfigSchema.ts",
-        "src/ConfigSchemaRuntime.ts",
+        "src/bootstrap/config/Config.ts",
+        "src/bootstrap/config/ConfigSchema.ts",
+        "src/bootstrap/config/ConfigSchemaRuntime.ts",
         "src/bootstrap/WidgetWrapper.tsx",
     ],
 } as const;
@@ -64,11 +65,9 @@ const sharedFiles = [
     "tsconfig.json",
     "tsconfig.app.json",
 
-    "api/index.ts",
+    "api/package.ts",
 
-    "src/entrypoints/npm.tsx",
-
-    "src/Widget.tsx",
+    "src/bootstrap/view/Widget.tsx",
 
     "src/bootstrap/widget-root.tsx",
 
@@ -97,6 +96,25 @@ const variantFiles = {
     ]
 } as const;
 
+const widgetSpecificFiles = new Set([
+    "api/package.ts",
+    "api/widget.tsx",
+    "api/runtime-widget.tsx",
+    "api/runtime-shadow-widget.tsx",
+    "vite.npm.config.ts",
+    "src/bootstrap/config/Config.ts",
+    "src/bootstrap/config/ConfigSchema.ts",
+    "src/bootstrap/config/ConfigSchemaRuntime.ts",
+    "src/bootstrap/view/Widget.tsx",
+    "src/bootstrap/view/WidgetView.tsx",
+    "src/bootstrap/WidgetWrapper.tsx",
+    "src/bootstrap/ssr/render.tsx",
+    "src/bootstrap/widget-root.tsx",
+    "src/bootstrap/widget-ssr-component.tsx",
+    "src/activity/Context/ActivityContextProvider.tsx",
+    "src/npm/main.tsx",
+]);
+
 export interface WidgetStructureValidationResult {
     widget: string;
     variant?: string;
@@ -105,6 +123,7 @@ export interface WidgetStructureValidationResult {
     missing?: string[];
     canonicalMissing?: string[];
     modified?: string[];
+    unexpected?: string[];
 }
 
 export class WidgetStructureValidator {
@@ -147,20 +166,18 @@ export class WidgetStructureValidator {
             };
         }
 
-        const missing = this.findMissingFiles(
-            widgetRoot,
-            requiredFiles[variant],
-        );
-
-        const canonicalFiles = [
+        const missing = this.findMissingFiles(widgetRoot, [
+            ...requiredFiles[variant],
             ...sharedFiles,
-            ...variantFiles[variant],
-        ];
+        ]);
+        const unexpected = this.findUnexpectedFiles(widgetRoot, variant);
 
         const comparison = this.compareCanonicalFiles(
             widgetRoot,
             canonicalRoot,
-            canonicalFiles,
+            [...sharedFiles, ...variantFiles[variant]].filter(
+                file => !widgetSpecificFiles.has(file),
+            ),
         );
 
         return {
@@ -168,17 +185,48 @@ export class WidgetStructureValidator {
             variant,
             valid:
                 missing.length === 0 &&
+                unexpected.length === 0 &&
                 comparison.missing.length === 0 &&
                 comparison.canonicalMissing.length === 0 &&
                 comparison.modified.length === 0,
 
-            missing: [
-                ...missing,
-                ...comparison.missing,
-            ],
+            missing: [...missing, ...comparison.missing],
             canonicalMissing: comparison.canonicalMissing,
             modified: comparison.modified,
+            unexpected,
         };
+    }
+
+    private findUnexpectedFiles(
+        widgetRoot: string,
+        variant: keyof typeof variantFiles,
+    ): string[] {
+        const apiRoot = resolve(widgetRoot, "api");
+        const expectedApiFiles = new Set([
+            "package.ts",
+            variantFiles[variant][0].replace("api/", ""),
+        ]);
+        const unexpected = readdirSync(apiRoot, { withFileTypes: true })
+            .filter(entry => !entry.isFile() || !expectedApiFiles.has(entry.name))
+            .map(entry => `api/${entry.name}`);
+
+        const removedPaths = [
+            "src/Config.ts",
+            "src/ConfigSchema.ts",
+            "src/ConfigSchemaRuntime.ts",
+            "src/Widget.tsx",
+            "src/WidgetView.tsx",
+            "src/ssr/render.tsx",
+        ];
+        unexpected.push(
+            ...removedPaths.filter(path => existsSync(resolve(widgetRoot, path))),
+        );
+
+        if (existsSync(resolve(widgetRoot, "src/entrypoints"))) {
+            unexpected.push("src/entrypoints/");
+        }
+
+        return unexpected;
     }
 
     private findMissingFiles(

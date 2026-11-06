@@ -1,5 +1,5 @@
-import { WIDGET_ID } from "../Config.ts";
-import { WidgetView } from "../WidgetView.tsx";
+import { WIDGET_ID } from "./config/Config.ts";
+import { WidgetView } from "./view/WidgetView.tsx";
 
 type Props = {
     contract: unknown;

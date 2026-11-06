@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { WidgetConfig } from "../Config";
+import type { WidgetConfig } from "../bootstrap/config/Config.ts";
 import { SizeguideHeader } from "./SizeguideHeader.tsx";
 import { SizeguideHowTo } from "./SizeguideHowTo.tsx";
 import { SizeguideTable } from "./SizeguideTable.tsx";

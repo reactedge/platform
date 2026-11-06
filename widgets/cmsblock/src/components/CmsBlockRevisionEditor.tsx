@@ -1,12 +1,13 @@
 import { CmsBlockRenderedPreview } from "./CmsBlockRenderedPreview.tsx";
-import type { CmsBlockController } from "../hooks/domain/useCmsBlockController.ts";
+import { useCmsBlockControllerContext } from "../state/CmsBlock/CmsBlockControllerContext.tsx";
 import { useCmsBlockRevisionDraft } from "../hooks/domain/useCmsBlockRevisionDraft.ts";
 
-type Props = { controller: CmsBlockController; onDirtyChange: (dirty: boolean) => void };
+type Props = { onDirtyChange: (dirty: boolean) => void };
 
-export function CmsBlockRevisionEditor({ controller, onDirtyChange }: Props) {
-    const pending = controller.record?.pending;
-    const draft = useCmsBlockRevisionDraft({ controller, pending, onDirtyChange });
+export function CmsBlockRevisionEditor({ onDirtyChange }: Props) {
+    const cmsBlock = useCmsBlockControllerContext();
+    const pending = cmsBlock.record?.pending;
+    const draft = useCmsBlockRevisionDraft({ controller: cmsBlock, pending, onDirtyChange });
     if (!pending) return null;
 
     return (
@@ -19,8 +20,8 @@ export function CmsBlockRevisionEditor({ controller, onDirtyChange }: Props) {
             <CmsBlockRenderedPreview
                 title="Generated CMSBlock draft"
                 revision={{ ...pending, html: draft.html }}
-                templateId={controller.draft.templateId}
-                layoutId={controller.draft.layoutId}
+                templateId={cmsBlock.draft.templateId}
+                layoutId={cmsBlock.draft.layoutId}
             />
             <div className="cmsblock-editor__actions">
                 <button type="button" disabled={draft.busy || !draft.dirty} onClick={() => { void draft.save(); }}>

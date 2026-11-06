@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import {WIDGET_ID} from "../src/Config";
+import {WIDGET_ID} from "../src/bootstrap/config/Config.ts";
 
 test.describe('ContactUs Widget', () => {
     let widget;
@@ -66,5 +66,7 @@ test.describe('ContactUs Widget', () => {
             await input.fill(value);
             await expect(input).toHaveValue(value);
         }
+
+        await expect(submit).toBeEnabled();
     });
 });

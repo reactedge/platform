@@ -1,5 +1,5 @@
 import {useActivityContext} from "../activity/Context/useActivityContext.ts";
-import {readWidgetConfig} from "../Config.ts";
+import {readWidgetConfig} from "./config/Config.ts";
 import {useMediaQuery} from "../hooks/ui/useMediaQuery.tsx";
 import {ConfigStateProvider} from "../state/Config/ConfigStateProvider.tsx";
 import {MegamenuContent} from "../components/MegamenuContent.tsx";

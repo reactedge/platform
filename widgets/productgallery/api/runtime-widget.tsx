@@ -1,5 +1,5 @@
 import "../src/styles/widget.css";
-import { WIDGET_ID } from "../src/Config.ts";
+import { WIDGET_ID } from "../src/bootstrap/config/Config.ts";
 
 import type { WidgetApi } from "@reactedge/public-api/widget";
 import type {ReactEdgeRuntimeConfig} from "@reactedge/public-api/runtime.ts";

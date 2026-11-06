@@ -1,5 +1,5 @@
 import type { CategoryData, MagentoCategoryChild } from "../types/infra/magento/category.types.ts";
-import type { WidgetConfig } from "../Config.ts";
+import type { WidgetConfig } from "../bootstrap/config/Config.ts";
 
 export const categoryLayereIds = (
     category?: CategoryData

@@ -1,7 +1,7 @@
 import {type ReactNode} from "react";
 import {LocalSystemStateContext} from "./SystemState.tsx";
 import type {WidgetActivity} from "@reactedge/framework/activity";
-import type {WidgetConfig} from "../../Config.ts";
+import type {WidgetConfig} from "../../bootstrap/config/Config.ts";
 interface SystemStateProviderProps {
     children: ReactNode;
     config: WidgetConfig;

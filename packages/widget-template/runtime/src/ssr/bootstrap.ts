@@ -1,5 +1,5 @@
-import type { ReactEdgeRuntimeConfig } from "../Config.ts";
-import { WIDGET_ID } from "../Config.ts";
+import type { ReactEdgeRuntimeConfig } from "../bootstrap/config/Config.ts";
+import { WIDGET_ID } from "../bootstrap/config/Config.ts";
 import fs from 'node:fs/promises';
 import {createGraphqlService} from "@reactedge/framework/graphql/graphql.service.ts"
 import {fetchMagentoProductData} from "../services/magento/fetchMagentoProductData";
