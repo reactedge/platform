@@ -4,11 +4,11 @@ import type { CmsBlockBootstrap } from "../../services/cmsblock/CmsBlockApi.ts";
 import { WIDGET_ID } from "../config/Config.ts";
 import { WidgetView } from "../view/WidgetView.tsx";
 
-/** Signature required by the platform SSR worker: renderHtml(contract, bootstrap, runtime). */
+/** Signature required by the platform SSR worker: renderHtml(config, runtime, bootstrap). */
 export const renderHtml = (
     contract: unknown,
-    bootstrap: CmsBlockBootstrap,
-    runtime: ReactEdgeRuntimeConfig
+    runtime: ReactEdgeRuntimeConfig,
+    bootstrap: CmsBlockBootstrap
 ): string => renderToString(
     <div className={`reactedge-${WIDGET_ID}`}>
         <WidgetView contract={contract} runtime={runtime} bootstrapData={bootstrap} />

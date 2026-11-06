@@ -3,18 +3,7 @@ import { WIDGET_ID } from "../config/Config.ts";
 import type { ReactEdgeRuntimeConfig } from "../config/Config.ts";
 import { WidgetView } from "../view/WidgetView.tsx";
 
-function isRuntimeConfig(value: unknown): value is ReactEdgeRuntimeConfig {
-    return typeof value === "object" && value !== null && "integrations" in value && "context" in value;
-}
-
-export const renderHtml = (config: unknown, runtimeOrBootstrap: unknown, possibleRuntime?: unknown): string => {
-    const runtime = isRuntimeConfig(runtimeOrBootstrap)
-        ? runtimeOrBootstrap
-        : isRuntimeConfig(possibleRuntime)
-            ? possibleRuntime
-            : null;
-    if (!runtime) throw new Error("Quote SSR requires runtime configuration");
-
+export const renderHtml = (config: unknown, runtime: ReactEdgeRuntimeConfig, _bootstrap: unknown): string => {
     return renderToString(
         <div className={`reactedge-${WIDGET_ID}`}>
             <WidgetView contract={config} runtime={runtime} />

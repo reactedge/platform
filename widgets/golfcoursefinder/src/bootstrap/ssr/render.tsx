@@ -4,8 +4,8 @@ import { WidgetView } from "../view/WidgetView.tsx";
 
 export function renderHtml(
     contract: unknown,
-    _bootstrap: unknown,
     runtime: ReactEdgeRuntimeConfig,
+    _bootstrap: unknown,
 ): string {
     return renderToString(
         <div className={`reactedge-${WIDGET_ID}`}>
