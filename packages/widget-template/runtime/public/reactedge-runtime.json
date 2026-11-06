@@ -1,0 +1,11 @@
+{
+  "integrations": {
+    "magentoGraphql": {
+      "api": "https://example.com/graphql"
+    }
+  },
+  "context": {
+    "storeCode": "default",
+    "sku": "EXAMPLE"
+  }
+}
