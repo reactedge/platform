@@ -27,9 +27,7 @@ export async function buildBootstrap(runtime: ReactEdgeRuntimeConfig) {
             runtime.context.sku
         );
 
-    return {
-        galleryData
-    };
+    return galleryData;
 }
 
 function getGraphqQlAPI(runtime: ReactEdgeRuntimeConfig) {
