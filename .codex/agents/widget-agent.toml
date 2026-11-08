@@ -15,12 +15,15 @@ Use this canonical widget source layout:
   its template. Preserve the existing variant filename and public API.
 - `src/bootstrap/config/` owns widget configuration and schema files.
 - `src/bootstrap/ssr/render.tsx` owns the server-rendering entry point and any
-  bootstrap/runtime exports used by SSR.
+  bootstrap/runtime exports used by SSR. The renderer may omit unused trailing
+  positional parameters; do not keep underscore-prefixed placeholders solely
+  to mirror the platform caller.
 - Keep every SSR implementation under `src/bootstrap/ssr/`.
 - Every widget's `src/bootstrap/ssr/render.tsx` must export `renderHtml` with
-  the positional signature `(config, runtime, bootstrap)`, even when one or
-  more values are unused. Preserve this order and do not support alternate
-  argument orders; prefix intentionally unused parameters with `_`.
+  the positional parameter order `(config, runtime, bootstrap)` for parameters
+  it uses. Unused trailing parameters are optional and should be omitted.
+  Preserve the order of retained parameters and do not support alternate
+  argument orders.
 - `src/bootstrap/view/` owns `Widget.tsx` and `WidgetView.tsx` when those files
   exist. `Widget.tsx` exposes the widget's React mounting/component API;
   `WidgetView.tsx` renders the widget's primary view.
