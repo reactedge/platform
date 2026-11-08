@@ -30,20 +30,20 @@ export const WidgetCreatelisting = ({ config }: Props) => {
         : 0;
 
     return (
-        <div className="word-editor listing-workspace">
+        <section className="word-editor listing-workspace" aria-labelledby="createlisting-title">
             <header className="word-editor__header">
-                <h2 data-createlisting-title className="word-editor__title" style={{ color: config.settings.colour }}>
+                <h2 id="createlisting-title" data-createlisting-title className="word-editor__title" style={{ color: config.settings.colour }}>
                     {config.data.title}
                 </h2>
                 <p className="word-editor__subtitle">Listing capabilities</p>
             </header>
-            <div className="word-editor__workspace">
+            <section className="word-editor__workspace" aria-label="Listing workspace">
                 <ListingCapabilities mode={listingController.mode} disabled={listingController.disabled} onChoose={chooseListing}>
                     <ProductCapabilities mode={productController.mode}
                         disabled={listingController.disabled || productController.disabled} onChoose={chooseProduct} />
                 </ListingCapabilities>
-                <div className="word-editor__document-area">
-                    <div className="word-editor__document listing-workspace__content">
+                <section className="word-editor__document-area" aria-label="Listing editor">
+                    <article className="word-editor__document listing-workspace__content">
                         {productActive ? (
                             <ProductWorkspace listings={listingController.listings} controller={productController} />
                         ) : (
@@ -54,9 +54,9 @@ export const WidgetCreatelisting = ({ config }: Props) => {
                             </>
                         )}
                         <SavedListings listings={listingController.listings} products={productController.products} />
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </article>
+                </section>
+            </section>
+        </section>
     );
 };
