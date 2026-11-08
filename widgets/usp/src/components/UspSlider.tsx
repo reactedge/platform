@@ -8,7 +8,7 @@ export function UspSlider({ slides, config }: UspSliderProps) {
 
     return (
         <div className={`usp-slider-bar ${config.theme || 'light'}`}>
-            <div className="usp-slider__inner"
+            <ul className="usp-slider__inner"
                  style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
                 {slides.map((slide, i) => (
@@ -16,10 +16,9 @@ export function UspSlider({ slides, config }: UspSliderProps) {
                         key={i}
                         slide={slide}
                         isActive={i === currentIndex}
-                        tileMode={false}
                     />
                 ))}
-            </div>
+            </ul>
 
             <NavigationArrows
                 current={currentIndex}
