@@ -6,6 +6,14 @@
       "strategy": "static"
     }
   },
+  "productgallery-gallery": {
+    "widget": "productgallery",
+    "active": true,
+    "contract": "gallery.json",
+    "ssr": {
+      "strategy": "static"
+    }
+  },
   "megamenu": {
     "active": true,
     "contract": "default.json",

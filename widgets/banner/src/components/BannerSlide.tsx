@@ -1,5 +1,5 @@
 import type { BannerSlideProps } from "./Types";
-import {ZoomableImage} from "./BannerSlide/ZoomableImage.tsx";
+import {Image} from "./BannerSlide/Image.tsx";
 
 export const BannerSlide = ({ slide, isActive, visibleSlides = 1, tileMode }: BannerSlideProps) => {
     const { image, title } = slide;
@@ -38,7 +38,7 @@ export const BannerSlide = ({ slide, isActive, visibleSlides = 1, tileMode }: Ba
             data-banner-slide
             data-banner-active={isActive || undefined}
         >
-            <ZoomableImage {...props} />
+            <Image {...props} />
         </div>
     );
 };
