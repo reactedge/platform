@@ -15,8 +15,8 @@ export const UspMobileWidget = ({ config, slides }: Props) => {
     }
 
     return (
-        <div className={`usp-static-bar ${config.settings.theme || 'light'}`}>
-            <UspSlide slide={slide} isActive={false} tileMode={true} />
-        </div>
+        <ul className={`usp-static-bar ${config.settings.theme || 'light'}`}>
+            <UspSlide slide={slide} isActive={false} />
+        </ul>
     );
 };

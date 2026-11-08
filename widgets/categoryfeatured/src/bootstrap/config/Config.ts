@@ -1,5 +1,5 @@
-import {parseBootstrap, parseConfig} from "./ConfigSchema.ts";
-import type {WidgetActivity} from "@reactedge/framework/activity";
+import { parseBootstrap, parseConfig } from "./ConfigSchema.ts";
+import type { WidgetActivity } from "@reactedge/framework/activity";
 
 export interface WidgetConfig {
     readonly data: {
@@ -7,9 +7,9 @@ export interface WidgetConfig {
         cards: {
             type: 'category' | 'subcategory' | 'product' | 'cms' | 'external';
             title: string;
-            link: string;
-            thumbnail: string;
-            altText: string;
+            image: string;
+            imageAlt: string;
+            url: string;
         }[];
     };
 
@@ -44,11 +44,12 @@ export function readWidgetConfig(
         const contract = parseConfig(rawContract);
         if (!Array.isArray(bootstrap) || bootstrap.length === 0) return null;
 
-        const cards = parseBootstrap(bootstrap);
-        if (cards.length === 0) return null;
+        const featured = parseBootstrap(bootstrap);
+
+        if (featured.length === 0) return null;
         const resolved = {
             ...contract,
-            data: {...contract.data, cards},
+            data: { ...contract.data, cards: featured },
         };
 
         activity?.log(
@@ -63,7 +64,7 @@ export function readWidgetConfig(
         activity?.log(
             'bootstrap',
             'Invalid widget contract',
-            e instanceof Error? e.message: e,
+            e instanceof Error ? e.message : e,
             'error'
         );
 

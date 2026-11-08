@@ -32,17 +32,17 @@ export const WidgetCategoryFeatured = ({ config }: Props) => {
 
     return (
         <section className="categoryfeatured" aria-labelledby="categoryfeatured-title">
-            <h1
+            <h2
                 id="categoryfeatured-title"
                 className="categoryfeatured__title"
                 data-categoryfeatured-title
                 style={{ color: config.settings.colour }}
             >
                 {config.data.title}
-            </h1>
+            </h2>
 
             {isSmallScreen && config.data.cards.length > 1 && (
-                <div className="categoryfeatured__browse">
+                <nav className="categoryfeatured__browse" aria-label="Browse categories">
                     <button
                         className="categoryfeatured__arrow"
                         type="button"
@@ -63,7 +63,7 @@ export const WidgetCategoryFeatured = ({ config }: Props) => {
                     >
                         ›
                     </button>
-                </div>
+                </nav>
             )}
 
             <ul className="categoryfeatured__track" id="categoryfeatured-list" ref={trackRef}>

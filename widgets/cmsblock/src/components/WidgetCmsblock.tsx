@@ -24,9 +24,9 @@ export const WidgetCmsblock = ({ config, bootstrap }: Props) => {
             <section className="cmsblock-editor" aria-label="CMS block editor">
                 {mode !== "view" && (
                     <header className="cmsblock-editor__header">
-                        <h1 data-cmsblock-title style={{ color: config.settings.colour }}>
+                        <h2 data-cmsblock-title style={{ color: config.settings.colour }}>
                             {config.data.title}
-                        </h1>
+                        </h2>
                         <p>Author, generate, review and publish a responsive content block.</p>
                     </header>
                 )}

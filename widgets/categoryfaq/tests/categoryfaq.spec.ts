@@ -17,7 +17,7 @@ test.describe("Category FAQ Widget", () => {
     });
 
     test("renders its configured title and category FAQs", async () => {
-        await expect(widget.locator("h1[data-categoryfaq-title]")).toHaveText("Frequently asked questions");
+        await expect(widget.locator("h2[data-categoryfaq-title]")).toHaveText("Frequently asked questions");
         await expect(widget.locator("summary")).toHaveCount(2);
         await expect(widget.locator("summary").first()).toHaveText("How should I choose the right size?");
     });

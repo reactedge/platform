@@ -9,17 +9,19 @@ export const WidgetCategoryFaq = ({ config }: Props) => {
 
     return (
         <section className="categoryfaq" aria-labelledby="categoryfaq-title">
-            <h1 id="categoryfaq-title" data-categoryfaq-title style={{ color: config.settings.colour }}>
+            <h2 id="categoryfaq-title" data-categoryfaq-title style={{ color: config.settings.colour }}>
                 {config.data.title}
-            </h1>
-            <div className="categoryfaq__list">
+            </h2>
+            <ul className="categoryfaq__list">
                 {config.data.faqs.map((faq, index) => (
-                    <details className="categoryfaq__item" key={`${faq.question}-${index}`}>
-                        <summary>{faq.question}</summary>
-                        <div className="categoryfaq__answer">{faq.answer}</div>
-                    </details>
+                    <li className="categoryfaq__item" key={`${faq.question}-${index}`}>
+                        <details>
+                            <summary>{faq.question}</summary>
+                            <p className="categoryfaq__answer">{faq.answer}</p>
+                        </details>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </section>
     );
 };

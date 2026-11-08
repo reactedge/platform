@@ -17,7 +17,7 @@ export interface UspStaticProps {
 export interface UspSlideProps {
     slide: UspSlideData;
     isActive: boolean;
-    tileMode: boolean;
+    showSeparator?: boolean;
 }
 
 export interface UspSlideData {

@@ -73,6 +73,28 @@ unnecessary renders. Register a shared event listener at the provider or feature
 boundary rather than independently in every consumer. Use context only when its
 shared ownership and access benefits outweigh subscription and rendering costs.
 
+Semantic HTML Rules for ReactEdge Widgets: ReactEdge widgets are self-contained UI components, not standalone pages. Apply semantic HTML according to content and purpose.
+1. Host owns page-level structure: widgets must not introduce a page-level `main`, but
+   a self-contained widget region may use `section` when its content has
+   a meaningful label or heading.
+2. Widget owns semantics: Each widget defines its internal HTML independently.
+3. `article`: Use only for independently meaningful content, not automatically as a widget wrapper.
+4. `nav`: Use for navigation widgets (e.g. MegaMenu), not informational widgets (e.g. USP).
+5. Headings: Use `h2`–`h6` according to the host's heading hierarchy; avoid widget-owned `h1`.
+6. `p`: Use for descriptive and explanatory text.
+7. `ul` / `ol`: Use for collections and ordered sequences (USP, results, steps).
+8. `dl` / `table` / `figure`: Use for definitions, tabular data and media.
+9. `form` / `label` / `button` / `a`: Use native HTML semantics for inputs, actions and links.
+10. `div`: Do not use `div` in authored widget markup. Always choose the most
+    appropriate semantic HTML element for the content or interaction instead,
+    such as `section`, `article`, `header`, `footer`, `nav`, `ul`, `li`, `p`,
+    `figure`, `form`, or another suitable native element.
+11. Headings are common in widget UIs, especially `h3`. When inline content
+    follows a heading, give every widget-owned `h2`–`h6` at least
+    `padding-inline-end: 0.5rem` (or the equivalent `padding-right` in
+    left-to-right-only styling) so the content does not appear too close to it.
+    Use the direction-aware logical property by default; larger spacing is allowed.
+
 Follow the mandatory engineering standards in:
 AGENTS.md
 

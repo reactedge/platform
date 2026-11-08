@@ -16,7 +16,7 @@ export function WidgetGolfcoursefinder({ config }: Props) {
 
     return (
         <section className="golfCourseFinder" aria-label={t("Golf course finder")}>
-            <h1 data-golf-course-title>{t(config.data.title)}</h1>
+            <h2 data-golf-course-title>{t(config.data.title)}</h2>
             <GolfCourseSearchForm onSearch={handleSearch} />
             {loading && <SpinnerOverlay />}
             {error && <ErrorState message={error} />}

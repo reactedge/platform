@@ -11,9 +11,9 @@ export function ContactHeader({
     if (!config.title && !config.intro) return null;
 
     return (
-        <div className="intro">
-            <h1 data-contact-title>{config.title}</h1>
+        <header className="intro">
+            <h2 data-contact-title>{config.title}</h2>
             <p>{config.intro}</p>
-        </div>
+        </header>
     );
 }

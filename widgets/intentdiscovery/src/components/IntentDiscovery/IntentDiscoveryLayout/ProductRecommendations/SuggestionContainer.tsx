@@ -22,10 +22,10 @@ export const SuggestionContainer: React.FC<Props> = ({
     const visibleCards = showAll ? recommendations : recommendations.slice(0, 1);
 
     return (
-        <section className="re-intent-card">
+        <section className="re-intent-card" aria-label={title}>
             <header className="re-intent-header">
                 <div className="re-intent-header-left">
-                    <div className="re-intent-title">{title}</div>
+                    <h3 className="re-intent-title">{title}</h3>
                 </div>
 
                 {onClose && (
@@ -55,5 +55,3 @@ export const SuggestionContainer: React.FC<Props> = ({
         </section>
     )
 }
-
-
