@@ -30,11 +30,11 @@ export const WidgetCreatelisting = ({ config }: Props) => {
         : 0;
 
     return (
-        <section className="word-editor listing-workspace">
+        <div className="word-editor listing-workspace">
             <header className="word-editor__header">
-                <h1 data-createlisting-title className="word-editor__title" style={{ color: config.settings.colour }}>
+                <h2 data-createlisting-title className="word-editor__title" style={{ color: config.settings.colour }}>
                     {config.data.title}
-                </h1>
+                </h2>
                 <p className="word-editor__subtitle">Listing capabilities</p>
             </header>
             <div className="word-editor__workspace">
@@ -57,6 +57,6 @@ export const WidgetCreatelisting = ({ config }: Props) => {
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     );
 };

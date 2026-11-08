@@ -13,14 +13,14 @@ export const SizeguideHeader = ({ config, countryCode, setCountryCode, unit, set
     <header className="sizeguide__header">
         <div>
             <p className="sizeguide__product-type">{config.data.productType}</p>
-            <h1
+            <h2
                 id="sizeguide-title"
                 className="sizeguide__title"
                 data-sizeguide-title
                 style={{ color: config.settings.colour }}
             >
                 {config.data.title}
-            </h1>
+            </h2>
             {config.data.description && (
                 <p className="sizeguide__description">{config.data.description}</p>
             )}

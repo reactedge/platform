@@ -12,7 +12,7 @@ export function ContactHeader({
 
     return (
         <div className="intro">
-            <h1 data-contact-title>{config.title}</h1>
+            <h2 data-contact-title>{config.title}</h2>
             <p>{config.intro}</p>
         </div>
     );
