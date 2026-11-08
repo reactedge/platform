@@ -89,6 +89,10 @@ Semantic HTML Rules for ReactEdge Widgets: ReactEdge widgets are self-contained 
     appropriate semantic HTML element for the content or interaction instead,
     such as `section`, `article`, `header`, `footer`, `nav`, `ul`, `li`, `p`,
     `figure`, `form`, or another suitable native element.
+11. Headings: Every widget-owned `h2`–`h6` heading must have at least
+    `padding-inline-end: 0.5rem` so adjacent inline content does not appear
+    visually attached to the heading. Use the direction-aware logical property
+    rather than `padding-right`; larger component-specific spacing is allowed.
 
 Follow the mandatory engineering standards in:
 AGENTS.md
