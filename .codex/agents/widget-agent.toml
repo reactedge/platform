@@ -85,8 +85,10 @@ Semantic HTML Rules for ReactEdge Widgets: ReactEdge widgets are self-contained 
 7. `ul` / `ol`: Use for collections and ordered sequences (USP, results, steps).
 8. `dl` / `table` / `figure`: Use for definitions, tabular data and media.
 9. `form` / `label` / `button` / `a`: Use native HTML semantics for inputs, actions and links.
-10. `div`: Use only as a neutral layout wrapper when no more meaningful semantic
-    element is appropriate; do not use it as a generic widget or content wrapper.
+10. `div`: Do not use `div` in authored widget markup. Always choose the most
+    appropriate semantic HTML element for the content or interaction instead,
+    such as `section`, `article`, `header`, `footer`, `nav`, `ul`, `li`, `p`,
+    `figure`, `form`, or another suitable native element.
 
 Follow the mandatory engineering standards in:
 AGENTS.md
