@@ -4,6 +4,9 @@
 
 .categoryfaq__list {
     border-top: 1px solid #d1d5db;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .categoryfaq__item {
