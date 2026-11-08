@@ -21,7 +21,7 @@ export const WidgetCmsblock = ({ config, bootstrap }: Props) => {
 
     return (
         <CmsBlockControllerProvider value={cmsBlock}>
-            <div className="cmsblock-editor" aria-label="CMS block editor">
+            <section className="cmsblock-editor" aria-label="CMS block editor">
                 {mode !== "view" && (
                     <header className="cmsblock-editor__header">
                         <h2 data-cmsblock-title style={{ color: config.settings.colour }}>
@@ -35,7 +35,7 @@ export const WidgetCmsblock = ({ config, bootstrap }: Props) => {
                 {!loading && mode === "edit" && <CmsBlockEditMode />}
                 {!loading && mode === "review" && <CmsBlockReviewMode />}
                 {!loading && mode === "view" && <CmsBlockViewMode />}
-            </div>
+            </section>
         </CmsBlockControllerProvider>
     );
 };

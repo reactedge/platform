@@ -10,7 +10,7 @@ export const WidgetImagezoom = ({ config }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="imagezoom" aria-label={config.data.title}>
+        <section className="imagezoom" aria-label={config.data.title}>
             <button
                 className="imagezoom__preview"
                 type="button"
@@ -32,6 +32,6 @@ export const WidgetImagezoom = ({ config }: Props) => {
                 open={isOpen}
                 onClose={() => setIsOpen(false)}
             />
-        </div>
+        </section>
     );
 };

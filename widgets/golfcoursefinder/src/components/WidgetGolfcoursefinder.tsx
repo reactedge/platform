@@ -15,7 +15,7 @@ export function WidgetGolfcoursefinder({ config }: Props) {
     const { courses, center, error, loading, apiReachable, handleSearch } = useGolfCourseSearchController(config);
 
     return (
-        <div className="golfCourseFinder" aria-label={t("Golf course finder")}>
+        <section className="golfCourseFinder" aria-label={t("Golf course finder")}>
             <h2 data-golf-course-title>{t(config.data.title)}</h2>
             <GolfCourseSearchForm onSearch={handleSearch} />
             {loading && <SpinnerOverlay />}
@@ -28,6 +28,6 @@ export function WidgetGolfcoursefinder({ config }: Props) {
             />
             <GolfCourseResultsCards courses={courses} />
             <GolfCourseResultsTable courses={courses} />
-        </div>
+        </section>
     );
 }

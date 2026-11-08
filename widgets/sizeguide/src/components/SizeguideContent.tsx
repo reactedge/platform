@@ -19,7 +19,7 @@ export const SizeguideContent = ({ config }: Props) => {
     ) ?? config.data.countries[0]!;
 
     return (
-        <div className="sizeguide" aria-labelledby="sizeguide-title">
+        <section className="sizeguide" aria-labelledby="sizeguide-title">
             <SizeguideHeader
                 config={config}
                 countryCode={countryCode}
@@ -34,6 +34,6 @@ export const SizeguideContent = ({ config }: Props) => {
                 unit={unit}
             />
             <SizeguideHowTo config={config} />
-        </div>
+        </section>
     );
 };
