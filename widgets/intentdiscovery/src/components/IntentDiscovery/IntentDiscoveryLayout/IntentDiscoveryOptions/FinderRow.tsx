@@ -5,8 +5,8 @@ type FinderRowProps = {
 
 export const FinderRow: React.FC<FinderRowProps> = ({ children, className = '' }) => {
     return (
-        <div className={`event-row ${className}`}>
+        <section className={`event-row ${className}`}>
             {children}
-        </div>
+        </section>
     );
 };

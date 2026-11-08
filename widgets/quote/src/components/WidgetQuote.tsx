@@ -11,7 +11,7 @@ export const WidgetQuote = ({ config }: Props) => {
     const { openDialog, dialog, search, quote, delivery } = useQuoteDialogController(config);
 
     return (
-        <div className="quote" aria-label={config.data.title}>
+        <section className="quote" aria-label={config.data.title}>
             <QuoteTrigger title={config.data.title} onOpen={openDialog} />
             <QuoteDialog
                 dialog={dialog}
@@ -19,6 +19,6 @@ export const WidgetQuote = ({ config }: Props) => {
                 quote={quote}
                 delivery={delivery}
             />
-        </div>
+        </section>
     );
 };
