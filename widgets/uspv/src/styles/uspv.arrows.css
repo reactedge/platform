@@ -1,0 +1,34 @@
+/*
+ * Manual navigation arrows. Mirrors the USP mobile arrows
+ * (`.arrow-btn` inside `.navigation-arrows`): two round 28px buttons,
+ * vertically centred, one at each inline edge of the panel.
+ */
+.uspv-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0.5rem;
+
+    appearance: none;
+    border: none;
+    border-radius: 9999px;
+    background: var(--uspv-arrow-bg);
+    color: var(--uspv-arrow-color);
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.uspv-arrow--previous {
+    inset-inline-start: 0;
+}
+
+.uspv-arrow--next {
+    inset-inline-end: 0;
+}

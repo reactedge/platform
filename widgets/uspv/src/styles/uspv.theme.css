@@ -1,0 +1,41 @@
+/* Theme variables; same palette as the USP widget themes. */
+.uspv-panel.light {
+    --uspv-bg: #f8fafc;
+    --uspv-color: #1e3a8a;
+    --uspv-arrow-bg: #e5e7eb;   /* light gray */
+    --uspv-arrow-color: #374151;
+}
+
+.uspv-panel.dark {
+    --uspv-bg: #1f2937;         /* slate-800 */
+    --uspv-color: #e5e7eb;      /* soft white */
+    --uspv-arrow-bg: #374151;   /* subtle contrast */
+    --uspv-arrow-color: #f9fafb;
+}
+
+/*
+ * Promo palette: accessible orange gradient.
+ *
+ * Why these colours: the original promo gradient (#f97316 -> #f5a623)
+ * gave white text only 2.80:1 -> 2.03:1 contrast, below the WCAG 2.x AA
+ * minimum of 4.5:1 for normal text (1.4.3) and even below the 3:1 allowed
+ * for large bold headings. Automated checkers such as axe do not report
+ * this because they cannot measure text on gradient backgrounds.
+ *
+ * - Background: #c2410c (orange-700) -> #b45309 (amber-700) keeps the
+ *   promo's orange-to-amber shift, one shade deeper. White text measures
+ *   5.02:1 to 5.18:1 at every point of the gradient (AA for all text).
+ * - Arrow surface: 20% black instead of 20% white. A white overlay made
+ *   the button lighter and the white glyph fainter (about 3.6:1); a
+ *   black overlay darkens it, so the glyph reaches at least 7.05:1,
+ *   well above the 3:1 needed for UI components (1.4.11).
+ *
+ * Ratios were computed with the WCAG relative-luminance formula across
+ * the whole gradient, not only at its end points.
+ */
+.uspv-panel.promo {
+    --uspv-bg: linear-gradient(60deg, #c2410c, #b45309);
+    --uspv-color: #ffffff;
+    --uspv-arrow-bg: rgba(0, 0, 0, 0.2);
+    --uspv-arrow-color: #ffffff;
+}

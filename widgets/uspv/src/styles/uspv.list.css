@@ -1,0 +1,21 @@
+/*
+ * Slide track. Mirrors the USP mobile track (`.usp-slider__inner`):
+ * slides sit side by side and the track is translated horizontally so
+ * the active slide fills the panel.
+ */
+.uspv-list {
+    display: flex;
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    transition: transform 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .uspv-list {
+        transition: none;
+    }
+}

@@ -1,0 +1,28 @@
+{
+  "data": {
+    "slides": [
+      {
+        "heading": "🚚 Livraison offerte",
+        "text": "Pour toute commande supérieure à 50 €"
+      },
+      {
+        "heading": "🔒 Paiement sécurisé",
+        "text": "Paiement 100 % sécurisé"
+      },
+      {
+        "heading": "↩️ Retours simplifiés",
+        "text": "Retours sous 30 jours"
+      }
+    ]
+  },
+  "settings": {
+    "timer": 5000,
+    "theme": "light"
+  },
+  "translations": {
+    "Unique selling points": "Nos avantages",
+    "Previous selling point": "Avantage précédent",
+    "Next selling point": "Avantage suivant",
+    "%1 of %2": "%1 sur %2"
+  }
+}
