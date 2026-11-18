@@ -1,0 +1,13 @@
+/*
+ * USPV panel: the labelled widget container and the visible window of
+ * the slider. Mirrors the USP mobile rendering (`.usp-slider-bar`):
+ * a full-width themed bar that shows exactly one slide.
+ */
+.uspv-panel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+
+    background: var(--uspv-bg);
+    color: var(--uspv-color);
+}

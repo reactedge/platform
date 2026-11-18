@@ -1,0 +1,25 @@
+/*
+ * One selling proposition. Mirrors the USP mobile slide: a full-width
+ * slide, at least 45px high, with the heading and the text centred side
+ * by side. `min-height` (not `height`) lets a slide grow when its content
+ * wraps or the text is enlarged (WCAG 1.4.4), instead of being clipped
+ * by the panel. Slides share the track's height, so they stay aligned.
+ */
+.uspv-item {
+    display: flex;
+    flex: 0 0 100%;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 45px;
+}
+
+.uspv-item__heading {
+    margin: 0;
+    padding-inline-end: 1rem;
+}
+
+.uspv-item__text {
+    margin: 0;
+    line-height: 1.5rem;
+}

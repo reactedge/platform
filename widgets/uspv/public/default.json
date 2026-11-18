@@ -1,0 +1,22 @@
+{
+  "data": {
+    "slides": [
+      {
+        "heading": "🚚 Free Delivery",
+        "text": "On orders over £50"
+      },
+      {
+        "heading": "🔒 Secure Payment",
+        "text": "100% secure checkout"
+      },
+      {
+        "heading": "↩️ Easy Returns",
+        "text": "30-day returns"
+      }
+    ]
+  },
+  "settings": {
+    "timer": 5000,
+    "theme": "light"
+  }
+}

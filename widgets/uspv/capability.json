@@ -1,0 +1,36 @@
+{
+  "id": "uspv",
+  "widget": "uspv",
+  "description": "Displays unique selling propositions one at a time with the USP mobile slider visual. settings.timer (milliseconds) auto-advances the slides; using the left or right arrow stops the timer and switches to manual navigation. Optional top-level translations map the UI labels (English source string -> translation), as in the store finder; see public/fr.json.",
+  "exampleContract": {
+    "data": {
+      "slides": [
+        {
+          "heading": "Free Delivery",
+          "text": "On orders over £50"
+        },
+        {
+          "heading": "Secure Payment",
+          "text": "100% secure checkout"
+        },
+        {
+          "text": "30-day returns"
+        }
+      ]
+    },
+    "settings": {
+      "timer": 5000,
+      "theme": "light"
+    }
+  },
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}
