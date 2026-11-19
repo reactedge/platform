@@ -1,40 +1,47 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { ChargingStationApiError, ChargingStationService } from "../src/domain/charging-station.service.ts";
-import type { EVChargerFinderConfig } from "../src/domain/ev-charger.types.ts";
+import { ChargingStationService, ChargingStationServiceError } from "../src/domain/charging-station.service.ts";
 
-const config: EVChargerFinderConfig = {
-  data: { defaultCenter: { lat: 52.35, lng: -1.17 }, zoom: 6 },
-  integrations: {
-    openChargeMapApi: { api: "https://api.openchargemap.io/v3/poi/" },
-    ukPostcodesApi: { api: "https://api.postcodes.io/postcodes/" },
-  },
-};
+const service = (fetcher: typeof fetch) => new ChargingStationService("https://reactedge.example", fetcher);
 
-test("search resolves a postcode and maps charging point details", async () => {
-  const requests: string[] = [];
+test("search issues the nearby request and validates the typed response", async () => {
+  let requestedUrl = "";
   const fetcher: typeof fetch = async (input) => {
-    const url = String(input);
-    requests.push(url);
-    if (url.includes("postcodes.io")) return Response.json({ status: 200, result: { latitude: 51.5, longitude: -0.12 } });
-    return Response.json([{
-      ID: 7,
-      AddressInfo: { Title: "Central Charge", AddressLine1: "1 High Street", Town: "London", Postcode: "SW1A 1AA", Latitude: 51.51, Longitude: -0.11, Distance: 1.2 },
-      Connections: [{ ConnectionType: { Title: "CCS" }, PowerKW: 150, Quantity: 2 }],
-      StatusType: { IsOperational: true },
-    }]);
+    requestedUrl = String(input);
+    return Response.json({
+      center: { lat: 51.5, lng: -0.12 },
+      stations: [{ id: 7, name: "Central Charge", address: "1 High Street, London", lat: 51.51, lng: -0.11, connectors: [{ type: "CCS", powerKw: 150, quantity: 2 }], available: true, distanceKm: 1.2 }],
+    });
   };
-  const controller = new AbortController();
-  const result = await new ChargingStationService(config, fetcher).search("SW1A 1AA", 10, controller.signal);
+  const result = await service(fetcher).search("SW1A 1AA", 10, new AbortController().signal);
 
-  assert.deepEqual(result.center, { lat: 51.5, lng: -0.12 });
-  assert.equal(result.stations[0]?.name, "Central Charge");
+  assert.equal(new URL(requestedUrl).pathname, "/evchargers/nearby");
+  assert.equal(new URL(requestedUrl).searchParams.get("postcode"), "SW1A 1AA");
+  assert.equal(new URL(requestedUrl).searchParams.get("radiusKm"), "10");
   assert.equal(result.stations[0]?.connectors[0]?.powerKw, 150);
-  assert.equal(new URL(requests[1]!).searchParams.get("distance"), "10");
 });
 
-test("search reports postcode lookup failures with a typed source", async () => {
-  const fetcher: typeof fetch = async () => Response.json({ status: 404, result: null }, { status: 404 });
-  const service = new ChargingStationService(config, fetcher);
-  await assert.rejects(service.search("NOT A POSTCODE", 5, new AbortController().signal), (error: unknown) => error instanceof ChargingStationApiError && error.source === "postcode");
+test("search reports backend postcode errors and rejects malformed response data", async () => {
+  const badRequest: typeof fetch = async () => new Response(null, { status: 400 });
+  await assert.rejects(service(badRequest).search("BAD", 5, new AbortController().signal), (error: unknown) => error instanceof ChargingStationServiceError && error.kind === "postcode");
+  const malformed: typeof fetch = async () => Response.json({ center: { lat: 51, lng: 0 }, stations: [{ id: "wrong" }] });
+  await assert.rejects(service(malformed).search("SW1A 1AA", 5, new AbortController().signal), (error: unknown) => error instanceof ChargingStationServiceError && error.kind === "response");
+});
+
+test("search converts fetch failures into a typed network error", async () => {
+  const offline: typeof fetch = async () => { throw new Error("offline"); };
+  await assert.rejects(service(offline).search("SW1A 1AA", 25, new AbortController().signal), (error: unknown) => error instanceof ChargingStationServiceError && error.kind === "network");
+});
+
+test("search times out and preserves caller cancellation", async () => {
+  const waitForSignal: typeof fetch = async (_input, init) => new Promise((_resolve, reject) => {
+    init?.signal?.addEventListener("abort", () => reject(new DOMException("Aborted", "AbortError")), { once: true });
+  });
+  const timed = new ChargingStationService("https://reactedge.example", waitForSignal, 5);
+  await assert.rejects(timed.search("SW1A 1AA", 50, new AbortController().signal), (error: unknown) => error instanceof ChargingStationServiceError && error.kind === "timeout");
+
+  const controller = new AbortController();
+  const cancelled = service(waitForSignal).search("SW1A 1AA", 5, controller.signal);
+  controller.abort();
+  await assert.rejects(cancelled, (error: unknown) => error instanceof DOMException && error.name === "AbortError");
 });

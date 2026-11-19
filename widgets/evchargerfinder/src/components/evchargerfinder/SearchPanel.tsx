@@ -1,0 +1,32 @@
+import type { FormEvent } from "react";
+import type { RadiusKm } from "../../domain/charging-station.service.ts";
+import { BASE_RADIUS_KM } from "../../domain/ev-charger.types.ts";
+import { useTranslationState } from "../../state/Translation/useTranslationState.ts";
+
+interface SearchValues { readonly postcode: string; readonly radius: RadiusKm; readonly connector: string; readonly speed: string; readonly availableOnly: boolean }
+interface SearchActions {
+  readonly onPostcodeChange: (postcode: string) => void;
+  readonly onRadiusChange: (radius: RadiusKm) => void;
+  readonly onConnectorChange: (connector: string) => void;
+  readonly onSpeedChange: (speed: string) => void;
+  readonly onAvailabilityChange: (available: boolean) => void;
+  readonly onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}
+
+export function SearchPanel({ values, actions, loading }: { readonly values: SearchValues; readonly actions: SearchActions; readonly loading: boolean }) {
+  const { t } = useTranslationState();
+  return (
+    <>
+      <form className="evFinder__search" onSubmit={actions.onSubmit}>
+        <label htmlFor="evFinder-postcode">{t("UK postcode")}</label><input id="evFinder-postcode" autoComplete="postal-code" value={values.postcode} onChange={(event) => actions.onPostcodeChange(event.target.value)} placeholder={t("e.g. SW1A 1AA")} required />
+        <label htmlFor="evFinder-radius">{t("Search radius")}</label><select id="evFinder-radius" value={values.radius} onChange={(event) => actions.onRadiusChange(Number(event.target.value) as RadiusKm)}>{BASE_RADIUS_KM.map((distance) => <option key={distance} value={distance}>{distance} km</option>)}</select>
+        <button type="submit" disabled={loading}>{loading ? t("Searching…") : t("Search")}</button>
+      </form>
+      <fieldset className="evFinder__filters"><legend>{t("Filter charging points")}</legend>
+        <label>{t("Connector type")}<select value={values.connector} onChange={(event) => actions.onConnectorChange(event.target.value)}><option value="all">{t("All connectors")}</option><option value="ccs">CCS</option><option value="type 2">Type 2</option><option value="chademo">CHAdeMO</option><option value="type 1">Type 1</option></select></label>
+        <label>{t("Charging speed")}<select value={values.speed} onChange={(event) => actions.onSpeedChange(event.target.value)}><option value="all">{t("Any power")}</option><option value="rapid">{t("Rapid · 50 kW+")}</option><option value="standard">{t("Standard · under 50 kW")}</option></select></label>
+        <label className="evFinder__check"><input type="checkbox" checked={values.availableOnly} onChange={(event) => actions.onAvailabilityChange(event.target.checked)} />{t("Show operational stations only")}</label>
+      </fieldset>
+    </>
+  );
+}

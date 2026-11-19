@@ -13,8 +13,7 @@ export function readWidgetConfig(contract: unknown, runtime: unknown, activity: 
     const config = {
       data: widget.data,
       integrations: {
-        openChargeMapApi: runtimeConfig.integrations.openChargeMapApi,
-        ukPostcodesApi: runtimeConfig.integrations.ukPostcodesApi,
+        evchargerfinderApi: runtimeConfig.integrations.evchargerfinderApi,
       },
       ...(widget.translations ? { translations: widget.translations } : {}),
     } satisfies WidgetConfig;

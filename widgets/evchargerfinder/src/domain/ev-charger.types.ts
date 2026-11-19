@@ -25,8 +25,7 @@ export interface EVChargerFinderDataConfig {
 export interface EVChargerFinderConfig {
   readonly data: EVChargerFinderDataConfig;
   readonly integrations: {
-    readonly openChargeMapApi: { readonly api: string; readonly apiKey?: string | undefined };
-    readonly ukPostcodesApi: { readonly api: string };
+    readonly evchargerfinderApi: { readonly api: string };
   };
   readonly translations?: Record<string, string>;
 }
