@@ -1,0 +1,15 @@
+{
+  "id": "evchargerfinder",
+  "widget": "evchargerfinder",
+  "description": "Find nearby UK EV charging stations by postcode, radius, connector, charging speed and operational status.",
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}

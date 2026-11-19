@@ -1,0 +1,11 @@
+.evFinder__list { max-height: 460px; overflow: auto; padding-right: .25rem; }
+.evFinder__list h3 { font-size: 1rem; margin: 0 0 .6rem; }
+.evFinder__station { background: white; border: 1px solid #d9e4df; border-radius: 11px; margin-bottom: .55rem; padding: .8rem; }
+.evFinder__station.is-selected { border-color: #087f5b; box-shadow: 0 0 0 2px #087f5b2b; }
+.evFinder__station-title { background: none; border: 0; color: #17322c; cursor: pointer; font-size: 1rem !important; font-weight: 750; padding: 0; text-align: left; }
+.evFinder__station p { color: #61736d; font-size: .83rem; margin: .25rem 0; }
+.evFinder__station .evFinder__status { color: #087f5b; font-weight: 700; }
+.evFinder__station .evFinder__status--offline { color: #a74a22; }
+.evFinder__connectors { font-size: .78rem; margin: .45rem 0; padding-left: 1.2rem; }
+.evFinder__distance { font-weight: 700; }
+@media (max-width: 700px) { .evFinder__list { max-height: none; } }

@@ -1,0 +1,11 @@
+{
+  "integrations": {
+    "openChargeMapApi": {
+      "api": "https://api.openchargemap.io/v3/poi/"
+    },
+    "ukPostcodesApi": {
+      "api": "https://api.postcodes.io/postcodes/"
+    }
+  },
+  "context": {}
+}
