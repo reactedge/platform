@@ -36,6 +36,7 @@ For API-backed runtime-shadow widgets, follow:
 
 - React component structure:
 - JSX size: Keep the JSX returned by each React component to 30 lines or fewer. Extract focused child components when a component's JSX would exceed this limit.
+- JSX line width: Target 60–150 characters per substantive JSX line, counting indentation, and never exceed 150. Do not put multiple elements on one line to save vertical space; break attributes and children into readable lines. Short tags and short labels may be shorter; do not pad them to meet the target.
 - props drills: When forwarding a callback or event handler through a React component tree, pass
   it through at most two React components from its owner to the component that
   invokes it. If the path would exceed two components, first consider moving the handler owner closer to its consumer.
