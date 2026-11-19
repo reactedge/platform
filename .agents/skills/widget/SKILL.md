@@ -32,6 +32,7 @@ This document contains widget-specific standards.
 - Other startup and host integration code belongs under `src/bootstrap/`.
 
 ### React component structure:
+- Child components: Extract JSX-returning render helpers and component functions in a parent component file into separate child React components. Render each child as `<Child />` and pass its inputs as props. Put each child in its own `.tsx` file inside a folder named after the parent, beside the parent file. For example, keep `SearchPanel.tsx` beside `SearchPanel/ConnectorFilter.tsx`.
 - JSX size: Keep the JSX returned by each React component to 30 lines or fewer. Extract focused child components when a component's JSX would exceed this limit.
 - JSX line width: Target 60–150 characters per substantive JSX line, counting indentation, and never exceed 150. Do not put multiple elements on one line to save vertical space; break attributes and children into readable lines. Short tags and short labels may be shorter; do not pad them to meet the target.
 - props drills: When forwarding a callback or event handler through a React component tree, pass

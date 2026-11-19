@@ -2,6 +2,7 @@ import type { FormEvent } from "react";
 import type { RadiusKm } from "../../domain/charging-station.service.ts";
 import { BASE_RADIUS_KM } from "../../domain/ev-charger.types.ts";
 import { useTranslationState } from "../../state/Translation/useTranslationState.ts";
+import { FilterPanel } from "./SearchPanel/FilterPanel.tsx";
 
 interface SearchValues {
   readonly postcode: string;
@@ -49,58 +50,14 @@ export function SearchPanel({ values, actions, loading }: SearchPanelProps) {
         </select>
         <button type="submit" disabled={loading}>{loading ? t("Searching…") : t("Search")}</button>
       </form>
-      <FilterPanel values={values} actions={actions} />
+      <FilterPanel
+        connector={values.connector}
+        speed={values.speed}
+        availableOnly={values.availableOnly}
+        onConnectorChange={actions.onConnectorChange}
+        onSpeedChange={actions.onSpeedChange}
+        onAvailabilityChange={actions.onAvailabilityChange}
+      />
     </>
-  );
-}
-
-function FilterPanel({ values, actions }: { readonly values: SearchValues; readonly actions: SearchActions }) {
-  const { t } = useTranslationState();
-
-  return (
-    <fieldset className="evFinder__filters">
-      <legend>{t("Filter charging points")}</legend>
-      <ConnectorFilter value={values.connector} onChange={actions.onConnectorChange} />
-      <SpeedFilter value={values.speed} onChange={actions.onSpeedChange} />
-      <label className="evFinder__check">
-        <input
-          type="checkbox" checked={values.availableOnly}
-          onChange={(event) => actions.onAvailabilityChange(event.target.checked)}
-        />
-        {t("Show operational stations only")}
-      </label>
-    </fieldset>
-  );
-}
-
-function ConnectorFilter({ value, onChange }: { readonly value: string; readonly onChange: (value: string) => void }) {
-  const { t } = useTranslationState();
-
-  return (
-    <label htmlFor="evFinder-connector">
-      {t("Connector type")}
-      <select id="evFinder-connector" value={value} onChange={(event) => onChange(event.target.value)}>
-        <option value="all">{t("All connectors")}</option>
-        <option value="ccs">CCS</option>
-        <option value="type 2">Type 2</option>
-        <option value="chademo">CHAdeMO</option>
-        <option value="type 1">Type 1</option>
-      </select>
-    </label>
-  );
-}
-
-function SpeedFilter({ value, onChange }: { readonly value: string; readonly onChange: (value: string) => void }) {
-  const { t } = useTranslationState();
-
-  return (
-    <label htmlFor="evFinder-speed">
-      {t("Charging speed")}
-      <select id="evFinder-speed" value={value} onChange={(event) => onChange(event.target.value)}>
-        <option value="all">{t("Any power")}</option>
-        <option value="rapid">{t("Rapid · 50 kW+")}</option>
-        <option value="standard">{t("Standard · under 50 kW")}</option>
-      </select>
-    </label>
   );
 }
