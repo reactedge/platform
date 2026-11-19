@@ -64,14 +64,20 @@ export function WidgetEVChargerFinder({ config }: Props) {
 
   return (
     <section className="evFinder" aria-labelledby="evFinder-heading">
-      <header className="evFinder__header"><p className="evFinder__eyebrow">{t("UK electric vehicle charging")}</p><h2 id="evFinder-heading">{t("Find a charger near you")}</h2><p>{t("Search nearby charging points and check connector and power details.")}</p></header>
+      <header className="evFinder__header">
+        <p className="evFinder__eyebrow">{t("UK electric vehicle charging")}</p>
+        <h2 id="evFinder-heading">{t("Find a charger near you")}</h2>
+        <p>{t("Search nearby charging points and check connector and power details.")}</p>
+      </header>
       <SearchPanel values={searchValues} actions={searchActions} loading={loading} />
       <SearchFeedback loading={loading} hasSearched={hasSearched} hasResults={visibleStations.length > 0} error={error} />
       <section className="evFinder__results" aria-label={t("Search results")}>
         <StationMap center={center} stations={visibleStations} bounds={bounds} selectedId={selectedId} onSelect={setSelectedId} />
         <StationResults stations={visibleStations} selectedId={selectedId} onSelect={setSelectedId} hasSearched={hasSearched} />
       </section>
-      <footer className="evFinder__attribution">{t("Station data provided by ReactEdge charging service. Operational status may not reflect live connector availability.")}</footer>
+      <footer className="evFinder__attribution">
+        {t("Station data provided by ReactEdge charging service. Operational status may not reflect live connector availability.")}
+      </footer>
     </section>
   );
 }

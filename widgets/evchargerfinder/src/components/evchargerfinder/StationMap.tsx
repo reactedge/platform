@@ -15,7 +15,12 @@ export function StationMap({ center, stations, bounds, selectedId, onSelect }: M
   const { t } = useTranslationState();
   const latSpan = Math.max(bounds.maxLat - bounds.minLat, 0.04);
   const lngSpan = Math.max(bounds.maxLng - bounds.minLng, 0.04);
-  const bbox = `${bounds.minLng - lngSpan * 0.08}%2C${bounds.minLat - latSpan * 0.08}%2C${bounds.maxLng + lngSpan * 0.08}%2C${bounds.maxLat + latSpan * 0.08}`;
+  const bbox = [
+    bounds.minLng - lngSpan * 0.08,
+    bounds.minLat - latSpan * 0.08,
+    bounds.maxLng + lngSpan * 0.08,
+    bounds.maxLat + latSpan * 0.08,
+  ].join("%2C");
   return (
     <section className="evFinder__map" aria-label={t("Interactive station map")}>
       <iframe
