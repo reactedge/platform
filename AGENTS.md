@@ -6,6 +6,7 @@ These mandatory rules apply to all platform changes, regardless of agent, skill,
 - **Function length:** ESLint must warn when a function or method exceeds 250 lines.
 - **Git workflow:** Make implementation changes on a task-specific branch. When the task is complete, commit the task changes and push that branch to its matching remote branch without waiting for a separate push request. Keep unrelated working-tree changes out of the task commit and preserve them.
 - **Quality:** Run applicable lint, strict TypeScript, build, and test checks for changed components; report actual results and do not treat unexecuted checks as passing.
+- **Widgets:** For every newly created or modified widget, follow `.agents/skills/widget/SKILL.md` regardless of agent or workflow.
 - **Deployment:** After every completed deployment, run the platform MCP workspace-structure validation operation and report its result. Discover the actual tool/schema rather than inventing an operation. 
 
 ## Codex sub-agent delegation
