@@ -32,8 +32,10 @@ This document contains widget-specific standards.
 
 For API-backed runtime-shadow widgets, follow:
 .agents/skills/runtime-shadow-api-widget/SKILL.md
+- Third-party API isolation: Put provider requests, credentials, and provider-specific response mapping in a dedicated ReactEdge Express service. A widget calls that service through a typed client and must not call the third-party API directly.
 
 - React component structure:
+- JSX size: Keep the JSX returned by each React component to 30 lines or fewer. Extract focused child components when a component's JSX would exceed this limit.
 - props drills: When forwarding a callback or event handler through a React component tree, pass
   it through at most two React components from its owner to the component that
   invokes it. If the path would exceed two components, first consider moving the handler owner closer to its consumer.
