@@ -23,7 +23,7 @@ Follow the mandatory root `AGENTS.md` standards.
 5. Implement service behavior while retaining the scaffold's route, middleware, error handling, configuration, and lifecycle separation.
 6. Follow existing `services/` patterns for logging, telemetry, health checks, shutdown, and dependency injection where applicable.
 7. Add typed request/response contracts, input validation, error handling, and tests without embedding credentials or environment-specific endpoints.
-8. Ensure the service satisfies the global engineering standards. Verify actual service startup and endpoint behavior
+8. Re-run MCP service-structure validation if available after implementation. Verify actual service startup, endpoint behavior, and global engineering standards.
 
 ## Completion report
 
