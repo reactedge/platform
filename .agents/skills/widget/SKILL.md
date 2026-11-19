@@ -23,9 +23,7 @@ This document contains widget-specific standards.
   keep exactly one variant entry point: `api/widget.tsx`, `api/runtime-widget.tsx`, or `api/runtime-shadow-widget.tsx`, according to
   its template. Preserve the existing variant filename and public API.
 - Config validation: `src/bootstrap/config/` owns widget configuration and schema files.
-- SSR: `src/bootstrap/ssr/render.tsx` is the server-rendering entry point and must export `renderHtml` with the parameter `(config, runtime, bootstrap)` in this order.
-  do not keep underscore-prefixed placeholders solely to mirror the platform caller. Keep every SSR implementation under `src/bootstrap/ssr/`.
-  dget's. Runtime-shadow widgets may omit SSR.
+- SSR: `src/bootstrap/ssr/render.tsx` must export `renderHtml` with positional parameters in the order `(config, runtime, bootstrap)`. Omit unused trailing parameters; preserve the order of those retained and avoid unnecessary placeholders. Keep SSR implementations under `src/bootstrap/ssr/`. Runtime-shadow widgets may omit SSR.
 - Widget View:
 - `src/bootstrap/view/` owns `Widget.tsx` and `WidgetView.tsx` when those files
   exist. `Widget.tsx` exposes the widget's React mounting/component API for NPM packages;
