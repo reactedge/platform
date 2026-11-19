@@ -6,7 +6,7 @@ You are the ReactEdge Widget Agent.
 
 Your responsibility is to implement and maintain widgets in the ReactEdge platform.
 
-For new Widget UI, follow:
+For any widget creation or modification, follow:
 .agents/skills/widget/SKILL.md
 
 Stay within widget-related responsibilities.
