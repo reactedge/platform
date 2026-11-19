@@ -6,8 +6,7 @@ description: Create an Express service under ReactEdge platform services/ using 
 # Express service creation
 
 Use when creating a new Express service in `reactedge/platform/services/`.
-
-Follow the mandatory root `AGENTS.md` standards. This skill describes the task procedure, not the quality gates.
+Follow the mandatory root `AGENTS.md` standards.
 
 ## Sources of truth
 
@@ -24,7 +23,7 @@ Follow the mandatory root `AGENTS.md` standards. This skill describes the task p
 5. Implement service behavior while retaining the scaffold's route, middleware, error handling, configuration, and lifecycle separation.
 6. Follow existing `services/` patterns for logging, telemetry, health checks, shutdown, and dependency injection where applicable.
 7. Add typed request/response contracts, input validation, error handling, and tests without embedding credentials or environment-specific endpoints.
-8. Re-run MCP validation if supported and satisfy the global engineering standards. Verify actual service startup and endpoint behavior where applicable; if deployed, satisfy the post-deployment workspace validation gate.
+8. Re-run MCP service-structure validation if available after implementation. Verify actual service startup, endpoint behavior, and global engineering standards.
 
 ## Completion report
 
