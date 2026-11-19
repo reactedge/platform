@@ -1,3 +1,8 @@
+---
+name: widget
+description: Standards for creating and maintaining ReactEdge widgets.
+---
+
 Applies to every newly created or modified widget in `reactedge/platform`
 
 This document contains widget-specific standards.
