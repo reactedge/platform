@@ -7,7 +7,7 @@ description: Scaffold a runtime-shadow widget using ReactEdge MCP and replace it
 
 Use when creating or converting a `runtime-shadow` widget to consume an API instead of GraphQL.
 
-Follow the mandatory root `AGENTS.md` and `packages/widget-template/ENGINEERING_STANDARDS.md` standards. This skill describes the task procedure, not the quality gates.
+Follow the mandatory root `AGENTS.md`. This skill describes the task procedure, not the quality gates.
 
 ## Procedure
 
