@@ -1,0 +1,8 @@
+{
+  "integrations": {
+    "evchargerfinderApi": {
+      "api": "http://localhost:4182"
+    }
+  },
+  "context": {}
+}

@@ -18,10 +18,11 @@ This document contains widget-specific standards.
 
 ## Source layout
 
-- Bootstrap folder responsability:
 - API entry points: `api/package.ts` is the package export entry point. Each widget must also
   keep exactly one variant entry point: `api/widget.tsx`, `api/runtime-widget.tsx`, or `api/runtime-shadow-widget.tsx`, according to
   its template. Preserve the existing variant filename and public API.
+
+### Bootstrap folder responsability:
 - Config validation: `src/bootstrap/config/` owns widget configuration and schema files.
 - SSR: `src/bootstrap/ssr/render.tsx` must export `renderHtml` with positional parameters in the order `(config, runtime, bootstrap)`. Omit unused trailing parameters; preserve the order of those retained and avoid unnecessary placeholders. Keep SSR implementations under `src/bootstrap/ssr/`. Runtime-shadow widgets may omit SSR.
 - Widget View:
@@ -30,10 +31,10 @@ This document contains widget-specific standards.
   `WidgetView.tsx` renders the widget's widget static view.
 - Other startup and host integration code belongs under `src/bootstrap/`.
 
-For API-backed runtime-shadow widgets, follow:
-.agents/skills/runtime-shadow-api-widget/SKILL.md
-
-- React component structure:
+### React component structure:
+- Child components: Extract JSX-returning render helpers and component functions in a parent component file into separate child React components. Render each child as `<Child />` and pass its inputs as props. Put each child in its own `.tsx` file inside a folder named after the parent, beside the parent file. For example, keep `SearchPanel.tsx` beside `SearchPanel/ConnectorFilter.tsx`.
+- JSX size: Keep the JSX returned by each React component to 30 lines or fewer. Extract focused child components when a component's JSX would exceed this limit.
+- JSX line width: Target 60–150 characters per substantive JSX line, counting indentation, and never exceed 150. Do not put multiple elements on one line to save vertical space; break attributes and children into readable lines. Short tags and short labels may be shorter; do not pad them to meet the target.
 - props drills: When forwarding a callback or event handler through a React component tree, pass
   it through at most two React components from its owner to the component that
   invokes it. If the path would exceed two components, first consider moving the handler owner closer to its consumer.
@@ -53,6 +54,7 @@ For API-backed runtime-shadow widgets, follow:
 - destructured parameters: destructure controller result, then use those names directly.
   Avoid keeping the whole result under a generic variable such as `controller` throughout the render.
 
+### state
 - scope-state context: Use Intent Discovery's local state pattern as an example: `widgets/intentdiscovery/src/state/Intent/IntentStateProvider.tsx` owns the
   state and `widgets/intentdiscovery/src/state/Intent/useIntentState.ts` gives descendants access through a widget-local hook.
   Follow its ownership and local-access pattern, not necessarily its single-context shape. Keep context providers as close as practical to the descendants that share the
@@ -60,6 +62,7 @@ For API-backed runtime-shadow widgets, follow:
   Avoid combining frequently changing state and stable actions in one broad context when splitting them or keeping values stable would reduce unnecessary renders.
   Register a shared event listener at the provider or feature boundary rather than independently in every consumer.
 
+### HTML semantic
 - widget semantic HTML Rules: ReactEdge widgets are self-contained UI components, not standalone pages. Apply semantic HTML according to content and purpose.
 1. widgets must not introduce a page-level `main`. Use `section` when its content has a meaningful label or heading.
 2. widget owns semantics: Each widget defines its internal HTML independently.
@@ -72,11 +75,14 @@ For API-backed runtime-shadow widgets, follow:
 9. `form` / `label` / `button` / `a`: Use native HTML semantics for inputs, actions and links.
 10. `div`: Do not use `div`. Always choose the most appropriate semantic HTML element for the content or interaction.
 
+### Others
 - code standards: Follow the mandatory engineering standards in: AGENTS.md
 
 - widget assets: Keep widget-owned public assets under the widget's public/assets/ directory.
   When a widget's contract references those assets, use the deployable workspace asset path and coordinate the corresponding copies into
   workspace.sample/default/assets/<widget-id>/. Validate both contract and asset copies before reporting the widget as deployable.
+
+-APIs: Third-party API must use a dedicated service: provider requests, credentials, and provider-specific response mapping must be part of a dedicated ReactEdge Express service. The widget responsability is rendering and the API logic/security/resilience concerns must not be mixed into the widget code.
 
 ## Required verification
 

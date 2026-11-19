@@ -1,0 +1,22 @@
+{
+  "data": {
+    "defaultCenter": { "lat": 52.3555, "lng": -1.1743 },
+    "zoom": 6
+  },
+  "integration": {
+    "requires": ["evchargerfinderApi"]
+  },
+  "translations": {
+    "UK electric vehicle charging": "UK electric vehicle charging",
+    "Find a charger near you": "Find a charger near you",
+    "Search radius": "Search radius",
+    "Filter charging points": "Filter charging points",
+    "Connector type": "Connector type",
+    "Charging speed": "Charging speed",
+    "Show operational stations only": "Show operational stations only",
+    "Operational": "Operational",
+    "Reported offline": "Reported offline",
+    "Search": "Search",
+    "Searching…": "Searching…"
+  }
+}
