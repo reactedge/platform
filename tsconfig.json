@@ -1,9 +1,5 @@
 {
   "files": [],
-  "references": [
-    { "path": "./widgets/megamenu" },
-    { "path": "./widgets/productgallery" }
-  ],
   "compilerOptions": {
     "paths": {
       "@reactedge/*": [
