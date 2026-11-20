@@ -41,37 +41,25 @@ export function manifestPlugin({
                 throw new Error(`Expected ${fileName} to be a chunk`);
             }
 
-            const hash = createHash('sha256')
-                .update(output.code)
-                .digest('base64')
-                .replace(/\+/g, '-')
-                .replace(/\//g, '_')
-                .replace(/=+$/, '');
-
-            const newFileName =
-                `widget-${widgetName}@${hash}.iife.js`;
-
-            output.fileName = newFileName;
-
             const sourceMap = bundle[`${fileName}.map`];
 
             if (sourceMap) {
-                const newSourceMapFileName = `${newFileName}.map`;
-
-                sourceMap.fileName = newSourceMapFileName;
-
                 output.code = output.code.replace(
-                    /\/\/# sourceMappingURL=.*$/m,
-                    `//# sourceMappingURL=${newSourceMapFileName}`
+                    /^\/\/# sourceMappingURL=.*$/m,
+                    ""
                 );
             }
+
+            const digest = createHash("sha256")
+                .update(output.code)
+                .digest("base64");
 
             const manifest = {
                 widget: widgetName,
                 version,
-                hash,
+                integrity: `sha256-${digest}`,
                 ...(cssFilename && { cssFilename }),
-                filename: newFileName,
+                filename: fileName,
                 built_at: new Date().toISOString()
             };
 
