@@ -5,7 +5,7 @@ import type {
     OutputBundle,
     OutputOptions,
 } from "rollup";
-
+import type { Plugin } from "vite";
 
 type Options = {
     widgetName: string,
@@ -25,12 +25,12 @@ export type TPlugin = {
 export function manifestPlugin({
    widgetName,
    version
-}: Options): TPlugin {
+}: Options): Plugin {
     if (!widgetName) {
         throw new Error('manifestPlugin requires widgetName')
     }
 
-    const plugin: TPlugin = {
+    const plugin: Plugin = {
         name: 'reactedge-manifest-plugin',
         apply: 'build',
 
