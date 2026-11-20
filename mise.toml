@@ -34,6 +34,18 @@ arg "<version>" help="Widget version tag (with or without a v prefix)"
 '''
 run = "./launcher/scripts/widget-install.sh {{ usage.widget_name }} {{ usage.version }}"
 
+[tasks."widgets-setup"]
+description = "Install selected widgets at their latest stable tag"
+usage = '''
+arg "<widget-name>" var=#true help="One or more widget names"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+eval "widgets=(${usage_widget_name?})"
+exec ./launcher/scripts/widgets-setup.sh "${widgets[@]}"
+'''
+
 [tasks."widget-remove"]
 description = "Remove a widget from the local workspace"
 usage = '''
