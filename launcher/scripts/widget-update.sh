@@ -57,6 +57,8 @@ else
     git -C "$repo_dir" remote add origin "$repo_url"
 fi
 
+node "$script_dir/widget-set-version.mjs" "$widget_dir" "$version"
+
 rsync -a --delete \
     --exclude='.git/' \
     --exclude='node_modules/' \
