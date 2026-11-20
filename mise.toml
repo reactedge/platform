@@ -28,7 +28,11 @@ run = "./launcher/scripts/widget-test.sh {{arg(name='widget', required=true)}} {
 
 [tasks."widget-install"]
 description = "Install a widget repository at a specified version"
-run = "./launcher/scripts/widget-install.sh {{arg(name='widget', required=true)}} {{arg(name='version', required=true)}}"
+usage = '''
+arg "<widget-name>" help="Widget name"
+arg "<version>" help="Widget version tag (with or without a v prefix)"
+'''
+run = "./launcher/scripts/widget-install.sh {{ usage.widget_name }} {{ usage.version }}"
 
 [tasks."widgets-clean"]
 description = "Kill all widget development servers"

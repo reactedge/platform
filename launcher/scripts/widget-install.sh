@@ -31,9 +31,28 @@ cleanup() {
 }
 trap cleanup EXIT
 
-echo "Fetching $repo_url at $version..."
-git clone --depth 1 --branch="$version" "$repo_url" "$staging_dir/widget"
+tag_candidates=("refs/tags/$version")
+if [[ "$version" != v* ]]; then
+    tag_candidates+=("refs/tags/v$version")
+fi
+
+remote_tags="$(git ls-remote --tags --refs "$repo_url" "${tag_candidates[@]}")"
+tag=""
+for candidate in "${tag_candidates[@]}"; do
+    if awk -F '\t' -v candidate="$candidate" '$2 == candidate { found = 1 } END { exit !found }' <<< "$remote_tags"; then
+        tag="${candidate#refs/tags/}"
+        break
+    fi
+done
+
+if [[ -z "$tag" ]]; then
+    echo "Tag $version (or v$version) was not found in $repo_url" >&2
+    exit 1
+fi
+
+echo "Fetching $repo_url at tag $tag..."
+git clone --depth 1 --branch="$tag" "$repo_url" "$staging_dir/widget"
 
 rm -rf -- "$destination"
 mv -- "$staging_dir/widget" "$destination"
-echo "Installed widget $widget at $version"
+echo "Installed widget $widget at $tag"
