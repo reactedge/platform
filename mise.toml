@@ -26,6 +26,10 @@ description = "Test a widget locally"
 depends = ["widgets-clean"]
 run = "./launcher/scripts/widget-test.sh {{arg(name='widget', required=true)}} {{arg(name='debug', required=false)}}"
 
+[tasks."widget-install"]
+description = "Install a widget repository at a specified version"
+run = "./launcher/scripts/widget-install.sh {{arg(name='widget', required=true)}} {{arg(name='version', required=true)}}"
+
 [tasks."widgets-clean"]
 description = "Kill all widget development servers"
 run = "./launcher/scripts/widgets-clean.sh"
