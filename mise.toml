@@ -53,6 +53,18 @@ arg "<widget-name>" help="Widget name"
 '''
 run = "./launcher/scripts/widget-remove.sh {{ usage.widget_name }}"
 
+[tasks."widget-update"]
+description = "Push a widget update and create a version tag"
+usage = '''
+arg "<widget-name>" help="Widget name"
+arg "<version>" help="Release version without the v prefix"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+exec ./launcher/scripts/widget-update.sh "${usage_widget_name?}" "${usage_version?}"
+'''
+
 [tasks."widgets-clean"]
 description = "Kill all widget development servers"
 run = "./launcher/scripts/widgets-clean.sh"
