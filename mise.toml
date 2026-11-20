@@ -34,6 +34,13 @@ arg "<version>" help="Widget version tag (with or without a v prefix)"
 '''
 run = "./launcher/scripts/widget-install.sh {{ usage.widget_name }} {{ usage.version }}"
 
+[tasks."widget-remove"]
+description = "Remove a widget from the local workspace"
+usage = '''
+arg "<widget-name>" help="Widget name"
+'''
+run = "./launcher/scripts/widget-remove.sh {{ usage.widget_name }}"
+
 [tasks."widgets-clean"]
 description = "Kill all widget development servers"
 run = "./launcher/scripts/widgets-clean.sh"
