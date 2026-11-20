@@ -1,26 +1,12 @@
 import { createHash } from 'crypto'
 import fs from 'fs'
 import path from 'path'
-import type {
-    OutputBundle,
-    OutputOptions,
-} from "rollup";
 import type { Plugin } from "vite";
 
 type Options = {
     widgetName: string,
     version: string
 }
-
-export type TPlugin = {
-    name: string;
-    apply?: "build" | "serve";
-
-    generateBundle?: (
-        options: OutputOptions,
-        bundle: OutputBundle
-    ) => void;
-};
 
 export function manifestPlugin({
    widgetName,
