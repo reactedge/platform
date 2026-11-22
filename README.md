@@ -161,6 +161,23 @@ If your theme already contains one of these layout files, **do not overwrite it*
 
 The supplied files are starter integrations and can be adjusted to change widget placement within your theme.
 
+## 5. Add a widget locally
+
+The platform starts without any widgets. Add at least one widget before launching it locally:
+
+```bash
+mise run widget-install -- <widget-name> <version>
+```
+
+For example, to add four widgets, install each widget at its desired release tag:
+
+```bash
+mise run widget-install -- usp <version>
+mise run widget-install -- productgallery <version>
+mise run widget-install -- sizeguide <version>
+mise run widget-install -- megamenu <version>
+```
+
 ## 6. Launch a widget locally
 
 For example:
