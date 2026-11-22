@@ -17,6 +17,7 @@ When the user requests delegated implementation work, the main Codex agent acts 
 - Delegate widget creation or maintenance under `widgets/` to `widget-agent`.
 - Delegate Express service creation or maintenance under `services/` to `service-agent`.
 - For mixed tasks, delegate separable widget and service work to their respective agents, coordinate shared interfaces, and integrate their results. Avoid simultaneous edits to the same files.
+- Delegate npm workspace installation, dependency alignment, and audit work to `setup-agent`.
 - Keep architecture decisions, cross-cutting changes, and final verification coordinated by the main agent. Do not claim a delegation or tool run occurred unless it actually did.
 - Each sub-agent follows its existing skill and the mandatory standards above; do not restate the skill workflow in the launcher.
 
