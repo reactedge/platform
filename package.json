@@ -9,12 +9,10 @@
     "typecheck": "tsc -b && npm run typecheck --workspace @reactedge/mcp",
     "test:mcp": "npm run test --workspace @reactedge/mcp",
     "verify": "npm run lint && npm run typecheck && npm run build --workspaces",
-    "postinstall": "playwright install chromium",
-    "whitepaper:diagrams": "for file in packages/docs/whitepaper/diagrams/*.mmd; do mmdc -i \"$file\" -o \"${file%.mmd}.png\" -w 770; done"
+    "postinstall": "playwright install chromium"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
-    "@mermaid-js/mermaid-cli": "^11.16.0",
     "@playwright/test": "^1.61.1",
     "@types/node": "^25.9.5",
     "eslint": "^9.39.5",
