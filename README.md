@@ -194,21 +194,23 @@ mise run widget-dev -- megamenu
 
 ---
 
-### Shared React pilot
+### Shared React for browser widgets
 
-With USP and Category FAQ installed, build and test their shared React browser
-bundles from the repository root.
+Build and test the browser bundles for the installed widgets from the repository
+root. Intent Discovery uses its own `vite_project` and requires its dependencies
+to be installed there.
 
 ```bash
 npm run build:shared-react
 npm run test:shared-react
 ```
 
-The build writes to `workspace/release/pilot/shared-react/`. A pilot host
-serves that directory and loads `react-shared@19.2.8.iife.js` once before the
-two widgets’ scripts. Each widget subdirectory contains a manifest with the
-script filename, its integrity digest, and the stylesheet filename. Use
-ordered `defer` scripts and call the widget mount APIs after both have loaded.
+The build writes to `workspace/release/source/`. The host loads
+`react-shared@19.2.8.iife.js` from that directory once, before any widget script.
+Widget scripts keep the `widget-<name>@<version>.iife.js` filename. Use ordered
+`defer` scripts and call the widget mount APIs after their scripts have loaded.
+Publish the runtime and its widgets together. When replacing a cached bundle
+at the same URL, invalidate that URL as part of the rollout.
 
 ## 7. Deploy widgets
 

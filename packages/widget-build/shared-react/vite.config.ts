@@ -15,7 +15,7 @@ export default defineConfig({
         "process.env.NODE_ENV": JSON.stringify("production"),
     },
     build: {
-        outDir: "workspace/release/pilot/shared-react",
+        outDir: "workspace/release/source",
         emptyOutDir: false,
         lib: {
             entry: fileURLToPath(new URL("./browser.ts", import.meta.url)),

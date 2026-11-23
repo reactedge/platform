@@ -1,4 +1,9 @@
-import { pilotReactGlobals } from "./pilotReactGlobals.ts";
+const reactGlobals = {
+    "react": "ReactEdgeSharedReact.React",
+    "react-dom": "ReactEdgeSharedReact.ReactDOM",
+    "react-dom/client": "ReactEdgeSharedReact.ReactDOMClient",
+    "react/jsx-runtime": "ReactEdgeSharedReact.JSXRuntime",
+};
 
 export function createWidgetBuildDefaults<TBuild>(
     options: {
@@ -11,8 +16,6 @@ export function createWidgetBuildDefaults<TBuild>(
     }
 ): TBuild {
     const {widgetName, version, entry, outDir, emitCss, sourcemap } = options;
-    const reactGlobals = pilotReactGlobals(widgetName);
-    const bundleSuffix = reactGlobals ? ".shared-react.iife.js" : ".iife.js";
 
     return {
         outDir,
@@ -21,17 +24,17 @@ export function createWidgetBuildDefaults<TBuild>(
         lib: {
             entry,
             name: `ReactEdge_${widgetName}`,
-            fileName: () => `widget-${widgetName}@${version}${bundleSuffix}`,
+            fileName: () => `widget-${widgetName}@${version}.iife.js`,
             ...(emitCss && {
                 cssFileName: `widget-${widgetName}`,
             }),
             formats: ["iife"],
         },
         rollupOptions: {
-            ...(reactGlobals && { external: Object.keys(reactGlobals) }),
+            external: Object.keys(reactGlobals),
             output: {
                 assetFileNames: `widget-${widgetName}.[ext]`,
-                ...(reactGlobals && { globals: reactGlobals }),
+                globals: reactGlobals,
             },
         },
         minify: true,
