@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<script type="module">
+    import { mount } from './api/widget.tsx';
+    import { ResourceLoader } from "@reactedge/framework/contract";
+
+    const loader = new ResourceLoader();
+    const contract = await loader.loadContract("default.json");
+
+    const element = document.querySelector('usp-widget');
+
+    await requestAnimationFrame(() => {
+        mount(element, contract);
+    })
+</script>
+
+<usp-widget></usp-widget>
+
+</body>
+</html>

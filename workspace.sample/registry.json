@@ -25,11 +25,7 @@
     "active": true,
     "contract": "default.json",
     "ssr": {
-      "strategy": "static",
-      "variants": [
-        "desktop",
-        "mobile"
-      ]
+      "strategy": "static"
     }
   },
   "intentdiscovery": {
