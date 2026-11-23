@@ -194,6 +194,22 @@ mise run widget-dev -- megamenu
 
 ---
 
+### Shared React pilot
+
+With USP and Category FAQ installed, build and test their shared React browser
+bundles from the repository root.
+
+```bash
+npm run build:shared-react
+npm run test:shared-react
+```
+
+The build writes to `workspace/release/pilot/shared-react/`. A pilot host
+serves that directory and loads `react-shared@19.2.8.iife.js` once before the
+two widgets’ scripts. Each widget subdirectory contains a manifest with the
+script filename, its integrity digest, and the stylesheet filename. Use
+ordered `defer` scripts and call the widget mount APIs after both have loaded.
+
 ## 7. Deploy widgets
 
 Build and publish the widgets:

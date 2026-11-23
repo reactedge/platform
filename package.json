@@ -4,10 +4,12 @@
   "type": "module",
   "scripts": {
     "configure:ui": "node --experimental-strip-types launcher/control-panel/server.ts",
+    "build:shared-react": "bash launcher/scripts/build-shared-react.sh",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -b && npm run typecheck --workspace @reactedge/mcp",
     "test:mcp": "npm run test --workspace @reactedge/mcp",
+    "test:shared-react": "playwright test tests/shared-react.spec.ts",
     "verify": "npm run lint && npm run typecheck && npm run build --workspaces",
     "postinstall": "playwright install chromium"
   },
@@ -20,6 +22,8 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.8.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "tsx": "^4.23.0",
     "typescript-eslint": "^8.65.0",
     "vite": "^8.3.0"
