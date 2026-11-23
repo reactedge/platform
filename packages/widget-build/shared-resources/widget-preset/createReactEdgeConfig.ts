@@ -1,3 +1,10 @@
+const reactGlobals = {
+    "react": "ReactEdgeSharedReact.React",
+    "react-dom": "ReactEdgeSharedReact.ReactDOM",
+    "react-dom/client": "ReactEdgeSharedReact.ReactDOMClient",
+    "react/jsx-runtime": "ReactEdgeSharedReact.JSXRuntime",
+};
+
 export function createWidgetBuildDefaults<TBuild>(
     options: {
         widgetName: string;
@@ -24,8 +31,10 @@ export function createWidgetBuildDefaults<TBuild>(
             formats: ["iife"],
         },
         rollupOptions: {
+            external: Object.keys(reactGlobals),
             output: {
                 assetFileNames: `widget-${widgetName}.[ext]`,
+                globals: reactGlobals,
             },
         },
         minify: true,

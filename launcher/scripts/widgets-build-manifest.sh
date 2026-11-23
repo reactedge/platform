@@ -12,6 +12,8 @@ echo "🚀 Building deployment orchestrator"
 
 cd "$ROOT"
 
+bash launcher/scripts/build-shared-react.sh --runtime-only
+
 export REDIS_URL="${REDIS_URL:-redis://localhost:6379}"
 
 echo "Starting SSR worker"

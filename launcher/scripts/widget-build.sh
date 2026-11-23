@@ -12,6 +12,8 @@ fi
 
 npx tsx packages/widget-validation/src/cli.ts "$WIDGET"
 
+bash launcher/scripts/build-shared-react.sh --runtime-only
+
 cd "widgets/$WIDGET"
 
 npm run build

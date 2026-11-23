@@ -194,6 +194,24 @@ mise run widget-dev -- megamenu
 
 ---
 
+### Shared React for browser widgets
+
+Build and test the browser bundles for the installed widgets from the repository
+root. Intent Discovery uses its own `vite_project` and requires its dependencies
+to be installed there.
+
+```bash
+npm run build:shared-react
+npm run test:shared-react
+```
+
+The build writes to `workspace/release/source/`. The host loads
+`react-shared@19.2.8.iife.js` from that directory once, before any widget script.
+Widget scripts keep the `widget-<name>@<version>.iife.js` filename. Use ordered
+`defer` scripts and call the widget mount APIs after their scripts have loaded.
+Publish the runtime and its widgets together. When replacing a cached bundle
+at the same URL, invalidate that URL as part of the rollout.
+
 ## 7. Deploy widgets
 
 Build and publish the widgets:
