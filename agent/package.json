@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "tsx index.ts",
-    "typecheck": "tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext index.ts"
+    "test": "tsx --test workflow.test.ts",
+    "typecheck": "tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext index.ts workflow.test.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/client": "2.2.0",

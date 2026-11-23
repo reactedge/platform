@@ -17,14 +17,37 @@ export async function runWorkflow({ call, report, object, message }: WorkflowCon
     if (listed.isError) throw new Error(`Discovery failed: ${JSON.stringify(listed.data)}`);
     if (typeof store !== 'string' || !Array.isArray(widgets) || count !== widgets.length ||
         !widgets.every(widget => object(widget) && typeof widget.id === 'string' &&
-            widget.id.length > 0 && widget.active === true)) {
+            widget.id.length > 0 && widget.active === true && object(widget.ready) &&
+            typeof widget.ready.passed === 'boolean')) {
         throw new Error('Invalid list_active_widgets response');
     }
     report.store = store;
     const ids = widgets.map(widget => widget.id as string);
     if (new Set(ids).size !== ids.length) throw new Error('Duplicate active widget IDs');
 
-    for (const instance of ids) {
+    for (const widget of widgets) {
+        const instance = widget.id as string;
+        const ready = widget.ready as Record<string, unknown>;
+
+        if (ready.passed !== true) {
+            const detail = typeof ready.error === 'string'
+                ? ready.error
+                : 'Runtime dependencies are not ready';
+            report.results.push({
+                instance,
+                status: 'SKIP',
+                detail: `readiness: ${detail}`,
+                result: {
+                    instance,
+                    store,
+                    check: 'readiness',
+                    passed: false,
+                    ready,
+                },
+            });
+            continue;
+        }
+
         for (const check of ['build', 'test'] as const) {
             try {
                 const { data, isError } = await call('verify_active_widget', { instance, check });
