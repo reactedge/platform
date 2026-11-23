@@ -1,0 +1,36 @@
+{
+  "id": "usp",
+  "widget": "usp",
+  "description": "Displays unique selling propositions in a carousel at every viewport width. The timer in settings.timer (milliseconds) advances the slides automatically. Using an arrow switches to manual navigation. Optional top-level translations map English UI labels to translated strings. See public/fr.json.",
+  "exampleContract": {
+    "data": {
+      "slides": [
+        {
+          "heading": "Free Delivery",
+          "text": "On orders over £50"
+        },
+        {
+          "heading": "Secure Payment",
+          "text": "100% secure checkout"
+        },
+        {
+          "text": "30-day returns"
+        }
+      ]
+    },
+    "settings": {
+      "timer": 5000,
+      "theme": "light"
+    }
+  },
+  "signals": {
+    "consumes": [],
+    "emits": []
+  },
+  "runtime": {
+    "rendering": [
+      "client",
+      "ssr"
+    ]
+  }
+}

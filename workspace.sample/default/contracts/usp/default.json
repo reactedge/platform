@@ -2,24 +2,21 @@
   "data": {
     "slides": [
       {
-        "heading": "\uD83D\uDE9A Free Delivery",
+        "heading": "🚚 Free Delivery",
         "text": "On orders over £50"
       },
       {
-        "heading": "\uD83D\uDD12 Secure Payment",
+        "heading": "🔒 Secure Payment",
         "text": "100% secure checkout"
       },
       {
-        "heading": "↩\uFE0F Easy Returns",
+        "heading": "↩️ Easy Returns",
         "text": "30-day returns"
       }
     ]
   },
   "settings": {
-    "mode": {
-      "desktop": "static",
-      "tablet": "slider",
-      "mobile": "slider"
-    }
+    "timer": 5000,
+    "theme": "light"
   }
 }
