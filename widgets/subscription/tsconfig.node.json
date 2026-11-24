@@ -1,0 +1,10 @@
+{
+  "extends": "../../packages/widget-build/shared-resources/tsconfig.node.widget.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo"
+  },
+  "include": [
+    "vite.config.ts",
+    "vite.npm.config.ts"
+  ]
+}
