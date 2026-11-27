@@ -57,7 +57,7 @@ export function manifestPlugin({
             const manifest = {
                 widget: widgetName,
                 version,
-                integrity: `sha256-${digest}`,
+                hash: `sha256-${digest}`,
                 ...(cssFilename && { cssFilename }),
                 filename: fileName,
                 built_at: new Date().toISOString()

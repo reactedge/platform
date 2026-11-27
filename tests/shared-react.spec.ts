@@ -14,7 +14,7 @@ interface Manifest {
     version: string;
     filename: string;
     cssFilename: string;
-    integrity: string;
+    hash: string;
 }
 
 function hasBrowserBuild(widget: string): boolean {
@@ -44,7 +44,7 @@ function widgetTags(widget: string, manifest: Manifest): string {
         : "";
     return `
         ${stylesheet}
-        <script defer src="/${widget}/${manifest.filename}" integrity="${manifest.integrity}"></script>
+        <script defer src="/${widget}/${manifest.filename}" integrity="${manifest.hash}"></script>
     `;
 }
 
